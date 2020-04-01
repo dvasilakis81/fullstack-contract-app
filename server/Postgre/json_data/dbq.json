@@ -1,0 +1,1170 @@
+{
+  "parametricdata_reducer": {
+    "screenDimensions": {
+      "width": 1012.5,
+      "height": 1133.75
+    },
+    "doRefresh": true,
+    "municipalityDirections": [
+      {
+        "DirectionId": 3,
+        "DirectionName": "Προμηθειών και Αποθηκών",
+        "DirectionSupervisor": "Βακουντούζης Ιωάννης",
+        "DirectionTelephone": "210.5225446",
+        "DirectionEmail": "d.prom.apothikon@athens.gr",
+        "DirectionAddress": "Κων/νου Παλαιολόγου 9",
+        "DirectionPostCode": "104 38",
+        "DirectionCity": "Αθήνα",
+        "department": [
+          {
+            "DepartmentId": 10,
+            "DirectionId": 3,
+            "DepartmentName": "Προμηθειών, Προγραμματισμού, Τεκμηρίωσης Αιτημάτων και Ηλεκτρονικής Διακυβέρνησης",
+            "DepartmentSupervisor": "Μπουρνά Βούλα",
+            "DepartmentTelephone": "210.5225617",
+            "DepartmentEmail": "t.promitheion@athens.gr"
+          },
+          {
+            "DepartmentId": 11,
+            "DirectionId": 3,
+            "DepartmentName": "Διαδικασιών Σύναψης Δημοσίων Συμβάσεων",
+            "DepartmentSupervisor": "Μπιμπούδης Παναγιώτης",
+            "DepartmentTelephone": "213.2082956",
+            "DepartmentEmail": "t.prom.dimoprasies@athens.gr"
+          },
+          {
+            "DepartmentId": 13,
+            "DirectionId": 3,
+            "DepartmentName": "Διαχείρισης Καυσίμων και Λιπαντικών",
+            "DepartmentSupervisor": "Τσιλάβης Γεώργιος",
+            "DepartmentTelephone": "210.3460146",
+            "DepartmentEmail": "t.diax.kausimon.lipantikon@athens.gr"
+          },
+          {
+            "DepartmentId": 12,
+            "DirectionId": 3,
+            "DepartmentName": "Αποθηκών Υλικών",
+            "DepartmentSupervisor": "Κακριδά  Άννα",
+            "DepartmentTelephone": "210.5225068",
+            "DepartmentEmail": "t.apothikon.ylikon@athens.gr"
+          }
+        ]
+      },
+      {
+        "DirectionId": 2,
+        "DirectionName": "Στρατηγικού Σχεδιασμού, Ανθεκτικότητας, Καινοτομίας και Τεκμηρίωσης",
+        "DirectionSupervisor": "Δρ. Κακριδά Ουρανία",
+        "DirectionTelephone": "210.5277110",
+        "DirectionEmail": "d.stratigikou.sxediasmou@athens.gr",
+        "DirectionAddress": "Λιοσίων 22",
+        "DirectionPostCode": "104 38",
+        "DirectionCity": "Αθήνα",
+        "department": [
+          {
+            "DepartmentId": 4,
+            "DirectionId": 2,
+            "DepartmentName": "Τεχνολογίας, Πληροφορικής και Επικοινωνιών",
+            "DepartmentSupervisor": "Χατζηευστρατίου Ιωάννης",
+            "DepartmentTelephone": "210.5277169",
+            "DepartmentEmail": "i.chatzieustratiou@athens.gr"
+          },
+          {
+            "DepartmentId": 5,
+            "DirectionId": 2,
+            "DepartmentName": "Ανθεκτικότητας και Βιωσιμότητας",
+            "DepartmentSupervisor": "Νεοφύτου Γεώργιος",
+            "DepartmentTelephone": "210.3721553",
+            "DepartmentEmail": "t.anthektikotitas.biosimotitas@athens.gr"
+          },
+          {
+            "DepartmentId": 7,
+            "DirectionId": 2,
+            "DepartmentName": "Στρατηγικού Σχεδιασμού και Προγραμματισμού",
+            "DepartmentSupervisor": "Κοντώσης Ηλίας",
+            "DepartmentTelephone": "210.5277160",
+            "DepartmentEmail": "t.stratigikou.sxediasmou.progr@athens.gr"
+          },
+          {
+            "DepartmentId": 6,
+            "DirectionId": 2,
+            "DepartmentName": "Καινοτομίας και Εξωστρέφειας",
+            "DepartmentSupervisor": "Παπακωνσταντίνου - Παπαδοπούλου Έλλη",
+            "DepartmentTelephone": "210.5277109",
+            "DepartmentEmail": "t.kainotomias.exostrefias@athens.gr"
+          },
+          {
+            "DepartmentId": 3,
+            "DirectionId": 2,
+            "DepartmentName": "Διαχείρισης Γεωχωρικών Δεδομένων Πόλεως\r\n",
+            "DepartmentSupervisor": "Μαρούγκα Κωνσταντίνα",
+            "DepartmentTelephone": "210.5277185",
+            "DepartmentEmail": "t.gis@athens.gr"
+          },
+          {
+            "DepartmentId": 2,
+            "DirectionId": 2,
+            "DepartmentName": "Διοικητικής Υποστήριξης, Τεκμηρίωσης και Ηλεκτρονικής Διακυβέρνησης",
+            "DepartmentSupervisor": "Πριόβολου Καλλιόπη",
+            "DepartmentTelephone": "210.5277110",
+            "DepartmentEmail": "t.dioikitikis.ypostirixis.strat.sxed@athens.gr"
+          }
+        ]
+      },
+      {
+        "DirectionId": 20,
+        "DirectionName": "Κέντρων Εξυπηρέτησης Πολιτών (Κ.Ε.Π)",
+        "DirectionSupervisor": "Αυγερινός Δημήτριος",
+        "DirectionTelephone": "210 3836522",
+        "DirectionEmail": "d.kep@athens.gr",
+        "DirectionAddress": "Ακαδημίας 88",
+        "DirectionPostCode": "106 78",
+        "DirectionCity": "Αθήνα",
+        "department": [
+          {
+            "DepartmentId": 59,
+            "DirectionId": 20,
+            "DepartmentName": "Εξυπηρέτησης Πολιτών",
+            "DepartmentSupervisor": "Παπαχαραλάμπους Δημήτριος",
+            "DepartmentTelephone": "210 3303075",
+            "DepartmentEmail": "t.exipiretisis.politon@athens.gr"
+          },
+          {
+            "DepartmentId": 60,
+            "DirectionId": 20,
+            "DepartmentName": "Εσωτερικής Ανταπόκρισης",
+            "DepartmentSupervisor": "Φεραδούρου Αναστασία",
+            "DepartmentTelephone": "210 3836871",
+            "DepartmentEmail": "t.esoterikis.antapokrisis@athens.gr"
+          },
+          {
+            "DepartmentId": 61,
+            "DirectionId": 20,
+            "DepartmentName": "Εξωτερικών Εφαρμογών",
+            "DepartmentSupervisor": "Γούλας Κωνσταντίνος",
+            "DepartmentTelephone": "210 3836871",
+            "DepartmentEmail": "t.exoterikon.efarmogon@athens.gr"
+          }
+        ]
+      },
+      {
+        "DirectionId": 21,
+        "DirectionName": "Αστικής Κατάστασης",
+        "DirectionSupervisor": "Μπούρη Βασιλική",
+        "DirectionTelephone": "210 3722173",
+        "DirectionEmail": "d.ast.katastasis@athens.gr",
+        "DirectionAddress": "Αθηνάς 63",
+        "DirectionPostCode": "10552",
+        "DirectionCity": "Αθήνα",
+        "department": [
+          {
+            "DepartmentId": 62,
+            "DirectionId": 21,
+            "DepartmentName": "Διοικητικής Υποστήριξης & Ηλεκτρονικής Διακυβέρνησης",
+            "DepartmentSupervisor": "Τάτση Ζαφειρούλα",
+            "DepartmentTelephone": "210 5277938",
+            "DepartmentEmail": "t.dioikitikis.ypostirixis.astikis.katastasis@athens.gr"
+          },
+          {
+            "DepartmentId": 63,
+            "DirectionId": 21,
+            "DepartmentName": "Έκδοσης Πιστοποιητικών",
+            "DepartmentSupervisor": "Κοντού Αικατερίνη",
+            "DepartmentTelephone": "210 3722067",
+            "DepartmentEmail": "t.ekd.pistopoiitikon@athens.gr"
+          },
+          {
+            "DepartmentId": 64,
+            "DirectionId": 21,
+            "DepartmentName": "Μητρώου Αρρένων",
+            "DepartmentSupervisor": "Καγιά - Παναγοπούλου Αμαλία",
+            "DepartmentTelephone": "210 3722119",
+            "DepartmentEmail": "t.mitroou.arrenon@athens.gr"
+          },
+          {
+            "DepartmentId": 65,
+            "DirectionId": 21,
+            "DepartmentName": "Ιθαγένειας, Δημοτολογίου και Εκλογικών Καταλόγων",
+            "DepartmentSupervisor": "Τσιχριτζή Αμαλία",
+            "DepartmentTelephone": "210 3722102",
+            "DepartmentEmail": " t.ith.dimotologiou@athens.gr"
+          },
+          {
+            "DepartmentId": 66,
+            "DirectionId": 21,
+            "DepartmentName": "Γεννήσεων",
+            "DepartmentSupervisor": "Δασκαλάκη Ανδριάνα",
+            "DepartmentTelephone": "210 5277987",
+            "DepartmentEmail": "t.genniseon@athens.gr"
+          },
+          {
+            "DepartmentId": 67,
+            "DirectionId": 21,
+            "DepartmentName": "Γάμων – Θανάτων",
+            "DepartmentSupervisor": "Φρανσέ Αλέγρη",
+            "DepartmentTelephone": "210 5277966",
+            "DepartmentEmail": "t.gamon.thanaton@athens.gr"
+          },
+          {
+            "DepartmentId": 68,
+            "DirectionId": 21,
+            "DepartmentName": "Πολιτικών Γάμων",
+            "DepartmentSupervisor": "Θεωνά Ελένη-Άννα",
+            "DepartmentTelephone": "210 3722165",
+            "DepartmentEmail": "t.politikon.gamon@athens.gr"
+          }
+        ]
+      },
+      {
+        "DirectionId": 15,
+        "DirectionName": "Αποκέντρωσης και Διοίκησης",
+        "DirectionSupervisor": "Νεμπεγλεριώτης Ευάγγελος",
+        "DirectionTelephone": "210 5277541",
+        "DirectionEmail": "d.apokentrosi.dioikisi@athens.gr",
+        "DirectionAddress": "Λιοσίων 22",
+        "DirectionPostCode": "104 38",
+        "DirectionCity": "Αθήνα",
+        "department": [
+          {
+            "DepartmentId": 50,
+            "DirectionId": 15,
+            "DepartmentName": "Διοικητικής Υποστήριξης & Ηλεκτρονικής Διακυβέρνησης",
+            "DepartmentSupervisor": "Γιώργος Σκαφίδας",
+            "DepartmentTelephone": "210 5277071",
+            "DepartmentEmail": "t.dioikitikis.ypostirixis.apokentrosi@athens.gr"
+          },
+          {
+            "DepartmentId": 52,
+            "DirectionId": 15,
+            "DepartmentName": "Εξυπηρέτησης Δημοτών και Επαγγελματιών 1ης Δημοτικής Κοινότητας",
+            "DepartmentSupervisor": "Σταματογιαννόπουλος Νικόλαος",
+            "DepartmentTelephone": "210 5277963",
+            "DepartmentEmail": "t.dk1@athens.gr"
+          },
+          {
+            "DepartmentId": 53,
+            "DirectionId": 15,
+            "DepartmentName": "Εξυπηρέτησης Δημοτών και Επαγγελματιών 2ης Δημοτικής Κοινότητας",
+            "DepartmentSupervisor": "Καραθανάση Βαρβάρα",
+            "DepartmentTelephone": "210 7567860",
+            "DepartmentEmail": "t.dk2@athens.gr"
+          },
+          {
+            "DepartmentId": 54,
+            "DirectionId": 15,
+            "DepartmentName": "Εξυπηρέτησης Δημοτών και Επαγγελματιών 3ης Δημοτικής Κοινότητας",
+            "DepartmentSupervisor": "Τσιπούρα Ελένη",
+            "DepartmentTelephone": "210 3424343",
+            "DepartmentEmail": "t.dk3@athens.gr"
+          },
+          {
+            "DepartmentId": 55,
+            "DirectionId": 15,
+            "DepartmentName": "Εξυπηρέτησης Δημοτών και Επαγγελματιών 4ης Δημοτικής Κοινότητας",
+            "DepartmentSupervisor": "Νανούρης Ιωάννης",
+            "DepartmentTelephone": "210 5149940",
+            "DepartmentEmail": "t.dk4@athens.gr"
+          },
+          {
+            "DepartmentId": 56,
+            "DirectionId": 15,
+            "DepartmentName": "Εξυπηρέτησης Δημοτών και Επαγγελματιών 5ης Δημοτικής Κοινότητας",
+            "DepartmentSupervisor": "Νικολάου Κωνσταντίνος",
+            "DepartmentTelephone": "210 8646790",
+            "DepartmentEmail": "t.dk5@athens.gr"
+          },
+          {
+            "DepartmentId": 57,
+            "DirectionId": 15,
+            "DepartmentName": "Εξυπηρέτησης Δημοτών και Επαγγελματιών 6ης Δημοτικής Κοινότητας",
+            "DepartmentSupervisor": "Αναγνωστοπούλου Σοφία",
+            "DepartmentTelephone": "210 8668162",
+            "DepartmentEmail": "t.dk6@athens.gr"
+          },
+          {
+            "DepartmentId": 58,
+            "DirectionId": 15,
+            "DepartmentName": "Εξυπηρέτησης Δημοτών και Επαγγελματιών 7ης Δημοτικής Κοινότητας",
+            "DepartmentSupervisor": "Μήτσης Νικόλαος",
+            "DepartmentTelephone": "210 6998832",
+            "DepartmentEmail": "t.dk7@athens.gr"
+          },
+          {
+            "DepartmentId": 51,
+            "DirectionId": 15,
+            "DepartmentName": "Διοικητικού, Εποπτείας και Συντονισμού Δημοτικών Κοινοτήτων",
+            "DepartmentSupervisor": "Γλάρου Ιωάννα",
+            "DepartmentTelephone": "210 5277501",
+            "DepartmentEmail": "t.dioikitiko@athens.gr"
+          }
+        ]
+      }
+    ],
+    "signatories": [
+      {
+        "Id": 2,
+        "Name": "ΙΩΑΝΝΗΣ ΧΑΤΖΗΕΥΣΤΡΑΤΙΟΥ"
+      },
+      {
+        "Id": 3,
+        "Name": "ΠΑΠΑΚΩΝΣΤΑΝΤΙΝΟΥ – ΠΑΠΑΔΟΠΟΥΛΟΥ ΕΛΛΗ"
+      },
+      {
+        "Id": 4,
+        "Name": "Δρ. ΟΥΡΑΝΙΑ Β. ΚΑΚΡΙΔΑ"
+      },
+      {
+        "Id": 1,
+        "Name": "ΦΩΤΕΙΝΗ ΤΣΟΤΡΑ"
+      }
+    ],
+    "signatorytypes": [
+      {
+        "Id": 2,
+        "Name": "Ο ΣΥΝΤΑΚΤΗΣ"
+      },
+      {
+        "Id": 1,
+        "Name": "Η ΣΥΝΤΑΞΑΣΑ"
+      },
+      {
+        "Id": 3,
+        "Name": "Ο ΠΡΟΪΣΤΑΜΕΝΟΣ ΔΙΕΥΘΥΝΣΗΣ"
+      },
+      {
+        "Id": 5,
+        "Name": "Ο  ΠΡΟΪΣΤΑΜΕΝΟΣ ΤΜΗΜΑΤΟΣ"
+      },
+      {
+        "Id": 6,
+        "Name": "Η ΠΡΟΪΣΤΑΜΕΝΗ ΤΜΗΜΑΤΟΣ"
+      },
+      {
+        "Id": 4,
+        "Name": "Η ΠΡΟΪΣΤΑΜΕΝΗ ΔΙΕΥΘΥΝΣΗΣ"
+      }
+    ],
+    "errormessages": [
+      {
+        "Id": "518",
+        "Username": null,
+        "ErrorMessage": "Message: Cannot read property 'length' of null\nStack: \n",
+        "DateCreated": "2020-01-19T22:00:00.000Z"
+      },
+      {
+        "Id": "507",
+        "Username": "dvasilakis",
+        "ErrorMessage": "Message: Loading chunk 0 failed.\n(error: http://localhost:3000/static/js/0.chunk.js)\nStack: \n",
+        "DateCreated": "2020-01-19T22:00:00.000Z"
+      },
+      {
+        "Id": "508",
+        "Username": "dvasilakis",
+        "ErrorMessage": "Message: Loading chunk 0 failed.\n(error: http://localhost:3000/static/js/0.chunk.js)\nStack: \n",
+        "DateCreated": "2020-01-19T22:00:00.000Z"
+      },
+      {
+        "Id": "509",
+        "Username": "dvasilakis",
+        "ErrorMessage": "Message: Loading chunk 0 failed.\n(error: http://localhost:3000/static/js/0.chunk.js)\nStack: \n",
+        "DateCreated": "2020-01-19T22:00:00.000Z"
+      },
+      {
+        "Id": "510",
+        "Username": "dvasilakis",
+        "ErrorMessage": "Message: Loading chunk 0 failed.\n(error: http://localhost:3000/static/js/0.chunk.js)\nStack: \n",
+        "DateCreated": "2020-01-19T22:00:00.000Z"
+      },
+      {
+        "Id": "511",
+        "Username": "dvasilakis",
+        "ErrorMessage": "Message: Loading chunk 0 failed.\n(error: http://localhost:3000/static/js/0.chunk.js)\nStack: \n",
+        "DateCreated": "2020-01-19T22:00:00.000Z"
+      },
+      {
+        "Id": "512",
+        "Username": "dvasilakis",
+        "ErrorMessage": "Message: Loading chunk 0 failed.\n(error: http://localhost:3000/static/js/0.chunk.js)\nStack: \n",
+        "DateCreated": "2020-01-19T22:00:00.000Z"
+      },
+      {
+        "Id": "513",
+        "Username": "dvasilakis",
+        "ErrorMessage": "Message: Loading chunk 0 failed.\n(error: http://localhost:3000/static/js/0.chunk.js)\nStack: \n",
+        "DateCreated": "2020-01-19T22:00:00.000Z"
+      },
+      {
+        "Id": "514",
+        "Username": "dvasilakis",
+        "ErrorMessage": "Message: Loading chunk 0 failed.\n(error: http://localhost:3000/static/js/0.chunk.js)\nStack: \n",
+        "DateCreated": "2020-01-19T22:00:00.000Z"
+      },
+      {
+        "Id": "515",
+        "Username": "dvasilakis",
+        "ErrorMessage": "Message: Loading chunk 0 failed.\n(error: http://localhost:3000/static/js/0.chunk.js)\nStack: \n",
+        "DateCreated": "2020-01-19T22:00:00.000Z"
+      },
+      {
+        "Id": "516",
+        "Username": "dvasilakis",
+        "ErrorMessage": "Message: Loading chunk 0 failed.\n(error: http://localhost:3000/static/js/0.chunk.js)\nStack: \n",
+        "DateCreated": "2020-01-19T22:00:00.000Z"
+      },
+      {
+        "Id": "517",
+        "Username": "dvasilakis",
+        "ErrorMessage": "Message: Loading chunk 0 failed.\n(error: http://localhost:3000/static/js/0.chunk.js)\nStack: \n",
+        "DateCreated": "2020-01-19T22:00:00.000Z"
+      }
+    ],
+    "reservations": [
+      {
+        "Id": "2",
+        "Name": "Ε.Α.Α.ΔΗ.ΣΥ.",
+        "Percentage": 0.07,
+        "Stamp": 3,
+        "StampOGA": 20,
+        "IsReservation": true,
+        "Order": 1
+      },
+      {
+        "Id": "5",
+        "Name": "Α.Ε.Π.Π",
+        "Percentage": 0.06,
+        "Stamp": 3,
+        "StampOGA": 20,
+        "IsReservation": true,
+        "Order": 2
+      },
+      {
+        "Id": "8",
+        "Name": "Φ.Ε.",
+        "Percentage": 8,
+        "Stamp": null,
+        "StampOGA": null,
+        "IsReservation": true,
+        "Order": 3
+      },
+      {
+        "Id": "23",
+        "Name": "Φ.Π.Α.",
+        "Percentage": 24,
+        "Stamp": null,
+        "StampOGA": null,
+        "IsReservation": false,
+        "Order": null
+      }
+    ],
+    "userroles": {
+      "data": [
+        {
+          "Id": "1",
+          "Name": "Admin\r\n"
+        },
+        {
+          "Id": "2",
+          "Name": "Superuser"
+        },
+        {
+          "Id": "3",
+          "Name": "Create\r\n"
+        },
+        {
+          "Id": "4",
+          "Name": "Edit\r\n"
+        },
+        {
+          "Id": "5",
+          "Name": "Delete\r\n"
+        },
+        {
+          "Id": "6",
+          "Name": "View\r\n"
+        }
+      ],
+      "status": 200,
+      "statusText": "OK",
+      "headers": {
+        "content-length": "181",
+        "content-type": "application/json; charset=utf-8"
+      },
+      "config": {
+        "url": "http://localhost:7845/userroles",
+        "method": "get",
+        "headers": {
+          "Accept": "application/json, text/plain, */*",
+          "Authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImR2YXNpbGFraXMiLCJpYXQiOjE1Nzk1MTQ4MDUsImV4cCI6MTU3OTU0MzYwNX0.TRQsd-GoxN8f7AQZOLbB82NXUO4iaz_dRVuhCwe1EpU"
+        },
+        "transformRequest": [
+          null
+        ],
+        "transformResponse": [
+          null
+        ],
+        "timeout": 0,
+        "xsrfCookieName": "XSRF-TOKEN",
+        "xsrfHeaderName": "X-XSRF-TOKEN",
+        "maxContentLength": -1
+      },
+      "request": {}
+    },
+    "contractTypes": [
+      {
+        "ContractTypeId": "2",
+        "ContractTypeName": "Προγραμματική"
+      },
+      {
+        "ContractTypeId": "1",
+        "ContractTypeName": "Δημόσιας Ανάθεσης"
+      }
+    ],
+    "users": [
+      {
+        "Id": "20",
+        "Username": "p.chalkitis",
+        "Password": "$2a$10$WyTeEUVG7p5B68syVSC6fe4VqFrPnwown84khLeR920Kf/ChMeR1i",
+        "Role": 1,
+        "Firstname": "Παύλος ",
+        "Lastname": "Χαλκίτης",
+        "userroles": [
+          {
+            "Id": 1,
+            "Name": "Admin\r\n"
+          }
+        ]
+      },
+      {
+        "Id": "4",
+        "Username": "dvasilakis",
+        "Password": "$2a$10$uZiLUhOIDVFc5C6bdu9Lq.6n9p38l90hCYy10pIrU42nLpYe5FR3K",
+        "Role": 1,
+        "Firstname": "Δημήτριος ",
+        "Lastname": "Βασιλάκης",
+        "userroles": [
+          {
+            "Id": 1,
+            "Name": "Admin\r\n"
+          }
+        ]
+      },
+      {
+        "Id": "3",
+        "Username": "admin",
+        "Password": "$2a$10$80mc2Ltf0DBkNvpzkQu51utFnve2iH62IVPO8vGefn2XPrQKvUtti",
+        "Role": 1,
+        "Firstname": "Διαχειριστής",
+        "Lastname": "",
+        "userroles": [
+          {
+            "Id": 1,
+            "Name": "Admin\r\n"
+          }
+        ]
+      },
+      {
+        "Id": "16",
+        "Username": "test1",
+        "Password": "test1",
+        "Role": 2,
+        "Firstname": "test1",
+        "Lastname": "",
+        "userroles": [
+          {
+            "Id": 2,
+            "Name": "Superuser"
+          }
+        ]
+      },
+      {
+        "Id": "19",
+        "Username": "m.apostolopoulou",
+        "Password": "$2a$10$RxnwA6b8Kqv.TYCGjqji9.z8dLcTZcnrdBMMBuhmMb2w/Zm19Xdwm",
+        "Role": 3,
+        "Firstname": "Μαρία",
+        "Lastname": "Αποστολοπούλου",
+        "userroles": [
+          {
+            "Id": 3,
+            "Name": "Create\r\n"
+          }
+        ]
+      },
+      {
+        "Id": "21",
+        "Username": "k.kaloutas",
+        "Password": "$2a$10$ix4aMH88ybzSGJLVTuDHHO7Eh2jsZNUGuF1XLsfFojoeIOneibYW2",
+        "Role": 1,
+        "Firstname": "Κων/νος",
+        "Lastname": "Καλουτάς",
+        "userroles": [
+          {
+            "Id": 1,
+            "Name": "Admin\r\n"
+          }
+        ]
+      },
+      {
+        "Id": "22",
+        "Username": "i.chatzieustratiou",
+        "Password": "$2a$10$QOWDKVhn7I98.ARMOMEm3eoX9X0LuVE2m.4V8Kb6t5VK7MbJ.wrwC",
+        "Role": 2,
+        "Firstname": "Ιωάννης",
+        "Lastname": "Χατζηευστρατίου",
+        "userroles": [
+          {
+            "Id": 2,
+            "Name": "Superuser"
+          }
+        ]
+      },
+      {
+        "Id": "23",
+        "Username": "r.paschou",
+        "Password": "$2a$10$D2VGEY58KY394pZinlrsguKERLVLqKTQBDAoAAJZoHwuVBl2cnjFy",
+        "Role": 1,
+        "Firstname": "Ρωξάνη",
+        "Lastname": "Πάσχου",
+        "userroles": [
+          {
+            "Id": 1,
+            "Name": "Admin\r\n"
+          }
+        ]
+      },
+      {
+        "Id": "9",
+        "Username": "jimakos",
+        "Password": "$2a$10$/RrPU7/xgJ9DExzruJhLbeGDIxjT3hpzTTujiMrJNSwVeuQ2QO.h6",
+        "Role": 2,
+        "Firstname": "Jimakos",
+        "Lastname": null,
+        "userroles": [
+          {
+            "Id": 2,
+            "Name": "Superuser"
+          }
+        ]
+      }
+    ],
+    "agencies": [
+      {
+        "Id": "1",
+        "Name": "Εταιρεία Ανάπτυξης και Τουριστικής Προβολής Αθηνών (ΕΑΤΑ)"
+      },
+      {
+        "Id": "2",
+        "Name": "ΔΑΕΜ Α.Ε. - Ανώνυμη Αναπτυξιακή Εταιρεία Μηχανογράφησης & Επιχειρησιακών Μονάδων ΟΤΑ του Δήμου Αθηναίων\r\n"
+      },
+      {
+        "Id": "11",
+        "Name": "Ο.Π.Α.Ν.Δ.Α"
+      }
+    ]
+  },
+  "contracts_reducer": {
+    "loadedItems": 5,
+    "contractsList": [
+      {
+        "Id": "67",
+        "ContractTypeId": 1,
+        "Title": "LALALALLA",
+        "ProtocolNumber": 122378,
+        "ProtocolDate": "2019-12-31T22:00:00.000Z",
+        "KAE": "1",
+        "Actor": "12",
+        "CodeDirection": "12",
+        "AwardNumber": 213,
+        "AwardDate": "2019-12-31T22:00:00.000Z",
+        "AwardAda": "123d",
+        "CpvCode": "234",
+        "CpvTitle": "234",
+        "AmountPure": 345,
+        "AmountFpa": 82.8,
+        "AmountTotal": 427.8,
+        "Balance": null,
+        "Start": "2019-12-31T22:00:00.000Z",
+        "End": "2019-12-31T22:00:00.000Z",
+        "NumberOfAccounts": 56,
+        "DateCreated": "2020-01-14T09:59:38.000Z",
+        "DateModified": "2020-01-20T09:08:19.000Z",
+        "DirectionId": "2",
+        "DepartmentId": "5",
+        "ConcessionaireName": "234",
+        "ConcessionaireAFM": "324",
+        "HasDownPayment": true,
+        "FpaValue": 24,
+        "OwnerId": "4",
+        "AllUsers": false,
+        "Total": "13",
+        "createdaccounts": null,
+        "contracttype": [
+          {
+            "ContractTypeId": 1,
+            "ContractTypeName": "Δημόσιας Ανάθεσης"
+          }
+        ],
+        "direction": [
+          {
+            "DirectionId": 2,
+            "DirectionName": "Στρατηγικού Σχεδιασμού, Ανθεκτικότητας, Καινοτομίας και Τεκμηρίωσης",
+            "DirectionSupervisor": "Δρ. Κακριδά Ουρανία",
+            "DirectionTelephone": "210.5277110",
+            "DirectionEmail": "d.stratigikou.sxediasmou@athens.gr",
+            "DirectionAddress": "Λιοσίων 22",
+            "DirectionPostCode": "104 38",
+            "DirectionCity": "Αθήνα"
+          }
+        ],
+        "department": [
+          {
+            "DepartmentId": 5,
+            "DirectionId": 2,
+            "DepartmentName": "Ανθεκτικότητας και Βιωσιμότητας",
+            "DepartmentSupervisor": "Νεοφύτου Γεώργιος",
+            "DepartmentTelephone": "210.3721553",
+            "DepartmentEmail": "t.anthektikotitas.biosimotitas@athens.gr"
+          }
+        ],
+        "contractusers": [
+          {
+            "ContractId": 67,
+            "UserId": 4
+          },
+          {
+            "ContractId": 67,
+            "UserId": 19
+          },
+          {
+            "ContractId": 67,
+            "UserId": 23
+          }
+        ],
+        "owner": [
+          {
+            "Id": 4,
+            "Username": "dvasilakis",
+            "Password": "$2a$10$uZiLUhOIDVFc5C6bdu9Lq.6n9p38l90hCYy10pIrU42nLpYe5FR3K",
+            "Role": 1,
+            "Firstname": "Δημήτριος ",
+            "Lastname": "Βασιλάκης"
+          }
+        ]
+      },
+      {
+        "Id": "66",
+        "ContractTypeId": 1,
+        "Title": "asdf",
+        "ProtocolNumber": 1223323,
+        "ProtocolDate": "2019-12-31T22:00:00.000Z",
+        "KAE": "1",
+        "Actor": "12",
+        "CodeDirection": "12",
+        "AwardNumber": 213,
+        "AwardDate": "2019-12-31T22:00:00.000Z",
+        "AwardAda": "123d",
+        "CpvCode": "234",
+        "CpvTitle": "234",
+        "AmountPure": 345,
+        "AmountFpa": 82.8,
+        "AmountTotal": 427.8,
+        "Balance": null,
+        "Start": "2019-12-31T22:00:00.000Z",
+        "End": "2019-12-31T22:00:00.000Z",
+        "NumberOfAccounts": 56,
+        "DateCreated": "2020-01-14T09:50:22.000Z",
+        "DateModified": "2020-01-14T09:50:22.000Z",
+        "DirectionId": "2",
+        "DepartmentId": "5",
+        "ConcessionaireName": "234",
+        "ConcessionaireAFM": "324",
+        "HasDownPayment": true,
+        "FpaValue": 24,
+        "OwnerId": "4",
+        "AllUsers": false,
+        "Total": "13",
+        "createdaccounts": null,
+        "contracttype": [
+          {
+            "ContractTypeId": 1,
+            "ContractTypeName": "Δημόσιας Ανάθεσης"
+          }
+        ],
+        "direction": [
+          {
+            "DirectionId": 2,
+            "DirectionName": "Στρατηγικού Σχεδιασμού, Ανθεκτικότητας, Καινοτομίας και Τεκμηρίωσης",
+            "DirectionSupervisor": "Δρ. Κακριδά Ουρανία",
+            "DirectionTelephone": "210.5277110",
+            "DirectionEmail": "d.stratigikou.sxediasmou@athens.gr",
+            "DirectionAddress": "Λιοσίων 22",
+            "DirectionPostCode": "104 38",
+            "DirectionCity": "Αθήνα"
+          }
+        ],
+        "department": [
+          {
+            "DepartmentId": 5,
+            "DirectionId": 2,
+            "DepartmentName": "Ανθεκτικότητας και Βιωσιμότητας",
+            "DepartmentSupervisor": "Νεοφύτου Γεώργιος",
+            "DepartmentTelephone": "210.3721553",
+            "DepartmentEmail": "t.anthektikotitas.biosimotitas@athens.gr"
+          }
+        ],
+        "contractusers": null,
+        "owner": [
+          {
+            "Id": 4,
+            "Username": "dvasilakis",
+            "Password": "$2a$10$uZiLUhOIDVFc5C6bdu9Lq.6n9p38l90hCYy10pIrU42nLpYe5FR3K",
+            "Role": 1,
+            "Firstname": "Δημήτριος ",
+            "Lastname": "Βασιλάκης"
+          }
+        ]
+      },
+      {
+        "Id": "65",
+        "ContractTypeId": 1,
+        "Title": "asdf",
+        "ProtocolNumber": 12323,
+        "ProtocolDate": "2019-12-31T22:00:00.000Z",
+        "KAE": "1",
+        "Actor": "12",
+        "CodeDirection": "12",
+        "AwardNumber": 213,
+        "AwardDate": "2019-12-31T22:00:00.000Z",
+        "AwardAda": "123d",
+        "CpvCode": "234",
+        "CpvTitle": "234",
+        "AmountPure": 345,
+        "AmountFpa": 82.8,
+        "AmountTotal": 427.8,
+        "Balance": null,
+        "Start": "2019-12-31T22:00:00.000Z",
+        "End": "2019-12-31T22:00:00.000Z",
+        "NumberOfAccounts": 56,
+        "DateCreated": "2020-01-14T09:43:59.000Z",
+        "DateModified": "2020-01-14T09:43:59.000Z",
+        "DirectionId": "2",
+        "DepartmentId": "5",
+        "ConcessionaireName": "234",
+        "ConcessionaireAFM": "324",
+        "HasDownPayment": true,
+        "FpaValue": 24,
+        "OwnerId": "4",
+        "AllUsers": false,
+        "Total": "13",
+        "createdaccounts": null,
+        "contracttype": [
+          {
+            "ContractTypeId": 1,
+            "ContractTypeName": "Δημόσιας Ανάθεσης"
+          }
+        ],
+        "direction": [
+          {
+            "DirectionId": 2,
+            "DirectionName": "Στρατηγικού Σχεδιασμού, Ανθεκτικότητας, Καινοτομίας και Τεκμηρίωσης",
+            "DirectionSupervisor": "Δρ. Κακριδά Ουρανία",
+            "DirectionTelephone": "210.5277110",
+            "DirectionEmail": "d.stratigikou.sxediasmou@athens.gr",
+            "DirectionAddress": "Λιοσίων 22",
+            "DirectionPostCode": "104 38",
+            "DirectionCity": "Αθήνα"
+          }
+        ],
+        "department": [
+          {
+            "DepartmentId": 5,
+            "DirectionId": 2,
+            "DepartmentName": "Ανθεκτικότητας και Βιωσιμότητας",
+            "DepartmentSupervisor": "Νεοφύτου Γεώργιος",
+            "DepartmentTelephone": "210.3721553",
+            "DepartmentEmail": "t.anthektikotitas.biosimotitas@athens.gr"
+          }
+        ],
+        "contractusers": null,
+        "owner": [
+          {
+            "Id": 4,
+            "Username": "dvasilakis",
+            "Password": "$2a$10$uZiLUhOIDVFc5C6bdu9Lq.6n9p38l90hCYy10pIrU42nLpYe5FR3K",
+            "Role": 1,
+            "Firstname": "Δημήτριος ",
+            "Lastname": "Βασιλάκης"
+          }
+        ]
+      },
+      {
+        "Id": "64",
+        "ContractTypeId": 1,
+        "Title": "asdf",
+        "ProtocolNumber": 123,
+        "ProtocolDate": "2019-12-31T22:00:00.000Z",
+        "KAE": "1",
+        "Actor": "12",
+        "CodeDirection": "12",
+        "AwardNumber": 213,
+        "AwardDate": "2019-12-31T22:00:00.000Z",
+        "AwardAda": "123d",
+        "CpvCode": "234",
+        "CpvTitle": "234",
+        "AmountPure": 345,
+        "AmountFpa": 82.8,
+        "AmountTotal": 427.8,
+        "Balance": null,
+        "Start": "2019-12-31T22:00:00.000Z",
+        "End": "2019-12-31T22:00:00.000Z",
+        "NumberOfAccounts": 56,
+        "DateCreated": "2020-01-14T09:40:23.000Z",
+        "DateModified": "2020-01-14T09:40:23.000Z",
+        "DirectionId": "2",
+        "DepartmentId": "5",
+        "ConcessionaireName": "234",
+        "ConcessionaireAFM": "324",
+        "HasDownPayment": true,
+        "FpaValue": 24,
+        "OwnerId": "4",
+        "AllUsers": false,
+        "Total": "13",
+        "createdaccounts": null,
+        "contracttype": [
+          {
+            "ContractTypeId": 1,
+            "ContractTypeName": "Δημόσιας Ανάθεσης"
+          }
+        ],
+        "direction": [
+          {
+            "DirectionId": 2,
+            "DirectionName": "Στρατηγικού Σχεδιασμού, Ανθεκτικότητας, Καινοτομίας και Τεκμηρίωσης",
+            "DirectionSupervisor": "Δρ. Κακριδά Ουρανία",
+            "DirectionTelephone": "210.5277110",
+            "DirectionEmail": "d.stratigikou.sxediasmou@athens.gr",
+            "DirectionAddress": "Λιοσίων 22",
+            "DirectionPostCode": "104 38",
+            "DirectionCity": "Αθήνα"
+          }
+        ],
+        "department": [
+          {
+            "DepartmentId": 5,
+            "DirectionId": 2,
+            "DepartmentName": "Ανθεκτικότητας και Βιωσιμότητας",
+            "DepartmentSupervisor": "Νεοφύτου Γεώργιος",
+            "DepartmentTelephone": "210.3721553",
+            "DepartmentEmail": "t.anthektikotitas.biosimotitas@athens.gr"
+          }
+        ],
+        "contractusers": null,
+        "owner": [
+          {
+            "Id": 4,
+            "Username": "dvasilakis",
+            "Password": "$2a$10$uZiLUhOIDVFc5C6bdu9Lq.6n9p38l90hCYy10pIrU42nLpYe5FR3K",
+            "Role": 1,
+            "Firstname": "Δημήτριος ",
+            "Lastname": "Βασιλάκης"
+          }
+        ]
+      },
+      {
+        "Id": "63",
+        "ContractTypeId": 2,
+        "Title": "asdfasdfasdf",
+        "ProtocolNumber": 3452334,
+        "ProtocolDate": "2019-12-31T22:00:00.000Z",
+        "KAE": "1",
+        "Actor": "3",
+        "CodeDirection": "23",
+        "AwardNumber": 3,
+        "AwardDate": "2019-12-31T22:00:00.000Z",
+        "AwardAda": "dfgsdg",
+        "CpvCode": "123",
+        "CpvTitle": "234",
+        "AmountPure": 345,
+        "AmountFpa": 82.8,
+        "AmountTotal": 427.8,
+        "Balance": null,
+        "Start": "2020-12-30T22:00:00.000Z",
+        "End": "2020-12-30T22:00:00.000Z",
+        "NumberOfAccounts": 5,
+        "DateCreated": "2020-01-13T10:31:34.000Z",
+        "DateModified": "2020-01-13T10:31:34.000Z",
+        "DirectionId": "3",
+        "DepartmentId": "11",
+        "ConcessionaireName": "asdf",
+        "ConcessionaireAFM": "23342",
+        "HasDownPayment": true,
+        "FpaValue": 24,
+        "OwnerId": "4",
+        "AllUsers": null,
+        "Total": "13",
+        "createdaccounts": null,
+        "contracttype": [
+          {
+            "ContractTypeId": 2,
+            "ContractTypeName": "Προγραμματική"
+          }
+        ],
+        "direction": [
+          {
+            "DirectionId": 3,
+            "DirectionName": "Προμηθειών και Αποθηκών",
+            "DirectionSupervisor": "Βακουντούζης Ιωάννης",
+            "DirectionTelephone": "210.5225446",
+            "DirectionEmail": "d.prom.apothikon@athens.gr",
+            "DirectionAddress": "Κων/νου Παλαιολόγου 9",
+            "DirectionPostCode": "104 38",
+            "DirectionCity": "Αθήνα"
+          }
+        ],
+        "department": [
+          {
+            "DepartmentId": 11,
+            "DirectionId": 3,
+            "DepartmentName": "Διαδικασιών Σύναψης Δημοσίων Συμβάσεων",
+            "DepartmentSupervisor": "Μπιμπούδης Παναγιώτης",
+            "DepartmentTelephone": "213.2082956",
+            "DepartmentEmail": "t.prom.dimoprasies@athens.gr"
+          }
+        ],
+        "contractusers": null,
+        "owner": [
+          {
+            "Id": 4,
+            "Username": "dvasilakis",
+            "Password": "$2a$10$uZiLUhOIDVFc5C6bdu9Lq.6n9p38l90hCYy10pIrU42nLpYe5FR3K",
+            "Role": 1,
+            "Firstname": "Δημήτριος ",
+            "Lastname": "Βασιλάκης"
+          }
+        ]
+      }
+    ],
+    "contractDetails": {
+      "Id": "67",
+      "ContractTypeId": 1,
+      "Title": "LALALALLA",
+      "ProtocolNumber": 122378,
+      "ProtocolDate": "2019-12-31T22:00:00.000Z",
+      "KAE": "1",
+      "Actor": "12",
+      "CodeDirection": "12",
+      "AwardNumber": 213,
+      "AwardDate": "2019-12-31T22:00:00.000Z",
+      "AwardAda": "123d",
+      "CpvCode": "234",
+      "CpvTitle": "234",
+      "AmountPure": 345,
+      "AmountFpa": 82.8,
+      "AmountTotal": 427.8,
+      "Balance": null,
+      "Start": "2019-12-31T22:00:00.000Z",
+      "End": "2019-12-31T22:00:00.000Z",
+      "NumberOfAccounts": 56,
+      "DateCreated": "2020-01-14T09:59:38.000Z",
+      "DateModified": "2020-01-20T09:08:19.000Z",
+      "DirectionId": "2",
+      "DepartmentId": "5",
+      "ConcessionaireName": "234",
+      "ConcessionaireAFM": "324",
+      "HasDownPayment": true,
+      "FpaValue": 24,
+      "OwnerId": "4",
+      "AllUsers": false,
+      "Total": "13",
+      "createdaccounts": null,
+      "contracttype": [
+        {
+          "ContractTypeId": 1,
+          "ContractTypeName": "Δημόσιας Ανάθεσης"
+        }
+      ],
+      "direction": [
+        {
+          "DirectionId": 2,
+          "DirectionName": "Στρατηγικού Σχεδιασμού, Ανθεκτικότητας, Καινοτομίας και Τεκμηρίωσης",
+          "DirectionSupervisor": "Δρ. Κακριδά Ουρανία",
+          "DirectionTelephone": "210.5277110",
+          "DirectionEmail": "d.stratigikou.sxediasmou@athens.gr",
+          "DirectionAddress": "Λιοσίων 22",
+          "DirectionPostCode": "104 38",
+          "DirectionCity": "Αθήνα"
+        }
+      ],
+      "department": [
+        {
+          "DepartmentId": 5,
+          "DirectionId": 2,
+          "DepartmentName": "Ανθεκτικότητας και Βιωσιμότητας",
+          "DepartmentSupervisor": "Νεοφύτου Γεώργιος",
+          "DepartmentTelephone": "210.3721553",
+          "DepartmentEmail": "t.anthektikotitas.biosimotitas@athens.gr"
+        }
+      ],
+      "contractusers": [
+        {
+          "ContractId": 67,
+          "UserId": 4
+        },
+        {
+          "ContractId": 67,
+          "UserId": 19
+        },
+        {
+          "ContractId": 67,
+          "UserId": 23
+        }
+      ],
+      "owner": [
+        {
+          "Id": 4,
+          "Username": "dvasilakis",
+          "Password": "$2a$10$uZiLUhOIDVFc5C6bdu9Lq.6n9p38l90hCYy10pIrU42nLpYe5FR3K",
+          "Role": 1,
+          "Firstname": "Δημήτριος ",
+          "Lastname": "Βασιλάκης"
+        }
+      ]
+    }
+  },
+  "account_reducer": {},
+  "token_reducer": {
+    "token": {
+      "data": {
+        "success": true,
+        "id": "4",
+        "username": "dvasilakis",
+        "role": 1,
+        "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImR2YXNpbGFraXMiLCJpYXQiOjE1Nzk1MTQ4MDUsImV4cCI6MTU3OTU0MzYwNX0.TRQsd-GoxN8f7AQZOLbB82NXUO4iaz_dRVuhCwe1EpU",
+        "expiresAt": "2020-1-20 20:06:45"
+      },
+      "status": 200,
+      "statusText": "OK",
+      "headers": {
+        "content-length": "262",
+        "content-type": "application/json; charset=utf-8"
+      },
+      "config": {
+        "url": "http://localhost:7845/login?u=dvasilakis&p=arta",
+        "method": "get",
+        "headers": {
+          "Accept": "application/json, text/plain, */*"
+        },
+        "transformRequest": [
+          null
+        ],
+        "transformResponse": [
+          null
+        ],
+        "timeout": 0,
+        "xsrfCookieName": "XSRF-TOKEN",
+        "xsrfHeaderName": "X-XSRF-TOKEN",
+        "maxContentLength": -1
+      },
+      "request": {}
+    }
+  }
+}

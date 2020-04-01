@@ -1,0 +1,26 @@
+.centered {  
+  position: absolute;
+  top: 50%;
+  right: 50%;
+  transform: translate(50%, -50%);
+  background: #333;
+  min-width: 500px;
+  padding: 20px;
+  border-radius: 20px;
+}
+
+.errormessage {
+  font-size: 26px;
+  font-weight: 900;
+  background: black;
+  color: red;
+  text-align: center;
+}
+
+.infomessage {
+  font-size: 26px;
+  font-weight: 900;
+  background: gold;
+  color: black;
+  text-align: center;
+}

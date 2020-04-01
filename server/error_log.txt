@@ -1,0 +1,12 @@
+Message: Cannot read property 'Number' of undefined
+Stack: TypeError: Cannot read property 'Number' of undefined
+    at Object.getAttachment2 (c:\Projects\React\git_ordering\server\WORD\rawXml\DownPayment\accountAttachments.js:42:38)
+    at Object.getAttachmentsXmlValue (c:\Projects\React\git_ordering\server\WORD\rawXml\DownPayment\accountAttachments.js:386:8)
+    at Object.setDataForDownpaymentAccountDocument (c:\Projects\React\git_ordering\server\FileData\DownPaymentData.js:73:49)
+    at c:\Projects\React\git_ordering\server\app.js:113:35
+    at Layer.handle [as handle_request] (c:\Projects\React\git_ordering\server\node_modules\express\lib\router\layer.js:95:5)
+    at next (c:\Projects\React\git_ordering\server\node_modules\express\lib\router\route.js:137:13)
+    at Route.dispatch (c:\Projects\React\git_ordering\server\node_modules\express\lib\router\route.js:112:3)
+    at Layer.handle [as handle_request] (c:\Projects\React\git_ordering\server\node_modules\express\lib\router\layer.js:95:5)
+    at c:\Projects\React\git_ordering\server\node_modules\express\lib\router\index.js:281:22
+    at Function.process_params (c:\Projects\React\git_ordering\server\node_modules\express\lib\router\index.js:335:12)
