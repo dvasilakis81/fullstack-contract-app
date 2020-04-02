@@ -1,9 +1,6 @@
-const dbConfig = require('../dbConfig')
 const jwt = require('jsonwebtoken');
-const util = require('util')
-const Pool = require('pg').Pool
-const pool = new Pool(dbConfig.params)
-
+const util = require('util');
+const pool = require('../dbConfig').pool;
 const helper = require('../../HelperMethods/helpermethods')
 const secretKey = process.env.API_SECRET || 'athens_2019';
 
@@ -48,7 +45,7 @@ const logError = (req, res, next, err, checkToken, ret) => {
 
   if (checkToken === true) {
     let token = req.headers['x-access-token'] || req.headers['authorization']; // Express headers are auto converted to lowercase
-    if (token.startsWith('Bearer '))
+    if (token && token.startsWith('Bearer '))
       token = token.slice(7, token.length);
 
     if (token) {

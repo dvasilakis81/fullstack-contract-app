@@ -1,9 +1,5 @@
-const dbConfig = require('../dbConfig')
+const pool = require('../dbConfig').pool
 const util = require('util')
-const Pool = require('pg').Pool
-const pool = new Pool(dbConfig.params)
-
-
 const helper = require('../../HelperMethods/helpermethods')
 const Signatures = require('./Signatures')
 

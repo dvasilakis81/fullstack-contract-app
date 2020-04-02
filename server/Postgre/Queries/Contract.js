@@ -1,8 +1,6 @@
 const helper = require('../../HelperMethods/helpermethods')
-const dbConfig = require('../dbConfig')
+const pool = require('../dbConfig').pool
 const util = require('util')
-const Pool = require('pg').Pool
-const pool = new Pool(dbConfig.params)
 
 // var types = require('pg').types
 // types.setTypeParser(1700, function(val) {

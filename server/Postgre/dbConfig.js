@@ -6,6 +6,7 @@
 //   port: process.env.PGPORT,
 // }
   //expiresAt: process.env.TOKEN_EXPIRES_IN
+const Pool = require('pg').Pool
 
 var params = {
   host: 'localhost',
@@ -14,7 +15,9 @@ var params = {
   password: '123',
   port: '5432'
 }
+var pool = new Pool({connectionString: 'postgresql://postgres:123@localhost:5432/Ordering2', ssl: false})
 
 module.exports = {
-  params
+  params,
+  pool
 }
