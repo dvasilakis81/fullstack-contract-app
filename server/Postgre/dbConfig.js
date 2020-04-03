@@ -15,7 +15,10 @@ var params = {
   password: '123',
   port: '5432'
 }
-var pool = new Pool({connectionString: 'postgresql://postgres:123@localhost:5432/Ordering2', ssl: false})
+const CONNECTION_STRING = process.env.DATABASE_URL || 'postgresql://postgres:123@localhost:5432/Ordering2';
+const SSL = process.env.NODE_ENV === 'production';
+
+var pool = new Pool({connectionString: CONNECTION_STRING, ssl: SSL})
 
 module.exports = {
   params,
