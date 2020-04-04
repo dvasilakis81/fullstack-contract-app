@@ -33,13 +33,6 @@ app.use(express.static(path.join(__dirname, "./WORD/templates")));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
-if (ENV === 'production'){
-  app.use(express.static(path.join(__dirname, '../client/build')))
-  app.use((req,res)=>{
-    res.sendfile(path.join(__dirname, '../client/build/index.html'))
-  })
-}
-
 app.post('/diavlog', dbLogin.checkToken, function (req, res, next) {
   var fs = require('fs');
   let d = new Date();
@@ -205,7 +198,15 @@ app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
-app.use(express.static(path.join(__dirname, 'public')));
+
+if (ENV === 'production') {
+  app.use(express.static(path.join(__dirname, '../client/build')))
+  app.use((req, res) => {
+    res.sendFile(path.join(__dirname, '../client/build/index.html'))
+  })
+}
+else
+  app.use(express.static(path.join(__dirname, 'public')));
 
 // app.use('/', indexRouter);
 // app.use('/users', usersRouter);
@@ -223,7 +224,7 @@ app.use(function (err, req, res, next) {
   res.locals.error = req.app.get('env') === 'development' ? err : {};
   helper.consoleLog('ERROR: ' + err.message)
   var errorMessage = 'Message: ' + err.message + '\nStack: ' + err.stack + '\n';
-  dbError.logError(req, res, next, errorMessage.substring(0,990), true, false)
+  dbError.logError(req, res, next, errorMessage.substring(0, 990), true, false)
 
   var inputPath = path.join(__dirname, "error_log.txt")
   fs.writeFile(inputPath, errorMessage, (err) => {
@@ -231,7 +232,7 @@ app.use(function (err, req, res, next) {
     helper.consoleLog('Error message saved!');
   });
 
-  res.status(err.status || 500).json('asdf');  
+  res.status(err.status || 500).json('asdf');
 });
 
 module.exports = app;

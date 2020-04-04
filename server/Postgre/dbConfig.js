@@ -15,9 +15,10 @@ var params = {
   password: '123',
   port: '5432'
 }
-const CONNECTION_STRING = process.env.DATABASE_URL || 'postgresql://postgres:123@localhost:5432/Ordering2';
+const CONNECTION_STRING = process.env.HEROKU_POSTGRESQL_OLIVE_URL || 'postgresql://postgres:123@localhost:5432/Ordering2';
 const SSL = process.env.NODE_ENV === 'production';
 
+console.log('CONNECTION_STRING: ' + CONNECTION_STRING);
 var pool = new Pool({connectionString: CONNECTION_STRING, ssl: SSL})
 
 module.exports = {

@@ -158,7 +158,7 @@ const deleteUser = (req, res, next) => {
 
 const login = (request, response, next) => {
   var ret = ''
-
+ 
   const dbConfig1 = process.env.API_SECRET || 'athens_2019'
   const username = request.query.u
   const password = request.query.p

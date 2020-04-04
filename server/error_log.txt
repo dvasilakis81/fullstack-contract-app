@@ -1,2 +1,12 @@
-Message: ENOENT: no such file or directory, stat 'c:\Projects\Node\fullstack-contract-app\client\build\index.html'
-Stack: Error: ENOENT: no such file or directory, stat 'c:\Projects\Node\fullstack-contract-app\client\build\index.html'
+Message: Not Found
+Stack: NotFoundError: Not Found
+    at c:\Projects\Node\fullstack-contract-app\server\app.js:216:8
+    at Layer.handle [as handle_request] (c:\Projects\Node\fullstack-contract-app\node_modules\express\lib\router\layer.js:95:5)
+    at trim_prefix (c:\Projects\Node\fullstack-contract-app\node_modules\express\lib\router\index.js:317:13)
+    at c:\Projects\Node\fullstack-contract-app\node_modules\express\lib\router\index.js:284:7
+    at Function.process_params (c:\Projects\Node\fullstack-contract-app\node_modules\express\lib\router\index.js:335:12)
+    at next (c:\Projects\Node\fullstack-contract-app\node_modules\express\lib\router\index.js:275:10)
+    at SendStream.error (c:\Projects\Node\fullstack-contract-app\node_modules\serve-static\index.js:121:7)
+    at SendStream.emit (events.js:197:13)
+    at SendStream.error (c:\Projects\Node\fullstack-contract-app\node_modules\send\index.js:270:17)
+    at SendStream.onStatError (c:\Projects\Node\fullstack-contract-app\node_modules\send\index.js:421:12)
