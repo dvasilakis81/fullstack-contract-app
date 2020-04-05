@@ -5,8 +5,7 @@ import { Redirect } from "react-router-dom";
 class Home extends Component {
 
   RedirectTo() {
-    var tokenjwt = this.props.token;
-    console.log('Home: this.props.token:' + tokenjwt + ' tokenjwt.data:' + tokenjwt.data + ' tokenjwt.data.token' + tokenjwt.data.token)
+    var tokenjwt = this.props.token;    
     if (tokenjwt && tokenjwt.data && tokenjwt.data.token)
       return <Redirect push to='/contracts' />
     else
