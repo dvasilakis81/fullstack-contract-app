@@ -19,7 +19,7 @@ class AccountContainer extends Component {
     this.props.getAccount(this.props.token.data.token, this.props.contractId, this.props.accountNumber)
   }
 
-  getAccountTemplate() {    
+  getAccountTemplate() {
     if (this.props.accountPending)
       return showGenericMessage('Αναμονή για τον λογαριασμό ...', false, false)
     else {
@@ -37,7 +37,7 @@ class AccountContainer extends Component {
               ContractId: this.props.contractId,
               ContractTitle: this.props.title,
               ContractTypeId: this.props.contractTypeId,
-              isDownpayment: this.props.isDownpayment,              
+              isDownpayment: this.props.isDownpayment,
               isEdit: false,
               DownpaymentLawArticle: '',
               AmountPure: null,
@@ -85,16 +85,15 @@ class AccountContainer extends Component {
 
   render() {
 
-    // if (this.props.account && this.props.account.success !== undefined && !this.props.account.success)
-    //   return <Redirect push to='/login' />
-    // else {
-      return (this.getAccountTemplate())
-    //}
+    if (this.props.account && this.props.account.tokenIsValid === false)
+      return <Redirect push to='/login' />
+    else
+      return (this.getAccountTemplate())    
   }
 }
 
 function mapStateToProps(state) {
-  return {    
+  return {
     account: state.account_reducer.account,
     accountPending: state.account_reducer.accountPending,
     accountRejected: state.account_reducer.accountRejected,
