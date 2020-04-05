@@ -85,14 +85,11 @@ class AccountContainer extends Component {
 
   render() {
 
-    if (this.props.account && this.props.account.success !== undefined && !this.props.account.success)
-      return <Redirect push to='/login' />
-    else {
-      return (
-        <>
-          {this.getAccountTemplate()}
-        </>)
-    }
+    // if (this.props.account && this.props.account.success !== undefined && !this.props.account.success)
+    //   return <Redirect push to='/login' />
+    // else {
+      return (this.getAccountTemplate())
+    //}
   }
 }
 
