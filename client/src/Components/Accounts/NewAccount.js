@@ -67,7 +67,7 @@ class NewAccount extends Component {
     return ret;
   }
   render(props) {
-    if (this.state.redirectToLogin) {
+    if (this.state.redirectToLogin === true) {
       console.log('New Account: RESET_ACTION')
       store.dispatch({ type: "RESET_ACTION", payload: null });
       return <Redirect push to="/login" />;
