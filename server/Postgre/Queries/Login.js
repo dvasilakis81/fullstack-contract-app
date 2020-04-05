@@ -182,7 +182,7 @@ const login = (request, response, next) => {
           else {
             //let token = jwt.sign({ username: username }, secretKey, { expiresIn: (process.env.TOKEN_EXPIRES_IN || '2h') });
             let token = jwt.sign({ username: username }, secretKey, { expiresIn: ('2h') });
-            response.json({
+            response.status(200).json({
               success: true,
               id: results.rows[0].Id,
               username: results.rows[0].Username,
