@@ -352,7 +352,7 @@ class ContractsPageBody extends Component {
     console.log('contractsList: ' + contractsList)
     console.log('contractsList.tokenIsValid: ' + contractsList.tokenIsValid)
     if (contractsList && contractsList.tokenIsValid === false) {
-      console.log('RESET_ACTION')
+      console.log('Contracts dispatch RESET_ACTION')
       store.dispatch({ type: "RESET_ACTION", payload: null });
       return <Redirect push to="/login" />;
     } else
