@@ -12,6 +12,7 @@ export function setDimensions(store) {
 }
 
 export function resetData(store) {
+  console.log('resetData just called')
   store.dispatch({ type: 'RESET_ACTION', payload: null });
   setDimensions(store);
 }
