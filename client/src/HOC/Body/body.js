@@ -15,22 +15,22 @@ class Body extends Component {
 
 	componentDidMount() {
 		//console.log('Body: this.props.token:' + this.props.token + ' tokenjwt.data:' + this.props.token.data + ' tokenjwt.data.token' + this.props.token.data.token)
-		if (this.props.isLoginPage === undefined) {
-			var l = window.history.length * -1
-			var dtNow = new Date()
-			if (this.props.token && this.props.token.data) {
-				var dtTokeExpiresAt = new Date(this.props.token.data.expiresAt);
-				var dtDiffs = (dtTokeExpiresAt - dtNow)
-				console.log('Body: dtTokeExpiresAt:' + dtTokeExpiresAt)
-				console.log('Body: dtNow:' + dtNow)
-				console.log('Body: dtDiffs:' + dtDiffs)
-				if (dtDiffs <= 0) {										
-					this.setState({ redirectToLogin: true });
-				}
-			} else {				
-				this.setState({ redirectToLogin: true });				
-			}
-		}
+		// if (this.props.isLoginPage === undefined) {
+		// 	var l = window.history.length * -1
+		// 	var dtNow = new Date()
+		// 	if (this.props.token && this.props.token.data) {
+		// 		var dtTokeExpiresAt = new Date(this.props.token.data.expiresAt);
+		// 		var dtDiffs = (dtTokeExpiresAt - dtNow)
+		// 		console.log('Body: dtTokeExpiresAt:' + dtTokeExpiresAt)
+		// 		console.log('Body: dtNow:' + dtNow)
+		// 		console.log('Body: dtDiffs:' + dtDiffs)
+		// 		if (dtDiffs <= 0) {										
+		// 			this.setState({ redirectToLogin: true });
+		// 		}
+		// 	} else {				
+		// 		this.setState({ redirectToLogin: true });				
+		// 	}
+		// }
 	}
 
 	render() {
