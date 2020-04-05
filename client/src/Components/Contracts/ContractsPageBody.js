@@ -80,8 +80,7 @@ class ContractsPageBody extends Component {
 
   componentDidMount() {
     if (this.props.token && this.props.token.data) {
-      if (this.props.doRefresh === undefined || (this.props.doRefresh !== undefined && this.props.doRefresh)) {
-        //console.log('Refresh is happening ...')
+      if (this.props.doRefresh === undefined || (this.props.doRefresh !== undefined && this.props.doRefresh)) {        
         //if (this.props.token.data.role === 1) {
 
         axios.get(getHostUrl() + "/users", { headers: { Authorization: "Bearer " + this.props.token.data.token } }).then(response => {

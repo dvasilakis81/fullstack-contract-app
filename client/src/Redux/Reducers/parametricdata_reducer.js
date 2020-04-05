@@ -8,8 +8,7 @@ export default function (state = {}, action) {
     case 'DO_REFRESH':
       state = { ...state, doRefresh: action.payload }
       break;
-    case 'SCREEN_DIMENSIONS':
-      //console.log('Reducer: Set SCREEN_DIMENSIONS: w: ' + action.payload.width + ' h: ' + action.payload.height)
+    case 'SCREEN_DIMENSIONS':      
       state = { ...state, screenDimensions: action.payload }
       break;
     case 'GET_MUN_DIRECTIONS':
@@ -31,8 +30,7 @@ export default function (state = {}, action) {
           ccPossibleValues.push(directionValue)
       }
       //ccPossibleValues.push(directionValue)
-      state = { ...state, ccValues: ccPossibleValues };
-      console.log(ccPossibleValues)
+      state = { ...state, ccValues: ccPossibleValues };      
       break;
     case 'GET_CONTRACT_TYPES':
       state = { ...state, contractTypes: action.payload.data };

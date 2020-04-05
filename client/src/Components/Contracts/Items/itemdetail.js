@@ -597,8 +597,7 @@ class ItemDetail extends React.Component {
 	}
 
 	getItemTemplate(contractDetails, windowHeight) {
-
-		//console.log('Δημιουργός σύμβασης ' + contractDetails.owner.length);		
+	
 		return (
 			<Scrollbars style={{ display: 'flex', flex: '1', flexFlow: 'column', overflowY: 'auto', overflowX: 'hidden' }}>
 				<Grid container xl style={{ flexGrow: '1', flexFlow: 'column', alignItems: 'stretch', height: '100%', maxHeight: windowHeight, overflowX: 'hidden' }}>

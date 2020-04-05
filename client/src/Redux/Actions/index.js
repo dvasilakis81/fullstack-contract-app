@@ -31,8 +31,7 @@ export function getAccount(token, contractId, accountNumber) {
 }
 
 export function login(username, password) {
-  var url = `${URL}/login?u=` + username + '&p=' + password;
-  //console.log('function login ' + url)
+  var url = `${URL}/login?u=` + username + '&p=' + password;  
   const request = axios.get(url)
   return {
     type: 'GET_TOKEN_JWT',

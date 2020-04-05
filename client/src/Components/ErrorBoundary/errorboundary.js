@@ -53,8 +53,7 @@ class ErrorBoundary extends React.Component {
   }
 
   render() {
-
-    //console.log('Προσπάθεια καταγραφής λάθους: ' + this.state.msgResponseLogClientError);
+  
     var dimensions = setDimensions(store);
     if (this.state.error) {
 
