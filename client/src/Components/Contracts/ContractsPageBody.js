@@ -350,7 +350,7 @@ class ContractsPageBody extends Component {
     var isSearchMode = (this.state.searchValue && this.state.searchValue.length > minCharsToSearch);
     let contractsList = isSearchMode ? this.props.searchContractsList : this.props.contracts
     console.log('contractsList: ' + contractsList)
-    console.log('contractsList.tokenIsValid: ' + contractsList.tokenIsValid)
+    console.log('contractsList.tokenIsValid: ' + contractsList ? contractsList.tokenIsValid : 'undefined')
     // if (contractsList && contractsList.tokenIsValid === false) {
     //   console.log('Contracts dispatch RESET_ACTION')
     //   store.dispatch({ type: "RESET_ACTION", payload: null });
