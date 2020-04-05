@@ -21,6 +21,9 @@ class Body extends Component {
 			if (this.props.token && this.props.token.data) {
 				var dtTokeExpiresAt = new Date(this.props.token.data.expiresAt);
 				var dtDiffs = (dtTokeExpiresAt - dtNow)
+				console.log('Body: dtTokeExpiresAt:' + dtTokeExpiresAt)
+				console.log('Body: dtNow:' + dtNow)
+				console.log('Body: dtDiffs:' + dtDiffs)
 				if (dtDiffs <= 0) {										
 					this.setState({ redirectToLogin: true });
 				}
@@ -36,7 +39,7 @@ class Body extends Component {
 		// let bodyWidth = '100%';
 		// if (ww)
 		// 	bodyWidth = ww
-		if (this.state.redirectToLogin) {
+		if (this.state.redirectToLogin === true) {
 			console.log('body : RESET_ACTION')
 			store.dispatch({ type: "RESET_ACTION", payload: null });
 			return <Redirect to="/login" />;
