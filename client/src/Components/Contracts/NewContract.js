@@ -316,6 +316,7 @@ class NewContract extends Component {
 	render() {
 
 		if (this.state.redirectToLogin) {
+			console.log('New Contract: RESET_ACTION')
 			store.dispatch({ type: "RESET_ACTION", payload: null });
 			return <Redirect push to="/login" />;
 		} else {

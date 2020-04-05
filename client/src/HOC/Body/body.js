@@ -36,6 +36,7 @@ class Body extends Component {
 		// if (ww)
 		// 	bodyWidth = ww
 		if (this.state.redirectToLogin) {
+			console.log('body : RESET_ACTION')
 			store.dispatch({ type: "RESET_ACTION", payload: null });
 			return <Redirect to="/login" />;
 		} else {

@@ -1277,6 +1277,7 @@ class AccountInfo extends React.Component {
 
 		const accountInfo = this.props.account;
 		if (accountInfo && accountInfo.tokenIsValid) {
+		  console.log('Account Info: RESET_ACTION')
 			store.dispatch({ type: "RESET_ACTION", payload: null });
 			return <Redirect push to="/login" />;
 		} else {
