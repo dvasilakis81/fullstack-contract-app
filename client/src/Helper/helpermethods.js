@@ -50,7 +50,8 @@ export function getContractsLimit(loadedContracts) {
 }
 
 export function getHostUrl() {
-  return window.SERVER_URL
+  return ''
+  //return window.SERVER_URL
 }
 
 const capitalize = (s) => {

@@ -6,6 +6,8 @@
 //   port: process.env.PGPORT,
 // }
   //expiresAt: process.env.TOKEN_EXPIRES_IN
+
+  // heroku pg:pull HEROKU_POSTGRESQL_OLIVE orderingappdb --app ordering-app-munathens
 const Pool = require('pg').Pool
 
 var params = {
