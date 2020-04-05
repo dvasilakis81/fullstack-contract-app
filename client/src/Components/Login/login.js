@@ -68,6 +68,7 @@ class Login extends Component {
       this.setState({ loginsuccess: false, message: 'Εισάγετε Κωδικό!', openMessage: true, variant: 'info', submitButtonDisabled: false });
     else {
       this.props.login(this.state.username, this.state.password).then(response => {
+        console.log('response.value.data.token: ' + response.value.data.token)
         if (response.value.data.token)
           this.setState({ loginsuccess: true });
         else
