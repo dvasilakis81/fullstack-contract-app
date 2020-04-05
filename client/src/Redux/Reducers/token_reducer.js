@@ -2,14 +2,16 @@ export default function (state = {}, action) {
 
   switch (action.type) {
     case 'RESET_ACTION':
+      console.log('RESET_ACTION')
       state = {}
       break;
     case 'GET_TOKEN_JWT_PENDING':      
        console.log('TOKEN_REDUCER: GET_TOKEN_JWT_PENDING')
       state = { ...state, tokenPending: 'token pending', tokenRejected: undefined, token: undefined };
       break;
-    case 'GET_TOKEN_JWT_FULFILLED':      
+    case 'GET_TOKEN_JWT_FULFILLED':
       console.log('TOKEN_REDUCER: GET_TOKEN_JWT_FULFILLED')
+      console.log('TOKEN_REDUCER: action.payload: ' + action.payload)
       state = { ...state, tokenPending: undefined, tokenRejected: undefined, token: action.payload };
       break;
     case 'GET_TOKEN_JWT_REJECTED':      
