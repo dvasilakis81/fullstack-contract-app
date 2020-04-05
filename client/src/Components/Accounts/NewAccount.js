@@ -36,7 +36,7 @@ class NewAccount extends Component {
       console.log('NewAccount: dtTokeExpiresAt:' + dtTokeExpiresAt)
 			console.log('NewAccount: dtNow:' + dtNow)
 			console.log('NewAccount: dtDiffs:' + dtDiffs)
-      if (dtDiffs <= 0)
+      if (Math.abs(dtDiffs) <= 0)
         this.setState({ redirectToLogin: true });
       else {
         var diffMins = Math.round(dtDiffs / 60000);
