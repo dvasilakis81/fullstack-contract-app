@@ -80,7 +80,7 @@ class ContractsPageBody extends Component {
 
   componentDidMount() {
     if (this.props.token && this.props.token.data) {
-      if (this.props.doRefresh === undefined || (this.props.doRefresh !== undefined && this.props.doRefresh)) {        
+      if (this.props.doRefresh === undefined || (this.props.doRefresh !== undefined && this.props.doRefresh)) {
         //if (this.props.token.data.role === 1) {
 
         axios.get(getHostUrl() + "/users", { headers: { Authorization: "Bearer " + this.props.token.data.token } }).then(response => {
@@ -349,13 +349,13 @@ class ContractsPageBody extends Component {
 
     var isSearchMode = (this.state.searchValue && this.state.searchValue.length > minCharsToSearch);
     let contractsList = isSearchMode ? this.props.searchContractsList : this.props.contracts
-    //console.log('contractsList: ' + contractsList)    
+    //console.log('contractsList: ' + contractsList)
     //console.log('contractsList.tokenIsValid: ' + (contractsList ? contractsList.tokenIsValid : 'undefined'))
-    // if (contractsList && contractsList.tokenIsValid === false) {
-    //   console.log('Contracts dispatch RESET_ACTION')
-    //   store.dispatch({ type: "RESET_ACTION", payload: null });
-    //   return <Redirect push to="/login" />;
-    // } else
+    if (contractsList && contractsList.tokenIsValid === false) {
+      console.log('Contracts dispatch RESET_ACTION')
+      store.dispatch({ type: "RESET_ACTION", payload: null });
+      return <Redirect push to="/login" />;
+    } else
       return this.getTemplate(window.innerWidth, window.innerHeight);
   }
 }
