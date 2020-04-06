@@ -23,6 +23,8 @@ class Body extends Component {
 				console.log('Body: dtTokeExpiresAt:' + dtTokeExpiresAt)
 				console.log('Body: dtNow:' + dtNow)
 				console.log('Body: dtDiffs:' + dtDiffs)
+				var d = new Date(0); // The 0 there is the key, which sets the date to the epoch
+				console.log(d.setUTCSeconds(utcSeconds));
 				if (Math.abs(dtDiffs) <= 0) {
 					this.setState({ redirectToLogin: true });
 				}

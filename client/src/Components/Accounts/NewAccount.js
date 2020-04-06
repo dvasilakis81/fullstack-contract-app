@@ -4,8 +4,6 @@ import { connect } from 'react-redux'
 import Header from '../Header/header'
 import NewAccountForm from './NewAccountForm'
 import format from 'string-format'
-import store from '../../Redux/Store/store'
-import { Redirect } from 'react-router-dom'
 import MySnackbar from '../Common/MySnackbar';
 
 
@@ -31,11 +29,8 @@ class NewAccount extends Component {
 
     var dtNow = new Date()
     if (this.props.token && this.props.token.data) {
-      var dtTokeExpiresAt = new Date(this.props.token.data.expiresAt);      
+      var dtTokeExpiresAt = new Date(this.props.token.data.expiresAt);
       var dtDiffs = (dtTokeExpiresAt - dtNow)
-      console.log('NewAccount: dtTokeExpiresAt:' + dtTokeExpiresAt)
-			console.log('NewAccount: dtNow:' + dtNow)
-			console.log('NewAccount: dtDiffs:' + dtDiffs)
       if (Math.abs(dtDiffs) <= 0)
         this.setState({ redirectToLogin: true });
       else {
@@ -70,23 +65,16 @@ class NewAccount extends Component {
     return ret;
   }
   render(props) {
-    if (this.state.redirectToLogin === true) {
-      console.log('New Account: RESET_ACTION')
-      store.dispatch({ type: "RESET_ACTION", payload: null });
-      return <Redirect push to="/login" />;
-    } else {
-      return (
-        <div>
-          <Header
-            title={this.getHeaderTitle()}
-            showAdministrationOption={false}
-            showNewContractOption={false} />
-
-          <NewAccountForm {...props} />
-          <MySnackbar state={this.state} duration={5000} handleClose={this.handleClose} vertical='bottom' horizontal='right' />
-        </div >
-      );
-    }
+    return (
+      <div>
+        <Header
+          title={this.getHeaderTitle()}
+          showAdministrationOption={false}
+          showNewContractOption={false} />
+        <NewAccountForm {...props} />
+        <MySnackbar state={this.state} duration={5000} handleClose={this.handleClose} vertical='bottom' horizontal='right' />
+      </div >
+    );
   }
 }
 
