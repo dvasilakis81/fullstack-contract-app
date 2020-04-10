@@ -51,8 +51,10 @@ export function getContractsLimit(loadedContracts) {
 }
 
 export function getHostUrl() {
-  return ''
-  //return window.SERVER_URL
+  if (process.env.NODE_ENV === 'production')
+    return ''
+  else 
+   return window.SERVER_URL
 }
 
 const capitalize = (s) => {

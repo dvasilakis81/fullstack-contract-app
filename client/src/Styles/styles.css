@@ -1,0 +1,16 @@
+tooltip {
+  font-size: '16px';
+  color: 'white';
+}
+
+tooltipTitle {
+  margin: '2px';
+  font-size: '16px';
+  color: 'black';
+  font-weight: 'bold';
+}
+
+tooltipIndicate {
+  font-size: '16px';
+  color: '#00ff3e';
+}

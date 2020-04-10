@@ -38,8 +38,8 @@ import VirtualizedCC from './VirtualizedCC';
 import {
 	getAayTooltipTemplate, getFirstTrasmissionProtocolTooltip,
 	getAccountProtocolTooltip, getWorkConfirmationDateTooltip, getDeliveredGoodDateTooltip,
-	getInvoiceTooltipTemplate, getDecisionNumberProtocolTooltip, getLawArticleTooltip,
-	getDecisionSADAProtocolTooltip, getDecisionNumber2ProtocolTooltip, getDecisionSADA2ProtocolTooltip,
+	getInvoiceTooltipTemplate, getLawArticleTooltip,
+	getDecisionSADAProtocolTooltip, getDecisionSADA2ProtocolTooltip,
 	getCourtOfAuditorsTooltip, getDocumentDateTooltipTemplate, getAccountStartDateTooltipTemplate, 
 	getAccountEndDateTooltipTemplate, getMonitoringCommitteeTooltipTemplate, getMonitoringCommitteePracticalTooltipTemplate
 } from './ΤooltipMethods';
@@ -661,33 +661,33 @@ class NewAccountForm extends Component {
 		</>)
 	}
 
-	getTemplateForDecisionCityCouncilAndSADA1() {
-		if (this.state.IsDownpayment) {
-			return (<>
-				<header style={useStyles.category}>Στοιχεία Απόφασης Διοικητικού Συμβουλίου και Απόφασης του Συντονιστή της Αποκεντρωμένης Διοίκησης Αττικής</header>
-				<div style={useStyles.divRowFlex}>
-					{getTextFieldWithTooltip(getDecisionNumberProtocolTooltip(useStyles, this.state, 1), 'number', 'DecisionDS1Number', 'Αριθμός A.Δ.Σ.', 'outlined', this.state.DecisionDS1Number, true, useStyles.accountInfoItem, false, null, { shrink: true }, this.setTextValue)}
-					{getTextFieldWithTooltip(getDecisionNumberProtocolTooltip(useStyles, this.state, 2), 'date', 'DecisionDS1Date', 'Ημ/νία Α.Δ.Σ.', 'outlined', this.state.DecisionDS1Date, true, useStyles.accountInfoItem, false, null, { shrink: true }, this.setTextValue)}
-					{getTextFieldWithTooltip(getDecisionNumberProtocolTooltip(useStyles, this.state, 3), 'text', 'DecisionDS1ADA', 'ΑΔΑ', 'outlined', this.state.DecisionDS1ADA, false, useStyles.accountInfoItem, false, null, { shrink: true }, this.setTextValue)}
-					{getTextFieldWithTooltip(getDecisionSADAProtocolTooltip(useStyles, this.state, 1), 'number', 'Decision1SADANumber', 'Αριθμός Απόφασης Σ.Α.Δ.Α', 'outlined', this.state.Decision1SADANumber, true, useStyles.accountInfoItem, false, null, { shrink: true }, this.setTextValue)}
-					{getTextFieldWithTooltip(getDecisionSADAProtocolTooltip(useStyles, this.state, 2), 'date', 'Decision1SADADate', 'Ημ/νία Απόφασης Σ.Α.Δ.Α', 'outlined', this.state.Decision1SADADate, true, useStyles.accountInfoItem, false, null, { shrink: true }, this.setTextValue)}
-				</div>
-			</>)
-		}
-	}
-	getTemplateForDecisionCityCouncilAndSADA2() {
-		if (this.state.IsDownpayment) {
-			return (
-				<div style={useStyles.divRowFlex}>
-					{getTextFieldWithTooltip(getDecisionNumber2ProtocolTooltip(useStyles, this.state, 1), 'number', 'DecisionDS2Number', 'Αριθμός 2ης Α.Δ.Σ.', 'outlined', this.state.DecisionDS2Number, true, useStyles.accountInfoItem, this.state.HasSecondDecisionDS === false, null, { shrink: true }, this.setTextValue)}
-					{getTextFieldWithTooltip(getDecisionNumber2ProtocolTooltip(useStyles, this.state, 2), 'date', 'DecisionDS2Date', 'Ημ/νία 2ης Α.Δ.Σ.', 'outlined', this.state.DecisionDS2Date, true, useStyles.accountInfoItem, this.state.HasSecondDecisionDS === false, null, { shrink: true }, this.setTextValue)}
-					{getTextFieldWithTooltip(getDecisionNumber2ProtocolTooltip(useStyles, this.state, 3), 'text', 'DecisionDS2Content', 'Περιεχόμενο Α.Δ.Σ.', 'outlined', this.state.DecisionDS2Content, true, useStyles.accountInfoLargeItem2, this.state.HasSecondDecisionDS === false, null, { shrink: true }, this.setTextValue)}
-					{getTextFieldWithTooltip(getDecisionSADA2ProtocolTooltip(useStyles, this.state, 1), 'number', 'Decision2SADANumber', 'Αριθμός 2ης Απόφασης Σ.Α.Δ.Α.', 'outlined', this.state.Decision2SADANumber, true, useStyles.accountInfoItem, this.state.HasSecondDecisionDS === false, null, { shrink: true }, this.setTextValue)}
-					{getTextFieldWithTooltip(getDecisionSADA2ProtocolTooltip(useStyles, this.state, 2), 'date', 'Decision2SADADate', 'Ημ/νία 2ης Απόφασης Σ.Α.Δ.Α.', 'outlined', this.state.Decision2SADADate, true, useStyles.accountInfoItem, this.state.HasSecondDecisionDS === false, null, { shrink: true }, this.setTextValue)}
-					{getCheckboxField('HasSecondDecisionDS', 'Αν υπάρχει 2η Απόφαση Δημοτικού Συμβουλίου', this.state.HasSecondDecisionDS, useStyles.accountInfoItem, this.setCheckboxValue)}
-				</div>)
-		}
-	}
+	// getTemplateForDecisionCityCouncilAndSADA1() {
+	// 	if (this.state.IsDownpayment) {
+	// 		return (<>
+	// 			<header style={useStyles.category}>Στοιχεία Απόφασης Διοικητικού Συμβουλίου και Απόφασης του Συντονιστή της Αποκεντρωμένης Διοίκησης Αττικής</header>
+	// 			<div style={useStyles.divRowFlex}>
+	// 				{getTextFieldWithTooltip(getDecisionNumberProtocolTooltip(useStyles, this.state, 1), 'number', 'DecisionDS1Number', 'Αριθμός A.Δ.Σ.', 'outlined', this.state.DecisionDS1Number, true, useStyles.accountInfoItem, false, null, { shrink: true }, this.setTextValue)}
+	// 				{getTextFieldWithTooltip(getDecisionNumberProtocolTooltip(useStyles, this.state, 2), 'date', 'DecisionDS1Date', 'Ημ/νία Α.Δ.Σ.', 'outlined', this.state.DecisionDS1Date, true, useStyles.accountInfoItem, false, null, { shrink: true }, this.setTextValue)}
+	// 				{getTextFieldWithTooltip(getDecisionNumberProtocolTooltip(useStyles, this.state, 3), 'text', 'DecisionDS1ADA', 'ΑΔΑ', 'outlined', this.state.DecisionDS1ADA, false, useStyles.accountInfoItem, false, null, { shrink: true }, this.setTextValue)}
+	// 				{getTextFieldWithTooltip(getDecisionSADAProtocolTooltip(useStyles, this.state, 1), 'number', 'Decision1SADANumber', 'Αριθμός Απόφασης Σ.Α.Δ.Α', 'outlined', this.state.Decision1SADANumber, true, useStyles.accountInfoItem, false, null, { shrink: true }, this.setTextValue)}
+	// 				{getTextFieldWithTooltip(getDecisionSADAProtocolTooltip(useStyles, this.state, 2), 'date', 'Decision1SADADate', 'Ημ/νία Απόφασης Σ.Α.Δ.Α', 'outlined', this.state.Decision1SADADate, true, useStyles.accountInfoItem, false, null, { shrink: true }, this.setTextValue)}
+	// 			</div>
+	// 		</>)
+	// 	}
+	// }
+	// getTemplateForDecisionCityCouncilAndSADA2() {
+	// 	if (this.state.IsDownpayment) {
+	// 		return (
+	// 			<div style={useStyles.divRowFlex}>
+	// 				{getTextFieldWithTooltip(getDecisionNumber2ProtocolTooltip(useStyles, this.state, 1), 'number', 'DecisionDS2Number', 'Αριθμός 2ης Α.Δ.Σ.', 'outlined', this.state.DecisionDS2Number, true, useStyles.accountInfoItem, this.state.HasSecondDecisionDS === false, null, { shrink: true }, this.setTextValue)}
+	// 				{getTextFieldWithTooltip(getDecisionNumber2ProtocolTooltip(useStyles, this.state, 2), 'date', 'DecisionDS2Date', 'Ημ/νία 2ης Α.Δ.Σ.', 'outlined', this.state.DecisionDS2Date, true, useStyles.accountInfoItem, this.state.HasSecondDecisionDS === false, null, { shrink: true }, this.setTextValue)}
+	// 				{getTextFieldWithTooltip(getDecisionNumber2ProtocolTooltip(useStyles, this.state, 3), 'text', 'DecisionDS2Content', 'Περιεχόμενο Α.Δ.Σ.', 'outlined', this.state.DecisionDS2Content, true, useStyles.accountInfoLargeItem2, this.state.HasSecondDecisionDS === false, null, { shrink: true }, this.setTextValue)}
+	// 				{getTextFieldWithTooltip(getDecisionSADA2ProtocolTooltip(useStyles, this.state, 1), 'number', 'Decision2SADANumber', 'Αριθμός 2ης Απόφασης Σ.Α.Δ.Α.', 'outlined', this.state.Decision2SADANumber, true, useStyles.accountInfoItem, this.state.HasSecondDecisionDS === false, null, { shrink: true }, this.setTextValue)}
+	// 				{getTextFieldWithTooltip(getDecisionSADA2ProtocolTooltip(useStyles, this.state, 2), 'date', 'Decision2SADADate', 'Ημ/νία 2ης Απόφασης Σ.Α.Δ.Α.', 'outlined', this.state.Decision2SADADate, true, useStyles.accountInfoItem, this.state.HasSecondDecisionDS === false, null, { shrink: true }, this.setTextValue)}
+	// 				{getCheckboxField('HasSecondDecisionDS', 'Αν υπάρχει 2η Απόφαση Δημοτικού Συμβουλίου', this.state.HasSecondDecisionDS, useStyles.accountInfoItem, this.setCheckboxValue)}
+	// 			</div>)
+	// 	}
+	// }
 	getTemplateForCourtOfAuditors() {
 		if (this.state.IsDownpayment) {
 			return (

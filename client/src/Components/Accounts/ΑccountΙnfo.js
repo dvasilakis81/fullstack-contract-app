@@ -122,7 +122,7 @@ class AccountInfo extends React.Component {
 				SignName4: accountDetails ? this.getSignatoryId(accountDetails.documentsignatory, 4) : '-1',
 				AbsenseOfDirector1: accountDetails ? this.getSignatoryAbsense(accountDetails.documentsignatory, 1) : false,
 				AbsenseOfDirector2: accountDetails ? this.getSignatoryAbsense(accountDetails.documentsignatory, 2) : false,
-				HasSecondDecisionDS: accountDetails && accountDetails.decisionboard && accountDetails.decisionboard.length > 1 ? true : false,
+				HasSecondDecisionBoard: accountDetails && accountDetails.decisionboard && accountDetails.decisionboard.length > 1 ? true : false,
 				DecisionDS1Number: accountDetails && accountDetails.decisionboard ? accountDetails.decisionboard[0].ProtocolNumber : null,
 				DecisionDS1ADA: accountDetails && accountDetails.decisionboard ? accountDetails.decisionboard[0].ADA : null,
 				DecisionDS1Date: accountDetails && accountDetails.decisionboard ? accountDetails.decisionboard[0].ProtocolDate : null,
@@ -261,17 +261,18 @@ class AccountInfo extends React.Component {
 	}
 
 	getDecisionBoardValues() {
-		let ret = [];
-		let ad = this.props.account;
-		let decisionDS1Number = (ad && ad.decisionboard ? ad.decisionboard[0].ProtocolNumber : null)
-		let decisionDS1Date = (ad && ad.decisionboard ? ad.decisionboard[0].ProtocolDate : null)
+		let ret = undefined;
+		// let ad = this.props.account;
+		// let decisionDS1Number = (ad && ad.decisionboard ? ad.decisionboard[0].ProtocolNumber : null)
+		// let decisionDS1Date = (ad && ad.decisionboard ? ad.decisionboard[0].ProtocolDate : null)
 
-		if (decisionDS1Number) {
-			ret.push({ Number: decisionDS1Number, Date: getDateFormatForDocument(decisionDS1Date) })
-			if (ad && ad.decisionboard && ad.decisionboard.length > 1)
-				ret.push({ Number: ad.decisionboard[1].ProtocolNumber, Date: getDateFormatForDocument(ad.decisionboard[1].ProtocolDate), Content: ad.decisionboard[1].Content })
-		}
-
+		// if (decisionDS1Number) {
+		// 	ret = []
+		// 	ret.push({ Number: decisionDS1Number, Date: getDateFormatForDocument(decisionDS1Date) })
+		// 	if (ad && ad.decisionboard && ad.decisionboard.length > 1)
+		// 		ret.push({ Number: ad.decisionboard[1].ProtocolNumber, Date: getDateFormatForDocument(ad.decisionboard[1].ProtocolDate), Content: ad.decisionboard[1].Content })
+		// }
+		// console.log('getDecisionBoardValues: ' + ret)
 		return ret;
 	}
 

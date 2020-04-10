@@ -15,6 +15,7 @@ class Body extends Component {
 
 	componentDidMount() {
 		//console.log('Body: this.props.token:' + this.props.token + ' tokenjwt.data:' + this.props.token.data + ' tokenjwt.data.token' + this.props.token.data.token)
+		console.log('Body: componentDidMount');
 		if (this.props.isLoginPage === undefined) {			
 			var dtNow = new Date()
 			if (this.props.token && this.props.token.data) {
@@ -22,9 +23,9 @@ class Body extends Component {
 				var dtDiffs = (dtTokeExpiresAt - dtNow)
 				console.log('Body: dtTokeExpiresAt:' + dtTokeExpiresAt)
 				console.log('Body: dtNow:' + dtNow)
-				console.log('Body: dtDiffs:' + dtDiffs)
-				//var d = new Date(0); // The 0 there is the key, which sets the date to the epoch
-				//console.log('setUTCSeconds: ' + d.setUTCSeconds(utcSeconds));
+				// console.log('Body: dtDiffs:' + dtDiffs)
+				// var d = new Date(0); // The 0 there is the key, which sets the date to the epoch
+				// console.log('setUTCSeconds: ' + d.setUTCSeconds(dtTokeExpiresAt));
 				if (Math.abs(dtDiffs) <= 0) {
 					this.setState({ redirectToLogin: true });
 				}

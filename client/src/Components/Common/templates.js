@@ -22,7 +22,8 @@ export function showGenericMessage(errorMessage, isError, hasHeader) {
 }
 
 export function getFooterTemplate() {
-  return <div style={{ display: 'flex', flexFlow: 'row', backgroundColor: '#03ebfc', height: getFooterHeight() }}>
+  //'#03ebfc'
+  return <div style={{ display: 'flex', flexFlow: 'row', backgroundColor: '#eeeeee', height: getFooterHeight() }}>
     <div style={{ display: 'flex', flexDirection: 'row', flexBasis: '100%', flex: '1', justifyContent: 'flex-end', marginRight: '30px' }}>
       <span style={{ fontWeight: '900', paddingTop: '5px' }}>{getDateFormat(new Date())} Δήμος Αθηναίων</span>
     </div>

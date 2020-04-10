@@ -517,7 +517,7 @@ class ItemDetail extends React.Component {
 						anchorReference="anchorPosition"
 						anchorPosition={{ top: this.getPopoverTop(this.state.windowHeight), left: this.getPopoverLeft(this.state.windowWidth) }}
 						style={{ transform: document.getElementById('root').style.transform }}>
-						<DecisionBoardView ContractId={this.state.ContractId} DecisionBoard={contractDetails.decisionboard} />
+						<DecisionBoardView contractDetails={contractDetails} DecisionBoard={contractDetails.decisionboard} />
 					</Popover>
 				</Typography>
 			</Paper>

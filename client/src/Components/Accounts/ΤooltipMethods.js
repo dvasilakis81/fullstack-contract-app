@@ -265,68 +265,6 @@ export function getAayTooltipTemplate(useStyles, state, ind) {
 }
 //#endregion
 
-export function getDecisionNumberProtocolTooltip(useStyles, state, ind) {
-  var style1 = (ind === 1 ? useStyles.tooltipIndicate : useStyles.tooltip)
-  var style2 = (ind === 2 ? useStyles.tooltipIndicate : useStyles.tooltip)
-  var style3 = (ind === 3 ? useStyles.tooltipIndicate : useStyles.tooltip)
-
-  //Διαβιβαστικό
-  //2.	Δύο (2) φωτοαντίγραφα της με αρ. 866/14-6-2018 Απόφασης του Δημοτικού Συμβουλίου (Α.Δ.Σ.) με Α.Δ.Α.
-  //Λογαριασμός
-  //2.	Τη με αρ. 866/14-6-2018 Απόφαση του Δημοτικού Συμβουλίου (Α.Δ.Σ.) Αθηναίων με την οποία εγκρίθηκαν: η υπογραφή των όρων, το σχέδιο και τα ανά έτος ποσά της προαναφερθείσας Προγραμματικής Σύμβασης. 
-  return (<>
-    <div style={useStyles.tooltipTitle}>ΣΥΝΗΜΜΕΝΑ ΔΙΚΑΙΟΛΟΓΗΤΙΚΑ(Διαβιβαστικό)</div>
-    <div>
-      <span style={useStyles.tooltip}>2. Δύο (2) φωτοαντίγραφα της με αρ. </span>
-      <span style={style1}>{state.DecisionDS1Number ? state.DecisionDS1Number : '___'}</span>
-      <span style={useStyles.tooltip}>/</span>
-      <span style={style2}>{state.DecisionDS1Date ? getDateFormatForDocument(state.DecisionDS1Date) : '__-__-____'}</span>
-      <span style={useStyles.tooltip}> Απόφασης του Δημοτικού Συμβουλίου (Α.Δ.Σ.)</span>
-      <span style={useStyles.tooltip}>{state.DecisionDS1ADA ? 'με ΑΔΑ' : ''}</span>
-      <span style={style3}>{state.DecisionDS1ADA ? state.DecisionDS1ADA : '____'}</span>
-    </div>
-    <div style={useStyles.tooltipTitle}>ΣΥΝΗΜΜΕΝΑ ΔΙΚΑΙΟΛΟΓΗΤΙΚΑ(Λογαριασμός)</div>
-    <div>
-      <span style={useStyles.tooltip}>2.	Τη με αρ. </span>
-      <span style={style1}>{state.DecisionDS1Number ? state.DecisionDS1Number : '___'}</span>
-      <span style={useStyles.tooltip}>/</span>
-      <span style={style2}>{state.DecisionDS1Date ? getDateFormatForDocument(state.DecisionDS1Date) : '__-__-____'}</span>
-      <span style={useStyles.tooltip}> Απόφαση του Δημοτικού Συμβουλίου (Α.Δ.Σ.) Αθηναίων με την οποία εγκρίθηκαν: η υπογραφή των όρων, το σχέδιο και τα ανά έτος ποσά της προαναφερθείσας Προγραμματικής Σύμβασης.</span>
-    </div>
-  </>)
-}
-
-export function getDecisionNumber2ProtocolTooltip(useStyles, state, ind) {
-  var style1 = (ind === 1 ? useStyles.tooltipIndicate : useStyles.tooltip)
-  var style2 = (ind === 2 ? useStyles.tooltipIndicate : useStyles.tooltip)
-  var style3 = (ind === 3 ? useStyles.tooltipIndicate : useStyles.tooltip)
-
-  //Διαβιβαστικό
-  //3.	Δύο (2) φωτοαντίγραφα της με αρ. 959/28-6-2018 Α.Δ.Σ. με Α.Δ.Α.
-  //Λογαριασμός
-  //3.	Τη με αρ. 959/28-6-2018 Α.Δ.Σ. με την οποία διορθώθηκε η ανωτέρω Α.Δ.Σ. “ως προς τον Κ.Α. του προϋπολογισμού και ως προς το λεκτικό της δαπάνης”. 
-
-  return (<>
-    <div style={useStyles.tooltipTitle}>ΣΥΝΗΜΜΕΝΑ ΔΙΚΑΙΟΛΟΓΗΤΙΚΑ(Διαβιβαστικό)</div>
-    <div>
-      <span style={useStyles.tooltip}>3.	Δύο (2) φωτοαντίγραφα της με αρ. </span>
-      <span style={style1}>{state.DecisionDS2Number ? state.DecisionDS2Number : '___'}</span>
-      <span style={useStyles.tooltip}>/</span>
-      <span style={style2}>{state.DecisionDS2Date ? getDateFormatForDocument(state.DecisionDS2Date) : '__-__-____'}</span>
-      <span style={useStyles.tooltip}> Α.Δ.Σ. με Α.Δ.Α.</span>
-    </div>
-    <div style={useStyles.tooltipTitle}>ΣΥΝΗΜΜΕΝΑ ΔΙΚΑΙΟΛΟΓΗΤΙΚΑ(Λογαριασμός)</div>
-    <div>
-      <span style={useStyles.tooltip}>3.	Τη με αρ. </span>
-      <span style={style1}>{state.DecisionDS2Number ? state.DecisionDS2Number : '___'}</span>
-      <span style={useStyles.tooltip}>/</span>
-      <span style={style2}>{state.DecisionDS2Date ? getDateFormatForDocument(state.DecisionDS2Date) : '__-__-____'}</span>
-      <span style={useStyles.tooltip}> Α.Δ.Σ. με την οποία διορθώθηκε η ανωτέρω Α.Δ.Σ. </span>
-      <span style={style3}>{state.DecisionDS2Content ? '“' + state.DecisionDS2Content + '”.' : 'π.χ. “ως προς τον Κ.Α. του προϋπολογισμού και ως προς το λεκτικό της δαπάνης”.'}</span>
-    </div>
-  </>)
-}
-
 export function getDecisionSADAProtocolTooltip(useStyles, state, ind) {
   var style1 = (ind === 1 ? useStyles.tooltipIndicate : useStyles.tooltip)
   var style2 = (ind === 2 ? useStyles.tooltipIndicate : useStyles.tooltip)

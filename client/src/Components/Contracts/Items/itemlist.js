@@ -25,7 +25,7 @@ class ItemList extends React.Component {
       tableLayout: 'fixed',
       padding: '10px',
       fontSize: '12px',
-      background: 'lightyellow',
+      background: 'white',
       border: '2px',
       borderStyle: 'solid',
       borderColor: '#ccccb3'
