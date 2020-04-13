@@ -79,7 +79,7 @@ export function getDecisionBoardTooltip(state, ind) {
       <span style={style2}>{state.ProtocolDate ? getDateFormatForDocument(state.ProtocolDate) : '__-__-____'}</span>
       <span style={useStyles.tooltip}> Απόφασης του Δημοτικού Συμβουλίου (Α.Δ.Σ.)</span>
       <span style={useStyles.tooltip}>{state.ADA ? ' με ΑΔΑ ' : ''}</span>
-      <span style={style3}>{state.ADA ? state.ADA : '____'}</span>
+      <span style={style3}>{state.ADA ? state.ADA : ''}</span>
     </div>
     <div style={useStyles.tooltipTitle}>ΣΥΝΗΜΜΕΝΑ ΔΙΚΑΙΟΛΟΓΗΤΙΚΑ(Λογαριασμός)</div>
     <div>
