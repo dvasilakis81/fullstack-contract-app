@@ -1,6 +1,8 @@
-export default function (state = {}, action) {
+import { ContactSupportOutlined } from "@material-ui/icons";
 
-	switch (action.type) {
+export default function (state = {}, action) {
+	console.log(action.type);
+	switch (action.type) {		
 		case 'RESET_ACTION':
 			console.log('RESET_ACTION')
 			state = {}
@@ -62,6 +64,112 @@ export default function (state = {}, action) {
 					contractDetailsSearchMode: action.payload
 				};
 			}
+			break;
+		case 'INSERT_DECISIONBOARD_PENDING':			
+			state = {
+				...state,
+				insertDecicionBoardPending: true,
+				insertDecicionBoardRejected: false
+			};
+			break;
+		case 'INSERT_DECISIONBOARD_REJECTED':			
+			state = {
+				...state,				
+				insertDecicionBoardPending: false,
+				insertDecicionBoardRejected: action.payload
+			};
+			break;
+		case 'INSERT_DECISIONBOARD_FULFILLED':
+			if (state.contractsList) {
+				let updatedContractsList = state.contractsList.map((item) => {
+					console.log('ContractId:' + action.payload.data.Id)					
+					var contractItem = action.payload.data;
+					if (item.Id == contractItem.Id)
+						item = contractItem
+
+					return item;
+				});
+
+				state = {
+					...state,
+					insertDecicionBoardPending: false,
+					insertDecicionBoardRejected: false,
+					contractsList: updatedContractsList,
+					contractDetails: action.payload.data
+				};
+			}
+
+			if (state.searchContractsList) {
+				let updatedContractsSearchList = state.searchContractsList.map((item) => {
+
+					var contractItem = action.payload.data;
+					if (item.Id == contractItem[0].Id)
+						item = contractItem[0]
+
+					return item;
+				});
+
+				state = {
+					...state,
+					insertDecicionBoardPending: false,
+					insertDecicionBoardRejected: false,
+					searchContractsList: updatedContractsSearchList,
+					contractDetailsSearchMode: action.payload
+				};
+			}
+
+			break;
+		case 'UPDATE_DECISIONBOARD_PENDING':
+			state = {
+				...state,
+				updateDecicionBoardPending: true,
+				updateDecicionBoardRejected: false
+			};
+			break;
+		case 'UPDATE_DECISIONBOARD_REJECTED':
+			state = {
+				...state,
+				updateDecicionBoardPending: false,
+				updateDecicionBoardRejected: action.payload
+			};
+			break;
+		case 'UPDATE_DECISIONBOARD_FULFILLED':
+
+			if (state.contractsList) {
+				let updatedContractsList = state.contractsList.map((item) => {
+
+					var contractItem = action.payload.data;
+					if (item.Id == contractItem[0].Id)
+						item = contractItem[0]
+
+					return item;
+				});
+
+				state = {
+					...state,
+					contractsList: updatedContractsList,
+				};
+			}
+
+			if (state.searchContractsList) {
+				let updatedContractsSearchList = state.searchContractsList.map((item) => {
+
+					var contractItem = action.payload.data;
+					if (item.Id == contractItem[0].Id)
+						item = contractItem[0]
+
+					return item;
+				});
+
+				state = {
+					...state,
+					updateDecicionBoardPending: false,
+					updateDecicionBoardRejected: false,
+					searchContractsList: updatedContractsSearchList,
+					contractDetailsSearchMode: action.payload
+				};
+			}
+
 			break;
 		case 'INSERT_CONTRACT':
 			let contractsList = null;
@@ -249,7 +357,7 @@ export default function (state = {}, action) {
 		case 'UPDATE_ACCOUNT_REJECTED':
 			state = { ...state, accountPending: undefined, accountRejected: action.payload, updatedAccount: undefined };
 			break;
-		case 'UPDATE_ACCOUNT_FULFILLED':			
+		case 'UPDATE_ACCOUNT_FULFILLED':
 			if (state.contractsList) {
 				let updatedContractsList = state.contractsList.map((item) => {
 

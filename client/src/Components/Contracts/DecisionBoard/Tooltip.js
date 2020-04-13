@@ -63,6 +63,7 @@ export function getDecisionBoardTooltip(state, ind) {
   var style1 = (ind === 1 ? useStyles.tooltipIndicate : useStyles.tooltip)
   var style2 = (ind === 2 ? useStyles.tooltipIndicate : useStyles.tooltip)
   var style3 = (ind === 3 ? useStyles.tooltipIndicate : useStyles.tooltip)
+  var style4 = (ind === 4 ? useStyles.tooltipIndicate : useStyles.tooltip)
 
   //Διαβιβαστικό
   //2.	Δύο (2) φωτοαντίγραφα της με αρ. 866/14-6-2018 Απόφασης του Δημοτικού Συμβουλίου (Α.Δ.Σ.) με Α.Δ.Α.
@@ -91,7 +92,7 @@ export function getDecisionBoardTooltip(state, ind) {
           <span style={useStyles.tooltip}> Απόφαση του Δημοτικού Συμβουλίου (Α.Δ.Σ.) Αθηναίων με την οποία εγκρίθηκαν: η υπογραφή των όρων, το σχέδιο και τα ανά έτος ποσά της προαναφερθείσας Προγραμματικής Σύμβασης.</span> :
           <>
             <span style={useStyles.tooltip}> Α.Δ.Σ. με την οποία διορθώθηκε η ανωτέρω Α.Δ.Σ. </span>
-            <span style={style3}>{state.Content ? '“' + state.Content + '”.' : 'π.χ. “ως προς τον Κ.Α. του προϋπολογισμού και ως προς το λεκτικό της δαπάνης”.'}</span>
+            <span style={style4}>{state.Content ? '“' + state.Content + '”.' : 'π.χ. “ως προς τον Κ.Α. του προϋπολογισμού και ως προς το λεκτικό της δαπάνης”.'}</span>
           </>
       }
     </div>

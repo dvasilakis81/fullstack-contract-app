@@ -498,7 +498,7 @@ class ItemDetail extends React.Component {
 
 	getBoardDecisionsInfoTemplate(contractDetails) {
 
-		var quantity = contractDetails.decisionboard && contractDetails.decisionboard.length > 0 ? contractDetails.decisionboard.length : 'Δεν έχει';
+		var quantity = contractDetails.decisionboard && contractDetails.decisionboard.length > 0 ? contractDetails.decisionboard.length : 'Δεν έχει';		
 		return <Grid>
 			<Paper style={styles.paperMoreContractInfo} square={true}>
 				<Typography>
@@ -516,8 +516,8 @@ class ItemDetail extends React.Component {
 						onClose={this.handlePopoverClose}
 						anchorReference="anchorPosition"
 						anchorPosition={{ top: this.getPopoverTop(this.state.windowHeight), left: this.getPopoverLeft(this.state.windowWidth) }}
-						style={{ transform: document.getElementById('root').style.transform }}>
-						<DecisionBoardView contractDetails={contractDetails} DecisionBoard={contractDetails.decisionboard} />
+						style={{ transform: document.getElementById('root').style.transform }}>							
+						<DecisionBoardView contractId={contractDetails.Id} DecisionBoard={contractDetails.decisionboard} />
 					</Popover>
 				</Typography>
 			</Paper>

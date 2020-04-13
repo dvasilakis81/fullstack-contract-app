@@ -75,4 +75,22 @@ export function updateAccount(data, token) {
   }
 }
 
+export function createDecisionBoard(data, token) {
+
+  const request = axios.post(`${URL}/insertdecisionboard`, data, { headers: { Authorization: 'Bearer ' + token } })
+  return {
+    type: 'INSERT_DECISIONBOARD',
+    payload: request
+  }
+}
+
+export function updateDecisionBoard(data, token) {
+
+  const request = axios.post(`${URL}/updatedecisionboard`, data, { headers: { Authorization: 'Bearer ' + token } })
+  return {
+    type: 'UPDATE_DECISIONBOARD',
+    payload: request
+  }
+}
+
 

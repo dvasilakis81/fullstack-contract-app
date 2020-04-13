@@ -40,10 +40,10 @@ class ContractsPageBody extends Component {
       submitButtonDisabled: false,
       navigateToEditAccount: false,
       navigateToLogin: false,
-      searchValue: '',
-      contractsPendingLoading: this.props.contractsPending,
+      searchValue: '',      
       windowWidth: window.innerWidth,
-      windowHeight: window.innerHeight
+      windowHeight: window.innerHeight,
+      xxx: this.props.insertDecicionBoardPending
     };
 
     this.fetchMore = this.fetchMore.bind(this);
@@ -349,8 +349,6 @@ class ContractsPageBody extends Component {
 
     var isSearchMode = (this.state.searchValue && this.state.searchValue.length > minCharsToSearch);
     let contractsList = isSearchMode ? this.props.searchContractsList : this.props.contracts
-    //console.log('contractsList: ' + contractsList)
-    //console.log('contractsList.tokenIsValid: ' + (contractsList ? contractsList.tokenIsValid : 'undefined'))
     if (contractsList && contractsList.tokenIsValid === false) {
       console.log('Contracts dispatch RESET_ACTION')
       store.dispatch({ type: "RESET_ACTION", payload: null });
@@ -363,7 +361,7 @@ class ContractsPageBody extends Component {
 function mapStateToProps(state) {
   return {
     //screenDimensions: state.parametricdata_reducer.screenDimensions,
-    doRefresh: state.parametricdata_reducer.doRefresh,
+    doRefresh: state.parametricdata_reducer.doRefresh,    
     contracts: state.contracts_reducer.contractsList,
     contractsPending: state.contracts_reducer.contractsPending,
     contractsRejected: state.contracts_reducer.contractsRejected,
@@ -373,7 +371,8 @@ function mapStateToProps(state) {
     searchModeValue: state.contracts_reducer.searchModeValue,
     isSearchMode: state.contracts_reducer.isSearchMode,
     loadedItems: state.contracts_reducer.loadedItems,
-    token: state.token_reducer.token
+    token: state.token_reducer.token,
+    insertDecicionBoardPending: state.contracts_reducer.insertDecicionBoardPending
   };
 }
 
