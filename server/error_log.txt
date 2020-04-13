@@ -1,12 +1,10 @@
-Message: Not Found
-Stack: NotFoundError: Not Found
-    at c:\Projects\Node\fullstack-contract-app\server\app.js:216:8
-    at Layer.handle [as handle_request] (c:\Projects\Node\fullstack-contract-app\node_modules\express\lib\router\layer.js:95:5)
-    at trim_prefix (c:\Projects\Node\fullstack-contract-app\node_modules\express\lib\router\index.js:317:13)
-    at c:\Projects\Node\fullstack-contract-app\node_modules\express\lib\router\index.js:284:7
-    at Function.process_params (c:\Projects\Node\fullstack-contract-app\node_modules\express\lib\router\index.js:335:12)
-    at next (c:\Projects\Node\fullstack-contract-app\node_modules\express\lib\router\index.js:275:10)
-    at SendStream.error (c:\Projects\Node\fullstack-contract-app\node_modules\serve-static\index.js:121:7)
-    at SendStream.emit (events.js:197:13)
-    at SendStream.error (c:\Projects\Node\fullstack-contract-app\node_modules\send\index.js:270:17)
-    at SendStream.onStatError (c:\Projects\Node\fullstack-contract-app\node_modules\send\index.js:421:12)
+Message: null value in column "ContractId" violates not-null constraint
+Stack: error: null value in column "ContractId" violates not-null constraint
+    at Connection.parseE (C:\Projects\Node\fullstack-contract-app\node_modules\pg\lib\connection.js:614:13)
+    at Connection.parseMessage (C:\Projects\Node\fullstack-contract-app\node_modules\pg\lib\connection.js:413:19)
+    at Socket.<anonymous> (C:\Projects\Node\fullstack-contract-app\node_modules\pg\lib\connection.js:129:22)
+    at Socket.emit (events.js:197:13)
+    at addChunk (_stream_readable.js:288:12)
+    at readableAddChunk (_stream_readable.js:269:11)
+    at Socket.Readable.push (_stream_readable.js:224:10)
+    at TCP.onStreamRead [as onread] (internal/stream_base_commons.js:145:17)

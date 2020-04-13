@@ -16,7 +16,7 @@ var http = require('http');
 //Here we are configuring express to use body-parser as middle-ware.
 //var port = normalizePort(process.env.SERVER_PORT || 7845);
 
-var port = normalizePort(process.env.PORT || 7845);
+var port = normalizePort(7845);
 app.set('port', port);
 
 /**

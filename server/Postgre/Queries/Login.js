@@ -58,8 +58,8 @@ const updateUser = (req, res, next) => {
     bcryptNodejs.hash(password, saltRounds, null, function (err, hash) {
       if (err)
         res.status(201).json('Failed to create hash: ')
-      else 
-        updateUserExecute(req, res, next, hash);      
+      else
+        updateUserExecute(req, res, next, hash);
     })
   }
   else
@@ -158,7 +158,7 @@ const deleteUser = (req, res, next) => {
 
 const login = (request, response, next) => {
   var ret = ''
- 
+
   const dbConfig1 = process.env.API_SECRET || 'athens_2019'
   const username = request.query.u
   const password = request.query.p
@@ -203,11 +203,12 @@ const login = (request, response, next) => {
 }
 
 const checkToken = (req, res, next) => {
-  let token = req.headers['x-access-token'] || req.headers['authorization']; // Express headers are auto converted to lowercase
-  if (token.startsWith('Bearer '))
-    token = token.slice(7, token.length);
+  let token = req.headers['x-access-token'] || req.headers['authorization']; // Express headers are auto converted to lowercase  
 
   if (token) {
+    if (token.startsWith('Bearer '))
+      token = token.slice(7, token.length);
+      
     jwt.verify(token, secretKey, (err, decoded) => {
       if (err) {
         return res.json({
@@ -225,8 +226,7 @@ const checkToken = (req, res, next) => {
   } else {
     return res.json({
       tokenIsValid: false,
-      message: 'Auth token is not supplied',
-      expiresAt: new Date(decoded.exp)
+      message: 'Auth token is not supplied'      
     });
   }
 };

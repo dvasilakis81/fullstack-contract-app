@@ -23,6 +23,8 @@ var dbAccount = require('./Postgre/Queries/Account')
 var dbError = require('./Postgre/Queries/Error')
 var dbLogin = require('./Postgre/Queries/Login')
 var dbParametric = require('./Postgre/Queries/Parametric')
+var dbBoardDecision = require('./Postgre/Queries/BoardDecision')
+
 var helper = require('./HelperMethods/helpermethods')
 
 const ENV = process.env.NODE_ENV;
@@ -190,6 +192,10 @@ app.get('/getaccountsinfo', dbLogin.checkToken, dbAccount.getAccountsInfo);
 app.post('/insertaccount', dbLogin.checkToken, dbAccount.insertAccount);
 app.post('/updateaccount', dbLogin.checkToken, dbAccount.updateAccount);
 
+app.post('/insertdecisionboard', dbLogin.checkToken, dbBoardDecision.insertDecisionBoard);
+app.post('/updatedecisionboard', dbLogin.checkToken, dbBoardDecision.updateDecisionBoard);
+
+//createdecisionboard
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'jade');
@@ -232,7 +238,7 @@ app.use(function (err, req, res, next) {
     helper.consoleLog('Error message saved!');
   });
 
-  res.status(err.status || 500).json('asdf');
+  res.status(err.status || 500).json(errorMessage);
 });
 
 module.exports = app;
