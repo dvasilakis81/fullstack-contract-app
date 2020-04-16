@@ -47,7 +47,8 @@ const styles = {
   },
   paperMoreContractInfo: {
     padding: '10px',
-    background: '#fffef3'
+    background: 'white'
+    // background: '#fffef3'
   }
 };
 
@@ -61,14 +62,15 @@ class DecisionBoardView extends Component {
       ProtocolDate: '',
       Content: '',
       ADA: '',
-      openMessage: false,
-      message: '',
-      variant: '',
       submitButtonDisabled: false,
       addNewItem: false,
       editItem: false,
       decisionBoardIndex: 0,
       Id: this.props.Id ? this.props.Id : '',
+      openMessage: false,
+      message: '',
+      variant: '',
+      msgPadding: ''
     }
 
     this.setTextValue = this.setTextValue.bind(this);
@@ -118,34 +120,25 @@ class DecisionBoardView extends Component {
     if (this.state.addNewItem === true) {
       this.props.createDecisionBoard(this.state, this.props.token.data.token).then(res => {
         var msg = 'Η Α.Δ.Σ. με πρωτόκολλο "' + this.state.ProtocolNumber + '/' + getDateFormatForDocument(this.state.ProtocolDate) + '" δημιουργήθηκε επιτυχώς!!!'
-        this.setState({ message: msg, openMessage: true, variant: 'success', submitButtonDisabled: false });
+        this.setState({ openMessage: true, msg: msg, variant: 'success', msgPadding: '10px', submitButtonDisabled: false, addNewItem: false, editItem: false });
+        // var param = {}
+        // param.msg = msg;
+        // param.variant = 'success'
+        // this.props.openServerMessage(param);
       }).catch(error => {
         var msg = 'Αποτυχία δημιουργίας Α.Δ.Σ. !!\n' + error;
-        this.setState({ message: <><div>{msg}</div><div>{getServerErrorResponseMessage(error)}</div></>, openMessage: true, variant: 'error', submitButtonDisabled: false });
+        this.setState({ openMessage: true, msg: <><div>{msg}</div><div>{getServerErrorResponseMessage(error)}</div></>, openMessage: true, variant: 'error', msgPadding: '10px', submitButtonDisabled: false });
       })
     } else if (this.state.editNewItem === true) {
 
-      // axios.post(getHostUrl() + '/contractexists', this.state, { headers: { Authorization: 'Bearer ' + this.props.token.data.token } }).then(res => {
-      //   var contractExists = res.data;
-      //   if (contractExists === true) {
-      //     var msg = 'Η σύμβαση με αριθμό πρωτοκόλλου ' + this.state.ProtocolNumber + ' ήδη υπάρχει';
-      //     this.setState({ message: msg, openMessage: true, variant: 'info', submitButtonDisabled: false });
-      //   }
-      //   else {
-      //     axios.post(getHostUrl() + '/insertcontract', this.state, { headers: { Authorization: 'Bearer ' + this.props.token.data.token } }).then(res => {
-      //       var msg = 'Η σύμβαση με πρωτόκολλο ' + this.state.ProtocolNumber + '/' + this.state.ProtocolDate + ' δημιουργήθηκε επιτυχώς!!!'
-      //       this.setState({ message: msg, openMessage: true, variant: 'success', submitButtonDisabled: false });
-      //       store.dispatch({ type: 'INSERT_CONTRACT', payload: res.data })
-      //       this.props.history.goBack();
-      //     }).catch(error => {
-      //       var msg = 'Αποτυχία δημιουργίας σύμβασης !!\n' + error;
-      //       this.setState({ message: <><div>{msg}</div><div>{getServerErrorResponseMessage(error)}</div></>, openMessage: true, variant: 'error', submitButtonDisabled: false });
-      //     });
-      //   }
-      // }).catch(error => {
-      //   var msg = 'Αποτυχία δημιουργίας σύμβασης !!\n' + error;
-      //   this.setState({ message: <><div>{msg}</div><div>{getServerErrorResponseMessage(error)}</div></>, openMessage: true, variant: 'error', submitButtonDisabled: false });
-      // });
+      this.props.updateDecisionBoard(this.state, this.props.token.data.token).then(res => {
+        var msg = 'Η Α.Δ.Σ. με πρωτόκολλο "' + this.state.ProtocolNumber + '/' + getDateFormatForDocument(this.state.ProtocolDate) + '" επεξεργάστηκε επιτυχώς!!!'
+        this.setState({ msg: msg, openMessage: true, variant: 'success', msgPadding: '10px', submitButtonDisabled: false, addNewItem: false, editItem: false });
+      }).catch(error => {
+        var msg = 'Αποτυχία δημιουργίας Α.Δ.Σ. !!\n' + error;
+        this.setState({ msg: <><div>{msg}</div><div>{getServerErrorResponseMessage(error)}</div></>, openMessage: true, variant: 'error', msgPadding: '10px', submitButtonDisabled: false });
+      })
+
     }
   }
 
@@ -167,26 +160,25 @@ class DecisionBoardView extends Component {
               {getTextFieldWithTooltip(getDecisionBoardTooltip(this.state, 3), 'text', 'ADA', 'ΑΔΑ', 'outlined', this.state.ADA, true, { width: '300px' }, false, null, { shrink: true }, this.setTextValue)}
             </div>
             <div style={{ display: 'flex', flexFlow: 'row', height: 'auto', backgroundColor: '#fff', justifyContent: 'center', padding: '10px' }}>
-              {getSubmitButton('contained', 'primary', { fontSize: '18px', padding: '5px', margin: '5px' }, null, 'ΑΠΟΘΗΚΕΥΣΗ', <Icon>save</Icon>, this.state.submitButtonDisabled)}
-              <Button variant='contained' color='secondary' style={{ fontSize: '18px', textAlign: 'center', padding: '5px', margin: '5px' }} onClick={() => { this.setState({ addNewItem: false, editItem: false }) }}>ΑΚΥΡΩΣΗ
-                <Icon>cancel</Icon>
-              </Button>
+              <LoadingOverlay
+                active={this.props.insertDecicionBoardPending === true}
+                spinner
+                text='Αναμονή για δημιουργία Α.Δ.Σ. ...'
+                styles={{
+                  overlay: (base) => ({
+                    ...base,
+                    width: '100%',
+                    textAlign: 'middle'
+                  })
+                }}>
+                {getSubmitButton('contained', 'primary', { fontSize: '18px', padding: '5px', margin: '5px' }, null, 'ΑΠΟΘΗΚΕΥΣΗ', <Icon>save</Icon>, this.state.submitButtonDisabled)}
+                <Button disabled={this.state.submitButtonDisabled} variant='contained' color='secondary' style={{ fontSize: '18px', textAlign: 'center', padding: '5px', margin: '5px' }} onClick={() => { this.setState({ addNewItem: false, editItem: false }) }}>ΑΚΥΡΩΣΗ
+                  <Icon>cancel</Icon>
+                </Button>
+              </LoadingOverlay>
             </div>
-            {/* <LoadingOverlay
-            active={this.props.insertDecicionBoardPending === true}
-            spinner
-            text='Αναμονή για δημιουργία Α.Δ.Σ. ...'
-            styles={{
-              overlay: (base) => ({
-                ...base,
-                width: '100%',
-                textAlign: 'middle'
-              })
-            }}>
-          </LoadingOverlay> */}
           </form>
         </div>
-
       </>
     }
   }
@@ -228,7 +220,10 @@ class DecisionBoardView extends Component {
               }
             </div>
           </div>
-          {this.editForm()}
+          {this.editForm()}          
+          <div style={{ display: 'flex', flexFlow: 'row', height: 'auto', background: 'lightgreen', justifyContent: 'center', padding: this.msgPadding }}>
+            <span style={{ fontSize: '18px', textAlign: 'center', fontWeight: 'bold' }}>{this.state.msg}</span>
+          </div>
           <div style={{ display: 'flex', flexFlow: 'row', height: 'auto', backgroundColor: '#fff', background: 'lightgrey', justifyContent: 'center' }}>
             <Button style={{ fontSize: '18px', textAlign: 'center' }} onClick={() => { this.setState({ addNewItem: true }) }}>ΠΡΟΣΘΗΚΗ</Button>
           </div>
