@@ -203,8 +203,7 @@ const login = (request, response, next) => {
 }
 
 const checkToken = (req, res, next) => {
-  let token = req.headers['x-access-token'] || req.headers['authorization']; // Express headers are auto converted to lowercase  
-  console.log("CHECKTOKEN\nprotocol:" + req.protocol + "\nhost: " + req.host + "\nhostname: " + req.hostname + "\npath: " + req.path + "\noriginalUrl: " + req.originalUrl + "\ntoken: " + req.token ? req.token : 'undefined');
+  let token = req.headers['x-access-token'] || req.headers['authorization']; // Express headers are auto converted to lowercase    
   if (token) {
     if (token.startsWith('Bearer '))
       token = token.slice(7, token.length);
@@ -224,6 +223,7 @@ const checkToken = (req, res, next) => {
       }
     });
   } else {
+    console.log("CHECKTOKEN\nprotocol:" + req.protocol + "\nhost: " + req.host + "\nhostname: " + req.hostname + "\npath: " + req.path + "\noriginalUrl: " + req.originalUrl + "\ntoken: " + req.token ? req.token : 'undefined');
     return res.json({
       tokenIsValid: false,
       message: 'Auth token is not supplied'      
