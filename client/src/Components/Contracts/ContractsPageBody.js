@@ -147,6 +147,9 @@ class ContractsPageBody extends Component {
           });
         });
 
+        var ddd = (this.props.token.data.token ? this.props.token.data.token : 'tokenData.token: undefined');
+        var fff = (this.props.token.data ? ddd : 'tokenData: undefined');
+        console.log('getContracts: ' + fff);        
         if (this.props.isSearchMode)
           this.props.searchContracts(this.props.token.data, this.props.searchModeValue);
         else
@@ -285,8 +288,7 @@ class ContractsPageBody extends Component {
         }} />
     );
   }
-  getTemplate() {
-    //let wh = this.props.screenDimensions.height;
+  getTemplate() {    
 
     let isSearchMode = ((this.state.searchValue && this.state.searchValue.length > 2) || this.props.isSearchMode)
     let contractsList = isSearchMode ? this.props.searchContractsList : this.props.contracts

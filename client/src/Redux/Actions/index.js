@@ -3,14 +3,10 @@ import { getHostUrl } from '../../Helper/helpermethods';
 
 const URL = getHostUrl();
 
-export function getContracts(tokenData, offset, limit) {
-  console.log('getContracts: ' + tokenData ? (tokenData.token ? tokenData.token : 'tokenData.token: undefined') : 'tokenData: undefined')
+export function getContracts(tokenData, offset, limit) {  
   const request = axios.get(`${URL}/contracts?loginuserid=` + tokenData.id + '&offset=' + offset + '&limit=' + limit, { headers: { Authorization: 'Bearer ' + tokenData.token } })
     .then(response => response.data)
-  return {
-    type: 'GET_CONTRACTS',
-    payload: request
-  }
+  return { type: 'GET_CONTRACTS', payload: request }
 }
 
 export function searchContracts(tokenData, filter) {

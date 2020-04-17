@@ -1,8 +1,7 @@
 export default function (state = {}, action) {
 
   switch (action.type) {
-    case 'RESET_ACTION':
-      console.log('RESET_ACTION')
+    case 'RESET_ACTION':      
       state = {}
       break;
     case 'GET_TOKEN_JWT_PENDING':      

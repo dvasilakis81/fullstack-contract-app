@@ -1,7 +1,7 @@
 import { ContactSupportOutlined } from "@material-ui/icons";
 
 export default function (state = {}, action) {
-	console.log(action.type);
+	//console.log(action.type);
 	switch (action.type) {		
 		case 'RESET_ACTION':
 			console.log('RESET_ACTION')

@@ -14,8 +14,7 @@ class Body extends Component {
 	}
 
 	componentDidMount() {
-		//console.log('Body: this.props.token:' + this.props.token + ' tokenjwt.data:' + this.props.token.data + ' tokenjwt.data.token' + this.props.token.data.token)
-		console.log('Body: componentDidMount');
+		
 		if (this.props.isLoginPage === undefined) {			
 			var dtNow = new Date()
 			if (this.props.token && this.props.token.data) {
