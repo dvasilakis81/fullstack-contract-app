@@ -204,7 +204,7 @@ const login = (request, response, next) => {
 
 const checkToken = (req, res, next) => {
   let token = req.headers['x-access-token'] || req.headers['authorization']; // Express headers are auto converted to lowercase  
-
+  console.log("CHECKTOKEN\nprotocol:" + req.protocol + "\nhost: " + req.host + "\nhostname: " + req.hostname + "\npath: " + req.path + "\noriginalUrl: " + req.originalUrl);
   if (token) {
     if (token.startsWith('Bearer '))
       token = token.slice(7, token.length);
