@@ -223,7 +223,8 @@ const checkToken = (req, res, next) => {
       }
     });
   } else {
-    console.log("CHECKTOKEN\nprotocol:" + req.protocol + "\nhost: " + req.host + "\nhostname: " + req.hostname + "\npath: " + req.path + "\noriginalUrl: " + req.originalUrl + "\ntoken: " + req.token ? req.token : 'undefined');
+    console.log("CHECKTOKEN\nprotocol:" + req.protocol + "\nhostname: " + req.hostname + "\npath: " + req.path + "\noriginalUrl: " + req.originalUrl);
+    console.log("\ntoken: " + req.token)
     return res.json({
       tokenIsValid: false,
       message: 'Auth token is not supplied'      
