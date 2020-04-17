@@ -208,25 +208,27 @@ const checkToken = (req, res, next) => {
       
     jwt.verify(token, secretKey, (err, decoded) => {
       if (err) {
-        return res.status(200).json({
-          tokenIsValid: false,
-          message: 'Token is not valid',
-          error: err.message,
-          expiresAt: err.expiredAt
-        });
+        next();
+        // return res.status(200).json({
+        //   tokenIsValid: false,
+        //   message: 'Token is not valid',
+        //   error: err.message,
+        //   expiresAt: err.expiredAt
+        // });
       } else {
-        const d = new Date(0);
-        d.setUTCSeconds(decoded.exp);
+        //const d = new Date(0);
+        //d.setUTCSeconds(decoded.exp);
         next();
       }
     });
   } else {
     console.log("CHECKTOKEN\nprotocol:" + req.protocol + "\nhostname: " + req.hostname + "\npath: " + req.path + "\noriginalUrl: " + req.originalUrl);
     console.log("\ntoken: " + req.token)
-    return res.status(200).json({
-      tokenIsValid: false,
-      message: 'Auth token is not supplied'      
-    });    
+    next();
+    // return res.status(200).json({
+    //   tokenIsValid: false,
+    //   message: 'Auth token is not supplied'      
+    // });    
   }
 };
 
