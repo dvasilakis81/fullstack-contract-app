@@ -194,8 +194,8 @@ app.post('/updateaccount', dbLogin.checkToken, dbAccount.updateAccount);
 
 app.post('/insertdecisionboard', dbLogin.checkToken, dbBoardDecision.insertDecisionBoard);
 app.post('/updatedecisionboard', dbLogin.checkToken, dbBoardDecision.updateDecisionBoard);
+app.post('/deletedecisionboard', dbLogin.checkToken, dbBoardDecision.deleteDecisionBoard);
 
-//createdecisionboard
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'jade');
@@ -205,19 +205,19 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 
-//if (ENV === 'production') {
+if (ENV === 'production') {
   app.use(express.static(path.join(__dirname, '../client/build')))
-  // app.use((req, res) => {
-  //   console.log('Redirect to index.html')    
-  //   res.sendFile(path.join(__dirname, '../client/build/index.html'))
-  // })
-  app.all('/*', function (req, res, next) {
-    console.log('Accessing all urls except all above ...')
+  app.use((req, res) => {
+    console.log('Redirect to index.html')
     res.sendFile(path.join(__dirname, '../client/build/index.html'))
   })
- //}
- //else
- //  app.use(express.static(path.join(__dirname, 'public')));
+  // app.all('/*', function (req, res, next) {
+  //   console.log('Accessing all urls except all above ...')
+  //   res.sendFile(path.join(__dirname, '../client/build/index.html'))
+  // })
+}
+else
+  app.use(express.static(path.join(__dirname, 'public')));
 
 // app.use('/', indexRouter);
 // app.use('/users', usersRouter);

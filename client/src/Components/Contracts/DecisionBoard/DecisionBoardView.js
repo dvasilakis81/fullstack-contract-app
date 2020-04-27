@@ -19,7 +19,7 @@ import {
 } from '../../MaterialObjects/materialobjects';
 
 import { bindActionCreators } from 'redux';
-import { createDecisionBoard, updateDecisionBoard } from '../../../Redux/Actions';
+import { createDecisionBoard, updateDecisionBoard, deleteDecisionBoard } from '../../../Redux/Actions';
 
 import { getDecisionBoardTooltip } from './Tooltip';
 
@@ -58,19 +58,20 @@ class DecisionBoardView extends Component {
 
     this.state = {
       contractId: this.props.contractDetails.Id,
-      ProtocolNumber: '',
-      ProtocolDate: '',
-      Content: '',
-      ADA: '',
       submitButtonDisabled: false,
       addNewItem: false,
       editItem: false,
-      decisionBoardIndex: 0,
-      Id: this.props.Id ? this.props.Id : '',
+      deleteItem: false,
+      decisionBoardIndex: 0,      
       openMessage: false,
       message: '',
       variant: '',
-      msgPadding: ''
+      msgPadding: '',
+      Id: this.props.Id ? this.props.Id : '',      
+      ProtocolNumber: '',
+      ProtocolDate: '',
+      Content: '',
+      ADA: ''
     }
 
     this.setTextValue = this.setTextValue.bind(this);
@@ -86,7 +87,7 @@ class DecisionBoardView extends Component {
     this.setState({ [event.target.id]: event.target.value });
   }
 
-  editDecisionBoard(index, decisionBoard) {
+  openEditDecisionBoard(index, decisionBoard) {
     this.setState({
       Id: decisionBoard.Id,
       ProtocolNumber: decisionBoard.ProtocolNumber,
@@ -98,20 +99,16 @@ class DecisionBoardView extends Component {
     })
   }
 
-  deleteDecisionBoard(decisionBoard) {
+  openDeleteDecisionBoard(index, decisionBoard) {
     this.setState({
-      Id: decisionBoard.Id
+      decisionBoardIndex: index + 1,
+      Id: decisionBoard.Id,      
+      ProtocolNumber: decisionBoard.ProtocolNumber,
+      ProtocolDate: decisionBoard.ProtocolDate,
+      deleteItem: true
     })
   }
 
-  getDeleteOption(index, item, decisionBoardlength) {
-
-    return <span onClick={() => { this.deleteDecisionBoard(item) }} style={{ textAlign: 'center', padding: '0px', justifyContent: 'end' }}>
-      <IconButton size="medium" color={index < decisionBoardlength - 1 ? "disabled" : "inherit"}>
-        <DeleteIcon />
-      </IconButton>
-    </span>
-  }
 
   handleSubmit(event) {
     event.preventDefault();
@@ -120,16 +117,12 @@ class DecisionBoardView extends Component {
     if (this.state.addNewItem === true) {
       this.props.createDecisionBoard(this.state, this.props.token.data.token).then(res => {
         var msg = 'Η Α.Δ.Σ. με πρωτόκολλο "' + this.state.ProtocolNumber + '/' + getDateFormatForDocument(this.state.ProtocolDate) + '" δημιουργήθηκε επιτυχώς!!!'
-        this.setState({ openMessage: true, msg: msg, variant: 'success', msgPadding: '10px', submitButtonDisabled: false, addNewItem: false, editItem: false });
-        // var param = {}
-        // param.msg = msg;
-        // param.variant = 'success'
-        // this.props.openServerMessage(param);
+        this.setState({ openMessage: true, msg: msg, variant: 'success', msgPadding: '10px', submitButtonDisabled: false, addNewItem: false, editItem: false });        
       }).catch(error => {
         var msg = 'Αποτυχία δημιουργίας Α.Δ.Σ. !!\n' + error;
         this.setState({ openMessage: true, msg: <><div>{msg}</div><div>{getServerErrorResponseMessage(error)}</div></>, openMessage: true, variant: 'error', msgPadding: '10px', submitButtonDisabled: false });
       })
-    } else if (this.state.editNewItem === true) {
+    } else if (this.state.editItem === true) {
 
       this.props.updateDecisionBoard(this.state, this.props.token.data.token).then(res => {
         var msg = 'Η Α.Δ.Σ. με πρωτόκολλο "' + this.state.ProtocolNumber + '/' + getDateFormatForDocument(this.state.ProtocolDate) + '" επεξεργάστηκε επιτυχώς!!!'
@@ -142,7 +135,19 @@ class DecisionBoardView extends Component {
     }
   }
 
-  editForm() {
+  requestDeleteDecisionBoard() {
+    this.setState({ submitButtonDisabled: true });
+
+    this.props.deleteDecisionBoard(this.state, this.props.token.data.token).then(res => {
+      var msg = 'Η Α.Δ.Σ. με πρωτόκολλο "' + this.state.ProtocolNumber + '/' + getDateFormatForDocument(this.state.ProtocolDate) + '" διεγράφει επιτυχώς!!!'
+      this.setState({ openMessage: true, msg: msg, variant: 'success', msgPadding: '10px', submitButtonDisabled: false, addNewItem: false, editItem: false, deleteItem: false });
+    }).catch(error => {
+      var msg = 'Αποτυχία διαγραφής Α.Δ.Σ. !!\n' + error;
+      this.setState({ openMessage: true, msg: <><div>{msg}</div><div>{getServerErrorResponseMessage(error)}</div></>, openMessage: true, variant: 'error', msgPadding: '10px', submitButtonDisabled: false });
+    })
+  }
+
+  DecisionBoardItemForm() {
     var decisionboard = this.props.contractDetails.decisionboard;
     if (this.state.addNewItem === true || this.state.editItem === true) {
       return <>
@@ -180,11 +185,35 @@ class DecisionBoardView extends Component {
           </form>
         </div>
       </>
+    } else if (this.state.deleteItem === true) {
+      return <div style={{ display: 'flex', flexFlow: 'column', height: 'auto', backgroundColor: '#fff', background: '#33C1FF', color: 'black', justifyContent: 'center', padding: '20px' }}>
+        <div style={{ textAlign: 'center', fontSize: '22px', fontWeight: 800, paddingBottom: '10px' }}>Διαγραφή {this.state.decisionBoardIndex}ης Απόφασης Δημοτικού Συμβουλίου;</div>
+        <div style={{ display: 'flex', flexFlow: 'row', height: 'auto', backgroundColor: '#33C1FF', justifyContent: 'center', padding: '10px' }}>
+          <LoadingOverlay
+            active={this.props.deleteDecicionBoardPending === true}
+            spinner
+            text='Αναμονή για διαγραφή Α.Δ.Σ. ...'
+            styles={{
+              overlay: (base) => ({
+                ...base,
+                width: '100%',
+                textAlign: 'middle'
+              })
+            }}>
+            <Button disabled={this.state.submitButtonDisabled} variant='contained' color='primary' style={{ fontSize: '18px', textAlign: 'center', padding: '5px', margin: '5px' }} onClick={() => { this.requestDeleteDecisionBoard() }}>
+              ΝΑΙ              
+            </Button>
+            <Button disabled={this.state.submitButtonDisabled} variant='contained' color='secondary' style={{ fontSize: '18px', textAlign: 'center', padding: '5px', margin: '5px' }} onClick={() => { this.setState({ deleteItem: false }) }}>
+              ΟΧΙ              
+            </Button>
+          </LoadingOverlay>
+        </div>
+      </div>
     }
   }
 
   render() {
-    console.log('Decision Board is rendered!!!!')
+
     return (
       <ContractsPopup header='Αποφάσεις Δημοτικού Συμβουλίου'>
         <div style={{ display: 'flex', flexFlow: 'column', flexWrap: 'wrap', width: '100%', height: '100%' }}>
@@ -202,12 +231,12 @@ class DecisionBoardView extends Component {
                             <span style={{ marginLeft: '10px' }}></span>
                             {item.Content ? <span style={{ fontStyle: 'italic' }}> και με <b>περιεχόμενο</b> {item.Content}</span> : ''}
                           </span>
-                          <span onClick={() => { this.editDecisionBoard(index, item) }} style={{ textAlign: 'center', padding: '0px', justifyContent: 'end' }}>
+                          <span onClick={() => { this.openEditDecisionBoard(index, item) }} style={{ textAlign: 'center', padding: '0px', justifyContent: 'end' }}>
                             <IconButton size="medium" color="inherit">
                               <SettingsIcon />
                             </IconButton>
                           </span>
-                          <span onClick={() => { this.deleteDecisionBoard(item) }} style={{ textAlign: 'center', padding: '0px', justifyContent: 'end' }}>
+                          <span onClick={() => { this.openDeleteDecisionBoard(index, item) }} style={{ textAlign: 'center', padding: '0px', justifyContent: 'end' }}>
                             <IconButton size="medium" color={index < this.props.contractDetails.decisionboard.length - 1 ? "disabled" : "inherit"}>
                               <DeleteIcon />
                             </IconButton>
@@ -220,7 +249,7 @@ class DecisionBoardView extends Component {
               }
             </div>
           </div>
-          {this.editForm()}          
+          {this.DecisionBoardItemForm()}
           <div style={{ display: 'flex', flexFlow: 'row', height: 'auto', background: 'lightgreen', justifyContent: 'center', padding: this.msgPadding }}>
             <span style={{ fontSize: '18px', textAlign: 'center', fontWeight: 'bold' }}>{this.state.msg}</span>
           </div>
@@ -246,7 +275,7 @@ function mapStateToProps(state) {
 }
 
 function mapDispatchToProps(dispatch) {
-  return bindActionCreators({ createDecisionBoard, updateDecisionBoard }, dispatch)
+  return bindActionCreators({ createDecisionBoard, updateDecisionBoard, deleteDecisionBoard }, dispatch)
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(DecisionBoardView)

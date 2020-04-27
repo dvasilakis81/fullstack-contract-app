@@ -12,12 +12,12 @@ const Pool = require('pg').Pool
 
 var params = {
   host: 'localhost',
-  database: 'Ordering2',
+  database: 'orderingappdb',
   user: 'postgres',
   password: '123',
-  port: '5432'
+  port: '5433'
 }
-const CONNECTION_STRING = process.env.HEROKU_POSTGRESQL_OLIVE_URL || 'postgresql://postgres:123@localhost:5432/Ordering2';
+const CONNECTION_STRING = process.env.HEROKU_POSTGRESQL_OLIVE_URL || 'postgresql://postgres:123@localhost:5433/orderingappdb';
 const SSL = process.env.NODE_ENV === 'production';
 
 console.log('CONNECTION_STRING: ' + CONNECTION_STRING);

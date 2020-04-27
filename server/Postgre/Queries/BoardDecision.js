@@ -24,23 +24,44 @@ const insertDecisionBoard = (req, res, next) => {
 }
 
 const updateDecisionBoard = (req, res, next) => {
-  var contractId = req.body.contractDetails.Id;
+  var contractId = req.body.contractId;
   var sqlQuery = util.format('UPDATE "Ordering"."DecisionBoard" ' +
     'SET "ProtocolNumber"=%s,"ProtocolDate"=%s,"Content"=%s,"ADA"=%s ' +
     'WHERE "Id"=%s AND "ContractId"=%s' +
-    'RETURNING * ', req.body.ProtocolNumber, req.body.ProtocolDate, req.body.Content, req.body.ADA, req.body.Id, contractId)
+    'RETURNING * ', 
+    helper.addQuotes(req.body.ProtocolNumber), 
+    helper.addQuotes(req.body.ProtocolDate), 
+    helper.addQuotes(req.body.Content), 
+    helper.addQuotes(req.body.ADA), 
+    helper.addQuotes(req.body.Id),
+    contractId)
   ret = pool.query(sqlQuery, (error, results) => {
     if (error)
       next(error);
     else {
-      helper.consoleLog('UpdateDownpaymentInfo: Insert DecisionBoard: Rows affected: ' + results.rowCount + ' ContractId: ' + contractId);
-      res.status(200).json(results.rows[0]);
+      helper.consoleLog("Update Decision Board \n");
+      contractMethods.getContractById(req, res, next, contractId)
     }
   })
 }
 
+const deleteDecisionBoard = (req, res, next) => {  
+  var Id = req.body.Id;
+  var contractId = req.body.contractId;
+  var sqlQuery = util.format('DELETE FROM "Ordering"."DecisionBoard" WHERE "Id"=%s AND "ContractId"=%s', Id, contractId)
+
+  pool.query(sqlQuery, (error, results) => {
+    if (error)
+      next(error);
+    else {
+      helper.consoleLog('deleteDecisionBoard: Delete DecisionBoard: Rows affected: ' + results.rowCount + ' ContractId: ' + contractId);
+      contractMethods.getContractById(req, res, next, contractId)
+    }
+  })
+}
 
 module.exports = {
   insertDecisionBoard,
-  updateDecisionBoard
+  updateDecisionBoard,
+  deleteDecisionBoard
 }

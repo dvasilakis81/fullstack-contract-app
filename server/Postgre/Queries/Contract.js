@@ -97,10 +97,8 @@ const getContracts = (request, response, next) => {
   })
 }
 
-const getContractById = (req, res, next, contractId) => {
-  var cid = req.body.ContractId;
-  if (contractId)
-    cid = contractId
+const getContractById = (req, res, next, contractId) => {  
+  
   var sqlQuery = 'SELECT *,' +
     '(SELECT COUNT(*) AS "Total" FROM "Ordering"."Contract"), ' +
     '(SELECT json_agg(Account) FROM (SELECT acct."Number",acct."Start",acct."End",acct."AmountPure", acct."AmountFpa", acct."AmountTotal" FROM "Ordering"."Account" as acct WHERE c."Id" = acct."ContractId" ORDER BY acct."Number") Account) AS CreatedAccounts, ' +
@@ -113,7 +111,7 @@ const getContractById = (req, res, next, contractId) => {
     '(SELECT json_agg(ContractUsers) FROM (SELECT * FROM "Ordering"."ContractUsers" as cus WHERE c."Id" = cus."ContractId") ContractUsers) AS ContractUsers, ' +
     '(SELECT json_agg(Owner) FROM (SELECT * FROM "Ordering"."User" as usr WHERE c."OwnerId" = usr."Id") Owner) AS Owner ' +
     'FROM "Ordering"."Contract" as c ' +
-    'WHERE c."Id"=' + cid
+    'WHERE c."Id"=' + contractId
   'ORDER BY c."DateCreated" DESC '
 
   pool.query(sqlQuery, (error, results) => {
@@ -122,7 +120,7 @@ const getContractById = (req, res, next, contractId) => {
       helper.consoleLog("Failed to get contract: \n" + error.message);
     }
     else {
-      helper.consoleLog("Contracts requested\n");
+      helper.consoleLog("Contract with id " + contractId + " requested\n");
       res.status(200).json(results.rows[0]);
     }
   })
@@ -238,7 +236,7 @@ const insertContractUsers = (req, res, next, contractId, usersToGiveAccessToCont
   var contractUsers = usersToGiveAccessToContract ? usersToGiveAccessToContract : req.body.contractStuff;
   var sqlQuery = 'INSERT INTO "Ordering"."ContractUsers"("ContractId", "UserId")  VALUES ';
   if (AllUsers)
-    getContractById(req, res, next);
+    getContractById(req, res, next, req.body.ContractId);
   else {
     for (var i = 0; i < contractUsers.length; i++) {
       sqlQuery += util.format('(%s,%s)', contractId, contractUsers[i].Id)
@@ -252,7 +250,7 @@ const insertContractUsers = (req, res, next, contractId, usersToGiveAccessToCont
     if (error)
       next(error);
     else
-      getContractById(req, res, next);
+      getContractById(req, res, next, req.body.ContractId);
   })
 }
 
@@ -299,7 +297,7 @@ const updateContractUsers = (req, res, next) => {
         if (usersToGiveAccessToContract.length > 0)
           giveAccessToContract(req, res, next, usersToGiveAccessToContract);
         else
-          getContractById(req, res, next)
+          getContractById(req, res, next, req.body.ContractId)
       }
     }
   })
@@ -328,7 +326,7 @@ const removeAccessToContract = (req, res, next, usersToRemoveAccessFromContract,
         if (usersToGiveAccessToContract && usersToGiveAccessToContract.length > 0)
           giveAccessToContract(req, res, next, usersToGiveAccessToContract);
         else
-          getContractById(req, res, next)
+          getContractById(req, res, next, req.body.ContractId)
       }
     })
   }

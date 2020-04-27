@@ -2,7 +2,7 @@ import { ContactSupportOutlined } from "@material-ui/icons";
 
 export default function (state = {}, action) {
 	//console.log(action.type);
-	switch (action.type) {		
+	switch (action.type) {
 		case 'RESET_ACTION':
 			console.log('RESET_ACTION')
 			state = {}
@@ -65,16 +65,70 @@ export default function (state = {}, action) {
 				};
 			}
 			break;
-		case 'INSERT_DECISIONBOARD_PENDING':			
+		case 'DELETE_DECISIONBOARD_PENDING':
+			state = {
+				...state,
+				deleteDecicionBoardPending: true,
+				deleteDecicionBoardRejected: false
+			};
+			break;
+		case 'DELETE_DECISIONBOARD_REJECTED':
+			state = {
+				...state,
+				deleteDecicionBoardPending: false,
+				deleteDecicionBoardRejected: action.payload
+			};
+			break;
+		case 'DELETE_DECISIONBOARD_FULFILLED':
+			if (state.contractsList) {
+				let updatedContractsList = state.contractsList.map((item) => {
+
+					var contractItem = action.payload.data;
+					if (item.Id == contractItem.Id)
+						item = contractItem
+
+					return item;
+				});
+
+				state = {
+					...state,
+					deleteDecicionBoardPending: false,
+					deleteDecicionBoardRejected: false,
+					contractsList: updatedContractsList,
+					contractDetails: action.payload.data
+				};
+			}
+
+			if (state.searchContractsList) {
+				let updatedContractsSearchList = state.searchContractsList.map((item) => {
+
+					var contractItem = action.payload.data;
+					if (item.Id == contractItem[0].Id)
+						item = contractItem[0]
+
+					return item;
+				});
+
+				state = {
+					...state,
+					deleteDecicionBoardPending: false,
+					deleteDecicionBoardRejected: false,
+					searchContractsList: updatedContractsSearchList,
+					contractDetailsSearchMode: action.payload
+				};
+			}
+
+			break;
+		case 'INSERT_DECISIONBOARD_PENDING':
 			state = {
 				...state,
 				insertDecicionBoardPending: true,
 				insertDecicionBoardRejected: false
 			};
 			break;
-		case 'INSERT_DECISIONBOARD_REJECTED':			
+		case 'INSERT_DECISIONBOARD_REJECTED':
 			state = {
-				...state,				
+				...state,
 				insertDecicionBoardPending: false,
 				insertDecicionBoardRejected: action.payload
 			};
@@ -82,7 +136,7 @@ export default function (state = {}, action) {
 		case 'INSERT_DECISIONBOARD_FULFILLED':
 			if (state.contractsList) {
 				let updatedContractsList = state.contractsList.map((item) => {
-					console.log('ContractId:' + action.payload.data.Id)					
+					console.log('ContractId:' + action.payload.data.Id)
 					var contractItem = action.payload.data;
 					if (item.Id == contractItem.Id)
 						item = contractItem
@@ -112,7 +166,7 @@ export default function (state = {}, action) {
 				state = {
 					...state,
 					insertDecicionBoardPending: false,
-					insertDecicionBoardRejected: false,
+					insertDecicionBoardRejected: false,					
 					searchContractsList: updatedContractsSearchList,
 					contractDetailsSearchMode: action.payload
 				};
@@ -139,8 +193,8 @@ export default function (state = {}, action) {
 				let updatedContractsList = state.contractsList.map((item) => {
 
 					var contractItem = action.payload.data;
-					if (item.Id == contractItem[0].Id)
-						item = contractItem[0]
+					if (item.Id == contractItem.Id)
+						item = contractItem
 
 					return item;
 				});
@@ -148,6 +202,7 @@ export default function (state = {}, action) {
 				state = {
 					...state,
 					contractsList: updatedContractsList,
+					contractDetails: action.payload.data
 				};
 			}
 
@@ -155,8 +210,8 @@ export default function (state = {}, action) {
 				let updatedContractsSearchList = state.searchContractsList.map((item) => {
 
 					var contractItem = action.payload.data;
-					if (item.Id == contractItem[0].Id)
-						item = contractItem[0]
+					if (item.Id == contractItem.Id)
+						item = contractItem
 
 					return item;
 				});
@@ -166,7 +221,7 @@ export default function (state = {}, action) {
 					updateDecicionBoardPending: false,
 					updateDecicionBoardRejected: false,
 					searchContractsList: updatedContractsSearchList,
-					contractDetailsSearchMode: action.payload
+					contractDetailsSearchMode: action.payload.data
 				};
 			}
 

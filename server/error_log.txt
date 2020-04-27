@@ -1,8 +1,8 @@
-Message: null value in column "ContractId" violates not-null constraint
-Stack: error: null value in column "ContractId" violates not-null constraint
-    at Connection.parseE (C:\Projects\Node\fullstack-contract-app\node_modules\pg\lib\connection.js:614:13)
-    at Connection.parseMessage (C:\Projects\Node\fullstack-contract-app\node_modules\pg\lib\connection.js:413:19)
-    at Socket.<anonymous> (C:\Projects\Node\fullstack-contract-app\node_modules\pg\lib\connection.js:129:22)
+Message: column "ProtocolDate" is of type date but expression is of type integer
+Stack: error: column "ProtocolDate" is of type date but expression is of type integer
+    at Connection.parseE (c:\Projects\Node\fullstack-contract-app\node_modules\pg\lib\connection.js:614:13)
+    at Connection.parseMessage (c:\Projects\Node\fullstack-contract-app\node_modules\pg\lib\connection.js:413:19)
+    at Socket.<anonymous> (c:\Projects\Node\fullstack-contract-app\node_modules\pg\lib\connection.js:129:22)
     at Socket.emit (events.js:197:13)
     at addChunk (_stream_readable.js:288:12)
     at readableAddChunk (_stream_readable.js:269:11)

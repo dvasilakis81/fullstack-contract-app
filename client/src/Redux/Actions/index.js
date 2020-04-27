@@ -90,4 +90,13 @@ export function updateDecisionBoard(data, token) {
   }
 }
 
+export function deleteDecisionBoard(data, token) {
+
+  const request = axios.post(`${URL}/deleteDecisionBoard`, data, { headers: { Authorization: 'Bearer ' + token } })
+  return {
+    type: 'DELETE_DECISIONBOARD',
+    payload: request
+  }
+}
+
 
