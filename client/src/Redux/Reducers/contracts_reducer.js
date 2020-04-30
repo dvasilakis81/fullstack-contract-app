@@ -1,7 +1,7 @@
-import { ContactSupportOutlined } from "@material-ui/icons";
+import store from '../Store/store'
 
-export default function (state = {}, action) {
-	//console.log(action.type);
+export default function (state = {}, action, root) {
+	//console.log(action.type);	
 	switch (action.type) {
 		case 'RESET_ACTION':
 			console.log('RESET_ACTION')
@@ -64,167 +64,6 @@ export default function (state = {}, action) {
 					contractDetailsSearchMode: action.payload
 				};
 			}
-			break;
-		case 'DELETE_DECISIONBOARD_PENDING':
-			state = {
-				...state,
-				deleteDecicionBoardPending: true,
-				deleteDecicionBoardRejected: false
-			};
-			break;
-		case 'DELETE_DECISIONBOARD_REJECTED':
-			state = {
-				...state,
-				deleteDecicionBoardPending: false,
-				deleteDecicionBoardRejected: action.payload
-			};
-			break;
-		case 'DELETE_DECISIONBOARD_FULFILLED':
-			if (state.contractsList) {
-				let updatedContractsList = state.contractsList.map((item) => {
-
-					var contractItem = action.payload.data;
-					if (item.Id == contractItem.Id)
-						item = contractItem
-
-					return item;
-				});
-
-				state = {
-					...state,
-					deleteDecicionBoardPending: false,
-					deleteDecicionBoardRejected: false,
-					contractsList: updatedContractsList,
-					contractDetails: action.payload.data
-				};
-			}
-
-			if (state.searchContractsList) {
-				let updatedContractsSearchList = state.searchContractsList.map((item) => {
-
-					var contractItem = action.payload.data;
-					if (item.Id == contractItem[0].Id)
-						item = contractItem[0]
-
-					return item;
-				});
-
-				state = {
-					...state,
-					deleteDecicionBoardPending: false,
-					deleteDecicionBoardRejected: false,
-					searchContractsList: updatedContractsSearchList,
-					contractDetailsSearchMode: action.payload
-				};
-			}
-
-			break;
-		case 'INSERT_DECISIONBOARD_PENDING':
-			state = {
-				...state,
-				insertDecicionBoardPending: true,
-				insertDecicionBoardRejected: false
-			};
-			break;
-		case 'INSERT_DECISIONBOARD_REJECTED':
-			state = {
-				...state,
-				insertDecicionBoardPending: false,
-				insertDecicionBoardRejected: action.payload
-			};
-			break;
-		case 'INSERT_DECISIONBOARD_FULFILLED':
-			if (state.contractsList) {
-				let updatedContractsList = state.contractsList.map((item) => {
-					console.log('ContractId:' + action.payload.data.Id)
-					var contractItem = action.payload.data;
-					if (item.Id == contractItem.Id)
-						item = contractItem
-
-					return item;
-				});
-
-				state = {
-					...state,
-					insertDecicionBoardPending: false,
-					insertDecicionBoardRejected: false,
-					contractsList: updatedContractsList,
-					contractDetails: action.payload.data
-				};
-			}
-
-			if (state.searchContractsList) {
-				let updatedContractsSearchList = state.searchContractsList.map((item) => {
-
-					var contractItem = action.payload.data;
-					if (item.Id == contractItem[0].Id)
-						item = contractItem[0]
-
-					return item;
-				});
-
-				state = {
-					...state,
-					insertDecicionBoardPending: false,
-					insertDecicionBoardRejected: false,					
-					searchContractsList: updatedContractsSearchList,
-					contractDetailsSearchMode: action.payload
-				};
-			}
-
-			break;
-		case 'UPDATE_DECISIONBOARD_PENDING':
-			state = {
-				...state,
-				updateDecicionBoardPending: true,
-				updateDecicionBoardRejected: false
-			};
-			break;
-		case 'UPDATE_DECISIONBOARD_REJECTED':
-			state = {
-				...state,
-				updateDecicionBoardPending: false,
-				updateDecicionBoardRejected: action.payload
-			};
-			break;
-		case 'UPDATE_DECISIONBOARD_FULFILLED':
-
-			if (state.contractsList) {
-				let updatedContractsList = state.contractsList.map((item) => {
-
-					var contractItem = action.payload.data;
-					if (item.Id == contractItem.Id)
-						item = contractItem
-
-					return item;
-				});
-
-				state = {
-					...state,
-					contractsList: updatedContractsList,
-					contractDetails: action.payload.data
-				};
-			}
-
-			if (state.searchContractsList) {
-				let updatedContractsSearchList = state.searchContractsList.map((item) => {
-
-					var contractItem = action.payload.data;
-					if (item.Id == contractItem.Id)
-						item = contractItem
-
-					return item;
-				});
-
-				state = {
-					...state,
-					updateDecicionBoardPending: false,
-					updateDecicionBoardRejected: false,
-					searchContractsList: updatedContractsSearchList,
-					contractDetailsSearchMode: action.payload.data
-				};
-			}
-
 			break;
 		case 'INSERT_CONTRACT':
 			let contractsList = null;
@@ -465,6 +304,169 @@ export default function (state = {}, action) {
 			}
 
 			state = { ...state, updateAccountPending: undefined, updateAccountRejected: undefined, updateAccount: action.payload };
+			break;
+		case 'INSERT_DECISIONBOARD_PENDING':
+			state = {
+				...state,
+				insertDecicionBoardPending: true,
+				insertDecicionBoardRejected: false
+			};
+			break;
+		case 'INSERT_DECISIONBOARD_REJECTED':
+			state = {
+				...state,
+				insertDecicionBoardPending: false,
+				insertDecicionBoardRejected: action.payload
+			};
+			break;
+		case 'INSERT_DECISIONBOARD_FULFILLED':
+			if (state.contractsList) {
+				let updatedContractsList = state.contractsList.map((item) => {
+					console.log('ContractId:' + action.payload.data.Id)
+					var contractItem = action.payload.data;
+					if (item.Id == contractItem.Id)
+						item = contractItem
+
+					return item;
+				});
+
+				state = {
+					...state,
+					insertDecicionBoardPending: false,
+					insertDecicionBoardRejected: false,
+					contractsList: updatedContractsList,
+					contractDetails: action.payload.data
+				};
+			}
+
+			if (state.searchContractsList) {
+				let updatedContractsSearchList = state.searchContractsList.map((item) => {
+
+					var contractItem = action.payload.data;
+					if (item.Id == contractItem[0].Id)
+						item = contractItem[0]
+
+					return item;
+				});
+
+				state = {
+					...state,
+					insertDecicionBoardPending: false,
+					insertDecicionBoardRejected: false,
+					searchContractsList: updatedContractsSearchList,
+					contractDetailsSearchMode: action.payload
+				};
+			}
+
+			break;
+		case 'UPDATE_DECISIONBOARD_PENDING':
+
+			state = {
+				...state,
+				updateDecicionBoardPending: true,
+				updateDecicionBoardRejected: false
+			};
+			break;
+		case 'UPDATE_DECISIONBOARD_REJECTED':
+			state = {
+				...state,
+				updateDecicionBoardPending: false,
+				updateDecicionBoardRejected: action.payload
+			};
+			break;
+		case 'UPDATE_DECISIONBOARD_FULFILLED':
+
+			if (state.contractsList) {
+				let updatedContractsList = state.contractsList.map((item) => {
+
+					var contractItem = action.payload.data;
+					if (item.Id == contractItem.Id)
+						item = contractItem
+
+					return item;
+				});
+
+				state = {
+					...state,
+					contractsList: updatedContractsList,
+					contractDetails: action.payload.data
+				};
+			}
+
+			if (state.searchContractsList) {
+				let updatedContractsSearchList = state.searchContractsList.map((item) => {
+
+					var contractItem = action.payload.data;
+					if (item.Id == contractItem.Id)
+						item = contractItem
+
+					return item;
+				});
+
+				state = {
+					...state,
+					updateDecicionBoardPending: false,
+					updateDecicionBoardRejected: false,
+					searchContractsList: updatedContractsSearchList,
+					contractDetailsSearchMode: action.payload.data
+				};
+			}
+
+			break;
+		case 'DELETE_DECISIONBOARD_PENDING':
+			state = {
+				...state,
+				deleteDecicionBoardPending: true,
+				deleteDecicionBoardRejected: false
+			};
+			break;
+		case 'DELETE_DECISIONBOARD_REJECTED':
+			state = {
+				...state,
+				deleteDecicionBoardPending: false,
+				deleteDecicionBoardRejected: action.payload
+			};
+			break;
+		case 'DELETE_DECISIONBOARD_FULFILLED':
+
+			if (state.contractsList) {
+				let updatedContractsList = state.contractsList.map((item) => {
+
+					var contractItem = action.payload.data;
+					if (item.Id == contractItem.Id)
+						item = contractItem
+
+					return item;
+				});
+
+				state = {
+					...state,
+					deleteDecicionBoardPending: false,
+					deleteDecicionBoardRejected: false,
+					contractsList: updatedContractsList,
+					contractDetails: action.payload.data
+				};
+			}
+
+			if (state.searchContractsList) {
+				let updatedContractsSearchList = state.searchContractsList.map((item) => {
+
+					var contractItem = action.payload.data;
+					if (item.Id == contractItem[0].Id)
+						item = contractItem[0]
+
+					return item;
+				});
+
+				state = {
+					...state,
+					deleteDecicionBoardPending: false,
+					deleteDecicionBoardRejected: false,
+					searchContractsList: updatedContractsSearchList,
+					contractDetailsSearchMode: action.payload
+				};
+			}
+
 			break;
 		default:
 			break;

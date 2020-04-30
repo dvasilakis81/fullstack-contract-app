@@ -1,4 +1,4 @@
-export default function (state = {}, action) {
+export default function (state = {}, action, root) {
 
   switch (action.type) {
     // console.log('RESET_ACTION')

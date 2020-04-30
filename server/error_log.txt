@@ -1,10 +1,12 @@
-Message: column "ProtocolDate" is of type date but expression is of type integer
-Stack: error: column "ProtocolDate" is of type date but expression is of type integer
-    at Connection.parseE (c:\Projects\Node\fullstack-contract-app\node_modules\pg\lib\connection.js:614:13)
-    at Connection.parseMessage (c:\Projects\Node\fullstack-contract-app\node_modules\pg\lib\connection.js:413:19)
-    at Socket.<anonymous> (c:\Projects\Node\fullstack-contract-app\node_modules\pg\lib\connection.js:129:22)
-    at Socket.emit (events.js:197:13)
-    at addChunk (_stream_readable.js:288:12)
-    at readableAddChunk (_stream_readable.js:269:11)
-    at Socket.Readable.push (_stream_readable.js:224:10)
-    at TCP.onStreamRead [as onread] (internal/stream_base_commons.js:145:17)
+Message: Cannot read property '0' of undefined
+Stack: TypeError: Cannot read property '0' of undefined
+    at Object.getAttachment2 (C:\Projects\Node\fullstack-contract-app\server\WORD\rawXml\DownPayment\trasmissionAttachments.js:56:171)
+    at Object.getAttachmentsXmlValue (C:\Projects\Node\fullstack-contract-app\server\WORD\rawXml\DownPayment\trasmissionAttachments.js:341:9)
+    at Object.setDataForDownpaymentTransmissionDocument (C:\Projects\Node\fullstack-contract-app\server\FileData\DownPaymentData.js:9:54)
+    at C:\Projects\Node\fullstack-contract-app\server\app.js:94:35
+    at Layer.handle [as handle_request] (C:\Projects\Node\fullstack-contract-app\node_modules\express\lib\router\layer.js:95:5)
+    at next (C:\Projects\Node\fullstack-contract-app\node_modules\express\lib\router\route.js:137:13)
+    at jwt.verify (C:\Projects\Node\fullstack-contract-app\server\Postgre\Queries\Login.js:220:9)
+    at C:\Projects\Node\fullstack-contract-app\node_modules\jsonwebtoken\verify.js:223:12
+    at getSecret (C:\Projects\Node\fullstack-contract-app\node_modules\jsonwebtoken\verify.js:90:14)
+    at Object.module.exports [as verify] (C:\Projects\Node\fullstack-contract-app\node_modules\jsonwebtoken\verify.js:94:10)

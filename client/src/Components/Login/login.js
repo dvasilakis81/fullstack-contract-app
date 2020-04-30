@@ -112,7 +112,7 @@ class Login extends Component {
                 {getTextField('text', 'username', 'Όνομα χρήστη', 'filled', this.state.username, false, { paddingBottom: '10px' }, false, { style: { fontFamily: 'Arial', color: 'blue', background: 'white' } }, null, this.setTextValue)}
                 {getTextField('password', 'password', 'Κωδικός', 'filled', this.state.password, false, { paddingBottom: '10px' }, false, { style: { fontFamily: 'Arial', color: 'blue', background: 'white' } }, null, this.setTextValue)}
                 {getButton('contained', 'small', 'primary', pageStyles.btnConnect, this.handleSubmit, 'Σύνδεση', null, false)}
-                <MySnackbar state={this.state} duration={5000} handleClose={this.handleClose} vertical='bottom' horizontal='center' currentdimensions={true} />
+                <MySnackbar state={this.state} duration={5000} handleClose={this.handleClose} vertical='bottom' horizontal='center' useScreenDimensions={true} />
 
               </div>
             </div>

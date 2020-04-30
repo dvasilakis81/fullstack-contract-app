@@ -255,7 +255,7 @@ class ItemDetail extends React.Component {
               </Button>
 					</DialogActions>
 				</Dialog>
-				<MySnackbar state={this.state} duration={5000} handleClose={this.handleClose} vertical='bottom' horizontal='right' />
+				<MySnackbar state={this.state} duration={5000} handleClose={this.handleClose} vertical='bottom' horizontal='right' useScreenDimensions={true} />
 			</Paper>
 		</Grid>)
 	}

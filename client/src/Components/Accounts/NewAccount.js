@@ -72,7 +72,7 @@ class NewAccount extends Component {
           showAdministrationOption={false}
           showNewContractOption={false} />
         <NewAccountForm {...props} />
-        <MySnackbar state={this.state} duration={5000} handleClose={this.handleClose} vertical='bottom' horizontal='right' />
+        <MySnackbar state={this.state} duration={5000} handleClose={this.handleClose} vertical='bottom' horizontal='right' useScreenDimensions={true} />
       </div >
     );
   }

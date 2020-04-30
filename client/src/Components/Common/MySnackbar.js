@@ -38,8 +38,6 @@ const styles = {
   },
 };
 
-
-
 class MySnackbar extends Component {
 
   getIcon(variant) {
@@ -65,8 +63,8 @@ class MySnackbar extends Component {
     let duration = this.props.duration;
     let width = 400;
     let left = this.props.screenDimensions ? this.props.screenDimensions.width - (width + 50) : 0;
-    let top = this.props.screenDimensions ? this.props.screenDimensions.height - (getHeaderHeight() + getFooterHeight() + 50) : 0
-    let style = this.props.currentdimensions && this.props.currentdimensions === true ? null : { width: width + 'px', position: 'absolute', left: left, top: top }
+    let top = this.props.useScreenDimensions === true ? this.props.screenDimensions.height - (getHeaderHeight() + getFooterHeight() + 50) : 0
+    let style = this.props.useScreenDimensions === true ? { width: width + 'px', position: 'absolute', left: left, top: top } : null
 
     //const Icon = variantIcon[variant];
     const bgColor = variantBgColor[variant];

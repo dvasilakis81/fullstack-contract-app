@@ -28,7 +28,7 @@ class Administration extends Component {
       <div style={{ width: '100%', height: '100%' }}>
         <Header title="Διαχειριστικό Παραμέτρων" showAdministrationOption={false} showNewContractOption={false} hstyle="2" />
         <AdministrationContainer />
-        <MySnackbar state={this.state} duration={5000} handleClose={this.handleClose} vertical='bottom' horizontal='right' />
+        <MySnackbar state={this.state} duration={5000} handleClose={this.handleClose} vertical='bottom' horizontal='right' useScreenDimensions={true} />
       </div>
     );
   }

@@ -735,7 +735,7 @@ class NewAccountForm extends Component {
 								{this.getSignaturesForAccount()}
 								{this.getSignaturesForTransmission()}
 							</form >
-							<MySnackbar state={this.state} duration={10000} handleClose={this.handleClose} vertical='bottom' horizontal='right' />
+							<MySnackbar state={this.state} duration={10000} handleClose={this.handleClose} vertical='bottom' horizontal='right' useScreenDimensions={true} />
 						</div>
 					</div>
 					{getFooterTemplate()}

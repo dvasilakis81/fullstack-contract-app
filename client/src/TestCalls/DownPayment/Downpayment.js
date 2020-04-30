@@ -217,7 +217,7 @@ class DownpaymentTransmission extends Component {
           disabled={this.state.disabled}>
           Δημιουργία αρχείου προκαταβολής-λογαριασμού
         </button>
-        <MySnackbar state={this.state} duration={5000} handleClose={this.handleClose} vertical='bottom' horizontal='right' />
+        <MySnackbar state={this.state} duration={5000} handleClose={this.handleClose} vertical='bottom' horizontal='right' useScreenDimensions={true} />
       </div>
 
 
