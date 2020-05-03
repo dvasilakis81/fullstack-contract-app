@@ -275,7 +275,7 @@ class DecisionBoardView extends Component {
           </div>
         </div>
         {this.decisionBoardItemForm()}
-        <div style={{ display: 'flex', flexFlow: 'row', height: 'auto', backgroundColor: '#fff', background: 'lightgrey', justifyContent: 'center' }}>
+        <div style={{ display: 'flex', flexFlow: 'row', height: 'auto', backgroundColor: '#fff', background: 'white', justifyContent: 'center' }}>
           <Button
             disabled={this.state.deleteItem === true || this.state.editItem === true}
             style={{ fontSize: '18px', textAlign: 'center' }}

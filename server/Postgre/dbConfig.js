@@ -8,6 +8,8 @@
   //expiresAt: process.env.TOKEN_EXPIRES_IN
 
   // heroku pg:pull HEROKU_POSTGRESQL_OLIVE orderingappdb --app ordering-app-munathens
+  // heroku pg:push orderingappdb heroku_postgresql_olive --app ordering-app-munathens
+  // https://ordering-app-munathens.herokuapp.com/contracts
 const Pool = require('pg').Pool
 
 var params = {
