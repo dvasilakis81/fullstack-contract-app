@@ -11,7 +11,7 @@ import LoadingOverlay from 'react-loading-overlay'
 
 import ItemsList from '../Contracts/Items/itemslist';
 import ItemDetail from '../Contracts/Items/itemdetail';
-import { getFooterTemplate, getFailedConnectionWithServer, showGenericMessage } from '../Common/templates'
+import { getFooterTemplate, showErrorMessageFromServer, getFailedConnectionWithServer, showGenericMessage } from '../Common/templates'
 import { getContracts, searchContracts } from '../../Redux/Actions';
 import store from '../../Redux/Store/store';
 import Body from '../../HOC/Body/body';
@@ -40,10 +40,9 @@ class ContractsPageBody extends Component {
       submitButtonDisabled: false,
       navigateToEditAccount: false,
       navigateToLogin: false,
-      searchValue: '',      
+      searchValue: '',
       windowWidth: window.innerWidth,
-      windowHeight: window.innerHeight,
-      xxx: this.props.insertDecicionBoardPending
+      windowHeight: window.innerHeight      
     };
 
     this.fetchMore = this.fetchMore.bind(this);
@@ -149,7 +148,7 @@ class ContractsPageBody extends Component {
 
         var ddd = (this.props.token.data.token ? this.props.token.data.token : 'tokenData.token: undefined');
         var fff = (this.props.token.data ? ddd : 'tokenData: undefined');
-        console.log('getContracts: ' + fff);        
+        console.log('getContracts: ' + fff);
         if (this.props.isSearchMode)
           this.props.searchContracts(this.props.token.data, this.props.searchModeValue);
         else
@@ -288,14 +287,26 @@ class ContractsPageBody extends Component {
         }} />
     );
   }
-  getTemplate() {    
+  getTemplate() {
 
     let isSearchMode = ((this.state.searchValue && this.state.searchValue.length > 2) || this.props.isSearchMode)
     let contractsList = isSearchMode ? this.props.searchContractsList : this.props.contracts
     if (this.state.navigateToLogin)
       return <Redirect to='/login' />
-    else if (this.props.contractsRejected)
-      return getFailedConnectionWithServer();
+    else if (this.props.contractsRejected) {
+      var msgToShow = '';
+      if (this.props.contractsRejected && this.props.contractsRejected.message === 'Network Error') {
+        msgToShow = 'Αποτυχία σύνδεσης με τον διακομιστή!'
+      } else if (this.props.contractsRejected.response && this.props.contractsRejected.response.data) {
+        msgToShow = this.props.contractsRejected.response.statusText
+        msgToShow += '\nroutine:' + this.props.contractsRejected.response.data.routine
+        msgToShow += '\nhint: ' + this.props.contractsRejected.response.data.hint
+      }
+      else if (this.props.contractsRejected && this.props.contractsRejected.message)
+        msgToShow = this.props.contractsRejected.message
+
+      return showErrorMessageFromServer(msgToShow);
+    }
     else {
       return (
         <LoadingOverlay
@@ -363,7 +374,7 @@ class ContractsPageBody extends Component {
 function mapStateToProps(state) {
   return {
     //screenDimensions: state.parametricdata_reducer.screenDimensions,
-    doRefresh: state.parametricdata_reducer.doRefresh,    
+    doRefresh: state.parametricdata_reducer.doRefresh,
     contracts: state.contracts_reducer.contractsList,
     contractsPending: state.contracts_reducer.contractsPending,
     contractsRejected: state.contracts_reducer.contractsRejected,
@@ -374,7 +385,7 @@ function mapStateToProps(state) {
     isSearchMode: state.contracts_reducer.isSearchMode,
     loadedItems: state.contracts_reducer.loadedItems,
     token: state.token_reducer.token,
-    insertDecicionBoardPending: state.contracts_reducer.insertDecicionBoardPending
+    insertContractInfoPending: state.contracts_reducer.insertContractInfoPending
   };
 }
 

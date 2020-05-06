@@ -305,21 +305,21 @@ export default function (state = {}, action, root) {
 
 			state = { ...state, updateAccountPending: undefined, updateAccountRejected: undefined, updateAccount: action.payload };
 			break;
-		case 'INSERT_DECISIONBOARD_PENDING':
+		case 'INSERT_CONTRACTINFO_PENDING':
 			state = {
 				...state,
-				insertDecicionBoardPending: true,
-				insertDecicionBoardRejected: false
+				insertContractInfoPending: true,
+				insertContractInfoRejected: false
 			};
 			break;
-		case 'INSERT_DECISIONBOARD_REJECTED':
+		case 'INSERT_CONTRACTINFO_REJECTED':
 			state = {
 				...state,
-				insertDecicionBoardPending: false,
-				insertDecicionBoardRejected: action.payload
+				insertContractInfoPending: false,
+				insertContractInfoRejected: action.payload
 			};
 			break;
-		case 'INSERT_DECISIONBOARD_FULFILLED':
+		case 'INSERT_CONTRACTINFO_FULFILLED':
 			if (state.contractsList) {
 				let updatedContractsList = state.contractsList.map((item) => {
 					console.log('ContractId:' + action.payload.data.Id)
@@ -332,8 +332,8 @@ export default function (state = {}, action, root) {
 
 				state = {
 					...state,
-					insertDecicionBoardPending: false,
-					insertDecicionBoardRejected: false,
+					insertContractInfoPending: false,
+					insertContractInfoRejected: false,
 					contractsList: updatedContractsList,
 					contractDetails: action.payload.data
 				};
@@ -351,15 +351,15 @@ export default function (state = {}, action, root) {
 
 				state = {
 					...state,
-					insertDecicionBoardPending: false,
-					insertDecicionBoardRejected: false,
+					insertContractInfoPending: false,
+					insertContractInfoRejected: false,
 					searchContractsList: updatedContractsSearchList,
 					contractDetailsSearchMode: action.payload
 				};
 			}
 
 			break;
-		case 'UPDATE_DECISIONBOARD_PENDING':
+		case 'UPDATE_CONTRACTINFO_PENDING':
 
 			state = {
 				...state,
@@ -367,14 +367,14 @@ export default function (state = {}, action, root) {
 				updateDecicionBoardRejected: false
 			};
 			break;
-		case 'UPDATE_DECISIONBOARD_REJECTED':
+		case 'UPDATE_CONTRACTINFO_REJECTED':
 			state = {
 				...state,
 				updateDecicionBoardPending: false,
 				updateDecicionBoardRejected: action.payload
 			};
 			break;
-		case 'UPDATE_DECISIONBOARD_FULFILLED':
+		case 'UPDATE_CONTRACTINFO_FULFILLED':
 
 			if (state.contractsList) {
 				let updatedContractsList = state.contractsList.map((item) => {
@@ -413,21 +413,21 @@ export default function (state = {}, action, root) {
 			}
 
 			break;
-		case 'DELETE_DECISIONBOARD_PENDING':
+		case 'DELETE_CONTRACTINFO_PENDING':
 			state = {
 				...state,
 				deleteDecicionBoardPending: true,
 				deleteDecicionBoardRejected: false
 			};
 			break;
-		case 'DELETE_DECISIONBOARD_REJECTED':
+		case 'DELETE_CONTRACTINFO_REJECTED':
 			state = {
 				...state,
 				deleteDecicionBoardPending: false,
 				deleteDecicionBoardRejected: action.payload
 			};
 			break;
-		case 'DELETE_DECISIONBOARD_FULFILLED':
+		case 'DELETE_CONTRACTINFO_FULFILLED':
 
 			if (state.contractsList) {
 				let updatedContractsList = state.contractsList.map((item) => {
@@ -467,7 +467,7 @@ export default function (state = {}, action, root) {
 				};
 			}
 
-			break;
+			break;		
 		default:
 			break;
 	}

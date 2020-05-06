@@ -38,8 +38,7 @@ import VirtualizedCC from './VirtualizedCC';
 import {
 	getAayTooltipTemplate, getFirstTrasmissionProtocolTooltip,
 	getAccountProtocolTooltip, getWorkConfirmationDateTooltip, getDeliveredGoodDateTooltip,
-	getInvoiceTooltipTemplate, getLawArticleTooltip,
-	getDecisionSADAProtocolTooltip, getDecisionSADA2ProtocolTooltip,
+	getInvoiceTooltipTemplate, getLawArticleTooltip,	
 	getCourtOfAuditorsTooltip, getDocumentDateTooltipTemplate, getAccountStartDateTooltipTemplate, 
 	getAccountEndDateTooltipTemplate, getMonitoringCommitteeTooltipTemplate, getMonitoringCommitteePracticalTooltipTemplate
 } from './ΤooltipMethods';
@@ -166,18 +165,7 @@ class NewAccountForm extends Component {
 			SignName3: this.props.location.state.SignName3,
 			SignName4: this.props.location.state.SignName4,
 			AbsenseOfDirector1: this.props.location.state.AbsenseOfDirector1,
-			AbsenseOfDirector2: this.props.location.state.AbsenseOfDirector2,
-			HasSecondDecisionDS: this.props.location.state.HasSecondDecisionDS,
-			DecisionDS1Number: this.props.location.state.DecisionDS1Number,
-			DecisionDS1Date: this.props.location.state.DecisionDS1Date,
-			DecisionDS1ADA: this.props.location.state.DecisionDS1ADA,
-			DecisionDS2Number: this.props.location.state.DecisionDS2Number,
-			DecisionDS2Date: this.props.location.state.DecisionDS2Date,
-			DecisionDS2Content: this.props.location.state.DecisionDS2Content,
-			Decision1SADANumber: this.props.location.state.Decision1SADANumber,
-			Decision1SADADate: this.props.location.state.Decision1SADADate,
-			Decision2SADANumber: this.props.location.state.Decision2SADANumber,
-			Decision2SADADate: this.props.location.state.Decision2SADADate,
+			AbsenseOfDirector2: this.props.location.state.AbsenseOfDirector2,			
 			HasCourtOfAuditors: this.props.location.state.HasCourtOfAuditors,
 			PraxisNumber: this.props.location.state.PraxisNumber,
 			PraxisYear: this.props.location.state.PraxisYear,
@@ -586,27 +574,7 @@ class NewAccountForm extends Component {
 				{getTextFieldWithTooltip(getInvoiceTooltipTemplate(useStyles, this.state, contractDetails.ConcessionaireName, 2), 'date', 'InvoiceDate', 'Α.Π. Τιμολογίου', 'outlined', this.state.InvoiceDate, true, useStyles.accountInfoItem, false, null, { shrink: true }, this.setTextValue)}
 			</div>
 		</>
-	}
-
-	getMonitoringCommiteeInfo() {
-		var contractDetails = this.props.isSearchMode ? this.props.contractDetailsSearchMode : this.props.contractDetails
-		return <>
-			<header style={useStyles.category}>Στοιχεία Επιτροπής Παρακολούθησης</header>
-			{this.state.HasMonitoringCommittee === true ?
-				<div>
-					<div style={useStyles.divRowFlex}>
-						{getTextFieldWithTooltip(getMonitoringCommitteeTooltipTemplate(useStyles, this.state, contractDetails.ConcessionaireName, this.state.AccountNumber, 4), 'date', 'MonitoringCommitteeMayorDecisionForMembersProtocolNumber', 'Α.Π. Πρακτικού', 'outlined', this.state.MonitoringCommitteeMayorDecisionForMembersProtocolNumber, true, useStyles.accountInfoItem, false, null, { shrink: true }, this.setTextValue)}
-						{getTextFieldWithTooltip(getMonitoringCommitteeTooltipTemplate(useStyles, this.state, contractDetails.ConcessionaireName, this.state.AccountNumber, 4), 'date', 'MonitoringCommitteeMayorDecisionForMembersProtocolDate', 'Α.Π. Πρακτικού', 'outlined', this.state.MonitoringCommitteeMayorDecisionForMembersProtocolDate, true, useStyles.accountInfoItem, false, null, { shrink: true }, this.setTextValue)}						
-						{getTextFieldWithTooltip(getMonitoringCommitteePracticalTooltipTemplate(useStyles, this.state, this.state.AccountNumber, 1), 'date', 'MonitoringCommitteePracticalDate', 'Ημερομηνία Πρακτικού', 'outlined', this.state.MonitoringCommitteePracticalDate, true, useStyles.accountInfoItem, false, null, { shrink: true }, this.setTextValue)}
-						{getTextFieldWithTooltip(getMonitoringCommitteeTooltipTemplate(useStyles, this.state, contractDetails.ConcessionaireName, this.state.AccountNumber, 1), 'text', 'MonitoringCommitteeDocumentProtocolNumber', 'Α.Π. Διαβιβαστικού Εγγράφου', 'outlined', this.state.MonitoringCommitteeDocumentProtocolNumber, true, useStyles.accountInfoItem, false, null, { shrink: true }, this.setTextValue)}
-						{getTextFieldWithTooltip(getMonitoringCommitteeTooltipTemplate(useStyles, this.state, contractDetails.ConcessionaireName, this.state.AccountNumber, 2), 'date', 'MonitoringCommitteeDocumentProtocolDate', 'Α.Π. Διαβιβαστικού Εγγράφου', 'outlined', this.state.MonitoringCommitteeDocumentProtocolDate, true, useStyles.accountInfoItem, false, null, { shrink: true }, this.setTextValue)}
-					</div>
-				</div> : <></>}
-			<div>
-				{getButton('contained', 'small', null, useStyles.btnAuto, this.state.HasMonitoringCommittee === true ? this.removeMonitoringCommittee : this.addMonitoringCommittee, this.state.HasMonitoringCommittee === true ? 'Διαγραφή στοιχείων επιτροπής παρακολούθησης' : 'Προσθήκη στοιχείων επιτροπής παρακολούθησης' , null, false)}
-			</div>
-		</>
-	}
+	}	
 
 	getSignaturesForAccount() {
 		return <>
@@ -644,9 +612,7 @@ class NewAccountForm extends Component {
 	getDownpaymentInfo() {
 		if (this.state.IsDownpayment === true) {
 			return <>
-				{this.getTemplateForDownpaymentLawArticle()}
-				{this.getTemplateForDecisionCityCouncilAndSADA1()}
-				{this.getTemplateForDecisionCityCouncilAndSADA2()}
+				{this.getTemplateForDownpaymentLawArticle()}				
 				{this.getTemplateForCourtOfAuditors()}
 			</>
 		}
@@ -659,49 +625,6 @@ class NewAccountForm extends Component {
 				{getTextFieldWithTooltip(getLawArticleTooltip(useStyles, this.state, this.props.contractDetails), 'number', 'DownpaymentLawArticle', 'Άρθρο', 'outlined', this.state.DownpaymentLawArticle, true, useStyles.accountInfoItem, false, null, { shrink: true }, this.setTextValue)}
 			</div>
 		</>)
-	}
-
-	// getTemplateForDecisionCityCouncilAndSADA1() {
-	// 	if (this.state.IsDownpayment) {
-	// 		return (<>
-	// 			<header style={useStyles.category}>Στοιχεία Απόφασης Διοικητικού Συμβουλίου και Απόφασης του Συντονιστή της Αποκεντρωμένης Διοίκησης Αττικής</header>
-	// 			<div style={useStyles.divRowFlex}>
-	// 				{getTextFieldWithTooltip(getDecisionNumberProtocolTooltip(useStyles, this.state, 1), 'number', 'DecisionDS1Number', 'Αριθμός A.Δ.Σ.', 'outlined', this.state.DecisionDS1Number, true, useStyles.accountInfoItem, false, null, { shrink: true }, this.setTextValue)}
-	// 				{getTextFieldWithTooltip(getDecisionNumberProtocolTooltip(useStyles, this.state, 2), 'date', 'DecisionDS1Date', 'Ημ/νία Α.Δ.Σ.', 'outlined', this.state.DecisionDS1Date, true, useStyles.accountInfoItem, false, null, { shrink: true }, this.setTextValue)}
-	// 				{getTextFieldWithTooltip(getDecisionNumberProtocolTooltip(useStyles, this.state, 3), 'text', 'DecisionDS1ADA', 'ΑΔΑ', 'outlined', this.state.DecisionDS1ADA, false, useStyles.accountInfoItem, false, null, { shrink: true }, this.setTextValue)}
-	// 				{getTextFieldWithTooltip(getDecisionSADAProtocolTooltip(useStyles, this.state, 1), 'number', 'Decision1SADANumber', 'Αριθμός Απόφασης Σ.Α.Δ.Α', 'outlined', this.state.Decision1SADANumber, true, useStyles.accountInfoItem, false, null, { shrink: true }, this.setTextValue)}
-	// 				{getTextFieldWithTooltip(getDecisionSADAProtocolTooltip(useStyles, this.state, 2), 'date', 'Decision1SADADate', 'Ημ/νία Απόφασης Σ.Α.Δ.Α', 'outlined', this.state.Decision1SADADate, true, useStyles.accountInfoItem, false, null, { shrink: true }, this.setTextValue)}
-	// 			</div>
-	// 		</>)
-	// 	}
-	// }
-	// getTemplateForDecisionCityCouncilAndSADA2() {
-	// 	if (this.state.IsDownpayment) {
-	// 		return (
-	// 			<div style={useStyles.divRowFlex}>
-	// 				{getTextFieldWithTooltip(getDecisionNumber2ProtocolTooltip(useStyles, this.state, 1), 'number', 'DecisionDS2Number', 'Αριθμός 2ης Α.Δ.Σ.', 'outlined', this.state.DecisionDS2Number, true, useStyles.accountInfoItem, this.state.HasSecondDecisionDS === false, null, { shrink: true }, this.setTextValue)}
-	// 				{getTextFieldWithTooltip(getDecisionNumber2ProtocolTooltip(useStyles, this.state, 2), 'date', 'DecisionDS2Date', 'Ημ/νία 2ης Α.Δ.Σ.', 'outlined', this.state.DecisionDS2Date, true, useStyles.accountInfoItem, this.state.HasSecondDecisionDS === false, null, { shrink: true }, this.setTextValue)}
-	// 				{getTextFieldWithTooltip(getDecisionNumber2ProtocolTooltip(useStyles, this.state, 3), 'text', 'DecisionDS2Content', 'Περιεχόμενο Α.Δ.Σ.', 'outlined', this.state.DecisionDS2Content, true, useStyles.accountInfoLargeItem2, this.state.HasSecondDecisionDS === false, null, { shrink: true }, this.setTextValue)}
-	// 				{getTextFieldWithTooltip(getDecisionSADA2ProtocolTooltip(useStyles, this.state, 1), 'number', 'Decision2SADANumber', 'Αριθμός 2ης Απόφασης Σ.Α.Δ.Α.', 'outlined', this.state.Decision2SADANumber, true, useStyles.accountInfoItem, this.state.HasSecondDecisionDS === false, null, { shrink: true }, this.setTextValue)}
-	// 				{getTextFieldWithTooltip(getDecisionSADA2ProtocolTooltip(useStyles, this.state, 2), 'date', 'Decision2SADADate', 'Ημ/νία 2ης Απόφασης Σ.Α.Δ.Α.', 'outlined', this.state.Decision2SADADate, true, useStyles.accountInfoItem, this.state.HasSecondDecisionDS === false, null, { shrink: true }, this.setTextValue)}
-	// 				{getCheckboxField('HasSecondDecisionDS', 'Αν υπάρχει 2η Απόφαση Δημοτικού Συμβουλίου', this.state.HasSecondDecisionDS, useStyles.accountInfoItem, this.setCheckboxValue)}
-	// 			</div>)
-	// 	}
-	// }
-	getTemplateForCourtOfAuditors() {
-		if (this.state.IsDownpayment) {
-			return (
-				<><header style={useStyles.category}>Στοιχεία Ελεγκτικού Συνεδρίου</header>
-					<div style={useStyles.divRowFlex}>
-						{getTextFieldWithTooltip(getCourtOfAuditorsTooltip(useStyles, this.state, 1), 'number', 'PraxisNumber', 'Αριθμός Πράξης', 'outlined', this.state.PraxisNumber, this.state.HasCourtOfAuditors === false, useStyles.accountInfoItem, this.state.HasCourtOfAuditors === false, null, { shrink: true }, this.setTextValue)}
-						{getTextFieldWithTooltip(getCourtOfAuditorsTooltip(useStyles, this.state, 2), 'number', 'PraxisYear', 'Χρονιά Πράξης', 'outlined', this.state.PraxisYear, this.state.HasCourtOfAuditors === false, useStyles.accountInfoItem, this.state.HasCourtOfAuditors === false, null, { shrink: true }, this.setTextValue)}
-						{getTextFieldWithTooltip(getCourtOfAuditorsTooltip(useStyles, this.state, 3), 'text', 'ScaleNumber', 'Κλιμάκιο', 'outlined', this.state.ScaleNumber, this.state.HasCourtOfAuditors === false, useStyles.accountInfoItem, this.state.HasCourtOfAuditors === false, null, { shrink: true }, this.setTextValue)}
-						{getTextFieldWithTooltip(getCourtOfAuditorsTooltip(useStyles, this.state, 4), 'number', 'APDANumber', 'Αριθμός. Α.Π.Δ.Α', 'outlined', this.state.APDANumber, this.state.HasCourtOfAuditors === false, useStyles.accountInfoItem, this.state.HasCourtOfAuditors === false, null, { shrink: true }, this.setTextValue)}
-						{getTextFieldWithTooltip(getCourtOfAuditorsTooltip(useStyles, this.state, 5), 'date', 'APDADate', 'Ημ/νία. Α.Π.Δ.Α.', 'outlined', this.state.APDADate, this.state.HasCourtOfAuditors === false, useStyles.accountInfoItem, this.state.HasCourtOfAuditors === false, null, { shrink: true }, this.setTextValue)}
-						{getCheckboxField('HasCourtOfAuditors', 'Αν υπάρχει Ελεγκτικό Συνέδριο', this.state.HasCourtOfAuditors, useStyles.accountInfoItem, this.setCheckboxValue)}
-					</div>
-				</>)
-		}
 	}
 
 	addMonitoringCommittee() {

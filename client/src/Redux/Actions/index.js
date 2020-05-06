@@ -3,7 +3,7 @@ import { getHostUrl } from '../../Helper/helpermethods';
 
 const URL = getHostUrl();
 
-export function getContracts(tokenData, offset, limit) {  
+export function getContracts(tokenData, offset, limit) {
   const request = axios.get(`${URL}/contracts?loginuserid=` + tokenData.id + '&offset=' + offset + '&limit=' + limit, { headers: { Authorization: 'Bearer ' + tokenData.token } })
     .then(response => response.data)
   return { type: 'GET_CONTRACTS', payload: request }
@@ -28,7 +28,7 @@ export function getAccount(token, contractId, accountNumber) {
 }
 
 export function login(username, password) {
-  var url = `${URL}/login?u=` + username + '&p=' + password;  
+  var url = `${URL}/login?u=` + username + '&p=' + password;
   const request = axios.get(url)
   return {
     type: 'GET_TOKEN_JWT',
@@ -76,8 +76,8 @@ export function createDecisionBoard(data, token) {
 
   const request = axios.post(`${URL}/insertdecisionboard`, data, { headers: { Authorization: 'Bearer ' + token } })
   return {
-    type: 'INSERT_DECISIONBOARD',
-    payload: request    
+    type: 'INSERT_CONTRACTINFO',
+    payload: request
   }
 }
 
@@ -85,7 +85,7 @@ export function updateDecisionBoard(data, token) {
 
   const request = axios.post(`${URL}/updatedecisionboard`, data, { headers: { Authorization: 'Bearer ' + token } })
   return {
-    type: 'UPDATE_DECISIONBOARD',    
+    type: 'UPDATE_CONTRACTINFO',
     payload: request
   }
 }
@@ -94,9 +94,66 @@ export function deleteDecisionBoard(data, token) {
 
   const request = axios.post(`${URL}/deleteDecisionBoard`, data, { headers: { Authorization: 'Bearer ' + token } })
   return {
-    type: 'DELETE_DECISIONBOARD',
+    type: 'DELETE_CONTRACTINFO',
     payload: request
   }
 }
+
+export function createDecisionCoordinatorDecentrilizedAdministration(data, token) {
+
+  const request = axios.post(`${URL}/insertdecisioncoordinatordecentrilizedadministration`, data, { headers: { Authorization: 'Bearer ' + token } })
+  return {
+    type: 'INSERT_CONTRACTINFO',
+    payload: request
+  }
+}
+
+export function updateDecisionCoordinatorDecentrilizedAdministration(data, token) {
+
+  const request = axios.post(`${URL}/updatedecisioncoordinatordecentrilizedadministration`, data, { headers: { Authorization: 'Bearer ' + token } })
+  return {
+    type: 'UPDATE_CONTRACTINFO',
+    payload: request
+  }
+}
+
+export function deleteDecisionCoordinatorDecentrilizedAdministration(data, token) {
+
+  const request = axios.post(`${URL}/deletedecisioncoordinatordecentrilizedadministration`, data, { headers: { Authorization: 'Bearer ' + token } })
+  return {
+    type: 'DELETE_CONTRACTINFO',
+    payload: request
+  }
+}
+
+
+export function createCourtOfAuditors(data, token) {
+
+  const request = axios.post(`${URL}/insertcourtofauditors`, data, { headers: { Authorization: 'Bearer ' + token } })
+  return {
+    type: 'INSERT_CONTRACTINFO',
+    payload: request
+  }
+}
+
+export function updateCourtOfAuditors(data, token) {
+
+  const request = axios.post(`${URL}/updatecourtofauditors`, data, { headers: { Authorization: 'Bearer ' + token } })
+  return {
+    type: 'UPDATE_CONTRACTINFO',
+    payload: request
+  }
+}
+
+export function deleteCourtOfAuditors(data, token) {
+
+  const request = axios.post(`${URL}/deletecourtofauditors`, data, { headers: { Authorization: 'Bearer ' + token } })
+  return {
+    type: 'DELETE_CONTRACTINFO',
+    payload: request
+  }
+}
+
+
 
 

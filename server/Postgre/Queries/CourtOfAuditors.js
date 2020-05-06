@@ -1,71 +1,71 @@
 const pool = require('../dbConfig').pool
 const util = require('util')
 const helper = require('../../HelperMethods/helpermethods')
+const contractMethods = require('./Contract')
 
-const insertCourtOfAuditors = (req, res, next, accountInfo) => {
-  var contractId = accountInfo[0].ContractId
-  var sqlQuery = util.format('SELECT * FROM "Ordering"."CourtOfAuditors" as coa WHERE coa."ContractId"=%s', helper.addQuotes(contractId))
+const insert = (req, res, next) => {
+  var contractId = req.body.contractId;
+  var sqlQuery = util.format('INSERT INTO "Ordering"."CourtOfAuditors"("ContractId","ProtocolNumber","ProtocolYear","ScaleNumber","APDA_ProtocolNumber","APDA_ProtocolDate") ' +
+    'VALUES(%s,%s,%s,%s,%s,%s) ' +
+    'RETURNING "Id"',
+    helper.addQuotes(contractId),
+    helper.addQuotes(req.body.ProtocolNumber),
+    helper.addQuotes(req.body.ProtocolYear),
+    helper.addQuotes(req.body.ScaleNumber),
+    helper.addQuotes(req.body.APDANumber),
+    helper.addQuotes(req.body.APDADate))
 
-  ret = pool.query(sqlQuery, (error, results) => {
+  pool.query(sqlQuery, (error, results) => {
     if (error)
       next(error);
     else {
-      if (results.rows.length > 0)
-        res.status(200).json(results.rows[0].Id);
-      else {
-        var sqlQuery = util.format('INSERT INTO "Ordering"."CourtOfAuditors"("ContractId","ProtocolNumber","ProtocolYear","ScaleNumber","APDA_ProtocolNumber","APDA_ProtocolDate") ' +
-          'VALUES(%s,%s,%s,%s,%s,%s) ' +
-          'RETURNING "Id"',
-          helper.addQuotes(contractId),
-          helper.addQuotes(req.body.PraxisNumber),
-          helper.addQuotes(req.body.PraxisYear),
-          helper.addQuotes(req.body.ScaleNumber),
-          helper.addQuotes(req.body.APDANumber),
-          helper.addQuotes(req.body.APDADate))
-
-        pool.query(sqlQuery, (error, results) => {
-          if (error)
-            next(error);
-          else {
-            helper.consoleLog("Insert in Court of Auditors \n");
-            res.status(200).json(accountInfo);
-          }
-        })
-      }
+      helper.consoleLog("Insert in Court of Auditors \n");
+      contractMethods.getContractById(req, res, next, contractId)
     }
   })
+  
 }
 
-const UpdateCourtOfAuditors = (req, res, next, accountInfo) => {
-  var contractId = accountInfo[0].ContractId
-  var sqlQuery = util.format('DELETE FROM "Ordering"."CourtOfAuditors" as d WHERE d."ContractId"=%s ', contractId);
-  ret = pool.query(sqlQuery, (error, results) => {
+const update = (req, res, next, accountInfo) => {
+  var contractId = req.body.contractId;
+  var sqlQuery = util.format('INSERT INTO "Ordering"."CourtOfAuditors"("ContractId","ProtocolNumber","ProtocolYear","ScaleNumber","APDA_ProtocolNumber","APDA_ProtocolDate") ' +
+    'VALUES(%s,%s,%s,%s,%s,%s) ' +
+    'RETURNING "Id"',
+    helper.addQuotes(contractId),
+    helper.addQuotes(req.body.ProtocolNumber),
+    helper.addQuotes(req.body.ProtocolYear),
+    helper.addQuotes(req.body.ScaleNumber),
+    helper.addQuotes(req.body.APDANumber),
+    helper.addQuotes(req.body.APDADate))
+
+  pool.query(sqlQuery, (error, results) => {
     if (error)
       next(error);
     else {
-      var sqlQuery = util.format('INSERT INTO "Ordering"."CourtOfAuditors"("ContractId","ProtocolNumber","ProtocolYear","ScaleNumber","APDA_ProtocolNumber","APDA_ProtocolDate") ' +
-        'VALUES(%s,%s,%s,%s,%s,%s) ' +
-        'RETURNING "Id"',
-        helper.addQuotes(contractId),
-        helper.addQuotes(req.body.PraxisNumber),
-        helper.addQuotes(req.body.PraxisYear),
-        helper.addQuotes(req.body.ScaleNumber),
-        helper.addQuotes(req.body.APDANumber),
-        helper.addQuotes(req.body.APDADate))
+      helper.consoleLog("Update Decision Board \n");
+      contractMethods.getContractById(req, res, next, contractId)
+    }
+  })
 
-      pool.query(sqlQuery, (error, results) => {
-        if (error)
-          next(error);
-        else {
-          helper.consoleLog("Update Decision Board \n");
-          res.status(200).json(accountInfo);
-        }
-      })
+}
+
+const remove = (req, res, next) => {  
+  var Id = req.body.Id;
+  var contractId = req.body.contractId;
+  var sqlQuery = util.format('DELETE FROM "Ordering"."CourtOfAuditors" WHERE "Id"=%s AND "ContractId"=%s', Id, contractId)
+
+  pool.query(sqlQuery, (error, results) => {
+    if (error)
+      next(error);
+    else {
+      helper.consoleLog('courtOfAuditors: Delete CourtOfAuditors: Rows affected: ' + results.rowCount + ' ContractId: ' + contractId);
+      contractMethods.getContractById(req, res, next, contractId)
     }
   })
 }
 
 module.exports = {
- insertCourtOfAuditors,
- UpdateCourtOfAuditors
+  insert,
+  update,
+  remove
 }

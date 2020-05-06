@@ -22,7 +22,9 @@ import MySnackbar from '../../Common/MySnackbar'
 import store from '../../../Redux/Store/store'
 //import AnalyticAccountPaymentUntilToday from '../Contracts/AnalyticAccountPaymentUntilToday';
 import ReactVirtualizedTable from '../../Contracts/VirtualizedAccountsTable';
-import DecisionBoardView from '../DecisionBoard/DecisionBoardView';
+import DecisionBoardView from '../DecisionBoard/view';
+import DecisionCoordinatorDecentrilizedAdministrationView from '../DecisionCoordinatorDecentrilizedAdministration/view';
+import CourtOfAuditorsView from '../CourtOfAuditors/view';
 
 import EditIcon from '@material-ui/icons/Edit';
 import DeleteIcon from '@material-ui/icons/Delete';
@@ -80,7 +82,10 @@ class ItemDetail extends React.Component {
 			openDialog: false,
 			openMessage: false,
 			anchorEl: null,
-			openDecisionBoardPopup: null,
+			openDecisionBoardView: null,
+			openDecisionCoordinatorDecentrilizedAdministrationView: null,
+			openCourtOfAuditorsView: null,
+			openView: null,
 			windowWidth: window.innerWidth,
 			windowHeight: window.innerHeight
 		}
@@ -94,6 +99,9 @@ class ItemDetail extends React.Component {
 		this.handlePopoverClose = this.handlePopoverClose.bind(this);
 
 		this.handleDecisionBoardClick = this.handleDecisionBoardClick.bind(this);
+		this.handleDecisionCoordinatorDecentrilizedAdministrationClick = this.handleDecisionCoordinatorDecentrilizedAdministrationClick.bind(this);
+		this.handleCourtOfAuditorsClick = this.handleCourtOfAuditorsClick.bind(this);
+
 	}
 
 	handlePopoverClick(event) {
@@ -101,11 +109,19 @@ class ItemDetail extends React.Component {
 	}
 
 	handleDecisionBoardClick(event) {
-		this.setState({ openDecisionBoardPopup: event.currentTarget });
+		this.setState({ openDecisionBoardView: event.currentTarget });
+	}
+
+	handleDecisionCoordinatorDecentrilizedAdministrationClick(event) {
+		this.setState({ openDecisionCoordinatorDecentrilizedAdministrationView: event.currentTarget });
+	}
+
+	handleCourtOfAuditorsClick(event) {
+		this.setState({ openCourtOfAuditorsView: event.currentTarget });
 	}
 
 	handlePopoverClose() {
-		this.setState({ anchorEl: null, openDecisionBoardPopup: null });
+		this.setState({ anchorEl: null, openDecisionBoardView: null, openDecisionCoordinatorDecentrilizedAdministrationView: null, openCourtOfAuditorsView: null });
 	}
 
 	editNewContract(e) {
@@ -252,7 +268,7 @@ class ItemDetail extends React.Component {
               </Button>
 						<Button onClick={this.handleClose} color="primary" autoFocus>
 							Ακύρωση
-              </Button>
+            </Button>
 					</DialogActions>
 				</Dialog>
 				<MySnackbar state={this.state} duration={5000} handleClose={this.handleClose} vertical='bottom' horizontal='right' useScreenDimensions={true} />
@@ -498,7 +514,7 @@ class ItemDetail extends React.Component {
 
 	getBoardDecisionsInfoTemplate(contractDetails) {
 
-		var quantity = contractDetails.decisionboard && contractDetails.decisionboard.length > 0 ? contractDetails.decisionboard.length : 'Δεν έχει';		
+		var quantity = contractDetails.decisionboard && contractDetails.decisionboard.length > 0 ? contractDetails.decisionboard.length : 'Δεν έχει';
 		return <Grid>
 			<Paper style={styles.paperMoreContractInfo} square={true}>
 				<Typography>
@@ -512,12 +528,12 @@ class ItemDetail extends React.Component {
 						Προβολή
 					</Button>
 					<Popover
-						open={this.state.openDecisionBoardPopup ? true : false}
+						open={this.state.openDecisionBoardView ? true : false}
 						onClose={this.handlePopoverClose}
 						anchorReference="anchorPosition"
 						anchorPosition={{ top: this.getPopoverTop(this.state.windowHeight), left: this.getPopoverLeft(this.state.windowWidth) }}
-						style={{ transform: document.getElementById('root').style.transform }}>							
-						<DecisionBoardView contractId={contractDetails.Id} DecisionBoard={contractDetails.decisionboard} />
+						style={{ transform: document.getElementById('root').style.transform }}>
+						<DecisionBoardView contractId={contractDetails.Id} DecisionBoard={contractDetails.decisionboard} header='Αποφάσεις Δημοτικού Συμβουλίου' />
 					</Popover>
 				</Typography>
 			</Paper>
@@ -535,29 +551,20 @@ class ItemDetail extends React.Component {
 						variant='contained'
 						size='small'
 						style={{ margin: '5px', background: '#F3FCFF', color: '#000' }}
-						onClick={this.handlePopoverClick}>
+						onClick={this.handleDecisionCoordinatorDecentrilizedAdministrationClick}>
 						Προβολή
 					</Button>
+					<Popover
+						open={this.state.openDecisionCoordinatorDecentrilizedAdministrationView ? true : false}
+						onClose={this.handlePopoverClose}
+						anchorReference="anchorPosition"
+						anchorPosition={{ top: this.getPopoverTop(this.state.windowHeight), left: this.getPopoverLeft(this.state.windowWidth) }}
+						style={{ transform: document.getElementById('root').style.transform }}>
+						<DecisionCoordinatorDecentrilizedAdministrationView contractId={contractDetails.Id} header='Αποφάσεις Ελέγχους της Αποκεντρωμένης Διοίκησης' />
+					</Popover>
 				</Typography>
 			</Paper>
 		</Grid>
-
-		// return contractDetails.decisioncoordinatordecentrilizedadministration.map((item, index) => {
-		// 	return (<Fragment>
-		// 		{
-		// 			<Grid item key={index}>
-		// 				<Paper style={styles.paperMoreContractInfo} square={true}>
-		// 					<Typography>
-		// 						<b>{index + 1}η Απόφαση Ελέγχου Νομιμότητας της Αποκεντρωμένης A.Π.</b> {item.ProtocolNumber ? item.ProtocolNumber : ''}/{item.ProtocolDate ? item.ProtocolDate : ''}
-		// 						{item.ADA ? <span >με ΑΔΑ {item.ADA}</span> : ''}
-		// 						<span style={{ marginLeft: '10px' }}></span>
-		// 						{item.Content ? <span style={{ fontStyle: 'italic' }}>{item.Content}</span> : ''}
-		// 					</Typography>
-		// 				</Paper>
-		// 			</Grid>
-		// 		}
-		// 	</Fragment>)
-		// })
 	}
 
 	getCourtOfAuditorsInfoTemplate(contractDetails) {
@@ -566,14 +573,23 @@ class ItemDetail extends React.Component {
 			<Paper style={styles.paperMoreContractInfo} square={true}>
 				<Typography>
 					<b>Ελεγκτικό Συνέδριο</b>
-					<span style={{ marginLeft: '10px', fontWeight: '' }}>{contractDetails.CourtOfAuditors ? contractDetails.CourtOfAuditors.length : 'Δεν έχει'}</span>
+					<span style={{ marginLeft: '10px', fontWeight: '' }}>{contractDetails.courtofauditors ? contractDetails.courtofauditors.length : 'Δεν έχει'}</span>
 					<Button
 						variant='contained'
 						size='small'
 						style={{ margin: '5px', background: '#F3FCFF', color: '#000' }}
-						onClick={this.handlePopoverClick}>
+						onClick={this.handleCourtOfAuditorsClick}>
 						Προβολή
-						</Button>
+					</Button>
+
+					<Popover
+						open={this.state.openCourtOfAuditorsView ? true : false}
+						onClose={this.handlePopoverClose}
+						anchorReference="anchorPosition"
+						anchorPosition={{ top: this.getPopoverTop(this.state.windowHeight), left: this.getPopoverLeft(this.state.windowWidth) }}
+						style={{ transform: document.getElementById('root').style.transform }}>
+						<CourtOfAuditorsView contractId={contractDetails.Id} header='Ελεγκτικά Συνέδρια' />
+					</Popover>
 				</Typography>
 			</Paper>
 		</Grid>
@@ -597,7 +613,7 @@ class ItemDetail extends React.Component {
 	}
 
 	getItemTemplate(contractDetails, windowHeight) {
-	
+
 		return (
 			<Scrollbars style={{ display: 'flex', flex: '1', flexFlow: 'column', overflowY: 'auto', overflowX: 'hidden' }}>
 				<Grid container xl style={{ flexGrow: '1', flexFlow: 'column', alignItems: 'stretch', height: '100%', maxHeight: windowHeight, overflowX: 'hidden' }}>

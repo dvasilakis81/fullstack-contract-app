@@ -1,69 +1,72 @@
 const pool = require('../dbConfig').pool
 const util = require('util')
 const helper = require('../../HelperMethods/helpermethods')
-const CourtOfAuditors = require('./CourtOfAuditors')
+const contractMethods = require('./Contract')
 
-const insertDecisionCoordinatorDecentrilizedAdministration = (req, res, next, accountInfo) => {
-  var contractId = accountInfo[0].ContractId
-  var accountId = accountInfo[0].Id
-  var sqlQuery = util.format('SELECT * FROM "Ordering"."DecisionCoordinatorDecentrilizedAdministration" as dc WHERE dc."ContractId"=%s', helper.addQuotes(contractId))
+const insert = (req, res, next) => {
+  var contractId = req.body.contractId;
 
-  ret = pool.query(sqlQuery, (error, results) => {
+  var sqlQuery = 'INSERT INTO "Ordering"."DecisionCoordinatorDecentrilizedAdministration"("ContractId","ProtocolNumber","ProtocolDate","ADA", "OrderNo") VALUES ';
+  sqlQuery += util.format('(%s, %s, %s, %s, %s)',
+  helper.addQuotes(contractId), 
+  helper.addQuotes(req.body.ProtocolNumber), 
+  helper.addQuotes(req.body.ProtocolDate),   
+  helper.addQuotes(req.body.ADA ? req.body.ADA : ''), 
+  helper.addQuotes(req.body.orderNo));
+
+  pool.query(sqlQuery, (error, results) => {
     if (error)
       next(error);
     else {
-      if (results.rows.length > 0)
-        res.status(200).json(results.rows[0].Id);
+      if (error)
+        next(error);
       else {
-        var sqlQuery = 'INSERT INTO "Ordering"."DecisionCoordinatorDecentrilizedAdministration"("ContractId","ProtocolNumber","ProtocolDate") VALUES ';
-        sqlQuery += util.format('(%s, %s, %s)', helper.addQuotes(contractId), helper.addQuotes(req.body.Decision1SADANumber), helper.addQuotes(req.body.Decision1SADADate));
-        if (req.body.HasSecondDecisionDS)
-          sqlQuery += util.format(',(%s, %s, %s)', helper.addQuotes(contractId), helper.addQuotes(req.body.Decision2SADANumber), helper.addQuotes(req.body.Decision1SADADate))
-
-        pool.query(sqlQuery, (error, results) => {
-          if (error)
-            next(error);
-          else {
-            helper.consoleLog("Insert DecisionCoordinator Decentrilized Administration \n");
-            if (req.body.HasCourtOfAuditors === true)
-              CourtOfAuditors.insertCourtOfAuditors(req, res, next, accountInfo);
-            else
-              res.status(200).json(accountInfo);
-          }
-        })
+        helper.consoleLog("Insert Decision Coordinator Decentrilized Administration \n");
+        contractMethods.getContractById(req, res, next, contractId)
       }
     }
   })
 }
 
-const UpdateDecisionCoordinatorDecentrilizedAdministration = (req, res, next, accountInfo) => {
-  var sqlQuery = util.format('DELETE FROM "Ordering"."DecisionCoordinatorDecentrilizedAdministration" as d WHERE d."AccountId"=%s ', req.body.AccountId);
+const update = (req, res, next) => {
+
+  var contractId = req.body.contractId;
+  var sqlQuery = util.format('UPDATE "Ordering"."DecisionCoordinatorDecentrilizedAdministration" ' +
+    'SET "ProtocolNumber"=%s,"ProtocolDate"=%s,"ADA"=%s ' +
+    'WHERE "Id"=%s AND "ContractId"=%s' +
+    'RETURNING * ',
+    helper.addQuotes(req.body.ProtocolNumber),
+    helper.addQuotes(req.body.ProtocolDate),
+    helper.addQuotes(req.body.ADA),
+    helper.addQuotes(req.body.Id),
+    contractId)
   ret = pool.query(sqlQuery, (error, results) => {
     if (error)
       next(error);
     else {
-      var sqlQuery = 'INSERT INTO "Ordering"."DecisionCoordinatorDecentrilizedAdministration"("AccountId","ProtocolNumber","ProtocolDate") VALUES ';
-      sqlQuery += util.format('(%s, %s, %s)', helper.addQuotes(req.body.AccountId), helper.addQuotes(req.body.Decision1SADANumber), helper.addQuotes(req.body.Decision1SADADate));
-      if (req.body.HasSecondDecisionDS)
-        sqlQuery += util.format(',(%s, %s, %s)', helper.addQuotes(req.body.AccountId), helper.addQuotes(req.body.Decision2SADANumber), helper.addQuotes(req.body.Decision2SADADate));
-
-      pool.query(sqlQuery, (error, results) => {
-        if (error)
-          next(error);
-        else {
-          helper.consoleLog("Update Decision Coordinator Decentrilized Administration");
-          if (req.body.HasCourtOfAuditors === true)
-            CourtOfAuditors.UpdateCourtOfAuditors(req, res, next, accountInfo);
-          else
-            res.status(200).json(accountInfo);
-        }
-      })
+      helper.consoleLog("Update Decision Coordinator Decentrilized Administration \n");
+      contractMethods.getContractById(req, res, next, contractId)
     }
   })
 }
 
+const remove = (req, res, next) => {  
+  var Id = req.body.Id;
+  var contractId = req.body.contractId;
+  var sqlQuery = util.format('DELETE FROM "Ordering"."DecisionCoordinatorDecentrilizedAdministration" WHERE "Id"=%s AND "ContractId"=%s', Id, contractId)
+
+  pool.query(sqlQuery, (error, results) => {
+    if (error)
+      next(error);
+    else {
+      helper.consoleLog('deleteDecisionCoordinatorDecentrilizedAdministration: Delete DecisionCoordinatorDecentrilizedAdministration: Rows affected: ' + results.rowCount + ' ContractId: ' + contractId);
+      contractMethods.getContractById(req, res, next, contractId)
+    }
+  })
+}
 
 module.exports = {
- insertDecisionCoordinatorDecentrilizedAdministration,
- UpdateDecisionCoordinatorDecentrilizedAdministration
+ insert,
+ update,
+ remove
 }

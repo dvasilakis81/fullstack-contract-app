@@ -7,6 +7,11 @@ export function getFailedConnectionWithServer() {
   return showGenericMessage('Αποτυχία σύνδεσης με τον διακομιστή!', true)
 }
 
+
+export function showErrorMessageFromServer(error) {
+  return showGenericMessage(error, true, false)
+}
+
 export function showGenericMessage(errorMessage, isError, hasHeader) {
   var className = isError ? 'centered errormessage' : 'centered infomessage'
 

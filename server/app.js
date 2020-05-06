@@ -24,6 +24,8 @@ var dbError = require('./Postgre/Queries/Error')
 var dbLogin = require('./Postgre/Queries/Login')
 var dbParametric = require('./Postgre/Queries/Parametric')
 var dbBoardDecision = require('./Postgre/Queries/BoardDecision')
+var dbDecisionCoordinatorDecentrilizedAdministration = require('./Postgre/Queries/DecisionCoordinatorDecentrilizedAdministration')
+var dbCourtOfAuditors = require('./Postgre/Queries/CourtOfAuditors')
 
 var helper = require('./HelperMethods/helpermethods')
 
@@ -192,9 +194,16 @@ app.get('/getaccountsinfo', dbLogin.checkToken, dbAccount.getAccountsInfo);
 app.post('/insertaccount', dbLogin.checkToken, dbAccount.insertAccount);
 app.post('/updateaccount', dbLogin.checkToken, dbAccount.updateAccount);
 
-app.post('/insertdecisionboard', dbLogin.checkToken, dbBoardDecision.insertDecisionBoard);
-app.post('/updatedecisionboard', dbLogin.checkToken, dbBoardDecision.updateDecisionBoard);
-app.post('/deletedecisionboard', dbLogin.checkToken, dbBoardDecision.deleteDecisionBoard);
+app.post('/insertdecisionboard', dbLogin.checkToken, dbBoardDecision.insert);
+app.post('/updatedecisionboard', dbLogin.checkToken, dbBoardDecision.update);
+app.post('/deletedecisionboard', dbLogin.checkToken, dbBoardDecision.remove);
+app.post('/insertdecisioncoordinatordecentrilizedadministration', dbLogin.checkToken, dbDecisionCoordinatorDecentrilizedAdministration.insert);
+app.post('/updatedecisioncoordinatordecentrilizedadministration', dbLogin.checkToken, dbDecisionCoordinatorDecentrilizedAdministration.update);
+app.post('/deletedecisioncoordinatordecentrilizedadministration', dbLogin.checkToken, dbDecisionCoordinatorDecentrilizedAdministration.remove);
+app.post('/insertCourtOfAuditors', dbLogin.checkToken, dbCourtOfAuditors.insert);
+app.post('/updateCourtOfAuditors', dbLogin.checkToken, dbCourtOfAuditors.update);
+app.post('/deleteCourtOfAuditors', dbLogin.checkToken, dbCourtOfAuditors.remove);
+
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -243,7 +252,7 @@ app.use(function (err, req, res, next) {
     helper.consoleLog('Error message saved!');
   });
 
-  res.status(err.status || 500).json(errorMessage);
+  res.status(err.status || 500).json(err);
 });
 
 module.exports = app;

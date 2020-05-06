@@ -3,10 +3,11 @@ const util = require('util')
 const helper = require('../../HelperMethods/helpermethods')
 const contractMethods = require('./Contract')
 
-const insertDecisionBoard = (req, res, next) => {
+const insert = (req, res, next) => {
   var contractId = req.body.contractId;
+  var orderNo = req.body.orderNo;  
   var sqlQuery = 'INSERT INTO "Ordering"."DecisionBoard"("ContractId","ProtocolNumber","ProtocolDate","Content","ADA", "OrderNo") VALUES ';
-  sqlQuery += util.format('(%s, %s, %s, %s, %s)', helper.addQuotes(contractId), helper.addQuotes(req.body.ProtocolNumber), helper.addQuotes(req.body.ProtocolDate), helper.addQuotes(req.body.Content), helper.addQuotes(req.body.ADA), helper.addQuotes(decisionBoardIndex));
+  sqlQuery += util.format('(%s, %s, %s, %s, %s)', helper.addQuotes(contractId), helper.addQuotes(req.body.ProtocolNumber), helper.addQuotes(req.body.ProtocolDate), helper.addQuotes(req.body.Content), helper.addQuotes(req.body.ADA), helper.addQuotes(orderNo));
 
   pool.query(sqlQuery, (error, results) => {
     if (error)
@@ -16,14 +17,13 @@ const insertDecisionBoard = (req, res, next) => {
         next(error);
       else {
         helper.consoleLog("Insert Decision Board \n");
-        contractMethods.getContractById(req, res, next, contractId)
-        //res.status(200).json(results.rows[0]);
+        contractMethods.getContractById(req, res, next, contractId)        
       }
     }
   })
 }
 
-const updateDecisionBoard = (req, res, next) => {
+const update = (req, res, next) => {
   var contractId = req.body.contractId;
   var sqlQuery = util.format('UPDATE "Ordering"."DecisionBoard" ' +
     'SET "ProtocolNumber"=%s,"ProtocolDate"=%s,"Content"=%s,"ADA"=%s ' +
@@ -45,7 +45,7 @@ const updateDecisionBoard = (req, res, next) => {
   })
 }
 
-const deleteDecisionBoard = (req, res, next) => {  
+const remove = (req, res, next) => {  
   var Id = req.body.Id;
   var contractId = req.body.contractId;
   var sqlQuery = util.format('DELETE FROM "Ordering"."DecisionBoard" WHERE "Id"=%s AND "ContractId"=%s', Id, contractId)
@@ -61,7 +61,7 @@ const deleteDecisionBoard = (req, res, next) => {
 }
 
 module.exports = {
-  insertDecisionBoard,
-  updateDecisionBoard,
-  deleteDecisionBoard
+  insert,
+  update,
+  remove
 }

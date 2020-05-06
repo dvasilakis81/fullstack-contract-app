@@ -1,26 +1,31 @@
 .centered {  
   position: absolute;
-  top: 50%;
+  top: 30%;
   right: 50%;
   transform: translate(50%, -50%);
-  background: #333;
+  background: transparent;
   min-width: 500px;
   padding: 20px;
-  border-radius: 20px;
+  border-radius: 0px;  
+  white-space: pre-wrap;
 }
 
 .errormessage {
   font-size: 26px;
   font-weight: 900;
-  background: black;
+  background: transparent;
   color: red;
   text-align: center;
+  border: 3px solid red;
+  white-space: pre-wrap;
 }
 
 .infomessage {
   font-size: 26px;
   font-weight: 900;
-  background: gold;
+  background: transparent;
+  border: 3px solid black;
   color: black;
-  text-align: center;
+  text-align: center;  
+  white-space: pre-wrap;
 }

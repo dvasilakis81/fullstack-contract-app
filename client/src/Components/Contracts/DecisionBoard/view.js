@@ -13,7 +13,7 @@ import { getSubmitButton, getTextFieldWithTooltip } from '../../MaterialObjects/
 import { bindActionCreators } from 'redux';
 import { createDecisionBoard, updateDecisionBoard, deleteDecisionBoard } from '../../../Redux/Actions';
 
-import { getDecisionBoardTooltip } from './Tooltip';
+import { getDecisionBoardTooltip } from './tooltip';
 
 const styles = {
   paperContractMonetaryInfoFrame: {
@@ -49,13 +49,12 @@ class DecisionBoardView extends Component {
     super(props);
 
     this.state = {
-      contracts: this.props.contractId,
       contractId: this.props.contractDetails.Id,
       submitButtonDisabled: false,
       addNewItem: false,
       editItem: false,
       deleteItem: false,
-      decisionBoardIndex: 0,
+      orderNo: 0,
       openMessage: false,
       message: '',
       msgPadding: '0px',
@@ -64,8 +63,7 @@ class DecisionBoardView extends Component {
       ProtocolNumber: '',
       ProtocolDate: '',
       Content: '',
-      ADA: '',
-      index: -1
+      ADA: ''
     }
 
     this.setTextValue = this.setTextValue.bind(this);
@@ -88,7 +86,7 @@ class DecisionBoardView extends Component {
       ProtocolDate: decisionBoard.ProtocolDate,
       Content: decisionBoard.Content,
       ADA: decisionBoard.ADA,
-      decisionBoardIndex: index + 1,
+      orderNo: index + 1,
       editItem: true
     })
   }
@@ -147,25 +145,28 @@ class DecisionBoardView extends Component {
   }
 
   decisionBoardItemForm() {
-    var decisionboard = this.props.contractDetails.decisionboard;
-    var decisionboardIndex = this.state.addNewItem === true ? (decisionboard ? decisionboard.length + 1 : 1) : this.state.decisionBoardIndex
+    
     if (this.state.addNewItem === true || this.state.editItem === true) {
       return <div style={{ display: 'flex', flexFlow: 'column', height: 'auto', backgroundColor: '#fff', background: '#33C1FF', color: 'black', justifyContent: 'center', padding: '20px' }}>
         <form style={{ padding: '10px' }} autoComplete="off" onSubmit={this.handleSubmit}>
-          <div style={{ textAlign: 'center', fontSize: '22px', fontWeight: 800, paddingBottom: '10px' }}>{this.state.addNewItem === true ? 'Εισαγωγή' : 'Επεξεργασία'} στοιχείων {decisionboardIndex}ης Απόφασης Δημοτικού Συμβουλίου</div>
+          <div style={{ textAlign: 'center', fontSize: '22px', fontWeight: 800, paddingBottom: '10px' }}>{this.state.addNewItem === true ? 'Εισαγωγή' : 'Επεξεργασία'} στοιχείων {this.state.orderNo}ης Απόφασης Δημοτικού Συμβουλίου</div>
           <div style={{ display: 'flex', flexFlow: 'row', height: 'auto', backgroundColor: '#fff', justifyContent: 'left', padding: '10px' }}>
             {getTextFieldWithTooltip(getDecisionBoardTooltip(this.state, 1), 'number', 'ProtocolNumber', 'Αρ. Πρωτ.', 'outlined', this.state.ProtocolNumber, true, { width: '200px', marginRight: '20px' }, false, null, { shrink: true }, this.setTextValue)}
             {getTextFieldWithTooltip(getDecisionBoardTooltip(this.state, 2), 'date', 'ProtocolDate', 'Ημ. Πρωτ.', 'outlined', this.state.ProtocolDate, true, { width: '200px', background: 'white' }, false, null, { shrink: true }, this.setTextValue)}
           </div>
-          {decisionboardIndex > 1 ? <><div style={{ display: 'flex', flexFlow: 'column', height: 'auto', backgroundColor: '#fff', justifyContent: 'left', padding: '10px' }}>
-            {getTextFieldWithTooltip(getDecisionBoardTooltip(this.state, 4), 'text', 'Content', 'Περιεχόμενο', 'outlined', this.state.Content, true, { width: 'auto' }, false, null, { shrink: true }, this.setTextValue)}
+          {
+            this.state.orderNo > 1 ?
+              <div style={{ display: 'flex', flexFlow: 'column', height: 'auto', backgroundColor: '#fff', justifyContent: 'left', padding: '10px' }}>
+                {getTextFieldWithTooltip(getDecisionBoardTooltip(this.state, 4), 'text', 'Content', 'Περιεχόμενο', 'outlined', this.state.Content, false, { width: 'auto' }, false, null, { shrink: true }, this.setTextValue)}
+              </div> :
+              <></>
+          }
+          <div style={{ display: 'flex', flexFlow: 'column', height: 'auto', backgroundColor: '#fff', justifyContent: 'left', padding: '10px' }}>
+            {getTextFieldWithTooltip(getDecisionBoardTooltip(this.state, 3), 'text', 'ADA', 'ΑΔΑ', 'outlined', this.state.ADA, false, { width: '300px' }, false, null, { shrink: true }, this.setTextValue)}
           </div>
-            <div style={{ display: 'flex', flexFlow: 'column', height: 'auto', backgroundColor: '#fff', justifyContent: 'left', padding: '10px' }}>
-              {getTextFieldWithTooltip(getDecisionBoardTooltip(this.state, 3), 'text', 'ADA', 'ΑΔΑ', 'outlined', this.state.ADA, true, { width: '300px' }, false, null, { shrink: true }, this.setTextValue)}
-            </div></> : <></>}
           <div style={{ display: 'flex', flexFlow: 'row', height: 'auto', backgroundColor: '#fff', justifyContent: 'center', padding: '10px' }}>
             <LoadingOverlay
-              active={this.props.insertDecicionBoardPending === true}
+              active={this.props.insertContractInfoPending === true}
               spinner
               text='Αναμονή για δημιουργία Α.Δ.Σ. ...'
               styles={{
@@ -189,7 +190,7 @@ class DecisionBoardView extends Component {
       </div>
     } else if (this.state.deleteItem === true) {
       return <div style={{ display: 'flex', flexFlow: 'column', height: 'auto', backgroundColor: '#fff', background: '#33C1FF', color: 'black', justifyContent: 'center', padding: '20px' }}>
-        <div style={{ textAlign: 'center', fontSize: '22px', fontWeight: 800, paddingBottom: '10px' }}>Διαγραφή {this.state.decisionBoardIndex}ης Απόφασης Δημοτικού Συμβουλίου;</div>
+        <div style={{ textAlign: 'center', fontSize: '22px', fontWeight: 800, paddingBottom: '10px' }}>Διαγραφή {this.state.orderNo}ης Απόφασης Δημοτικού Συμβουλίου;</div>
         <div style={{ display: 'flex', flexFlow: 'row', height: 'auto', backgroundColor: '#33C1FF', justifyContent: 'center', padding: '10px' }}>
           <LoadingOverlay
             active={this.props.deleteDecicionBoardPending === true}
@@ -242,7 +243,7 @@ class DecisionBoardView extends Component {
     }
   }
   render() {
-
+    var length = this.props.contractDetails.decisionboard ? this.props.contractDetails.decisionboard.length : 0
     return (
       <ContractsPopup
         header='Αποφάσεις Δημοτικού Συμβουλίου'
@@ -274,12 +275,12 @@ class DecisionBoardView extends Component {
             }
           </div>
         </div>
-        {this.decisionBoardItemForm()}
+        {this.decisionBoardItemForm(length)}
         <div style={{ display: 'flex', flexFlow: 'row', height: 'auto', backgroundColor: '#fff', background: 'white', justifyContent: 'center' }}>
           <Button
             disabled={this.state.deleteItem === true || this.state.editItem === true}
             style={{ fontSize: '18px', textAlign: 'center' }}
-            onClick={() => { this.setState({ addNewItem: true, decisionBoardIndex: (this.props.contractDetails.decisionboard ? this.props.contractDetails.decisionboard.length + 1 : 1) }) }}>
+            onClick={() => { this.setState({ addNewItem: true, orderNo: length + 1 }) }}>
             ΠΡΟΣΘΗΚΗ
           </Button>
         </div>
@@ -291,8 +292,8 @@ class DecisionBoardView extends Component {
 function mapStateToProps(state) {
   return {
     screenDimensions: state.parametricdata_reducer.screenDimensions,
-    insertDecicionBoardPending: state.contracts_reducer.insertDecicionBoardPending,
-    insertDecicionBoardRejected: state.contracts_reducer.insertDecicionBoardRejected,
+    insertContractInfoPending: state.contracts_reducer.insertContractInfoPending,
+    insertContractInfoRejected: state.contracts_reducer.insertContractInfoRejected,
     isSearchMode: state.contracts_reducer.isSearchMode,
     contracts: state.contracts_reducer.contractsList,
     contractDetails: state.contracts_reducer.contractDetails,
