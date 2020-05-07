@@ -10,6 +10,7 @@ import Typography from "@material-ui/core/Typography";
 import { createMuiTheme, MuiThemeProvider, withStyles } from "@material-ui/core/styles";
 import Tooltip from '@material-ui/core/Tooltip';
 
+
 export function getSelectFieldWithTooltip(tl, id, label, values, isRequired, style, setValue) {
 
   return (<Tooltip
@@ -29,6 +30,7 @@ const StyledTooltip = withStyles({
 })(Tooltip);
 
 export function getSelectField(id, label, values, selectedValue, isRequired, style, setValue) {
+  
   return <TextField
     required={isRequired}
     select
@@ -116,7 +118,7 @@ export function getTextField(type, id, label, variant, stateValue, isRequired, s
 
   // if (type === 'number')
   //   inputProps.push({ 'inputProps': { step: '.01' })
-
+  
   return <TextField
     disabled={isDisabled}
     required={isRequired}
@@ -127,8 +129,9 @@ export function getTextField(type, id, label, variant, stateValue, isRequired, s
     variant={variant}
     style={style}    
     onChange={setValue}
-    InputProps={inputProps}
-    InputLabelProps={inputLabelProps} />
+    InputProps={{ inputProps }}
+    InputLabelProps={inputLabelProps} 
+    size='small'/>
 }
 
 export function getCheckboxField(id, label, stateValue, style, setValue) {

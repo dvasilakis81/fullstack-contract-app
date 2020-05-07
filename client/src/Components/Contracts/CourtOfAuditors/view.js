@@ -14,6 +14,8 @@ import { bindActionCreators } from 'redux';
 import { createCourtOfAuditors, updateCourtOfAuditors, deleteCourtOfAuditors } from '../../../Redux/Actions';
 
 import { getCourtOfAuditorsTooltip } from './tooltip';
+import ProtocolInput from '../../CustomControls/ProtocolInput';
+import MyTextField from '../../CustomControls/MyTextField';
 
 const styles = {
   paperContractMonetaryInfoFrame: {
@@ -67,7 +69,7 @@ class CourtOfAuditorsView extends Component {
       orderNo: 0
     }
 
-    this.setTextValue = this.setTextValue.bind(this);
+    this.onChange = this.onChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
     this.handleClose = this.handleClose.bind(this, '');
   }
@@ -76,7 +78,7 @@ class CourtOfAuditorsView extends Component {
     this.setState({ message: '', openMessage: false, submitButtonDisabled: false });
   }
 
-  setTextValue(event) {
+  onChange(event) {
     this.setState({ [event.target.id]: event.target.value });
   }
 
@@ -164,7 +166,7 @@ class CourtOfAuditorsView extends Component {
         <form style={{ padding: '10px' }} autoComplete="off" onSubmit={this.handleSubmit}>
           <div style={{ textAlign: 'center', fontSize: '22px', fontWeight: 800, paddingBottom: '10px' }}>{this.state.addNewItem === true ? 'Εισαγωγή' : 'Επεξεργασία'} στοιχείων {this.state.orderNo}ου Ελεγκτικού Συνεδρίου</div>
           <div style={{ display: 'flex', flexFlow: 'row', height: 'auto', backgroundColor: '#fff', justifyContent: 'left', padding: '10px' }}>
-            {this.renderCourtOfAuditors()}
+            {this.renderCourtOfAuditorsInput()}
           </div>
           <div style={{ display: 'flex', flexFlow: 'row', height: 'auto', backgroundColor: '#fff', justifyContent: 'center', padding: '10px' }}>
             <LoadingOverlay
@@ -235,15 +237,13 @@ class CourtOfAuditorsView extends Component {
       <DeleteIcon />
     </IconButton>
   }
-  renderCourtOfAuditors() {
+  renderCourtOfAuditorsInput() {
 
     return (
-      <div style={{ display: 'flex', flexDirection: 'row', margin: '5px', flexWrap: 'wrap', justifyContent: 'flex-start' }}>
-        {getTextFieldWithTooltip(getCourtOfAuditorsTooltip(this.state, 1), 'number', 'ProtocolNumber', 'Αριθμός Πράξης', 'outlined', this.state.ProtocolNumber, this.state.HasCourtOfAuditors === false, { width: '200px', marginRight: '0px', padding: '20px' }, false, null, { shrink: true }, this.setTextValue)}
-        {getTextFieldWithTooltip(getCourtOfAuditorsTooltip(this.state, 2), 'number', 'ProtocolYear', 'Χρονιά Πράξης', 'outlined', this.state.ProtocolYear, this.state.HasCourtOfAuditors === false, { width: '200px', marginRight: '0px', padding: '20px' }, false, null, { shrink: true }, this.setTextValue)}
-        {getTextFieldWithTooltip(getCourtOfAuditorsTooltip(this.state, 3), 'text', 'ScaleNumber', 'Κλιμάκιο', 'outlined', this.state.ScaleNumber, this.state.HasCourtOfAuditors === false, { width: '200px', marginRight: '0px', padding: '20px' }, false, null, { shrink: true }, this.setTextValue)}
-        {getTextFieldWithTooltip(getCourtOfAuditorsTooltip(this.state, 4), 'number', 'APDANumber', 'Αριθμός. Α.Π.Δ.Α', 'outlined', this.state.APDANumber, this.state.HasCourtOfAuditors === false, { width: '200px', marginRight: '0px', padding: '20px' }, false, null, { shrink: true }, this.setTextValue)}
-        {getTextFieldWithTooltip(getCourtOfAuditorsTooltip(this.state, 5), 'date', 'APDADate', 'Ημ/νία. Α.Π.Δ.Α.', 'outlined', this.state.APDADate, this.state.HasCourtOfAuditors === false, { width: '200px', marginRight: '0px', padding: '20px' }, false, null, { shrink: true }, this.setTextValue)}
+      <div style={{ display: 'flex', flexDirection: 'row', margin: '5px', flexWrap: 'wrap', justifyContent: 'flex-start' }}>        
+        <ProtocolInput tm1={getCourtOfAuditorsTooltip(this.state, 1)} tm2={getCourtOfAuditorsTooltip(this.state, 2)} title='Αρ. Πράξης' idn='ProtocolNumber' idd='ProtocolYear' protocolNumber={this.state.ProtocolNumber} protocolDate={this.state.ProtocolYear} st={null} onChange={this.onChange} />
+        <MyTextField tm={getCourtOfAuditorsTooltip(this.state, 3)} valueType='text' title='Κλιμάκιο' label='' variant='outlined' id='ScaleNumber' stateValue={this.state.ScaleNumber} isRequired={true} isDisabled={false} onChange={this.onChange} />
+        <ProtocolInput tm1={getCourtOfAuditorsTooltip(this.state, 4)} tm2={getCourtOfAuditorsTooltip(this.state, 5)} title='Α.Π.Δ.Α.' idn='APDANumber' idd='APDADate' protocolNumber={this.state.APDANumber} protocolDate={this.state.APDADate} onChange={this.onChange} />
       </div>
     )
   }
