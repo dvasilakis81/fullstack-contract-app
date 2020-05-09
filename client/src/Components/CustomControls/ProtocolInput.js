@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import MyTextField from './MyTextField'
+import InputTitle from './InputTitle'
 
 class ProtocolInput extends Component {
   constructor(props) {
@@ -11,13 +12,13 @@ class ProtocolInput extends Component {
   render() {
 
     return (
-      <div style={{ margin: '10px', border: '1px solid black' }}>
-        <div style={{ background: 'lightgrey', textAlign: 'center' }}>{this.props.title}</div>
-        <div>
-          <MyTextField {...this.props} tm={this.props.tm1} partOfProtocol={true} inputProps={{ style: { textAlign: "right", width: '100px' } }} id={this.props.idn} />
-          <span style={{ fontSize: '22px', margin: '0px', backgroundColor: '#daf0ff' }}>/</span>
-          <MyTextField {...this.props} tm={this.props.tm2} partOfProtocol={true} inputProps={{ style: { textAlign: "left", width: '100px' } }} id={this.props.idd} />
-        </div>
+      <div style={{ margin: '10px', border: '1px solid black'}} >
+        <InputTitle title={this.props.title} />
+        <>
+          <MyTextField {...this.props} tm={this.props.tm1} partOfProtocol={true} inputProps={{ style: { textAlign: "right", width: '100px' } }} id={this.props.idn} tp={this.props.tp1} stateValue={this.props.protocolNumber}/>
+          <span style={{ fontSize: '22px', margin: '0px', backgroundColor: '#FFFEF4' }}>/</span>
+          <MyTextField {...this.props} tm={this.props.tm2} partOfProtocol={true} inputProps={{ style: { textAlign: "left", width: '150px' } }} id={this.props.idd} tp={this.props.tp2} stateValue={this.props.protocolDate}/>
+        </>
       </div>
     )
   }

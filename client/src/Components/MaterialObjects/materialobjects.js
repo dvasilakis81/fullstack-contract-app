@@ -112,12 +112,7 @@ export function getTextFieldMultiline(rows, type, id, label, variant, stateValue
     InputLabelProps={inputLabelProps} />
 }
 
-export function getTextField(type, id, label, variant, stateValue, isRequired, style, isDisabled, inputProps, inputLabelProps, setValue) {
-  // if (inputProps)
-  //   inputProps = {}
-
-  // if (type === 'number')
-  //   inputProps.push({ 'inputProps': { step: '.01' })
+export function getTextField(type, id, label, variant, stateValue, isRequired, style, isDisabled, inputProps, inputLabelProps, onChange) {
   
   return <TextField
     disabled={isDisabled}
@@ -128,10 +123,11 @@ export function getTextField(type, id, label, variant, stateValue, isRequired, s
     value={stateValue}
     variant={variant}
     style={style}    
-    onChange={setValue}
-    InputProps={{ inputProps }}
+    onChange={onChange}
+    InputProps={inputProps}
     InputLabelProps={inputLabelProps} 
-    size='small'/>
+    size='small'
+    />
 }
 
 export function getCheckboxField(id, label, stateValue, style, setValue) {

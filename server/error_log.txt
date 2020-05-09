@@ -1,3 +1,10 @@
-Message: read ECONNRESET
-Stack: Error: read ECONNRESET
-    at TCP.onStreamRead (internal/stream_base_commons.js:162:27)
+Message: value too long for type character varying(2000)
+Stack: error: value too long for type character varying(2000)
+    at Connection.parseE (C:\Projects\Node\fullstack-contract-app\node_modules\pg\lib\connection.js:614:13)
+    at Connection.parseMessage (C:\Projects\Node\fullstack-contract-app\node_modules\pg\lib\connection.js:413:19)
+    at Socket.<anonymous> (C:\Projects\Node\fullstack-contract-app\node_modules\pg\lib\connection.js:129:22)
+    at Socket.emit (events.js:197:13)
+    at addChunk (_stream_readable.js:288:12)
+    at readableAddChunk (_stream_readable.js:269:11)
+    at Socket.Readable.push (_stream_readable.js:224:10)
+    at TCP.onStreamRead [as onread] (internal/stream_base_commons.js:145:17)

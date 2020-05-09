@@ -13,6 +13,8 @@ import Button from '@material-ui/core/Button';
 import InputAdornment from '@material-ui/core/InputAdornment';
 import ClearIcon from '@material-ui/icons/Clear';
 import Avatar from '@material-ui/core/Avatar';
+import ProtocolInput from '../CustomControls/ProtocolInput';
+import MyTextField from '../CustomControls/MyTextField';
 
 // Then import the virtualized Select HOC
 import VirtualizedSelect from 'react-virtualized-select'
@@ -38,9 +40,10 @@ import VirtualizedCC from './VirtualizedCC';
 import {
 	getAayTooltipTemplate, getFirstTrasmissionProtocolTooltip,
 	getAccountProtocolTooltip, getWorkConfirmationDateTooltip, getDeliveredGoodDateTooltip,
-	getInvoiceTooltipTemplate, getLawArticleTooltip,	
-	getCourtOfAuditorsTooltip, getDocumentDateTooltipTemplate, getAccountStartDateTooltipTemplate, 
-	getAccountEndDateTooltipTemplate, getMonitoringCommitteeTooltipTemplate, getMonitoringCommitteePracticalTooltipTemplate
+	getInvoiceTooltipTemplate, getLawArticleTooltip,
+	getDocumentDateTooltipTemplate, getAccountStartDateTooltipTemplate,
+	getMayorDecisionProtocolTooltip, getMonitoringCommitteePracticalTooltip, getMonitoringCommitteeTooltipTemplate,
+	getAccountEndDateTooltipTemplate,
 } from './ΤooltipMethods';
 
 import Header from '../Header/header'
@@ -165,26 +168,20 @@ class NewAccountForm extends Component {
 			SignName3: this.props.location.state.SignName3,
 			SignName4: this.props.location.state.SignName4,
 			AbsenseOfDirector1: this.props.location.state.AbsenseOfDirector1,
-			AbsenseOfDirector2: this.props.location.state.AbsenseOfDirector2,			
-			HasCourtOfAuditors: this.props.location.state.HasCourtOfAuditors,
-			PraxisNumber: this.props.location.state.PraxisNumber,
-			PraxisYear: this.props.location.state.PraxisYear,
-			ScaleNumber: this.props.location.state.ScaleNumber,
-			APDANumber: this.props.location.state.APDANumber,
-			APDADate: this.props.location.state.APDADate,
+			AbsenseOfDirector2: this.props.location.state.AbsenseOfDirector2,
 			MonitoringCommittee: this.props.location.state.MonitoringCommittee,
 			HasMonitoringCommittee: false,
-			MonitoringCommitteeMayorDecisionForMembersProtocolNumber:  this.props.location.state.MonitoringCommitteeMayorDecisionForMembersProtocolNumber,
-			MonitoringCommitteeMayorDecisionForMembersProtocolDate:  this.props.location.state.MonitoringCommitteeMayorDecisionForMembersProtocolDate,
-			MonitoringCommitteeDocumentProtocolNumber:  this.props.location.state.MonitoringCommitteeDocumentProtocolNumber,
-			MonitoringCommitteeDocumentProtocolDate:  this.props.location.state.MonitoringCommitteeDocumentProtocolDate,			
-			MonitoringCommitteePracticalDate:  this.props.location.state.MonitoringCommitteePracticalDate,
+			MonitoringCommitteeMayorDecisionForMembersProtocolNumber: this.props.location.state.MonitoringCommitteeMayorDecisionForMembersProtocolNumber,
+			MonitoringCommitteeMayorDecisionForMembersProtocolDate: this.props.location.state.MonitoringCommitteeMayorDecisionForMembersProtocolDate,
+			MonitoringCommitteeDocumentProtocolNumber: this.props.location.state.MonitoringCommitteeDocumentProtocolNumber,
+			MonitoringCommitteeDocumentProtocolDate: this.props.location.state.MonitoringCommitteeDocumentProtocolDate,
+			MonitoringCommitteePracticalDate: this.props.location.state.MonitoringCommitteePracticalDate,
 			MonitoringCommitteeContentGivenWorkTime: this.props.location.state.MonitoringCommitteeContentGivenWorkTime,
 			cc: this.props.location.state.cc ? this.props.location.state.cc : []
 		}
 
 		this.setCheckboxValue = this.setCheckboxValue.bind(this);
-		this.setTextValue = this.setTextValue.bind(this);
+		this.onChange = this.onChange.bind(this);
 		this.setCC1Value1TextValue = this.setCC1Value1TextValue.bind(this);
 		this.handleSubmit = this.handleSubmit.bind(this);
 		this.autoComplete = this.autoComplete.bind(this);
@@ -197,7 +194,7 @@ class NewAccountForm extends Component {
 		this.removeCC = this.removeCC.bind(this);
 		this.addMonitoringCommittee = this.addMonitoringCommittee.bind(this);
 		this.removeMonitoringCommittee = this.removeMonitoringCommittee.bind(this);
-		this.getCC = this.getCC.bind(this);		
+		this.getCC = this.getCC.bind(this);
 	}
 
 	handleSubmit(e) {
@@ -231,7 +228,7 @@ class NewAccountForm extends Component {
 		this.setState({ CC1Value2: '-1' });
 	}
 
-	setTextValue(e) {
+	onChange(e) {
 		this.setState({ [e.target.id]: e.target.value });
 	}
 	handleClose = (event, reason) => {
@@ -369,8 +366,8 @@ class NewAccountForm extends Component {
 
 			return (
 				<div style={useStyles.divRowFlex}>
-					{getTextFieldWithTooltip(getFirstTrasmissionProtocolTooltip(useStyles, this.state.FirstAccountProtocolNumber, this.state.FirstAccountProtocolDate, 1), 'number', 'FirstAccountProtocolNumber', 'Α.Π. Πρώτου Διαβιβαστικού Εγγράφου', 'outlined', this.state.FirstAccountProtocolNumber, false, useStyles.accountInfoItem, false, null, { shrink: true }, this.setTextValue)}
-					{getTextFieldWithTooltip(getFirstTrasmissionProtocolTooltip(useStyles, this.state.FirstAccountProtocolNumber, this.state.FirstAccountProtocolDate, 2), 'date', 'FirstAccountProtocolDate', 'Α.Π. Πρώτου Διαβιβαστικού Εγγράφου', 'outlined', this.state.FirstAccountProtocolDate, false, useStyles.accountInfoItem, false, null, { shrink: true }, this.setTextValue)}
+					{getTextFieldWithTooltip(getFirstTrasmissionProtocolTooltip(useStyles, this.state.FirstAccountProtocolNumber, this.state.FirstAccountProtocolDate, 1), 'number', 'FirstAccountProtocolNumber', 'Α.Π. Πρώτου Διαβιβαστικού Εγγράφου', 'outlined', this.state.FirstAccountProtocolNumber, false, useStyles.accountInfoItem, false, null, { shrink: true }, this.onChange)}
+					{getTextFieldWithTooltip(getFirstTrasmissionProtocolTooltip(useStyles, this.state.FirstAccountProtocolNumber, this.state.FirstAccountProtocolDate, 2), 'date', 'FirstAccountProtocolDate', 'Α.Π. Πρώτου Διαβιβαστικού Εγγράφου', 'outlined', this.state.FirstAccountProtocolDate, false, useStyles.accountInfoItem, false, null, { shrink: true }, this.onChange)}
 					{getButton('contained', 'small', null, useStyles.btnAuto, this.autoCompleteFirstAccountProtocolNumber, 'ΥΠΟΛΟΓΙΣΜΟΣ', null, false)}
 				</div>)
 		}
@@ -381,8 +378,8 @@ class NewAccountForm extends Component {
 		if (accountId) {
 			return (
 				<div style={useStyles.divRowFlex}>
-					{getTextFieldWithTooltip(getAccountProtocolTooltip(useStyles, this.state.ProtocolNumber, this.state.ProtocolDate, 1), 'number', 'ProtocolNumber', 'Αριθμός Πρωτοκόλλου', 'outlined', this.state.ProtocolNumber, false, useStyles.accountInfoItem, false, null, { shrink: true }, this.setTextValue)}
-					{getTextFieldWithTooltip(getAccountProtocolTooltip(useStyles, this.state.ProtocolNumber, this.state.ProtocolDate, 2), 'date', 'ProtocolDate', 'Ημ. Πρωτοκόλλου', 'outlined', this.state.ProtocolDate, false, useStyles.accountInfoItem, false, null, { shrink: true }, this.setTextValue)}
+					{getTextFieldWithTooltip(getAccountProtocolTooltip(useStyles, this.state.ProtocolNumber, this.state.ProtocolDate, 1), 'number', 'ProtocolNumber', 'Αριθμός Πρωτοκόλλου', 'outlined', this.state.ProtocolNumber, false, useStyles.accountInfoItem, false, null, { shrink: true }, this.onChange)}
+					{getTextFieldWithTooltip(getAccountProtocolTooltip(useStyles, this.state.ProtocolNumber, this.state.ProtocolDate, 2), 'date', 'ProtocolDate', 'Ημ. Πρωτοκόλλου', 'outlined', this.state.ProtocolDate, false, useStyles.accountInfoItem, false, null, { shrink: true }, this.onChange)}
 				</div>)
 		}
 	}
@@ -429,7 +426,7 @@ class NewAccountForm extends Component {
 									<Autocomplete
 										freeSolo
 										filterSelectedOptions
-										inputValue={ccValue ? ccValue : ''}	
+										inputValue={ccValue ? ccValue : ''}
 										options={ccValues}
 										getOptionLabel={option => <li><span style={{ fontSize: '2rem', verticalAlign: 'middle' }}>&bull;</span>{option}</li>}
 										onChange={(e, v, r) => this.setCC(e, v, r, index)}
@@ -489,12 +486,12 @@ class NewAccountForm extends Component {
 
 	getWorkConfirmationDate() {
 		if (this.state.IsDownpayment === false)
-			return getTextFieldWithTooltip(getWorkConfirmationDateTooltip(useStyles, this.state.WorkConfirmationDate, this.state.IsFirstOfTheYear), 'date', 'WorkConfirmationDate', 'Ημ. Βεβαίωσης Έργου', 'outlined', this.state.WorkConfirmationDate, false, useStyles.accountInfoItem, false, null, { shrink: true }, this.setTextValue)
+			return getTextFieldWithTooltip(getWorkConfirmationDateTooltip(useStyles, this.state.WorkConfirmationDate, this.state.IsFirstOfTheYear), 'date', 'WorkConfirmationDate', 'Ημ. Βεβαίωσης Έργου', 'outlined', this.state.WorkConfirmationDate, false, useStyles.accountInfoItem, false, null, { shrink: true }, this.onChange)
 	}
 
 	getDeliveryGoodsDate() {
 		if (this.state.IsDownpayment === false)
-			return getTextFieldWithTooltip(getDeliveredGoodDateTooltip(useStyles, this.state.DeliveryGoodsDate), 'date', 'DeliveryGoodsDate', 'Ημ. Πρωτ. Οριστικής Παραλαβής Αγαθών/Υπηρεσιών', 'outlined', this.state.DeliveryGoodsDate, false, useStyles.accountInfoLargeItem, false, null, { shrink: true }, this.setTextValue)
+			return getTextFieldWithTooltip(getDeliveredGoodDateTooltip(useStyles, this.state.DeliveryGoodsDate), 'date', 'DeliveryGoodsDate', 'Ημ. Πρωτ. Οριστικής Παραλαβής Αγαθών/Υπηρεσιών', 'outlined', this.state.DeliveryGoodsDate, false, useStyles.accountInfoLargeItem, false, null, { shrink: true }, this.onChange)
 	}
 
 	getAAYInfo() {
@@ -503,25 +500,25 @@ class NewAccountForm extends Component {
 			<header style={useStyles.category}>Στοιχεία ΑΑΥ</header>
 			<div style={useStyles.divRowFlex}>
 				{/* <ProtocolNumber idn='AayProtocolNumber' idd='AayProtocolDate' protocolNumber={this.state.AayProtocolNumber} protocolDate={this.state.AayProtocolDate} st={useStyles} setTextValue={this.setTextValue} /> */}
-				{getTextFieldWithTooltip(getAayTooltipTemplate(useStyles, this.state, 4), 'number', 'AayProtocolNumber', 'Α.Π. Α.Α.Υ.', 'outlined', this.state.AayProtocolNumber, true, useStyles.accountInfoItem, false, null, { shrink: true }, this.setTextValue)}
-				{getTextFieldWithTooltip(getAayTooltipTemplate(useStyles, this.state, 5), 'date', 'AayProtocolDate', 'Α.Π. Α.Α.Υ.', 'outlined', this.state.AayProtocolDate, true, useStyles.accountInfoItem, false, null, { shrink: true }, this.setTextValue)}
-				{getTextFieldWithTooltip(getAayTooltipTemplate(useStyles, this.state, 1), 'text', 'AayValue', 'Α.Α.Υ', 'outlined', this.state.AayValue, true, useStyles.accountInfoItem, false, null, { shrink: true }, this.setTextValue)}
-				{getTextFieldWithTooltip(getAayTooltipTemplate(useStyles, this.state, 3), 'number', 'AayEadNumber', 'ΕΑΔ αριθμός', 'outlined', this.state.AayEadNumber, true, useStyles.accountInfoItem, false, null, { shrink: true }, this.setTextValue)}
-				{getTextFieldWithTooltip(getAayTooltipTemplate(useStyles, this.state, 6), 'text', 'AayADA', 'ΑΔΑ', 'outlined', this.state.AayADA, true, useStyles.accountInfoItem, false, null, { shrink: true }, this.setTextValue)}
+				{getTextFieldWithTooltip(getAayTooltipTemplate(useStyles, this.state, 4), 'number', 'AayProtocolNumber', 'Α.Π. Α.Α.Υ.', 'outlined', this.state.AayProtocolNumber, true, useStyles.accountInfoItem, false, null, { shrink: true }, this.onChange)}
+				{getTextFieldWithTooltip(getAayTooltipTemplate(useStyles, this.state, 5), 'date', 'AayProtocolDate', 'Α.Π. Α.Α.Υ.', 'outlined', this.state.AayProtocolDate, true, useStyles.accountInfoItem, false, null, { shrink: true }, this.onChange)}
+				{getTextFieldWithTooltip(getAayTooltipTemplate(useStyles, this.state, 1), 'text', 'AayValue', 'Α.Α.Υ', 'outlined', this.state.AayValue, true, useStyles.accountInfoItem, false, null, { shrink: true }, this.onChange)}
+				{getTextFieldWithTooltip(getAayTooltipTemplate(useStyles, this.state, 3), 'number', 'AayEadNumber', 'ΕΑΔ αριθμός', 'outlined', this.state.AayEadNumber, true, useStyles.accountInfoItem, false, null, { shrink: true }, this.onChange)}
+				{getTextFieldWithTooltip(getAayTooltipTemplate(useStyles, this.state, 6), 'text', 'AayADA', 'ΑΔΑ', 'outlined', this.state.AayADA, true, useStyles.accountInfoItem, false, null, { shrink: true }, this.onChange)}
 				{this.getAAYPreviousYear()}
 			</div>
 		</div>
 	}
 	getAAYPreviousYear() {
 		if (this.state.IsDownpayment === false)
-			return getTextField('number', 'AayPreviousYear', 'ΑΑΥ Προηγούμενου Έτος (για δαπάνες ΠΟΕ)', 'outlined', this.state.AayPreviousYear, false, useStyles.accountInfoItem, false, null, { shrink: true }, this.setTextValue)
+			return getTextField('number', 'AayPreviousYear', 'ΑΑΥ Προηγούμενου Έτος (για δαπάνες ΠΟΕ)', 'outlined', this.state.AayPreviousYear, false, useStyles.accountInfoItem, false, null, { shrink: true }, this.onChange)
 	}
 
 	getDocumentsInfo() {
 		return <>
 			<header style={useStyles.category}>Στοιχεία Εγγράφων</header>
 			<div style={useStyles.divRowFlex}>
-				{getTextFieldWithTooltip(getDocumentDateTooltipTemplate(useStyles, this.state), 'date', 'DocumentDate', 'Ημερομηνία Εγγράφων', 'outlined', this.state.DocumentDate, true, useStyles.accountInfoItem, false, null, { shrink: true }, this.setTextValue)}
+				{getTextFieldWithTooltip(getDocumentDateTooltipTemplate(useStyles, this.state), 'date', 'DocumentDate', 'Ημερομηνία Εγγράφων', 'outlined', this.state.DocumentDate, true, useStyles.accountInfoItem, false, null, { shrink: true }, this.onChange)}
 			</div>
 			{this.getCC()}
 			{/* {this.getCC1()}
@@ -541,18 +538,18 @@ class NewAccountForm extends Component {
 			{this.addProtocolInfo(this.state.AccountId, this.state.AccountNumber)}
 			{this.addFirstAccountProtocolInfo()}
 			<div style={useStyles.divRowFlex}>
-				{getTextFieldWithTooltip(getAccountStartDateTooltipTemplate(useStyles, this.state), 'date', 'Start', 'Έναρξη Λογαριασμού', 'outlined', this.state.Start, true, useStyles.accountInfoItem, false, null, { shrink: true }, this.setTextValue)}
-				{getTextFieldWithTooltip(getAccountEndDateTooltipTemplate(useStyles, this.state), 'date', 'End', 'Λήξη Λογαριασμού', 'outlined', this.state.End, true, useStyles.accountInfoItem, false, null, { shrink: true }, this.setTextValue)}
+				{getTextFieldWithTooltip(getAccountStartDateTooltipTemplate(useStyles, this.state), 'date', 'Start', 'Έναρξη Λογαριασμού', 'outlined', this.state.Start, true, useStyles.accountInfoItem, false, null, { shrink: true }, this.onChange)}
+				{getTextFieldWithTooltip(getAccountEndDateTooltipTemplate(useStyles, this.state), 'date', 'End', 'Λήξη Λογαριασμού', 'outlined', this.state.End, true, useStyles.accountInfoItem, false, null, { shrink: true }, this.onChange)}
 				{getCheckboxField('IsFirstOfTheYear', '1ος τους έτους', this.state.IsFirstOfTheYear, useStyles.accountInfoItem, this.setCheckboxValue)}
 			</div>
 			<div style={useStyles.divRowFlex}>
-				{getTextField('number', 'AmountPure', 'Καθαρό Ποσό', 'outlined', this.state.AmountPure, true, useStyles.accountInfoItem, false, { inputProps: { step: 'any' }, endAdornment: <InputAdornment position="end">€</InputAdornment> }, { shrink: true }, this.setTextValue)}
-				{getTextField('number', 'AmountFpa', this.getFpaValueForTextField(), 'outlined', this.state.AmountFpa, true, useStyles.accountInfoItem, false, { inputProps: { step: 'any' }, endAdornment: <InputAdornment position="end">€</InputAdornment> }, { shrink: true }, this.setTextValue)}
-				{getTextField('number', 'AmountTotal', 'Ποσό Λογαριασμού', 'outlined', this.state.AmountTotal, true, useStyles.accountInfoItem, false, { inputProps: { step: 'any' }, endAdornment: <InputAdornment position="end">€</InputAdornment> }, { shrink: true }, this.setTextValue)}
+				{getTextField('number', 'AmountPure', 'Καθαρό Ποσό', 'outlined', this.state.AmountPure, true, useStyles.accountInfoItem, false, { inputProps: { step: 'any' }, endAdornment: <InputAdornment position="end">€</InputAdornment> }, { shrink: true }, this.onChange)}
+				{getTextField('number', 'AmountFpa', this.getFpaValueForTextField(), 'outlined', this.state.AmountFpa, true, useStyles.accountInfoItem, false, { inputProps: { step: 'any' }, endAdornment: <InputAdornment position="end">€</InputAdornment> }, { shrink: true }, this.onChange)}
+				{getTextField('number', 'AmountTotal', 'Ποσό Λογαριασμού', 'outlined', this.state.AmountTotal, true, useStyles.accountInfoItem, false, { inputProps: { step: 'any' }, endAdornment: <InputAdornment position="end">€</InputAdornment> }, { shrink: true }, this.onChange)}
 				{getButton('contained', 'small', null, useStyles.btnAuto, this.autoComplete, 'ΥΠΟΛΟΓΙΣΜΟΣ', null, false)}
 			</div>
 			<div style={useStyles.divRowFlex}>
-				{getTextField('text', 'AmountFullWritten', 'Ποσό Ολογράφως', 'outlined', this.state.AmountFullWritten, true, useStyles.accountInfoLargeItem2, false, null, { shrink: true }, this.setTextValue)}
+				{getTextField('text', 'AmountFullWritten', 'Ποσό Ολογράφως', 'outlined', this.state.AmountFullWritten, true, useStyles.accountInfoLargeItem2, false, null, { shrink: true }, this.onChange)}
 				{getButton('contained', 'small', null, useStyles.btnAuto, this.autoCompleteFullWritten, 'ΥΠΟΛΟΓΙΣΜΟΣ', null, false)}
 			</div>
 			<div style={useStyles.divRowFlex}>
@@ -567,32 +564,32 @@ class NewAccountForm extends Component {
 		return <>
 			<header style={useStyles.category}>Στοιχεία Τιμολογίου</header>
 			<div style={useStyles.divRowFlex}>
-				{getTextFieldWithTooltip(getInvoiceTooltipTemplate(useStyles, this.state, contractDetails.ConcessionaireName, 5), 'date', 'InvoiceDeliveredDate', 'Ημ/νία Παραλαβής Τιμολογίου', 'outlined', this.state.InvoiceDeliveredDate, true, useStyles.accountInfoItem, false, null, { shrink: true }, this.setTextValue)}
-				{getTextFieldWithTooltip(getInvoiceTooltipTemplate(useStyles, this.state, contractDetails.ConcessionaireName, 3), 'number', 'InvoiceDeliveredDateProtocolNumber', 'Α.Π. Ημ/νίας Παραλαβής Τιμολογίου', 'outlined', this.state.InvoiceDeliveredDateProtocolNumber, true, useStyles.accountInfoItem, false, null, { shrink: true }, this.setTextValue)}
-				{getTextFieldWithTooltip(getInvoiceTooltipTemplate(useStyles, this.state, contractDetails.ConcessionaireName, 4), 'date', 'InvoiceDeliveredDateProtocolDate', 'Α.Π. Ημ/νίας Παραλαβής Τιμολογίου', 'outlined', this.state.InvoiceDeliveredDateProtocolDate, true, useStyles.accountInfoItem, false, null, { shrink: true }, this.setTextValue)}
-				{getTextFieldWithTooltip(getInvoiceTooltipTemplate(useStyles, this.state, contractDetails.ConcessionaireName, 1), 'text', 'InvoiceNumber', 'Α.Π. Τιμολογίου', 'outlined', this.state.InvoiceNumber, true, useStyles.accountInfoItem, false, null, { shrink: true }, this.setTextValue)}
-				{getTextFieldWithTooltip(getInvoiceTooltipTemplate(useStyles, this.state, contractDetails.ConcessionaireName, 2), 'date', 'InvoiceDate', 'Α.Π. Τιμολογίου', 'outlined', this.state.InvoiceDate, true, useStyles.accountInfoItem, false, null, { shrink: true }, this.setTextValue)}
+				{getTextFieldWithTooltip(getInvoiceTooltipTemplate(useStyles, this.state, contractDetails.ConcessionaireName, 5), 'date', 'InvoiceDeliveredDate', 'Ημ/νία Παραλαβής Τιμολογίου', 'outlined', this.state.InvoiceDeliveredDate, true, useStyles.accountInfoItem, false, null, { shrink: true }, this.onChange)}
+				{getTextFieldWithTooltip(getInvoiceTooltipTemplate(useStyles, this.state, contractDetails.ConcessionaireName, 3), 'number', 'InvoiceDeliveredDateProtocolNumber', 'Α.Π. Ημ/νίας Παραλαβής Τιμολογίου', 'outlined', this.state.InvoiceDeliveredDateProtocolNumber, true, useStyles.accountInfoItem, false, null, { shrink: true }, this.onChange)}
+				{getTextFieldWithTooltip(getInvoiceTooltipTemplate(useStyles, this.state, contractDetails.ConcessionaireName, 4), 'date', 'InvoiceDeliveredDateProtocolDate', 'Α.Π. Ημ/νίας Παραλαβής Τιμολογίου', 'outlined', this.state.InvoiceDeliveredDateProtocolDate, true, useStyles.accountInfoItem, false, null, { shrink: true }, this.onChange)}
+				{getTextFieldWithTooltip(getInvoiceTooltipTemplate(useStyles, this.state, contractDetails.ConcessionaireName, 1), 'text', 'InvoiceNumber', 'Α.Π. Τιμολογίου', 'outlined', this.state.InvoiceNumber, true, useStyles.accountInfoItem, false, null, { shrink: true }, this.onChange)}
+				{getTextFieldWithTooltip(getInvoiceTooltipTemplate(useStyles, this.state, contractDetails.ConcessionaireName, 2), 'date', 'InvoiceDate', 'Α.Π. Τιμολογίου', 'outlined', this.state.InvoiceDate, true, useStyles.accountInfoItem, false, null, { shrink: true }, this.onChange)}
 			</div>
 		</>
-	}	
+	}
 
 	getSignaturesForAccount() {
 		return <>
 			<header style={useStyles.category}>Υπογραφές για αρχείο '{this.state.AccountNumber}ος Λογαριασμός' </header>
 			<div style={useStyles.divRowFlex}>
-				{getSelectField('SignType1', 'Τίτλος υπογράφων', this.loadSignatoryTypes([1, 2], this.state.SignType1), this.state.SignType1, true, useStyles.selectSignatures, this.setTextValue)}
+				{getSelectField('SignType1', 'Τίτλος υπογράφων', this.loadSignatoryTypes([1, 2], this.state.SignType1), this.state.SignType1, true, useStyles.selectSignatures, this.onChange)}
 				<span style={{ marginLeft: '30px' }}></span>
-				{getSelectField('SignName1', 'Όνομα υπογράφων', this.loadSignatories(this.state.SignName1), this.state.SignName1, true, useStyles.selectSignatures, this.setTextValue)}
+				{getSelectField('SignName1', 'Όνομα υπογράφων', this.loadSignatories(this.state.SignName1), this.state.SignName1, true, useStyles.selectSignatures, this.onChange)}
 			</div>
 			<div style={useStyles.divRowFlex}>
-				{getSelectField('SignType2', 'Τίτλος υπογράφων', this.loadSignatoryTypes([5, 6], this.state.SignType2), this.state.SignType2, true, useStyles.selectSignatures, this.setTextValue)}
+				{getSelectField('SignType2', 'Τίτλος υπογράφων', this.loadSignatoryTypes([5, 6], this.state.SignType2), this.state.SignType2, true, useStyles.selectSignatures, this.onChange)}
 				<span style={{ marginLeft: '30px' }}></span>
-				{getSelectField('SignName2', 'Όνομα υπογράφων', this.loadSignatories(this.state.SignName2), this.state.SignName2, true, useStyles.selectSignatures, this.setTextValue)}
+				{getSelectField('SignName2', 'Όνομα υπογράφων', this.loadSignatories(this.state.SignName2), this.state.SignName2, true, useStyles.selectSignatures, this.onChange)}
 			</div>
 			<div style={useStyles.divRowFlex}>
-				{getSelectField('SignType3', 'Τίτλος υπογράφων', this.loadSignatoryTypes([3, 4], this.state.SignType3), this.state.SignType3, true, useStyles.selectSignatures, this.setTextValue)}
+				{getSelectField('SignType3', 'Τίτλος υπογράφων', this.loadSignatoryTypes([3, 4], this.state.SignType3), this.state.SignType3, true, useStyles.selectSignatures, this.onChange)}
 				<span style={{ marginLeft: '30px' }}></span>
-				{getSelectField('SignName3', 'Όνομα υπογράφων', this.loadSignatories(this.state.SignName3), this.state.SignName3, true, useStyles.selectSignatures, this.setTextValue)}
+				{getSelectField('SignName3', 'Όνομα υπογράφων', this.loadSignatories(this.state.SignName3), this.state.SignName3, true, useStyles.selectSignatures, this.onChange)}
 				{getCheckboxField('AbsenseOfDirector1', 'κ.κ.α.', this.state.AbsenseOfDirector1, useStyles.accountInfoItem, this.setCheckboxValue)}
 			</div>
 		</>
@@ -601,9 +598,9 @@ class NewAccountForm extends Component {
 		return <>
 			<header style={useStyles.category}>Υπογραφές για αρχείο 'Διαβιβαστικό Έγγραφο {this.state.AccountNumber}ου Λογαριασμού' </header>
 			<div style={useStyles.divRowFlex}>
-				{getSelectField('SignType4', 'Τίτλος υπογράφων', this.loadSignatoryTypes([3, 4], this.state.SignType4), this.state.SignType4, true, useStyles.selectSignatures, this.setTextValue)}
+				{getSelectField('SignType4', 'Τίτλος υπογράφων', this.loadSignatoryTypes([3, 4], this.state.SignType4), this.state.SignType4, true, useStyles.selectSignatures, this.onChange)}
 				<span style={{ marginLeft: '30px' }}></span>
-				{getSelectField('SignName4', 'Όνομα υπογράφων', this.loadSignatories(this.state.SignName4), this.state.SignName4, true, useStyles.selectSignatures, this.setTextValue)}
+				{getSelectField('SignName4', 'Όνομα υπογράφων', this.loadSignatories(this.state.SignName4), this.state.SignName4, true, useStyles.selectSignatures, this.onChange)}
 				{getCheckboxField('AbsenseOfDirector2', 'κ.κ.α.', this.state.AbsenseOfDirector2, useStyles.accountInfoItem, this.setCheckboxValue)}
 			</div>
 		</>
@@ -613,7 +610,6 @@ class NewAccountForm extends Component {
 		if (this.state.IsDownpayment === true) {
 			return <>
 				{this.getTemplateForDownpaymentLawArticle()}				
-				{this.getTemplateForCourtOfAuditors()}
 			</>
 		}
 	}
@@ -622,7 +618,7 @@ class NewAccountForm extends Component {
 		return (<>
 			<header style={useStyles.category}>“Πόροι – Χρηματοδότηση – Προϋπολογισμός”</header>
 			<div style={useStyles.divRowFlex}>
-				{getTextFieldWithTooltip(getLawArticleTooltip(useStyles, this.state, this.props.contractDetails), 'number', 'DownpaymentLawArticle', 'Άρθρο', 'outlined', this.state.DownpaymentLawArticle, true, useStyles.accountInfoItem, false, null, { shrink: true }, this.setTextValue)}
+				{getTextFieldWithTooltip(getLawArticleTooltip(useStyles, this.state, this.props.contractDetails), 'number', 'DownpaymentLawArticle', 'Άρθρο', 'outlined', this.state.DownpaymentLawArticle, true, useStyles.accountInfoItem, false, null, { shrink: true }, this.onChange)}
 			</div>
 		</>)
 	}
@@ -635,6 +631,65 @@ class NewAccountForm extends Component {
 	removeMonitoringCommittee() {
 		let newValue = this.state.HasMonitoringCommittee ? false : true
 		this.setState({ HasMonitoringCommittee: newValue })
+	}
+
+	getMonitoringCommiteeInfo() {
+		var contractDetails = this.props.isSearchMode ? this.props.contractDetailsSearchMode : this.props.contractDetails
+		return <>
+			<header style={useStyles.category}>Στοιχεία Επιτροπής Παρακολούθησης</header>
+			{this.state.HasMonitoringCommittee === true ?
+				<div>
+					<div style={useStyles.divRowFlex}>
+						<ProtocolInput
+							tm1={getMayorDecisionProtocolTooltip(useStyles, this.state, 1)}
+							tm2={getMayorDecisionProtocolTooltip(useStyles, this.state, 2)}
+							title='Α.Π. Απόφασης Δημάρχου'
+							idn='MayorDecisionForMembersProtocolNumber'
+							idd='MayorDecisionForMembersProtocolDate'
+							protocolNumber={this.state.MayorDecisionForMembersProtocolNumber}
+							protocolDate={this.state.MayorDecisionForMembersProtocolDate}
+							onChange={this.onChange}
+							tp1='text'
+							tp2='date' />
+						<MyTextField
+							tm={getMonitoringCommitteePracticalTooltip(useStyles, this.state, this.state.AccountNumber, 1)}
+							tp='date'
+							title='Ημ. Πρακτικού Συνεδρίασης'							
+							id='MonitoringCommitteePracticalDate'
+							stateValue={this.state.MonitoringCommitteePracticalDate}
+							isRequired={true}
+							isDisabled={false}
+							onChange={this.onChange}
+							style={{ width: '100%' }}
+							width='40%' />
+						<ProtocolInput
+							tm1={getMonitoringCommitteeTooltipTemplate(useStyles, this.state, contractDetails, this.state.AccountNumber, 1)}
+							tm2={getMonitoringCommitteeTooltipTemplate(useStyles, this.state, contractDetails, this.state.AccountNumber, 2)}
+							title='Α.Π. διαβιβαστικού εγγράφου'
+							idn='TransmissionDocumentProtocolNumber'
+							idd='TransmissionDocumentProtocolDate'
+							protocolNumber={this.state.TransmissionDocumentProtocolNumber}
+							protocolDate={this.state.TransmissionDocumentProtocolDate}
+							onChange={this.onChange}
+							tp1='text'
+							tp2='date' />
+						<MyTextField
+							tm={getMonitoringCommitteeTooltipTemplate(useStyles, this.state, contractDetails.ConcessionaireName, this.state.AccountNumber, 3)}
+							tp='text'
+							title='Χρονικός ορίζοντας των περιεχομένων του παραδοτέου του φυσικού αντικειμένου'							
+							id='MonitoringCommitteeContentGivenWorkTime'
+							stateValue={this.state.MonitoringCommitteeContentGivenWorkTime}
+							isRequired={true}
+							isDisabled={false}
+							onChange={this.onChange}
+							style={{ width: '100%' }}
+							width='40%' />
+					</div>
+				</div> : <></>}
+			<div>
+				{getButton('contained', 'small', null, useStyles.btnAuto, this.state.HasMonitoringCommittee === true ? this.removeMonitoringCommittee : this.addMonitoringCommittee, this.state.HasMonitoringCommittee === true ? 'Διαγραφή στοιχείων επιτροπής παρακολούθησης' : 'Προσθήκη στοιχείων επιτροπής παρακολούθησης', null, false)}
+			</div>
+		</>
 	}
 
 	render() {

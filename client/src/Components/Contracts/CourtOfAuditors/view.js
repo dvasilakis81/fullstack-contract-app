@@ -11,7 +11,7 @@ import Icon from '@material-ui/core/Icon';
 import { getDateFormatForDocument, getServerErrorResponseMessage } from '../../../Helper/helpermethods';
 import { getSubmitButton, getTextFieldWithTooltip, getCheckboxField } from '../../MaterialObjects/materialobjects';
 import { bindActionCreators } from 'redux';
-import { createCourtOfAuditors, updateCourtOfAuditors, deleteCourtOfAuditors } from '../../../Redux/Actions';
+import { processContractInfo } from '../../../Redux/Actions';
 
 import { getCourtOfAuditorsTooltip } from './tooltip';
 import ProtocolInput from '../../CustomControls/ProtocolInput';
@@ -124,7 +124,7 @@ class CourtOfAuditorsView extends Component {
     this.setState({ submitButtonDisabled: true });
 
     if (this.state.addNewItem === true) {
-      this.props.createCourtOfAuditors(this.state, this.props.token.data.token).then(res => {
+      this.props.processContractInfo(this.state, this.props.token.data.token, 'insertcourtofauditors').then(res => {
         var msg = 'To Ελεγκτικό Συνέδριο δημιουργήθηκε επιτυχώς!!!'
         this.setState({ openMessage: true, message: msg, msgColor: 'lightGreen', msgPadding: '10px', submitButtonDisabled: false, addNewItem: false, editItem: false });
         this.resetMsgInfo();
@@ -134,7 +134,7 @@ class CourtOfAuditorsView extends Component {
         this.resetMsgInfo();
       })
     } else if (this.state.editItem === true) {
-      this.props.updateCourtOfAuditors(this.state, this.props.token.data.token).then(res => {
+      this.props.processContractInfo(this.state, this.props.token.data.token, 'updatecourtofauditors').then(res => {
         var msg = 'Το Ελεγκτικό Συνέδριο επεξεργάστηκε επιτυχώς!!!'
         this.setState({ message: msg, openMessage: true, msgColor: 'lightGreen', msgPadding: '10px', submitButtonDisabled: false, addNewItem: false, editItem: false });
         this.resetMsgInfo();
@@ -149,7 +149,7 @@ class CourtOfAuditorsView extends Component {
   requestDeleteCourtOfAuditors() {
     this.setState({ submitButtonDisabled: true });
 
-    this.props.deleteCourtOfAuditors(this.state, this.props.token.data.token).then(res => {
+    this.props.processContractInfo(this.state, this.props.token.data.token, 'deletecourtofauditors').then(res => {
       var msg = 'Το Ελεγκτικό Συνέδριο διαγράφηκε επιτυχώς!!!'
       this.setState({ openMessage: true, message: msg, variant: 'success', msgPadding: '10px', submitButtonDisabled: false, addNewItem: false, editItem: false, deleteItem: false });
       this.resetMsgInfo();
@@ -162,15 +162,15 @@ class CourtOfAuditorsView extends Component {
   courtOfAuditorsItemForm() {
 
     if (this.state.addNewItem === true || this.state.editItem === true) {
-      return <div style={{ display: 'flex', flexFlow: 'column', height: 'auto', backgroundColor: '#fff', background: '#33C1FF', color: 'black', justifyContent: 'center', padding: '20px' }}>
-        <form style={{ padding: '10px' }} autoComplete="off" onSubmit={this.handleSubmit}>
+      return <div style={{ display: 'flex', flexFlow: 'column', height: 'auto', background: '#C0C0C0', color: 'black', justifyContent: 'center', padding: '20px' }}>
+        <form style={{ padding: '10px', backgroundColor: '#fff' }} autoComplete="off" onSubmit={this.handleSubmit}>
           <div style={{ textAlign: 'center', fontSize: '22px', fontWeight: 800, paddingBottom: '10px' }}>{this.state.addNewItem === true ? 'Εισαγωγή' : 'Επεξεργασία'} στοιχείων {this.state.orderNo}ου Ελεγκτικού Συνεδρίου</div>
-          <div style={{ display: 'flex', flexFlow: 'row', height: 'auto', backgroundColor: '#fff', justifyContent: 'left', padding: '10px' }}>
+          <div style={{ display: 'flex', flexFlow: 'row', height: 'auto', justifyContent: 'left', padding: '10px' }}>
             {this.renderCourtOfAuditorsInput()}
           </div>
-          <div style={{ display: 'flex', flexFlow: 'row', height: 'auto', backgroundColor: '#fff', justifyContent: 'center', padding: '10px' }}>
+          <div style={{ display: 'flex', flexFlow: 'row', height: 'auto', justifyContent: 'center', padding: '10px' }}>
             <LoadingOverlay
-              active={this.props.insertCourtOfAuditorsPending === true}
+              active={this.props.insertContractInfoPending === true}
               spinner
               text='Αναμονή για δημιουργία Ελεγκτικού Συνεδρίου ...'
               styles={{
@@ -184,7 +184,10 @@ class CourtOfAuditorsView extends Component {
               <Button disabled={this.state.submitButtonDisabled} variant='contained'
                 color='secondary'
                 style={{ fontSize: '18px', textAlign: 'center', padding: '5px', margin: '5px' }}
-                onClick={() => { this.setState({ addNewItem: false, editItem: false }) }}>
+                onClick={() => {
+                  this.setState({ addNewItem: false, editItem: false })
+                  this.resetMsgInfo();
+                }}>
                 ΑΚΥΡΩΣΗ
                   <Icon>cancel</Icon>
               </Button>
@@ -240,10 +243,10 @@ class CourtOfAuditorsView extends Component {
   renderCourtOfAuditorsInput() {
 
     return (
-      <div style={{ display: 'flex', flexDirection: 'row', margin: '5px', flexWrap: 'wrap', justifyContent: 'flex-start' }}>        
-        <ProtocolInput tm1={getCourtOfAuditorsTooltip(this.state, 1)} tm2={getCourtOfAuditorsTooltip(this.state, 2)} title='Αρ. Πράξης' idn='ProtocolNumber' idd='ProtocolYear' protocolNumber={this.state.ProtocolNumber} protocolDate={this.state.ProtocolYear} st={null} onChange={this.onChange} />
-        <MyTextField tm={getCourtOfAuditorsTooltip(this.state, 3)} valueType='text' title='Κλιμάκιο' label='' variant='outlined' id='ScaleNumber' stateValue={this.state.ScaleNumber} isRequired={true} isDisabled={false} onChange={this.onChange} />
-        <ProtocolInput tm1={getCourtOfAuditorsTooltip(this.state, 4)} tm2={getCourtOfAuditorsTooltip(this.state, 5)} title='Α.Π.Δ.Α.' idn='APDANumber' idd='APDADate' protocolNumber={this.state.APDANumber} protocolDate={this.state.APDADate} onChange={this.onChange} />
+      <div style={{ display: 'flex', flexDirection: 'row', margin: '5px', flexWrap: 'wrap', justifyContent: 'flex-start' }}>
+        <ProtocolInput tm1={getCourtOfAuditorsTooltip(this.state, 1)} tm2={getCourtOfAuditorsTooltip(this.state, 2)} title='Αρ. Πράξης' idn='ProtocolNumber' idd='ProtocolYear' protocolNumber={this.state.ProtocolNumber} protocolDate={this.state.ProtocolYear} onChange={this.onChange} tp1='text' tp2='text' />
+        <MyTextField tm={getCourtOfAuditorsTooltip(this.state, 3)} tp='text' title='Κλιμάκιο' label='' variant='outlined' id='ScaleNumber' stateValue={this.state.ScaleNumber} isRequired={true} isDisabled={false} onChange={this.onChange} />
+        <ProtocolInput tm1={getCourtOfAuditorsTooltip(this.state, 4)} tm2={getCourtOfAuditorsTooltip(this.state, 5)} title='Α.Π.Δ.Α.' idn='APDANumber' idd='APDADate' protocolNumber={this.state.APDANumber} protocolDate={this.state.APDADate} onChange={this.onChange} tp1='text' tp2='date' />
       </div>
     )
   }
@@ -314,8 +317,8 @@ class CourtOfAuditorsView extends Component {
 function mapStateToProps(state) {
   return {
     screenDimensions: state.parametricdata_reducer.screenDimensions,
-    insertCourtOfAuditorsPending: state.contracts_reducer.insertCourtOfAuditorsPending,
-    insertCourtOfAuditorsRejected: state.contracts_reducer.insertCourtOfAuditorsRejected,
+    insertContractInfoPending: state.contracts_reducer.insertContractInfoPending,
+    insertContractInfoPendingRejected: state.contracts_reducer.insertContractInfoRejected,
     isSearchMode: state.contracts_reducer.isSearchMode,
     contracts: state.contracts_reducer.contractsList,
     contractDetails: state.contracts_reducer.contractDetails,
@@ -326,7 +329,7 @@ function mapStateToProps(state) {
 }
 
 function mapDispatchToProps(dispatch) {
-  return bindActionCreators({ createCourtOfAuditors, updateCourtOfAuditors, deleteCourtOfAuditors }, dispatch)
+  return bindActionCreators({ processContractInfo }, dispatch)
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(CourtOfAuditorsView)

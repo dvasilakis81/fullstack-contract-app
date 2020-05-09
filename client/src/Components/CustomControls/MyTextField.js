@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
-import { getTextField, getTextFieldWithTooltip } from '../MaterialObjects/materialobjects';
-import StyledTextField from './tf'
+import StyledTextField from './tf';
+import InputTitle from './InputTitle'
 
 class MyTextField extends Component {
   constructor(props) {
@@ -16,11 +16,9 @@ class MyTextField extends Component {
         ?
         <StyledTextField {...this.props} />
         :
-        <div style={{ margin: '10px' }}>
-          <div style={{ background: 'lightgrey' }}>{this.props.title}</div>
-          <div>
-            <StyledTextField {...this.props} />
-          </div>
+        <div style={{ margin: '10px', width: this.props.width, border: '1px solid black' }}>          
+          <InputTitle title={this.props.title} />
+          <StyledTextField {...this.props} />
         </div>
     )
   }

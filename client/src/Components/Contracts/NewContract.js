@@ -97,7 +97,7 @@ class NewContract extends Component {
 		}
 
 		this.setCheckboxValue = this.setCheckboxValue.bind(this);
-		this.setTextValue = this.setTextValue.bind(this);
+		this.onChange = this.onChange.bind(this);
 		this.handleSubmit = this.handleSubmit.bind(this);
 		this.autoCompleteBudget = this.autoCompleteBudget.bind(this);
 		this.handleClose = this.handleClose.bind(this, '');
@@ -107,7 +107,7 @@ class NewContract extends Component {
 	}
 
 	handleContractStuff(e) {
-		this.setState({ contractStuff: this.getUserIds(e) });		
+		this.setState({ contractStuff: this.getUserIds(e) });
 	};
 
 	selectAllStuff() {
@@ -216,7 +216,7 @@ class NewContract extends Component {
 	setCheckboxValue(e) {
 		this.setState({ [e.target.id]: e.target.checked });
 	}
-	setTextValue(event) {
+	onChange(event) {
 		this.setState({ [event.target.id]: event.target.value });
 	}
 	handleClose = (event, reason) => {
@@ -312,81 +312,81 @@ class NewContract extends Component {
 													<InputLabel><b>Διεύθυνση</b></InputLabel>
 												</td>
 												<td style={styles.column}>
-													{getSelectField('DirectionId', 'Επιλέξτε μια διεύθυνση', this.loadSelectMunicipalityDirections(), this.state.DirectionId, isRequired, { display: 'flex', flexGrow: '1', height: '5' }, this.setTextValue)}
+													{getSelectField('DirectionId', 'Επιλέξτε μια διεύθυνση', this.loadSelectMunicipalityDirections(), this.state.DirectionId, isRequired, { display: 'flex', flexGrow: '1', height: '5' }, this.onChange)}
 												</td>
 											</tr>
 											<tr >
 												{this.getFirstColumn('Τμήμα')}
 												<td style={styles.column}>
-													{getSelectField('DepartmentId', 'Επιλέξτε ένα τμήμα', this.loadMunicipalityDirectionDepartments(this.state.DirectionId), this.state.DepartmentId, isRequired, { display: 'flex', flexGrow: '1', height: '5' }, this.setTextValue)}
+													{getSelectField('DepartmentId', 'Επιλέξτε ένα τμήμα', this.loadMunicipalityDirectionDepartments(this.state.DirectionId), this.state.DepartmentId, isRequired, { display: 'flex', flexGrow: '1', height: '5' }, this.onChange)}
 												</td>
 											</tr>
 											<tr style={styles.oddRow}>
 												{this.getFirstColumn('Τύπος')}
 												<td style={styles.column}>
-													{getSelectField('ContractTypeId', 'Επιλέξτε ένα τύπο', this.loadContractTypes(this.state.ContractTypeId), this.state.ContractTypeId, isRequired, { display: 'flex', flexGrow: '1' }, this.setTextValue)}
+													{getSelectField('ContractTypeId', 'Επιλέξτε ένα τύπο', this.loadContractTypes(this.state.ContractTypeId), this.state.ContractTypeId, isRequired, { display: 'flex', flexGrow: '1' }, this.onChange)}
 												</td>
 											</tr>
-											<tr>
+											 <tr>
 												{this.getFirstColumn('Πρωτόκολλο')}
-												<td style={styles.columnWithItems}>
-													{getTextField('number', 'ProtocolNumber', 'Αρ. Πρωτ.', 'outlined', this.state.ProtocolNumber, isRequired, { width: '200px', marginRight: '20px' }, false, null, { shrink: true }, this.setTextValue)}
-													{getTextField('date', 'ProtocolDate', 'Ημ. Πρωτ.', 'outlined', this.state.ProtocolDate, isRequired, { width: '200px' }, false, null, { shrink: true }, this.setTextValue)}
+												<td style={styles.columnWithItems}>													
+													{getTextField('number', 'ProtocolNumber', 'Αρ. Πρωτ.', 'outlined', this.state.ProtocolNumber, isRequired, { width: '200px', marginRight: '20px' }, false, null, { shrink: true }, this.onChange)}
+													{getTextField('date', 'ProtocolDate', 'Ημ. Πρωτ.', 'outlined', this.state.ProtocolDate, isRequired, { width: '200px' }, false, null, { shrink: true }, this.onChange)}
 												</td>
 											</tr>
 											<tr style={styles.oddRow}>
 												{this.getFirstColumn('Έναρξη/Λήξη')}
 												<td style={styles.columnWithItems}>
-													{getTextField('date', 'Start', 'Έναρξη Σύμβασης', 'outlined', this.state.Start, isRequired, { width: '200px', marginRight: '20px' }, false, null, { shrink: true }, this.setTextValue)}
-													{getTextField('date', 'End', 'Λήξη Σύμβασης', 'outlined', this.state.End, isRequired, { width: '200px' }, false, null, { shrink: true }, this.setTextValue)}
+													{getTextField('date', 'Start', 'Έναρξη Σύμβασης', 'outlined', this.state.Start, isRequired, { width: '200px', marginRight: '20px' }, false, null, { shrink: true }, this.onChange)}
+													{getTextField('date', 'End', 'Λήξη Σύμβασης', 'outlined', this.state.End, isRequired, { width: '200px' }, false, null, { shrink: true }, this.onChange)}
 												</td>
 											</tr>
 											<tr>
 												{this.getFirstColumn('Ανάδοχος')}
 												<td style={styles.columnWithItems}>
-													{getTextField('text', 'ConcessionaireName', 'Ανάδοχος', 'outlined', this.state.ConcessionaireName, isRequired, { display: 'flex', flexGrow: '1', marginRight: '5px' }, false, { inputProps: { maxLength: 1000 } }, { shrink: true }, this.setTextValue)}
-													{getTextField('text', 'ConcessionaireAFM', 'Α.Φ.Μ.', 'outlined', this.state.ConcessionaireAFM, isRequired, { width: '200px' }, false, { inputProps: { maxLength: 20 } }, { shrink: true }, this.setTextValue)}
+													{getTextField('text', 'ConcessionaireName', 'Ανάδοχος', 'outlined', this.state.ConcessionaireName, isRequired, { display: 'flex', flexGrow: '1', marginRight: '5px' }, false, { inputProps: { maxLength: 1000 } }, { shrink: true }, this.onChange)}
+													{getTextField('text', 'ConcessionaireAFM', 'Α.Φ.Μ.', 'outlined', this.state.ConcessionaireAFM, isRequired, { width: '200px' }, false, { inputProps: { maxLength: 20 } }, { shrink: true }, this.onChange)}
 												</td>
 											</tr>
 											<tr style={styles.oddRow}>
 												{this.getFirstColumn('Τίτλος')}
 												<td style={styles.column}>
-													{getTextFieldMultiline(3, 'text', 'Title', 'Τίτλος', 'outlined', this.state.Title, isRequired, { display: 'flex', flexGrow: '1', marginRight: '5px' }, false, { inputProps: { maxLength: 2000 } }, { shrink: true }, this.setTextValue)}
+													{getTextFieldMultiline(3, 'text', 'Title', 'Τίτλος', 'outlined', this.state.Title, isRequired, { display: 'flex', flexGrow: '1', marginRight: '5px' }, false, { inputProps: { maxLength: 2000 } }, { shrink: true }, this.onChange)}
 												</td>
 											</tr>
 											<tr>
 												{this.getFirstColumn('CPV')}
 												<td style={styles.columnWithItems}>
-													{getTextField('text', 'CpvCode', 'CPV Κωδικός', 'outlined', this.state.CpvCode, isRequired, { width: '200px', marginRight: '20px' }, false, { inputProps: { maxLength: 20 } }, { shrink: true }, this.setTextValue)}
-													{getTextField('text', 'CpvTitle', 'CPV Τίτλος', 'outlined', this.state.CpvTitle, isRequired, { width: '450px' }, false, { inputProps: { maxLength: 355 } }, { shrink: true }, this.setTextValue)}
+													{getTextField('text', 'CpvCode', 'CPV Κωδικός', 'outlined', this.state.CpvCode, isRequired, { width: '200px', marginRight: '20px' }, false, { inputProps: { maxLength: 20 } }, { shrink: true }, this.onChange)}
+													{getTextField('text', 'CpvTitle', 'CPV Τίτλος', 'outlined', this.state.CpvTitle, isRequired, { width: '450px' }, false, { inputProps: { maxLength: 355 } }, { shrink: true }, this.onChange)}
 												</td>
 											</tr>
 											<tr style={styles.oddRow}>
 												{this.getFirstColumn('Κ.Α.Ε. / Φ. / Δ.')}
 												<td style={styles.columnWithItems}>
-													{getTextField('text', 'KAE', 'K.A.E.', 'outlined', this.state.KAE, isRequired, { width: '150px', marginRight: '20px' }, false, { inputProps: { maxLength: 20 } }, { shrink: true }, this.setTextValue)}
-													{getTextField('text', 'Actor', 'Φ.', 'outlined', this.state.Actor, isRequired, { width: '100px', marginRight: '20px' }, false, { inputProps: { maxLength: 5 } }, { shrink: true }, this.setTextValue)}
-													{getTextField('text', 'CodeDirection', 'Δ.', 'outlined', this.state.CodeDirection, isRequired, { width: '100px' }, false, { inputProps: { maxLength: 5 } }, { shrink: true }, this.setTextValue)}
+													{getTextField('text', 'KAE', 'K.A.E.', 'outlined', this.state.KAE, isRequired, { width: '150px', marginRight: '20px' }, false, { inputProps: { maxLength: 20 } }, { shrink: true }, this.onChange)}
+													{getTextField('text', 'Actor', 'Φ.', 'outlined', this.state.Actor, isRequired, { width: '100px', marginRight: '20px' }, false, { inputProps: { maxLength: 5 } }, { shrink: true }, this.onChange)}
+													{getTextField('text', 'CodeDirection', 'Δ.', 'outlined', this.state.CodeDirection, isRequired, { width: '100px' }, false, { inputProps: { maxLength: 5 } }, { shrink: true }, this.onChange)}
 												</td>
 											</tr>
 											<tr>
 												{this.getFirstColumn('Απόφαση Κατακύρωσης')}
 												<td style={styles.columnWithItems}>
-													{getTextField('number', 'AwardNumber', 'Αριθμός', 'outlined', this.state.AwardNumber, isRequired, { width: '100px', marginRight: '20px' }, false, null, { shrink: true }, this.setTextValue)}
-													{getTextField('date', 'AwardDate', 'Ημερομηνία', 'outlined', this.state.AwardDate, isRequired, { width: '200px', marginRight: '20px' }, false, null, { shrink: true }, this.setTextValue)}
+													{getTextField('number', 'AwardNumber', 'Αριθμός', 'outlined', this.state.AwardNumber, isRequired, { width: '100px', marginRight: '20px' }, false, null, { shrink: true }, this.onChange)}
+													{getTextField('date', 'AwardDate', 'Ημερομηνία', 'outlined', this.state.AwardDate, isRequired, { width: '200px', marginRight: '20px' }, false, null, { shrink: true }, this.onChange)}
 													{getTextField('text', 'AwardAda', 'ΑΔΑ', 'outlined', this.state.AwardAda, isRequired, { width: '200px' }, false, {
 														startAdornment: <InputAdornment position="start">(ΑΔΑ:</InputAdornment>,
 														endAdornment: <InputAdornment position="end">)</InputAdornment>,
 														maxLength: 20
-													}, { shrink: true }, this.setTextValue)}
+													}, { shrink: true }, this.onChange)}
 												</td>
 											</tr>
 											<tr style={styles.oddRow}>
 												{this.getFirstColumn('Προϋπολογισμός')}
 												<td style={styles.columnWithItems}>
-													{getTextField('number', 'AmountPure', 'Καθαρό Ποσό', 'outlined', this.state.AmountPure, isRequired, { width: '200px', marginRight: '20px' }, false, { inputProps: { step: 'any' }, endAdornment: <InputAdornment position="end">€</InputAdornment> }, { shrink: true }, this.setTextValue)}
-													{getTextField('number', 'AmountFpa', getFpaLabel(getFpaValueFromReservations(this.props.reservations)), 'outlined', this.state.AmountFpa, isRequired, { width: '200px', marginRight: '20px' }, false, { inputProps: { step: 'any' }, endAdornment: <InputAdornment position="end">€</InputAdornment> }, { shrink: true }, this.setTextValue)}
-													{getTextField('number', 'AmountTotal', 'Συνολικό Ποσό', 'outlined', this.state.AmountTotal, isRequired, { width: '200px', marginRight: '20px' }, false, { inputProps: { step: 'any' }, endAdornment: <InputAdornment position="end">€</InputAdornment> }, { shrink: true }, this.setTextValue)}
+													{getTextField('number', 'AmountPure', 'Καθαρό Ποσό', 'outlined', this.state.AmountPure, isRequired, { width: '200px', marginRight: '20px' }, false, { inputProps: { step: 'any' }, endAdornment: <InputAdornment position="end">€</InputAdornment> }, { shrink: true }, this.onChange)}
+													{getTextField('number', 'AmountFpa', getFpaLabel(getFpaValueFromReservations(this.props.reservations)), 'outlined', this.state.AmountFpa, isRequired, { width: '200px', marginRight: '20px' }, false, { inputProps: { step: 'any' }, endAdornment: <InputAdornment position="end">€</InputAdornment> }, { shrink: true }, this.onChange)}
+													{getTextField('number', 'AmountTotal', 'Συνολικό Ποσό', 'outlined', this.state.AmountTotal, isRequired, { width: '200px', marginRight: '20px' }, false, { inputProps: { step: 'any' }, endAdornment: <InputAdornment position="end">€</InputAdornment> }, { shrink: true }, this.onChange)}
 													{getButton('contained', 'small', null, styles.btnAuto, this.autoCompleteBudget, 'ΥΠΟΛΟΓΙΣΜΟΣ', null, false)}
 												</td>
 											</tr>
@@ -399,7 +399,7 @@ class NewContract extends Component {
 											<tr style={styles.oddRow}>
 												{this.getFirstColumn('Αριθμός Παραδοτέων (Λογαριασμών)')}
 												<td style={styles.columnWithItems}>
-													{getTextField('number', 'NumberOfAccounts', '# Παραδοτέων (Λογαριασμών)', 'outlined', this.state.NumberOfAccounts, isRequired, { width: '200px', marginRight: '20px' }, false, { inputProps: { min: 0, max: 100 } }, { shrink: true }, this.setTextValue)}
+													{getTextField('number', 'NumberOfAccounts', '# Παραδοτέων (Λογαριασμών)', 'outlined', this.state.NumberOfAccounts, isRequired, { width: '200px', marginRight: '20px' }, false, { inputProps: { min: 0, max: 100 } }, { shrink: true }, this.onChange)}
 												</td>
 											</tr>
 										</tbody>

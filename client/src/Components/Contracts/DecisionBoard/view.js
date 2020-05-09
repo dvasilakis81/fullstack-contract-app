@@ -11,9 +11,11 @@ import Icon from '@material-ui/core/Icon';
 import { getDateFormatForDocument, getServerErrorResponseMessage } from '../../../Helper/helpermethods';
 import { getSubmitButton, getTextFieldWithTooltip } from '../../MaterialObjects/materialobjects';
 import { bindActionCreators } from 'redux';
-import { createDecisionBoard, updateDecisionBoard, deleteDecisionBoard } from '../../../Redux/Actions';
+import { processContractInfo } from '../../../Redux/Actions';
 
 import { getDecisionBoardTooltip } from './tooltip';
+import ProtocolInput from '../../CustomControls/ProtocolInput';
+import MyTextField from '../../CustomControls/MyTextField';
 
 const styles = {
   paperContractMonetaryInfoFrame: {
@@ -66,7 +68,7 @@ class DecisionBoardView extends Component {
       ADA: ''
     }
 
-    this.setTextValue = this.setTextValue.bind(this);
+    this.onChange = this.onChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
     this.handleClose = this.handleClose.bind(this, '');
   }
@@ -75,7 +77,7 @@ class DecisionBoardView extends Component {
     this.setState({ message: '', openMessage: false, submitButtonDisabled: false });
   }
 
-  setTextValue(event) {
+  onChange(event) {
     this.setState({ [event.target.id]: event.target.value });
   }
 
@@ -101,26 +103,35 @@ class DecisionBoardView extends Component {
     })
   }
 
+  resetMsgInfo() {
+    setTimeout(function () {
+      this.setState({ openMessage: false, message: '', msgPadding: '0px', ProtocolNumber: '', ProtocolDate: '', Content: '', ADA: '', orderNo: 0 });
+    }.bind(this), 5000);
+  }
 
   handleSubmit(event) {
     event.preventDefault();
     this.setState({ submitButtonDisabled: true });
 
     if (this.state.addNewItem === true) {
-      this.props.createDecisionBoard(this.state, this.props.token.data.token).then(res => {
+      this.props.processContractInfo(this.state, this.props.token.data.token, 'insertdecisionboard').then(res => {
         var msg = 'Η Α.Δ.Σ. με πρωτόκολλο "' + this.state.ProtocolNumber + '/' + getDateFormatForDocument(this.state.ProtocolDate) + '" δημιουργήθηκε επιτυχώς!!!'
         this.setState({ openMessage: true, message: msg, variant: 'success', msgPadding: '10px', submitButtonDisabled: false, addNewItem: false, editItem: false });
+        this.resetMsgInfo();
       }).catch(error => {
         var msg = 'Αποτυχία δημιουργίας Α.Δ.Σ. !!\n' + error;
         this.setState({ openMessage: true, message: <><div>{msg}</div><div>{getServerErrorResponseMessage(error)}</div></>, openMessage: true, variant: 'error', msgPadding: '10px', submitButtonDisabled: false });
+        this.resetMsgInfo();
       })
     } else if (this.state.editItem === true) {
-      this.props.updateDecisionBoard(this.state, this.props.token.data.token).then(res => {
+      this.props.processContractInfo(this.state, this.props.token.data.token, 'updatedecisionboard').then(res => {
         var msg = 'Η Α.Δ.Σ. με πρωτόκολλο "' + this.state.ProtocolNumber + '/' + getDateFormatForDocument(this.state.ProtocolDate) + '" επεξεργάστηκε επιτυχώς!!!'
         this.setState({ message: msg, openMessage: true, variant: 'success', msgPadding: '10px', submitButtonDisabled: false, addNewItem: false, editItem: false });
+        this.resetMsgInfo();
       }).catch(error => {
         var msg = 'Αποτυχία δημιουργίας Α.Δ.Σ. !!\n' + error;
         this.setState({ message: <><div>{msg}</div><div>{getServerErrorResponseMessage(error)}</div></>, openMessage: true, variant: 'error', msgPadding: '10px', submitButtonDisabled: false });
+        this.resetMsgInfo();
       })
     }
 
@@ -132,39 +143,39 @@ class DecisionBoardView extends Component {
   requestDeleteDecisionBoard() {
     this.setState({ submitButtonDisabled: true });
 
-    this.props.deleteDecisionBoard(this.state, this.props.token.data.token).then(res => {
+    this.props.processContractInfo(this.state, this.props.token.data.token, 'deleteDecisionBoard').then(res => {
       var msg = 'Η Α.Δ.Σ. με πρωτόκολλο "' + this.state.ProtocolNumber + '/' + getDateFormatForDocument(this.state.ProtocolDate) + '" διεγράφει επιτυχώς!!!'
       this.setState({ openMessage: true, message: msg, variant: 'success', msgPadding: '10px', submitButtonDisabled: false, addNewItem: false, editItem: false, deleteItem: false });
-      setTimeout(function () {
-        this.setState({ openMessage: false, message: '', variant: '', msgPadding: '10px' });
-      }.bind(this), 3000);
+      this.resetMsgInfo();
     }).catch(error => {
       var msg = 'Αποτυχία διαγραφής Α.Δ.Σ. !!\n' + error;
       this.setState({ openMessage: true, message: <><div>{msg}</div><div>{getServerErrorResponseMessage(error)}</div></>, openMessage: true, variant: 'error', msgPadding: '0px', submitButtonDisabled: false });
+      this.resetMsgInfo();
     })
   }
 
   decisionBoardItemForm() {
-    
+
     if (this.state.addNewItem === true || this.state.editItem === true) {
-      return <div style={{ display: 'flex', flexFlow: 'column', height: 'auto', backgroundColor: '#fff', background: '#33C1FF', color: 'black', justifyContent: 'center', padding: '20px' }}>
-        <form style={{ padding: '10px' }} autoComplete="off" onSubmit={this.handleSubmit}>
+      return <div style={{ display: 'flex', flexFlow: 'column', height: 'auto', background: '#C0C0C0', color: 'black', justifyContent: 'center', padding: '20px' }}>
+        <form style={{ padding: '10px', backgroundColor: '#fff' }} autoComplete="off" onSubmit={this.handleSubmit}>
           <div style={{ textAlign: 'center', fontSize: '22px', fontWeight: 800, paddingBottom: '10px' }}>{this.state.addNewItem === true ? 'Εισαγωγή' : 'Επεξεργασία'} στοιχείων {this.state.orderNo}ης Απόφασης Δημοτικού Συμβουλίου</div>
-          <div style={{ display: 'flex', flexFlow: 'row', height: 'auto', backgroundColor: '#fff', justifyContent: 'left', padding: '10px' }}>
-            {getTextFieldWithTooltip(getDecisionBoardTooltip(this.state, 1), 'number', 'ProtocolNumber', 'Αρ. Πρωτ.', 'outlined', this.state.ProtocolNumber, true, { width: '200px', marginRight: '20px' }, false, null, { shrink: true }, this.setTextValue)}
-            {getTextFieldWithTooltip(getDecisionBoardTooltip(this.state, 2), 'date', 'ProtocolDate', 'Ημ. Πρωτ.', 'outlined', this.state.ProtocolDate, true, { width: '200px', background: 'white' }, false, null, { shrink: true }, this.setTextValue)}
+          <div style={{ display: 'flex', flexFlow: 'row', height: 'auto', justifyContent: 'left', padding: '10px' }}>
+            <ProtocolInput tm1={getDecisionBoardTooltip(this.state, 1)} tm2={getDecisionBoardTooltip(this.state, 2)} title='Α.Π.' idn='ProtocolNumber' idd='ProtocolDate' protocolNumber={this.state.ProtocolNumber} protocolDate={this.state.ProtocolDate} st={null} onChange={this.onChange} tp1='text' tp2='date' />
+            <MyTextField tm={getDecisionBoardTooltip(this.state, 3)} tp='text' title='ΑΔΑ' label='' id='ADA' stateValue={this.state.ADA} isRequired={false} isDisabled={false} onChange={this.onChange} style={{ width: '100%' }} width='40%' inputProps={{ style: { textAlign: 'center' } }}/>
           </div>
           {
             this.state.orderNo > 1 ?
-              <div style={{ display: 'flex', flexFlow: 'column', height: 'auto', backgroundColor: '#fff', justifyContent: 'left', padding: '10px' }}>
-                {getTextFieldWithTooltip(getDecisionBoardTooltip(this.state, 4), 'text', 'Content', 'Περιεχόμενο', 'outlined', this.state.Content, false, { width: 'auto' }, false, null, { shrink: true }, this.setTextValue)}
-              </div> :
+              <div style={{ display: 'flex', flexFlow: 'column', height: 'auto', justifyContent: 'left', padding: '10px' }}>
+                <MyTextField tm={getDecisionBoardTooltip(this.state, 4)} tp='text' title='Περιεχόμενο' label='' id='Content' stateValue={this.state.Content} isRequired={false} isDisabled={false} onChange={this.onChange} style={{ width: '100%' }} />
+              </div>
+              :
               <></>
           }
-          <div style={{ display: 'flex', flexFlow: 'column', height: 'auto', backgroundColor: '#fff', justifyContent: 'left', padding: '10px' }}>
-            {getTextFieldWithTooltip(getDecisionBoardTooltip(this.state, 3), 'text', 'ADA', 'ΑΔΑ', 'outlined', this.state.ADA, false, { width: '300px' }, false, null, { shrink: true }, this.setTextValue)}
-          </div>
-          <div style={{ display: 'flex', flexFlow: 'row', height: 'auto', backgroundColor: '#fff', justifyContent: 'center', padding: '10px' }}>
+          {/* <div style={{ display: 'flex', flexFlow: 'column', height: 'auto', justifyContent: 'left', padding: '10px' }}>
+            <MyTextField tm={getDecisionBoardTooltip(this.state, 3)} tp='text' title='ΑΔΑ' label='' id='ADA' stateValue={this.state.ADA} isRequired={false} isDisabled={false} onChange={this.onChange} style={{ width: '100%' }} width='40%' />
+          </div> */}
+          <div style={{ display: 'flex', flexFlow: 'row', height: 'auto', justifyContent: 'center', padding: '10px' }}>
             <LoadingOverlay
               active={this.props.insertContractInfoPending === true}
               spinner
@@ -180,14 +191,17 @@ class DecisionBoardView extends Component {
               <Button disabled={this.state.submitButtonDisabled} variant='contained'
                 color='secondary'
                 style={{ fontSize: '18px', textAlign: 'center', padding: '5px', margin: '5px' }}
-                onClick={() => { this.setState({ addNewItem: false, editItem: false }) }}>
+                onClick={() => {
+                  this.setState({ addNewItem: false, editItem: false });
+                  this.resetMsgInfo();
+                }}>
                 ΑΚΥΡΩΣΗ
                   <Icon>cancel</Icon>
               </Button>
             </LoadingOverlay>
           </div>
         </form>
-      </div>
+      </div >
     } else if (this.state.deleteItem === true) {
       return <div style={{ display: 'flex', flexFlow: 'column', height: 'auto', backgroundColor: '#fff', background: '#33C1FF', color: 'black', justifyContent: 'center', padding: '20px' }}>
         <div style={{ textAlign: 'center', fontSize: '22px', fontWeight: 800, paddingBottom: '10px' }}>Διαγραφή {this.state.orderNo}ης Απόφασης Δημοτικού Συμβουλίου;</div>
@@ -305,7 +319,7 @@ function mapStateToProps(state) {
 }
 
 function mapDispatchToProps(dispatch) {
-  return bindActionCreators({ createDecisionBoard, updateDecisionBoard, deleteDecisionBoard }, dispatch)
+  return bindActionCreators({ processContractInfo }, dispatch)
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(DecisionBoardView)

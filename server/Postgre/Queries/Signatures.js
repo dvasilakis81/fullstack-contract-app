@@ -1,6 +1,7 @@
 const pool = require('../dbConfig').pool
 const util = require('util')
 const helper = require('../../HelperMethods/helpermethods')
+const MonitoringCommittee = require('./MonitoringCommittee')
 
 const insertDocumentSignatures = (req, res, next, accountInfo) => {
   var accountId = accountInfo[0].Id
@@ -28,7 +29,10 @@ const insertDocumentSignatures = (req, res, next, accountInfo) => {
             next(error);
           else {
             helper.consoleLog("Insert DocumentSignatures \n");
-            res.status(200).json(accountInfo);
+            if (accountInfo.HasMonitoringCommittee)
+              MonitoringCommittee.insertMonitoringCommittee(req, res, next, accountInfo);
+            else
+              res.status(200).json(accountInfo);
           }
         })
       }
@@ -101,8 +105,11 @@ const updateSignatory4 = (req, res, next, accountInfo) => {
     if (error)
       next(error);
     else {
-      helper.consoleLog('UpdateSignatory4: Rows affected: ' + results.rowCount + ' Account Id: ' + req.body.AccountId);      
-      res.status(200).json(accountInfo);
+      helper.consoleLog('UpdateSignatory4: Rows affected: ' + results.rowCount + ' Account Id: ' + req.body.AccountId);
+      if (accountInfo.HasMonitoringCommittee)
+        MonitoringCommittee.updateMonitoringCommittee(req, res, next);
+      else
+        MonitoringCommittee.deleteMonitoringCommittee(req, res, next, accountInfo);      
     }
   })
 }

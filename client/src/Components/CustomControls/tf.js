@@ -22,7 +22,7 @@ const styles = theme => ({
     "&&:after": {
       borderBottom: "none"
     },
-    backgroundColor: '#daf0ff'    
+    backgroundColor: '#FFFEF4'
   }
 });
 
@@ -35,11 +35,12 @@ const StyledTextField = props => {
   var isDisabled = props.isDisabled ? props.isDisabled : false;
   var inputLabelProps = { shrink: true };
   var isDisabled = props.isDisabled ? props.isDisabled : false;
-  var type = props.type;
+  var type = props.tp;
   var id = props.id;
   var stateValue = props.stateValue;
   var onChange = props.onChange;
-  var inputProps = props.inputProps;
+  var inputProps = props.inputProps ? props.inputProps : { style: { textAlign: 'center' } };
+  var style = props.style;
 
   if (tooltipTemplate) {
     return <StyledTooltip
@@ -63,11 +64,10 @@ const StyledTextField = props => {
         disabled={isDisabled}
         required={isRequired}
         type={type}
-        id={id}
-        label={label}
+        id={id}        
         value={stateValue}
         variant='standard'
-        style={null}
+        style={style}
         onChange={onChange}
         inputProps={inputProps}
         InputProps={{ classes }}
@@ -78,20 +78,19 @@ const StyledTextField = props => {
   }
   else {
     return <TextField
-        disabled={isDisabled}
-        required={isRequired}
-        type={type}
-        id={id}
-        label={label}
-        value={stateValue}
-        variant='standard'
-        style={null}
-        onChange={onChange}
-        inputProps={inputProps}
-        InputProps={{ classes }}
-        InputLabelProps={inputLabelProps}
-        size='small'
-      />    
+      disabled={isDisabled}
+      required={isRequired}
+      type={type}
+      id={id}      
+      value={stateValue}
+      variant='standard'
+      style={style}
+      onChange={onChange}
+      inputProps={inputProps}
+      InputProps={{ classes }}
+      InputLabelProps={inputLabelProps}
+      size='small'
+    />
   }
 };
 

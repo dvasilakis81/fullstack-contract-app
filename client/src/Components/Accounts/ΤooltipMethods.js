@@ -128,50 +128,61 @@ function getNumberLectical(number) {
 
   return ret;
 }
-export function getMonitoringCommitteePracticalTooltipTemplate(useStyles, state, an, ind) {
+
+export function getMayorDecisionProtocolTooltip(useStyles, state, ind) {
+  var style1 = (ind === 1 ? useStyles.tooltipIndicate : useStyles.tooltip)
+  var style2 = (ind === 2 ? useStyles.tooltipIndicate : useStyles.tooltip)
+  //6)	Την Απόφαση Δημάρχου με Α.Π. 312848/06.12.2019 για τον ορισμό των μελών της Επιτροπής Παρακολούθησης
+  var pn = state.MayorDecisionForMembersProtocolNumber;
+  var pd = state.MayorDecisionForMembersProtocolDate;
+
+  return (<>
+    <span style={useStyles.tooltip}> Την Απόφαση Δημάρχου με Α.Π. </span>
+    <span style={style1}>{pn ? pn : '_____'}</span>
+    <span style={useStyles.tooltip}>/</span>
+    <span style={style2}>{pd ? getDateFormatForDocument(pd) : '__-__-____'}</span>
+    <span style={useStyles.tooltip}> για τον ορισμό των μελών της Επιτροπής Παρακολούθησης. </span>
+  </>)
+}
+
+export function getMonitoringCommitteePracticalTooltip(useStyles, state, an, ind) {
   var style1 = (ind === 1 ? useStyles.tooltipIndicate : useStyles.tooltip)
   return (<>
-    {/* 7)	Δύο (2) φωτοαντίγραφα του από 20.02.2020 Πρακτικού της τρίτης (3ης) συνεδρίασης της Επιτροπής Παρακολούθησης της Προγραμματικής Σύμβασης */}
-    <div style={useStyles.tooltipTitle}>ΣΥΝΗΜΜΕΝΑ ΔΙΚΑΙΟΛΟΓΗΤΙΚΑ</div>
-    <span style={useStyles.tooltip}>Δύο (2) φωτοαντίγραφα του από </span>
+    {/* 7)	Το από  06.12.2019 πρακτικό της (2ης) δεύτερης συνεδρίασης Επιτροπής Παρακολούθησης της Προγραμματικής Σύμβασης. */}
+    <span style={useStyles.tooltip}>Το από </span>
     <span style={style1}>{state.MonitoringCommitteePracticalDate ? getDateFormatForDocument(state.MonitoringCommitteePracticalDate) : '__-__-_____'}</span>
     <span style={useStyles.tooltip}> πρακτικό της ({an}ης)  {getNumberLectical(an)} συνεδρίασης Επιτροπής Παρακολούθησης της Προγραμματικής Σύμβασης</span>
   </>)
 }
 
-export function getMonitoringCommitteeTooltipTemplate(useStyles, state, conc, an, ind) {
+//6)	Την Απόφαση Δημάρχου με Α.Π. 312848/06.12.2019 για τον ορισμό των μελών 
+//της Επιτροπής Παρακολούθησης
+
+export function getMonitoringCommitteeTooltipTemplate(useStyles, state, contractDetails, an, ind) {
   var style1 = (ind === 1 ? useStyles.tooltipIndicate : useStyles.tooltip)
   var style2 = (ind === 2 ? useStyles.tooltipIndicate : useStyles.tooltip)
   var style3 = (ind === 3 ? useStyles.tooltipIndicate : useStyles.tooltip)
   var style4 = (ind === 4 ? useStyles.tooltipIndicate : useStyles.tooltip)
   var style5 = (ind === 5 ? useStyles.tooltipIndicate : useStyles.tooltip)
 
-  // var numberTrasmissionAttachment = 3
-  // if (state.isDownpayment)
-  //   numberTrasmissionAttachment = state.HasSecondDecisionDS ? 8 : 6
-
-  // var numberAccountAttacment = 3
-  // if (state.isDownpayment)
-  //   numberAccountAttacment = state.HasSecondDecisionDS ? 8 : 6
-
-  //Διαβιβαστικό
-  //8.	Πρωτότυπο & φωτ/φο του με αριθμ. ΤΥΠΒ022942/29-3-2019 Τιμολογίου Παροχής Υπηρεσιών της COSMOS BUSINESS SYSTEMS Α.Ε.Β.Ε.
-  //Λογαριασμός
-  // 8.	Το με Α.Π. 260342/18-10-2018 διαβιβαστικό έγγραφο, με το οποίο μας διαβιβάστηκε το υπ’ αριθ. 5/17-10-2018 Τιμολόγιο της Δ.Α.Ε.Μ. Α.Ε στις 01-01-2019. 
+  // 8)	Το με ΑΠ. 318192/12.12.2019 έγγραφο της Τεχνόπολις του Δήμου Αθηναίων με το οποίο διαβιβάζονται:
+  // 	Το πρακτικό της 2ης συνεδρίασης της Επιτροπής Παρακολούθησης για την Προγραμματική Σύμβαση για το σχεδιασμό και υλοποίηση του Προγράμματος 
+  // «Το παιδί, Η πόλη και τα Μνημεία» που πραγματοποιήθηκε στις 06.12.2019.
+  // 	Τα περιεχόμενα του παραδοτέου του φυσικού αντικειμένου, που αφορά στο πρώτο τετράμηνο, Ιούνιος-Οκτώβριος  2019.
+  var title = contractDetails.Title;
+  var conc = contractDetails.ConcessionaireName;
 
   return (<>
-    {/* Το με ΑΠ. 48685/26.02.2020 έγγραφο της Τεχνόπολις του Δήμου Αθηναίων με το οποίο διαβιβάζονται:
-	Το Πρακτικό της 3ης συνεδρίασης της Επιτροπής Παρακολούθησης για την Προγραμματική Σύμβαση 
-	Τα περιεχόμενα του παραδοτέου του φυσικού αντικειμένου, που αφορά στο πρώτο τετράμηνο, Νοέμβριος 2019-Φεβρουάριος 2020, καθώς και το σχετικό υλικό, σε δύο (2) αντίτυπα.
- */}
-    <div style={useStyles.tooltipTitle}>ΣΥΝΗΜΜΕΝΑ ΔΙΚΑΙΟΛΟΓΗΤΙΚΑ</div>
     <span style={useStyles.tooltip}>To με Α.Π. </span>
-    <span style={style1}>{state.MonitoringCommitteeDocumentProtocolNumber ? state.MonitoringCommitteeDocumentProtocolDate : '____'}</span>
+    <span style={style1}>{state.TransmissionDocumentProtocolNumber ? state.TransmissionDocumentProtocolNumber : '____'}</span>
     <span style={useStyles.tooltip}>/</span>
-    <span style={style2}>{state.InvoiceDeliveredDateProtocolDate ? getDateFormatForDocument(state.InvoiceDeliveredDateProtocolDate) : '__-__-____'}</span>
-    <span style={useStyles.tooltip}> έγγραφο της {conc}, με το οποίο διαβιβάζονται:<br />-Το πρακτικό της {an}ης συνεδρίασης της Επιτροπής Παρακολούθησης για την Προγραμματική Σύμβαση
-          <br />-Τα περιεχόμενα του παραδοτέου έργου του φυσικού αντικειμένου, που αφορά στο δεύτερο τετράμηνο, Νοέμβριος 2019- Φεβρουάριος 2020, καθώς και το σχετικό υλικό, σε δύο (2) αντίτυπα.
-    </span>    
+    <span style={style2}>{state.TransmissionDocumentProtocolDate ? getDateFormatForDocument(state.TransmissionDocumentProtocolDate) : '__-__-____'}</span>
+    <span style={useStyles.tooltip}> έγγραφο της {conc}, με το οποίο διαβιβάζονται: <br /></span>
+    <span style={useStyles.tooltip}>- Το πρακτικό της {an}ης συνεδρίασης της Επιτροπής Παρακολούθησης για την Προγραμματική Σύμβαση για το σχεδιασμό και υλοποίηση του Προγράμματος «{title}» που πραγματοποιήθηκε στης </span>
+    <span>{state.MonitoringCommitteePracticalDate ? getDateFormatForDocument(state.MonitoringCommitteePracticalDate) : ' __-__-____'}<br /></span>
+    <span style={useStyles.tooltip}>-Τα περιεχόμενα του παραδοτέου έργου του φυσικού αντικειμένου, που αφορά στο </span>
+    <span style={style4}>{state.MonitoringCommitteeContentGivenWorkTime ? state.MonitoringCommitteeContentGivenWorkTime : ' π.χ. πρώτο τετράμηνο, Νοέμβριος 2019-Φεβρουάριος 2020'}</span>
+    <span style={useStyles.tooltip}>, καθώς και το σχετικό υλικό, σε δύο (2) αντίτυπα.</span>
   </>)
 }
 

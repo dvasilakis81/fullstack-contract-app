@@ -11,9 +11,11 @@ import Icon from '@material-ui/core/Icon';
 import { getDateFormatForDocument, getServerErrorResponseMessage } from '../../../Helper/helpermethods';
 import { getSubmitButton, getTextFieldWithTooltip } from '../../MaterialObjects/materialobjects';
 import { bindActionCreators } from 'redux';
-import { createDecisionCoordinatorDecentrilizedAdministration, updateDecisionCoordinatorDecentrilizedAdministration, deleteDecisionCoordinatorDecentrilizedAdministration } from '../../../Redux/Actions';
+import { processContractInfo } from '../../../Redux/Actions';
 
 import { getDecisionCoordinatorDecentrilizedAdministrationTooltip } from './tooltip';
+import ProtocolInput from '../../CustomControls/ProtocolInput';
+import MyTextField from '../../CustomControls/MyTextField';
 
 const styles = {
   paperContractMonetaryInfoFrame: {
@@ -57,7 +59,7 @@ class DecisionCoordinatorDecentrilizedAdministrationView extends Component {
       openMessage: false,
       message: '',
       msgColor: '',
-      msgPadding: '0px',      
+      msgPadding: '0px',
       Id: this.props.Id ? this.props.Id : '',
       ProtocolNumber: '',
       ProtocolDate: '',
@@ -66,7 +68,7 @@ class DecisionCoordinatorDecentrilizedAdministrationView extends Component {
       orderNo: 0
     }
 
-    this.setTextValue = this.setTextValue.bind(this);
+    this.onChange = this.onChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
     this.handleClose = this.handleClose.bind(this, '');
   }
@@ -75,7 +77,7 @@ class DecisionCoordinatorDecentrilizedAdministrationView extends Component {
     this.setState({ message: '', openMessage: false, submitButtonDisabled: false });
   }
 
-  setTextValue(event) {
+  onChange(event) {
     this.setState({ [event.target.id]: event.target.value });
   }
 
@@ -87,7 +89,7 @@ class DecisionCoordinatorDecentrilizedAdministrationView extends Component {
       Content: decisionCoordinatorDecentrilizedAdministration.Content,
       ADA: decisionCoordinatorDecentrilizedAdministration.ADA,
       orderNo: index + 1,
-      editItem: true      
+      editItem: true
     })
   }
 
@@ -101,9 +103,9 @@ class DecisionCoordinatorDecentrilizedAdministrationView extends Component {
     })
   }
 
-  resetMsgInfo(){
+  resetMsgInfo() {
     setTimeout(function () {
-      this.setState({ openMessage: false, message: '', msgPadding: '0px',  ProtocolNumber: '', ProtocolDate: '', Content: '', ADA: '', orderNo: 0 });
+      this.setState({ openMessage: false, message: '', msgPadding: '0px', ProtocolNumber: '', ProtocolDate: '', Content: '', ADA: '', orderNo: 0 });
     }.bind(this), 5000);
   }
 
@@ -112,7 +114,7 @@ class DecisionCoordinatorDecentrilizedAdministrationView extends Component {
     this.setState({ submitButtonDisabled: true });
 
     if (this.state.addNewItem === true) {
-      this.props.createDecisionCoordinatorDecentrilizedAdministration(this.state, this.props.token.data.token).then(res => {
+      this.props.processContractInfo(this.state, this.props.token.data.token, 'insertdecisioncoordinatordecentrilizedadministration').then(res => {
         var msg = 'Η Σ.Α.Δ.Α με πρωτόκολλο "' + this.state.ProtocolNumber + '/' + getDateFormatForDocument(this.state.ProtocolDate) + '" δημιουργήθηκε επιτυχώς!!!'
         this.setState({ openMessage: true, message: msg, msgColor: 'lightGreen', msgPadding: '10px', submitButtonDisabled: false, addNewItem: false, editItem: false });
         this.resetMsgInfo();
@@ -122,7 +124,7 @@ class DecisionCoordinatorDecentrilizedAdministrationView extends Component {
         this.resetMsgInfo();
       })
     } else if (this.state.editItem === true) {
-      this.props.updateDecisionCoordinatorDecentrilizedAdministration(this.state, this.props.token.data.token).then(res => {
+      this.props.processContractInfo(this.state, this.props.token.data.token, 'updatedecisioncoordinatordecentrilizedadministration').then(res => {
         var msg = 'Η Σ.Α.Δ.Α. με πρωτόκολλο "' + this.state.ProtocolNumber + '/' + getDateFormatForDocument(this.state.ProtocolDate) + '" επεξεργάστηκε επιτυχώς!!!'
         this.setState({ message: msg, openMessage: true, msgColor: 'lightGreen', msgPadding: '10px', submitButtonDisabled: false, addNewItem: false, editItem: false });
         this.resetMsgInfo();
@@ -137,7 +139,7 @@ class DecisionCoordinatorDecentrilizedAdministrationView extends Component {
   requestDeleteDecisionCoordinatorDecentrilizedAdministration() {
     this.setState({ submitButtonDisabled: true });
 
-    this.props.deleteDecisionCoordinatorDecentrilizedAdministration(this.state, this.props.token.data.token).then(res => {
+    this.props.processContractInfo(this.state, this.props.token.data.token, 'deletedecisioncoordinatordecentrilizedadministration').then(res => {
       var msg = 'Η Σ.Α.Δ.Α. με πρωτόκολλο "' + this.state.ProtocolNumber + '/' + getDateFormatForDocument(this.state.ProtocolDate) + '" διεγράφει επιτυχώς!!!'
       this.setState({ openMessage: true, message: msg, variant: 'success', msgPadding: '10px', submitButtonDisabled: false, addNewItem: false, editItem: false, deleteItem: false });
       setTimeout(function () {
@@ -152,17 +154,24 @@ class DecisionCoordinatorDecentrilizedAdministrationView extends Component {
   decisionCoordinatorDecentrilizedAdministrationItemForm(length) {
 
     if (this.state.addNewItem === true || this.state.editItem === true) {
-      return <div style={{ display: 'flex', flexFlow: 'column', height: 'auto', backgroundColor: '#fff', background: '#33C1FF', color: 'black', justifyContent: 'center', padding: '20px' }}>
-        <form style={{ padding: '10px' }} autoComplete="off" onSubmit={this.handleSubmit}>
+      return <div style={{ display: 'flex', flexFlow: 'column', height: 'auto', background: '#C0C0C0', color: 'black', justifyContent: 'center', padding: '20px' }}>
+        <form style={{ padding: '10px', backgroundColor: '#fff' }} autoComplete="off" onSubmit={this.handleSubmit}>
           <div style={{ textAlign: 'center', fontSize: '22px', fontWeight: 800, paddingBottom: '10px' }}>{this.state.addNewItem === true ? 'Εισαγωγή' : 'Επεξεργασία'} στοιχείων {this.state.orderNo}ης Απόφασης Ελέγχου Νομιμότητας της Αποκεντρωμένης</div>
           <div style={{ display: 'flex', flexFlow: 'row', height: 'auto', backgroundColor: '#fff', justifyContent: 'left', padding: '10px' }}>
-            {getTextFieldWithTooltip(getDecisionCoordinatorDecentrilizedAdministrationTooltip(this.state, 1), 'number', 'ProtocolNumber', 'Αρ. Πρωτ.', 'outlined', this.state.ProtocolNumber, true, { width: '200px', marginRight: '20px' }, false, null, { shrink: true }, this.setTextValue)}
-            {getTextFieldWithTooltip(getDecisionCoordinatorDecentrilizedAdministrationTooltip(this.state, 2), 'date', 'ProtocolDate', 'Ημ. Πρωτ.', 'outlined', this.state.ProtocolDate, true, { width: '200px', background: 'white' }, false, null, { shrink: true }, this.setTextValue)}
+            <ProtocolInput
+              tm1={getDecisionCoordinatorDecentrilizedAdministrationTooltip(this.state, 1)}
+              tm2={getDecisionCoordinatorDecentrilizedAdministrationTooltip(this.state, 2)}
+              title='Α.Π.'
+              idn='ProtocolNumber'
+              idd='ProtocolDate'
+              protocolNumber={this.state.ProtocolNumber}
+              protocolDate={this.state.ProtocolDate}
+              onChange={this.onChange}
+              tp1='text'
+              tp2='date' />
+            <MyTextField tm={getDecisionCoordinatorDecentrilizedAdministrationTooltip(this.state, 3)} tp='text' title='ΑΔΑ' label='' id='ADA' stateValue={this.state.ADA} isRequired={false} isDisabled={false} onChange={this.onChange} style={{ width: '100%' }} width='40%' />
           </div>
-          <div style={{ display: 'flex', flexFlow: 'column', height: 'auto', backgroundColor: '#fff', justifyContent: 'left', padding: '10px' }}>
-            {getTextFieldWithTooltip(getDecisionCoordinatorDecentrilizedAdministrationTooltip(this.state, 3), 'text', 'ADA', 'ΑΔΑ', 'outlined', this.state.ADA, false, { width: '300px' }, false, null, { shrink: true }, this.setTextValue)}
-          </div>
-          <div style={{ display: 'flex', flexFlow: 'row', height: 'auto', backgroundColor: '#fff', justifyContent: 'center', padding: '10px' }}>
+          <div style={{ display: 'flex', flexFlow: 'row', height: 'auto', justifyContent: 'center', padding: '10px' }}>
             <LoadingOverlay
               active={this.props.insertDecisionCoordinatorDecentrilizedAdministrationPending === true}
               spinner
@@ -175,10 +184,15 @@ class DecisionCoordinatorDecentrilizedAdministrationView extends Component {
                 })
               }}>
               {getSubmitButton('contained', 'primary', { fontSize: '18px', padding: '5px', margin: '5px' }, null, 'ΑΠΟΘΗΚΕΥΣΗ', <Icon>save</Icon>, this.state.submitButtonDisabled)}
-              <Button disabled={this.state.submitButtonDisabled} variant='contained'
+              <Button 
+                disabled={this.state.submitButtonDisabled} 
+                variant='contained'
                 color='secondary'
                 style={{ fontSize: '18px', textAlign: 'center', padding: '5px', margin: '5px' }}
-                onClick={() => { this.setState({ addNewItem: false, editItem: false }) }}>
+                onClick={() => {
+                  this.setState({ addNewItem: false, editItem: false })
+                  this.resetMsgInfo()
+                }}>
                 ΑΚΥΡΩΣΗ
                   <Icon>cancel</Icon>
               </Button>
@@ -297,8 +311,8 @@ class DecisionCoordinatorDecentrilizedAdministrationView extends Component {
 function mapStateToProps(state) {
   return {
     screenDimensions: state.parametricdata_reducer.screenDimensions,
-    insertDecisionCoordinatorDecentrilizedAdministrationPending: state.contracts_reducer.insertDecisionCoordinatorDecentrilizedAdministrationPending,
-    insertDecisionCoordinatorDecentrilizedAdministrationRejected: state.contracts_reducer.insertDecisionCoordinatorDecentrilizedAdministrationRejected,
+    insertContractInfoPending: state.contracts_reducer.insertContractInfoPending,
+    insertContractInfoRejected: state.contracts_reducer.insertContractInfoRejected,
     isSearchMode: state.contracts_reducer.isSearchMode,
     contracts: state.contracts_reducer.contractsList,
     contractDetails: state.contracts_reducer.contractDetails,
@@ -309,7 +323,7 @@ function mapStateToProps(state) {
 }
 
 function mapDispatchToProps(dispatch) {
-  return bindActionCreators({ createDecisionCoordinatorDecentrilizedAdministration, updateDecisionCoordinatorDecentrilizedAdministration, deleteDecisionCoordinatorDecentrilizedAdministration }, dispatch)
+  return bindActionCreators({ processContractInfo }, dispatch)
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(DecisionCoordinatorDecentrilizedAdministrationView)
