@@ -3,6 +3,7 @@ import TextField from "@material-ui/core/TextField";
 import { withStyles } from "@material-ui/core/styles";
 import Tooltip from '@material-ui/core/Tooltip';
 import { Typography } from '@material-ui/core';
+import InputAdornment from '@material-ui/core/InputAdornment';
 
 const StyledTooltip = withStyles({
   tooltip: {
@@ -13,7 +14,7 @@ const StyledTooltip = withStyles({
   }
 })(Tooltip);
 
-
+//backgroundColor: '#FFFEF4'
 const styles = theme => ({
   underline: {
     "&&&:before": {
@@ -22,8 +23,8 @@ const styles = theme => ({
     "&&:after": {
       borderBottom: "none"
     },
-    backgroundColor: '#FFFEF4'
-  }
+    backgroundColor: '#d1d1d1'    
+  }  
 });
 
 const StyledTextField = props => {
@@ -64,7 +65,7 @@ const StyledTextField = props => {
         disabled={isDisabled}
         required={isRequired}
         type={type}
-        id={id}        
+        id={id}
         value={stateValue}
         variant='standard'
         style={style}
@@ -81,7 +82,7 @@ const StyledTextField = props => {
       disabled={isDisabled}
       required={isRequired}
       type={type}
-      id={id}      
+      id={id}
       value={stateValue}
       variant='standard'
       style={style}
@@ -91,6 +92,7 @@ const StyledTextField = props => {
       InputLabelProps={inputLabelProps}
       size='small'
     />
+    // endAdornment: <InputAdornment position="end">€</InputAdornment> at InputProps
   }
 };
 

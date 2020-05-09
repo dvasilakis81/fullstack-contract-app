@@ -162,8 +162,6 @@ export function getMonitoringCommitteeTooltipTemplate(useStyles, state, contract
   var style1 = (ind === 1 ? useStyles.tooltipIndicate : useStyles.tooltip)
   var style2 = (ind === 2 ? useStyles.tooltipIndicate : useStyles.tooltip)
   var style3 = (ind === 3 ? useStyles.tooltipIndicate : useStyles.tooltip)
-  var style4 = (ind === 4 ? useStyles.tooltipIndicate : useStyles.tooltip)
-  var style5 = (ind === 5 ? useStyles.tooltipIndicate : useStyles.tooltip)
 
   // 8)	Το με ΑΠ. 318192/12.12.2019 έγγραφο της Τεχνόπολις του Δήμου Αθηναίων με το οποίο διαβιβάζονται:
   // 	Το πρακτικό της 2ης συνεδρίασης της Επιτροπής Παρακολούθησης για την Προγραμματική Σύμβαση για το σχεδιασμό και υλοποίηση του Προγράμματος 
@@ -179,9 +177,9 @@ export function getMonitoringCommitteeTooltipTemplate(useStyles, state, contract
     <span style={style2}>{state.TransmissionDocumentProtocolDate ? getDateFormatForDocument(state.TransmissionDocumentProtocolDate) : '__-__-____'}</span>
     <span style={useStyles.tooltip}> έγγραφο της {conc}, με το οποίο διαβιβάζονται: <br /></span>
     <span style={useStyles.tooltip}>- Το πρακτικό της {an}ης συνεδρίασης της Επιτροπής Παρακολούθησης για την Προγραμματική Σύμβαση για το σχεδιασμό και υλοποίηση του Προγράμματος «{title}» που πραγματοποιήθηκε στης </span>
-    <span>{state.MonitoringCommitteePracticalDate ? getDateFormatForDocument(state.MonitoringCommitteePracticalDate) : ' __-__-____'}<br /></span>
+    <span style={useStyles.tooltip}>{state.MonitoringCommitteePracticalDate ? getDateFormatForDocument(state.MonitoringCommitteePracticalDate) : ' __-__-____'}<br /></span>
     <span style={useStyles.tooltip}>-Τα περιεχόμενα του παραδοτέου έργου του φυσικού αντικειμένου, που αφορά στο </span>
-    <span style={style4}>{state.MonitoringCommitteeContentGivenWorkTime ? state.MonitoringCommitteeContentGivenWorkTime : ' π.χ. πρώτο τετράμηνο, Νοέμβριος 2019-Φεβρουάριος 2020'}</span>
+    <span style={style3}>{state.MonitoringCommitteeContentGivenWorkTime ? state.MonitoringCommitteeContentGivenWorkTime : ' π.χ. πρώτο τετράμηνο, Νοέμβριος 2019-Φεβρουάριος 2020'}</span>
     <span style={useStyles.tooltip}>, καθώς και το σχετικό υλικό, σε δύο (2) αντίτυπα.</span>
   </>)
 }

@@ -16,9 +16,11 @@ class MyTextField extends Component {
         ?
         <StyledTextField {...this.props} />
         :
-        <div style={{ margin: '10px', width: this.props.width, border: '1px solid black' }}>          
+        <div style={{ margin: '10px', width: this.props.width, border: '1px solid black' }}>
           <InputTitle title={this.props.title} />
-          <StyledTextField {...this.props} />
+          <div style={{ backgroundColor: '#d1d1d1' }}>
+            <StyledTextField {...this.props} style={{ width: '100%', minWidth: '250px' }} />
+          </div>
         </div>
     )
   }

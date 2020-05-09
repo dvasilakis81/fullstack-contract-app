@@ -366,8 +366,17 @@ class NewAccountForm extends Component {
 
 			return (
 				<div style={useStyles.divRowFlex}>
-					{getTextFieldWithTooltip(getFirstTrasmissionProtocolTooltip(useStyles, this.state.FirstAccountProtocolNumber, this.state.FirstAccountProtocolDate, 1), 'number', 'FirstAccountProtocolNumber', 'Α.Π. Πρώτου Διαβιβαστικού Εγγράφου', 'outlined', this.state.FirstAccountProtocolNumber, false, useStyles.accountInfoItem, false, null, { shrink: true }, this.onChange)}
-					{getTextFieldWithTooltip(getFirstTrasmissionProtocolTooltip(useStyles, this.state.FirstAccountProtocolNumber, this.state.FirstAccountProtocolDate, 2), 'date', 'FirstAccountProtocolDate', 'Α.Π. Πρώτου Διαβιβαστικού Εγγράφου', 'outlined', this.state.FirstAccountProtocolDate, false, useStyles.accountInfoItem, false, null, { shrink: true }, this.onChange)}
+					<ProtocolInput
+						tm1={getFirstTrasmissionProtocolTooltip(useStyles, this.state.FirstAccountProtocolNumber, this.state.FirstAccountProtocolDate, 1)}
+						tm2={getAccountProtocolTooltip(useStyles, this.state.FirstAccountProtocolNumber, this.state.FirstAccountProtocolDate, 2)}
+						title='Α.Π. Πρώτου Διαβιβαστικού Εγγράφου'
+						idn='FirstAccountProtocolNumber'
+						idd='FirstAccountProtocolDate'
+						protocolNumber={this.state.FirstAccountProtocolNumber}
+						protocolDate={this.state.FirstAccountProtocolDate}
+						onChange={this.onChange}
+						tp1='text'
+						tp2='date' />
 					{getButton('contained', 'small', null, useStyles.btnAuto, this.autoCompleteFirstAccountProtocolNumber, 'ΥΠΟΛΟΓΙΣΜΟΣ', null, false)}
 				</div>)
 		}
@@ -378,8 +387,7 @@ class NewAccountForm extends Component {
 		if (accountId) {
 			return (
 				<div style={useStyles.divRowFlex}>
-					{getTextFieldWithTooltip(getAccountProtocolTooltip(useStyles, this.state.ProtocolNumber, this.state.ProtocolDate, 1), 'number', 'ProtocolNumber', 'Αριθμός Πρωτοκόλλου', 'outlined', this.state.ProtocolNumber, false, useStyles.accountInfoItem, false, null, { shrink: true }, this.onChange)}
-					{getTextFieldWithTooltip(getAccountProtocolTooltip(useStyles, this.state.ProtocolNumber, this.state.ProtocolDate, 2), 'date', 'ProtocolDate', 'Ημ. Πρωτοκόλλου', 'outlined', this.state.ProtocolDate, false, useStyles.accountInfoItem, false, null, { shrink: true }, this.onChange)}
+					<ProtocolInput tm1={getAccountProtocolTooltip(useStyles, this.state.ProtocolNumber, this.state.ProtocolDate, 1)} tm2={getAccountProtocolTooltip(useStyles, this.state.ProtocolNumber, this.state.ProtocolDate, 2)} title='Α.Π. Λογαριασμού' idn='ProtocolNumber' idd='ProtocolDate' protocolNumber={this.state.ProtocolNumber} protocolDate={this.state.ProtocolDate} onChange={this.onChange} tp1='text' tp2='date' />
 				</div>)
 		}
 	}
@@ -426,9 +434,9 @@ class NewAccountForm extends Component {
 									<Autocomplete
 										freeSolo
 										filterSelectedOptions
-										inputValue={ccValue ? ccValue : ''}
+										inputValue={ccValue}
 										options={ccValues}
-										getOptionLabel={option => <li><span style={{ fontSize: '2rem', verticalAlign: 'middle' }}>&bull;</span>{option}</li>}
+										getOptionLabel={option => <li>{option}</li>}
 										onChange={(e, v, r) => this.setCC(e, v, r, index)}
 										onInputChange={(e, v, r) => this.setCC(e, v, r, index)}
 										ChipProps={{ color: "primary" }}
@@ -486,12 +494,12 @@ class NewAccountForm extends Component {
 
 	getWorkConfirmationDate() {
 		if (this.state.IsDownpayment === false)
-			return getTextFieldWithTooltip(getWorkConfirmationDateTooltip(useStyles, this.state.WorkConfirmationDate, this.state.IsFirstOfTheYear), 'date', 'WorkConfirmationDate', 'Ημ. Βεβαίωσης Έργου', 'outlined', this.state.WorkConfirmationDate, false, useStyles.accountInfoItem, false, null, { shrink: true }, this.onChange)
+			return <MyTextField tp='date' title='Ημ. Βεβαίωσης Έργου' id='WorkConfirmationDate' stateValue={this.state.WorkConfirmationDate} isRequired={true} isDisabled={false} onChange={this.onChange} inputProps={{ style: { textAlign: 'center' } }} />
 	}
 
 	getDeliveryGoodsDate() {
 		if (this.state.IsDownpayment === false)
-			return getTextFieldWithTooltip(getDeliveredGoodDateTooltip(useStyles, this.state.DeliveryGoodsDate), 'date', 'DeliveryGoodsDate', 'Ημ. Πρωτ. Οριστικής Παραλαβής Αγαθών/Υπηρεσιών', 'outlined', this.state.DeliveryGoodsDate, false, useStyles.accountInfoLargeItem, false, null, { shrink: true }, this.onChange)
+			return <MyTextField tp='date' title='Ημ. Βεβαίωσης Έργου' id='DeliveryGoodsDate' stateValue={this.state.DeliveryGoodsDate} isRequired={true} isDisabled={false} onChange={this.onChange} inputProps={{ style: { textAlign: 'center' } }} />
 	}
 
 	getAAYInfo() {
@@ -499,26 +507,24 @@ class NewAccountForm extends Component {
 		return <div>
 			<header style={useStyles.category}>Στοιχεία ΑΑΥ</header>
 			<div style={useStyles.divRowFlex}>
-				{/* <ProtocolNumber idn='AayProtocolNumber' idd='AayProtocolDate' protocolNumber={this.state.AayProtocolNumber} protocolDate={this.state.AayProtocolDate} st={useStyles} setTextValue={this.setTextValue} /> */}
-				{getTextFieldWithTooltip(getAayTooltipTemplate(useStyles, this.state, 4), 'number', 'AayProtocolNumber', 'Α.Π. Α.Α.Υ.', 'outlined', this.state.AayProtocolNumber, true, useStyles.accountInfoItem, false, null, { shrink: true }, this.onChange)}
-				{getTextFieldWithTooltip(getAayTooltipTemplate(useStyles, this.state, 5), 'date', 'AayProtocolDate', 'Α.Π. Α.Α.Υ.', 'outlined', this.state.AayProtocolDate, true, useStyles.accountInfoItem, false, null, { shrink: true }, this.onChange)}
-				{getTextFieldWithTooltip(getAayTooltipTemplate(useStyles, this.state, 1), 'text', 'AayValue', 'Α.Α.Υ', 'outlined', this.state.AayValue, true, useStyles.accountInfoItem, false, null, { shrink: true }, this.onChange)}
-				{getTextFieldWithTooltip(getAayTooltipTemplate(useStyles, this.state, 3), 'number', 'AayEadNumber', 'ΕΑΔ αριθμός', 'outlined', this.state.AayEadNumber, true, useStyles.accountInfoItem, false, null, { shrink: true }, this.onChange)}
-				{getTextFieldWithTooltip(getAayTooltipTemplate(useStyles, this.state, 6), 'text', 'AayADA', 'ΑΔΑ', 'outlined', this.state.AayADA, true, useStyles.accountInfoItem, false, null, { shrink: true }, this.onChange)}
+				<ProtocolInput tm1={getAayTooltipTemplate(useStyles, this.state, 4)} tm2={getAayTooltipTemplate(useStyles, this.state, 5)} title='Α.Π. Α.Α.Υ.' idn='AayProtocolNumber' idd='AayProtocolDate' protocolNumber={this.state.AayProtocolNumber} protocolDate={this.state.AayProtocolDate} onChange={this.onChange} tp1='text' tp2='date' />
+				<MyTextField tm={getAayTooltipTemplate(useStyles, this.state, 1)} tp='text' title='Α.Α.Υ' id='AayValue' stateValue={this.state.AayValue} isRequired={true} isDisabled={false} onChange={this.onChange} inputProps={{ style: { textAlign: 'center' } }} />
+				<MyTextField tm={getAayTooltipTemplate(useStyles, this.state, 3)} tp='number' title='ΕΑΔ αριθμός' id='AayEadNumber' stateValue={this.state.AayEadNumber} isRequired={true} isDisabled={false} onChange={this.onChange} inputProps={{ style: { textAlign: 'center' } }} />
+				<MyTextField tm={getAayTooltipTemplate(useStyles, this.state, 6)} tp='text' title='ΑΔΑ' id='AayADA' stateValue={this.state.AayADA} isRequired={true} isDisabled={false} onChange={this.onChange} inputProps={{ style: { textAlign: 'center' } }} />
 				{this.getAAYPreviousYear()}
 			</div>
 		</div>
 	}
 	getAAYPreviousYear() {
 		if (this.state.IsDownpayment === false)
-			return getTextField('number', 'AayPreviousYear', 'ΑΑΥ Προηγούμενου Έτος (για δαπάνες ΠΟΕ)', 'outlined', this.state.AayPreviousYear, false, useStyles.accountInfoItem, false, null, { shrink: true }, this.onChange)
+			return <MyTextField tp='number' title='ΑΑΥ Προηγούμενου Έτος (για δαπάνες ΠΟΕ)' id='AayPreviousYear' stateValue={this.state.AayPreviousYear} isRequired={false} isDisabled={false} onChange={this.onChange} inputProps={{ style: { textAlign: 'center' } }} />
 	}
 
 	getDocumentsInfo() {
 		return <>
 			<header style={useStyles.category}>Στοιχεία Εγγράφων</header>
 			<div style={useStyles.divRowFlex}>
-				{getTextFieldWithTooltip(getDocumentDateTooltipTemplate(useStyles, this.state), 'date', 'DocumentDate', 'Ημερομηνία Εγγράφων', 'outlined', this.state.DocumentDate, true, useStyles.accountInfoItem, false, null, { shrink: true }, this.onChange)}
+				<MyTextField tm={getDocumentDateTooltipTemplate(useStyles, this.state)} tp='date' title='Ημερομηνία Εγγράφων' id='DocumentDate' stateValue={this.state.DocumentDate} isRequired={true} isDisabled={false} onChange={this.onChange} />
 			</div>
 			{this.getCC()}
 			{/* {this.getCC1()}
@@ -538,18 +544,19 @@ class NewAccountForm extends Component {
 			{this.addProtocolInfo(this.state.AccountId, this.state.AccountNumber)}
 			{this.addFirstAccountProtocolInfo()}
 			<div style={useStyles.divRowFlex}>
-				{getTextFieldWithTooltip(getAccountStartDateTooltipTemplate(useStyles, this.state), 'date', 'Start', 'Έναρξη Λογαριασμού', 'outlined', this.state.Start, true, useStyles.accountInfoItem, false, null, { shrink: true }, this.onChange)}
-				{getTextFieldWithTooltip(getAccountEndDateTooltipTemplate(useStyles, this.state), 'date', 'End', 'Λήξη Λογαριασμού', 'outlined', this.state.End, true, useStyles.accountInfoItem, false, null, { shrink: true }, this.onChange)}
+				<MyTextField tm={getAccountStartDateTooltipTemplate(useStyles, this.state)} tp='date' title='Έναρξη Λογαριασμού' id='Start' stateValue={this.state.Start} isRequired={true} isDisabled={false} onChange={this.onChange} />
+				<MyTextField tm={getAccountStartDateTooltipTemplate(useStyles, this.state)} tp='date' title='Λήξη Λογαριασμού' id='End' stateValue={this.state.End} isRequired={true} isDisabled={false} onChange={this.onChange} />
 				{getCheckboxField('IsFirstOfTheYear', '1ος τους έτους', this.state.IsFirstOfTheYear, useStyles.accountInfoItem, this.setCheckboxValue)}
 			</div>
 			<div style={useStyles.divRowFlex}>
 				{getTextField('number', 'AmountPure', 'Καθαρό Ποσό', 'outlined', this.state.AmountPure, true, useStyles.accountInfoItem, false, { inputProps: { step: 'any' }, endAdornment: <InputAdornment position="end">€</InputAdornment> }, { shrink: true }, this.onChange)}
-				{getTextField('number', 'AmountFpa', this.getFpaValueForTextField(), 'outlined', this.state.AmountFpa, true, useStyles.accountInfoItem, false, { inputProps: { step: 'any' }, endAdornment: <InputAdornment position="end">€</InputAdornment> }, { shrink: true }, this.onChange)}
-				{getTextField('number', 'AmountTotal', 'Ποσό Λογαριασμού', 'outlined', this.state.AmountTotal, true, useStyles.accountInfoItem, false, { inputProps: { step: 'any' }, endAdornment: <InputAdornment position="end">€</InputAdornment> }, { shrink: true }, this.onChange)}
+				<MyTextField tp='number' title='Καθαρό Ποσό' id='AmountPure' stateValue={this.state.AmountPure} isRequired={true} isDisabled={false} onChange={this.onChange} inputProps={{ style: { textAlign: 'center' }, inputProps: { step: 'any' }, endAdornment: <InputAdornment position="end">€</InputAdornment> }} />
+				<MyTextField tp='number' title={this.getFpaValueForTextField()} id='AmountFpa' stateValue={this.state.AmountFpa} isRequired={true} isDisabled={false} onChange={this.onChange} inputProps={{ style: { textAlign: 'center' }, inputProps: { step: 'any' }, endAdornment: <InputAdornment position="end">€</InputAdornment> }} />
+				<MyTextField tp='number' title='Ποσό Λογαριασμού' id='AmountTotal' stateValue={this.state.AmountTotal} isRequired={true} isDisabled={false} onChange={this.onChange} inputProps={{ style: { textAlign: 'center' }, inputProps: { step: 'any' }, endAdornment: <InputAdornment position="end">€</InputAdornment> }} />
 				{getButton('contained', 'small', null, useStyles.btnAuto, this.autoComplete, 'ΥΠΟΛΟΓΙΣΜΟΣ', null, false)}
 			</div>
 			<div style={useStyles.divRowFlex}>
-				{getTextField('text', 'AmountFullWritten', 'Ποσό Ολογράφως', 'outlined', this.state.AmountFullWritten, true, useStyles.accountInfoLargeItem2, false, null, { shrink: true }, this.onChange)}
+				<MyTextField tp='text' title='Ποσό Ολογράφως' id='AmountFullWritten' stateValue={this.state.AmountFullWritten} isRequired={true} isDisabled={false} onChange={this.onChange} inputProps={{ style: { textAlign: 'center', width: '800px' }, inputProps: { step: 'any' }, endAdornment: <InputAdornment position="end">€</InputAdornment> }} />
 				{getButton('contained', 'small', null, useStyles.btnAuto, this.autoCompleteFullWritten, 'ΥΠΟΛΟΓΙΣΜΟΣ', null, false)}
 			</div>
 			<div style={useStyles.divRowFlex}>
@@ -564,11 +571,9 @@ class NewAccountForm extends Component {
 		return <>
 			<header style={useStyles.category}>Στοιχεία Τιμολογίου</header>
 			<div style={useStyles.divRowFlex}>
-				{getTextFieldWithTooltip(getInvoiceTooltipTemplate(useStyles, this.state, contractDetails.ConcessionaireName, 5), 'date', 'InvoiceDeliveredDate', 'Ημ/νία Παραλαβής Τιμολογίου', 'outlined', this.state.InvoiceDeliveredDate, true, useStyles.accountInfoItem, false, null, { shrink: true }, this.onChange)}
-				{getTextFieldWithTooltip(getInvoiceTooltipTemplate(useStyles, this.state, contractDetails.ConcessionaireName, 3), 'number', 'InvoiceDeliveredDateProtocolNumber', 'Α.Π. Ημ/νίας Παραλαβής Τιμολογίου', 'outlined', this.state.InvoiceDeliveredDateProtocolNumber, true, useStyles.accountInfoItem, false, null, { shrink: true }, this.onChange)}
-				{getTextFieldWithTooltip(getInvoiceTooltipTemplate(useStyles, this.state, contractDetails.ConcessionaireName, 4), 'date', 'InvoiceDeliveredDateProtocolDate', 'Α.Π. Ημ/νίας Παραλαβής Τιμολογίου', 'outlined', this.state.InvoiceDeliveredDateProtocolDate, true, useStyles.accountInfoItem, false, null, { shrink: true }, this.onChange)}
-				{getTextFieldWithTooltip(getInvoiceTooltipTemplate(useStyles, this.state, contractDetails.ConcessionaireName, 1), 'text', 'InvoiceNumber', 'Α.Π. Τιμολογίου', 'outlined', this.state.InvoiceNumber, true, useStyles.accountInfoItem, false, null, { shrink: true }, this.onChange)}
-				{getTextFieldWithTooltip(getInvoiceTooltipTemplate(useStyles, this.state, contractDetails.ConcessionaireName, 2), 'date', 'InvoiceDate', 'Α.Π. Τιμολογίου', 'outlined', this.state.InvoiceDate, true, useStyles.accountInfoItem, false, null, { shrink: true }, this.onChange)}
+				<MyTextField tm={getInvoiceTooltipTemplate(useStyles, this.state, contractDetails.ConcessionaireName, 5)} tp='date' title='Ημ/νία Παραλαβής Τιμολογίου' id='InvoiceDeliveredDate' stateValue={this.state.InvoiceDeliveredDate} isRequired={true} isDisabled={false} onChange={this.onChange} inputProps={{ style: { textAlign: 'center' } }} />
+				<ProtocolInput tm1={getInvoiceTooltipTemplate(useStyles, this.state, contractDetails.ConcessionaireName, 3)} tm2={getInvoiceTooltipTemplate(useStyles, this.state, contractDetails.ConcessionaireName, 4)} title='Α.Π. Ημ/νίας Παραλαβής Τιμολογίου' idn='InvoiceDeliveredDateProtocolNumber' idd='InvoiceDeliveredDateProtocolDate' protocolNumber={this.state.InvoiceDeliveredDateProtocolNumber} protocolDate={this.state.InvoiceDeliveredDateProtocolDate} onChange={this.onChange} tp1='text' tp2='date' />
+				<ProtocolInput tm1={getInvoiceTooltipTemplate(useStyles, this.state, contractDetails.ConcessionaireName, 1)} tm2={getInvoiceTooltipTemplate(useStyles, this.state, contractDetails.ConcessionaireName, 2)} title='Α.Π. Τιμολογίου' idn='InvoiceNumber' idd='InvoiceDate' protocolNumber={this.state.InvoiceNumber} protocolDate={this.state.InvoiceDate} onChange={this.onChange} tp1='text' tp2='date' />
 			</div>
 		</>
 	}
@@ -609,7 +614,7 @@ class NewAccountForm extends Component {
 	getDownpaymentInfo() {
 		if (this.state.IsDownpayment === true) {
 			return <>
-				{this.getTemplateForDownpaymentLawArticle()}				
+				{this.getTemplateForDownpaymentLawArticle()}
 			</>
 		}
 	}
@@ -640,50 +645,10 @@ class NewAccountForm extends Component {
 			{this.state.HasMonitoringCommittee === true ?
 				<div>
 					<div style={useStyles.divRowFlex}>
-						<ProtocolInput
-							tm1={getMayorDecisionProtocolTooltip(useStyles, this.state, 1)}
-							tm2={getMayorDecisionProtocolTooltip(useStyles, this.state, 2)}
-							title='Α.Π. Απόφασης Δημάρχου'
-							idn='MayorDecisionForMembersProtocolNumber'
-							idd='MayorDecisionForMembersProtocolDate'
-							protocolNumber={this.state.MayorDecisionForMembersProtocolNumber}
-							protocolDate={this.state.MayorDecisionForMembersProtocolDate}
-							onChange={this.onChange}
-							tp1='text'
-							tp2='date' />
-						<MyTextField
-							tm={getMonitoringCommitteePracticalTooltip(useStyles, this.state, this.state.AccountNumber, 1)}
-							tp='date'
-							title='Ημ. Πρακτικού Συνεδρίασης'							
-							id='MonitoringCommitteePracticalDate'
-							stateValue={this.state.MonitoringCommitteePracticalDate}
-							isRequired={true}
-							isDisabled={false}
-							onChange={this.onChange}
-							style={{ width: '100%' }}
-							width='40%' />
-						<ProtocolInput
-							tm1={getMonitoringCommitteeTooltipTemplate(useStyles, this.state, contractDetails, this.state.AccountNumber, 1)}
-							tm2={getMonitoringCommitteeTooltipTemplate(useStyles, this.state, contractDetails, this.state.AccountNumber, 2)}
-							title='Α.Π. διαβιβαστικού εγγράφου'
-							idn='TransmissionDocumentProtocolNumber'
-							idd='TransmissionDocumentProtocolDate'
-							protocolNumber={this.state.TransmissionDocumentProtocolNumber}
-							protocolDate={this.state.TransmissionDocumentProtocolDate}
-							onChange={this.onChange}
-							tp1='text'
-							tp2='date' />
-						<MyTextField
-							tm={getMonitoringCommitteeTooltipTemplate(useStyles, this.state, contractDetails.ConcessionaireName, this.state.AccountNumber, 3)}
-							tp='text'
-							title='Χρονικός ορίζοντας των περιεχομένων του παραδοτέου του φυσικού αντικειμένου'							
-							id='MonitoringCommitteeContentGivenWorkTime'
-							stateValue={this.state.MonitoringCommitteeContentGivenWorkTime}
-							isRequired={true}
-							isDisabled={false}
-							onChange={this.onChange}
-							style={{ width: '100%' }}
-							width='40%' />
+						<ProtocolInput tm1={getMayorDecisionProtocolTooltip(useStyles, this.state, 1)} tm2={getMayorDecisionProtocolTooltip(useStyles, this.state, 2)} title='Α.Π. Απόφασης Δημάρχου' idn='MayorDecisionForMembersProtocolNumber' idd='MayorDecisionForMembersProtocolDate' protocolNumber={this.state.MayorDecisionForMembersProtocolNumber} protocolDate={this.state.MayorDecisionForMembersProtocolDate} onChange={this.onChange} tp1='text' tp2='date' />
+						<MyTextField tm={getMonitoringCommitteePracticalTooltip(useStyles, this.state, this.state.AccountNumber, 1)} tp='date' title='Ημ. Πρακτικού Συνεδρίασης' id='MonitoringCommitteePracticalDate' stateValue={this.state.MonitoringCommitteePracticalDate} isRequired={true} isDisabled={false} onChange={this.onChange} style={{ width: 'auto' }} />
+						<ProtocolInput tm1={getMonitoringCommitteeTooltipTemplate(useStyles, this.state, contractDetails, this.state.AccountNumber, 1)} tm2={getMonitoringCommitteeTooltipTemplate(useStyles, this.state, contractDetails, this.state.AccountNumber, 2)} title='Α.Π. διαβιβαστικού εγγράφου' idn='TransmissionDocumentProtocolNumber' idd='TransmissionDocumentProtocolDate' protocolNumber={this.state.TransmissionDocumentProtocolNumber} protocolDate={this.state.TransmissionDocumentProtocolDate} onChange={this.onChange} tp1='text' tp2='date' />
+						<MyTextField tm={getMonitoringCommitteeTooltipTemplate(useStyles, this.state, contractDetails.ConcessionaireName, this.state.AccountNumber, 3)} tp='text' title='Χρονικός ορίζοντας των περιεχομένων του παραδοτέου του φυσικού αντικειμένου' id='MonitoringCommitteeContentGivenWorkTime' stateValue={this.state.MonitoringCommitteeContentGivenWorkTime} isRequired={true} isDisabled={false} onChange={this.onChange} />
 					</div>
 				</div> : <></>}
 			<div>

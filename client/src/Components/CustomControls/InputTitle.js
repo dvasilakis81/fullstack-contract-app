@@ -3,9 +3,10 @@ import React from "react";
 const styles = {
   title: {
     color: '#000',
-    background: '#C0C0C0',
+    background: '#addde6',
     textAlign: 'center',
-    fontWeight: 'bold'
+    fontWeight: 'bold',
+    padding: '5px'
   }
 }
 

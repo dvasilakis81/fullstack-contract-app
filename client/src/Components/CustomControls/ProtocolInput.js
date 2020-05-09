@@ -14,11 +14,11 @@ class ProtocolInput extends Component {
     return (
       <div style={{ margin: '10px', border: '1px solid black'}} >
         <InputTitle title={this.props.title} />
-        <>
+        <div style={{ backgroundColor: '#d1d1d1'}}>
           <MyTextField {...this.props} tm={this.props.tm1} partOfProtocol={true} inputProps={{ style: { textAlign: "right", width: '100px' } }} id={this.props.idn} tp={this.props.tp1} stateValue={this.props.protocolNumber}/>
-          <span style={{ fontSize: '22px', margin: '0px', backgroundColor: '#FFFEF4' }}>/</span>
+          <span style={{ fontSize: '22px', margin: '0px' }}>/</span>
           <MyTextField {...this.props} tm={this.props.tm2} partOfProtocol={true} inputProps={{ style: { textAlign: "left", width: '150px' } }} id={this.props.idd} tp={this.props.tp2} stateValue={this.props.protocolDate}/>
-        </>
+        </div>
       </div>
     )
   }
