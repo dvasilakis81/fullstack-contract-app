@@ -3,7 +3,6 @@ import TextField from "@material-ui/core/TextField";
 import { withStyles } from "@material-ui/core/styles";
 import Tooltip from '@material-ui/core/Tooltip';
 import { Typography } from '@material-ui/core';
-import InputAdornment from '@material-ui/core/InputAdornment';
 
 const StyledTooltip = withStyles({
   tooltip: {
@@ -23,15 +22,14 @@ const styles = theme => ({
     "&&:after": {
       borderBottom: "none"
     },
-    backgroundColor: '#d1d1d1'    
-  }  
+    backgroundColor: '#d1d1d1'
+  }
 });
 
 const StyledTextField = props => {
   const { classes, ...rest } = props;
 
   var tooltipTemplate = props.tm ? props.tm : null;
-  var label = props.label ? props.label : '';
   var isRequired = props.isRequired ? props.isRequired : true;
   var isDisabled = props.isDisabled ? props.isDisabled : false;
   var inputLabelProps = { shrink: true };
@@ -41,27 +39,71 @@ const StyledTextField = props => {
   var stateValue = props.stateValue;
   var onChange = props.onChange;
   var inputProps = props.inputProps ? props.inputProps : { style: { textAlign: 'center' } };
+  var InputProps = props.InputProps ? props.InputProps : null;
+  var multiline = props.multiline ? props.multiline : null;
   var style = props.style;
-
-  if (tooltipTemplate) {
-    return <StyledTooltip
-      placement="top"
-      disableHoverListener={true}
-      title={
-        <React.Fragment>
-          <Typography
-            color="transparent"
-            style={{
-              background: "transparent",
-              padding: "0px",
-              margin: "0px",
-              transform: document.getElementById('root').style.transform
-            }}>
-            {tooltipTemplate}
-          </Typography>
-        </React.Fragment>
-      }>
-      <TextField
+  var size = 'small'
+  
+  if (props.select === true) {
+    return <TextField
+      select
+      disabled={isDisabled}
+      required={isRequired}
+      id={id}
+      value={stateValue}
+      style={style}
+      onChange={onChange}
+      inputProps={inputProps}
+      InputProps={InputProps}
+      SelectProps={{ native: true }}
+      variant='standard'
+      size={size}
+    >
+      <option />
+      {props.values}
+    </TextField>
+  }
+  else {
+    if (tooltipTemplate) {
+      return <StyledTooltip
+        placement="top"
+        disableHoverListener={true}
+        title={
+          <React.Fragment>
+            <Typography
+              color="transparent"
+              style={{
+                background: "transparent",
+                padding: "0px",
+                margin: "0px",
+                transform: document.getElementById('root').style.transform
+              }}>
+              {tooltipTemplate}
+            </Typography>
+          </React.Fragment>
+        }>
+        <TextField
+          multiline={multiline}
+          rows={3}
+          disabled={isDisabled}
+          required={isRequired}
+          type={type}
+          id={id}
+          value={stateValue}
+          variant='standard'
+          style={style}
+          onChange={onChange}
+          inputProps={inputProps}
+          InputProps={InputProps}
+          InputLabelProps={inputLabelProps}
+          size={size}
+        />
+      </StyledTooltip>
+    }
+    else {
+      return <TextField
+        multiline={multiline}
+        rows={3}
         disabled={isDisabled}
         required={isRequired}
         type={type}
@@ -71,28 +113,11 @@ const StyledTextField = props => {
         style={style}
         onChange={onChange}
         inputProps={inputProps}
-        InputProps={{ classes }}
+        InputProps={InputProps}
         InputLabelProps={inputLabelProps}
-        size='small'
-      />
-    </StyledTooltip>
-  }
-  else {
-    return <TextField
-      disabled={isDisabled}
-      required={isRequired}
-      type={type}
-      id={id}
-      value={stateValue}
-      variant='standard'
-      style={style}
-      onChange={onChange}
-      inputProps={inputProps}
-      InputProps={{ classes }}
-      InputLabelProps={inputLabelProps}
-      size='small'
-    />
-    // endAdornment: <InputAdornment position="end">€</InputAdornment> at InputProps
+        size={size}
+      />      
+    }
   }
 };
 

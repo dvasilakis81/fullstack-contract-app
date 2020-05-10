@@ -421,7 +421,9 @@ class NewAccountForm extends Component {
 			this.setState({ cc: array });
 		}
 	}
+
 	getCC() {
+
 		let ccValues = this.props.ccValues
 		return <div>
 			{
@@ -436,27 +438,23 @@ class NewAccountForm extends Component {
 										filterSelectedOptions
 										inputValue={ccValue}
 										options={ccValues}
-										getOptionLabel={option => <li>{option}</li>}
+										getOptionLabel={(option) => option}
 										onChange={(e, v, r) => this.setCC(e, v, r, index)}
 										onInputChange={(e, v, r) => this.setCC(e, v, r, index)}
-										ChipProps={{ color: "primary" }}
 										style={{ width: '100%', margin: '5px' }}
-										renderInput={params => (
-											<TextField
-												{...params}
-												required={true}
-												variant="outlined"
+										ChipProps={{ color: "primary" }}
+										renderInput={(params) =>
+											<TextField {...params}
 												label={"Κοιν: " + (index + 1)}
 												placeholder="Πληκτρολογήστε ή επιλέξτε..."
-												fullWidth
-											/>
-										)}
+												variant="outlined"
+												fullWidth />}
 									/>
 								</Box>
 								<Box alignSelf='center'>
 									<Button
 										variant='contained'
-										size='normal'
+										size='medium'
 										style={useStyles.btnRemoveCC}
 										onClick={(e, v) => this.removeCC(e, index)}>
 										<ClearIcon />
@@ -549,14 +547,13 @@ class NewAccountForm extends Component {
 				{getCheckboxField('IsFirstOfTheYear', '1ος τους έτους', this.state.IsFirstOfTheYear, useStyles.accountInfoItem, this.setCheckboxValue)}
 			</div>
 			<div style={useStyles.divRowFlex}>
-				{getTextField('number', 'AmountPure', 'Καθαρό Ποσό', 'outlined', this.state.AmountPure, true, useStyles.accountInfoItem, false, { inputProps: { step: 'any' }, endAdornment: <InputAdornment position="end">€</InputAdornment> }, { shrink: true }, this.onChange)}
-				<MyTextField tp='number' title='Καθαρό Ποσό' id='AmountPure' stateValue={this.state.AmountPure} isRequired={true} isDisabled={false} onChange={this.onChange} inputProps={{ style: { textAlign: 'center' }, inputProps: { step: 'any' }, endAdornment: <InputAdornment position="end">€</InputAdornment> }} />
-				<MyTextField tp='number' title={this.getFpaValueForTextField()} id='AmountFpa' stateValue={this.state.AmountFpa} isRequired={true} isDisabled={false} onChange={this.onChange} inputProps={{ style: { textAlign: 'center' }, inputProps: { step: 'any' }, endAdornment: <InputAdornment position="end">€</InputAdornment> }} />
-				<MyTextField tp='number' title='Ποσό Λογαριασμού' id='AmountTotal' stateValue={this.state.AmountTotal} isRequired={true} isDisabled={false} onChange={this.onChange} inputProps={{ style: { textAlign: 'center' }, inputProps: { step: 'any' }, endAdornment: <InputAdornment position="end">€</InputAdornment> }} />
+				<MyTextField tp='number' title='Καθαρό Ποσό' id='AmountPure' stateValue={this.state.AmountPure} isRequired={true} isDisabled={false} onChange={this.onChange} inputProps={{ style: { textAlign: "center" } }} InputProps={{ endAdornment: <InputAdornment position="end"><span style={{ fontWeight: 'bolder', marginRight: '10px' }}>€</span></InputAdornment> }} />
+				<MyTextField tp='number' title={this.getFpaValueForTextField()} id='AmountFpa' stateValue={this.state.AmountFpa} isRequired={true} isDisabled={false} onChange={this.onChange} inputProps={{ style: { textAlign: 'center' } }} InputProps={{ endAdornment: <InputAdornment position="end"><span style={{ fontWeight: 'bolder', marginRight: '10px' }}>€</span></InputAdornment> }} />
+				<MyTextField tp='number' title='Ποσό Λογαριασμού' id='AmountTotal' stateValue={this.state.AmountTotal} isRequired={true} isDisabled={false} onChange={this.onChange} inputProps={{ style: { textAlign: 'center' } }} InputProps={{ endAdornment: <InputAdornment position="end"><span style={{ fontWeight: 'bolder', marginRight: '10px' }}>€</span></InputAdornment> }} />
 				{getButton('contained', 'small', null, useStyles.btnAuto, this.autoComplete, 'ΥΠΟΛΟΓΙΣΜΟΣ', null, false)}
 			</div>
 			<div style={useStyles.divRowFlex}>
-				<MyTextField tp='text' title='Ποσό Ολογράφως' id='AmountFullWritten' stateValue={this.state.AmountFullWritten} isRequired={true} isDisabled={false} onChange={this.onChange} inputProps={{ style: { textAlign: 'center', width: '800px' }, inputProps: { step: 'any' }, endAdornment: <InputAdornment position="end">€</InputAdornment> }} />
+				<MyTextField tp='text' title='Ποσό Ολογράφως' id='AmountFullWritten' stateValue={this.state.AmountFullWritten} isRequired={true} isDisabled={false} onChange={this.onChange} inputProps={{ style: { textAlign: 'center', width: '800px' } }} />
 				{getButton('contained', 'small', null, useStyles.btnAuto, this.autoCompleteFullWritten, 'ΥΠΟΛΟΓΙΣΜΟΣ', null, false)}
 			</div>
 			<div style={useStyles.divRowFlex}>
