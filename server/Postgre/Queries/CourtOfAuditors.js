@@ -26,23 +26,26 @@ const insert = (req, res, next) => {
   
 }
 
-const update = (req, res, next, accountInfo) => {
+const update = (req, res, next) => {
   var contractId = req.body.contractId;
-  var sqlQuery = util.format('INSERT INTO "Ordering"."CourtOfAuditors"("ContractId","ProtocolNumber","ProtocolYear","ScaleNumber","APDA_ProtocolNumber","APDA_ProtocolDate") ' +
-    'VALUES(%s,%s,%s,%s,%s,%s) ' +
-    'RETURNING "Id"',
-    helper.addQuotes(contractId),
+  var sqlQuery = 
+  util.format('UPDATE "Ordering"."CourtOfAuditors" ' +
+    'SET "ProtocolNumber"=%s,"ProtocolYear"=%s,"ScaleNumber"=%s,"APDA_ProtocolNumber"=%s,"APDA_ProtocolDate"=%s ' +
+    'WHERE "Id"=%s AND "ContractId"=%s' +
+    'RETURNING * ',     
     helper.addQuotes(req.body.ProtocolNumber),
     helper.addQuotes(req.body.ProtocolYear),
     helper.addQuotes(req.body.ScaleNumber),
     helper.addQuotes(req.body.APDANumber),
-    helper.addQuotes(req.body.APDADate))
+    helper.addQuotes(req.body.APDADate),
+    helper.addQuotes(req.body.Id),
+    contractId)
 
   pool.query(sqlQuery, (error, results) => {
     if (error)
       next(error);
     else {
-      helper.consoleLog("Update Decision Board \n");
+      helper.consoleLog("Update CourtOfAuditors \n");
       contractMethods.getContractById(req, res, next, contractId)
     }
   })

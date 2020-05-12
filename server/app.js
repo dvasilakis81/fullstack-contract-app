@@ -37,7 +37,7 @@ app.use(express.static(path.join(__dirname, "./WORD/templates")));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
-app.post('/diavlog', dbLogin.checkToken, function (req, res, next) {
+app.post('/createTransmissionDocument', dbLogin.checkToken, function (req, res, next) {
   var fs = require('fs');
   let d = new Date();
 
@@ -200,9 +200,9 @@ app.post('/deletedecisionboard', dbLogin.checkToken, dbBoardDecision.remove);
 app.post('/insertdecisioncoordinatordecentrilizedadministration', dbLogin.checkToken, dbDecisionCoordinatorDecentrilizedAdministration.insert);
 app.post('/updatedecisioncoordinatordecentrilizedadministration', dbLogin.checkToken, dbDecisionCoordinatorDecentrilizedAdministration.update);
 app.post('/deletedecisioncoordinatordecentrilizedadministration', dbLogin.checkToken, dbDecisionCoordinatorDecentrilizedAdministration.remove);
-app.post('/insertCourtOfAuditors', dbLogin.checkToken, dbCourtOfAuditors.insert);
-app.post('/updateCourtOfAuditors', dbLogin.checkToken, dbCourtOfAuditors.update);
-app.post('/deleteCourtOfAuditors', dbLogin.checkToken, dbCourtOfAuditors.remove);
+app.post('/insertcourtofauditors', dbLogin.checkToken, dbCourtOfAuditors.insert);
+app.post('/updatecourtofauditors', dbLogin.checkToken, dbCourtOfAuditors.update);
+app.post('/deletecourtofauditors', dbLogin.checkToken, dbCourtOfAuditors.remove);
 
 
 // view engine setup

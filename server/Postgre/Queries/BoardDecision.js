@@ -7,7 +7,13 @@ const insert = (req, res, next) => {
   var contractId = req.body.contractId;
   var orderNo = req.body.orderNo;  
   var sqlQuery = 'INSERT INTO "Ordering"."DecisionBoard"("ContractId","ProtocolNumber","ProtocolDate","Content","ADA", "OrderNo") VALUES ';
-  sqlQuery += util.format('(%s, %s, %s, %s, %s)', helper.addQuotes(contractId), helper.addQuotes(req.body.ProtocolNumber), helper.addQuotes(req.body.ProtocolDate), helper.addQuotes(req.body.Content), helper.addQuotes(req.body.ADA), helper.addQuotes(orderNo));
+  sqlQuery += util.format('(%s, %s, %s, %s, %s, %s)', 
+  helper.addQuotes(contractId), 
+  helper.addQuotes(req.body.ProtocolNumber), 
+  helper.addQuotes(req.body.ProtocolDate), 
+  helper.addQuotes(req.body.Content), 
+  helper.addQuotes(req.body.ADA ? req.body.ADA : ''), 
+  helper.addQuotes(orderNo));
 
   pool.query(sqlQuery, (error, results) => {
     if (error)

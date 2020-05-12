@@ -256,14 +256,14 @@ export default function (state = {}, action, root) {
 				let updatedContractsList = state.contractsList.map((item) => {
 
 					var accountJustUpdated = action.payload.data;
-					if (item.Id == accountJustUpdated[0].ContractId) {
+					if (item.Id == accountJustUpdated.ContractId) {
 						for (let i = 0; i < item.createdaccounts.length; i++) {
-							if (item.createdaccounts[i].Number == accountJustUpdated[0].Number) {
-								item.createdaccounts[i].Start = accountJustUpdated[0].Start
-								item.createdaccounts[i].End = accountJustUpdated[0].End
-								item.createdaccounts[i].AmountPure = accountJustUpdated[0].AmountPure
-								item.createdaccounts[i].AmountFpa = accountJustUpdated[0].AmountFpa
-								item.createdaccounts[i].AmountTotal = accountJustUpdated[0].AmountTotal
+							if (item.createdaccounts[i].Number == accountJustUpdated.Number) {
+								item.createdaccounts[i].Start = accountJustUpdated.Start
+								item.createdaccounts[i].End = accountJustUpdated.End
+								item.createdaccounts[i].AmountPure = accountJustUpdated.AmountPure
+								item.createdaccounts[i].AmountFpa = accountJustUpdated.AmountFpa
+								item.createdaccounts[i].AmountTotal = accountJustUpdated.AmountTotal
 							}
 						}
 					}
@@ -281,14 +281,14 @@ export default function (state = {}, action, root) {
 				let updatedContractsSearchList = state.searchContractsList.map((item) => {
 
 					var accountJustUpdated = action.payload.data;
-					if (item.Id == accountJustUpdated[0].ContractId) {
+					if (item.Id == accountJustUpdated.ContractId) {
 						for (let i = 0; i < item.createdaccounts.length; i++) {
 							if (item.createdaccounts[i].Number == accountJustUpdated.Number) {
-								item.createdaccounts[i].Start = accountJustUpdated[0].Start
-								item.createdaccounts[i].End = accountJustUpdated[0].End
-								item.createdaccounts[i].AmountPure = Number(accountJustUpdated[0].AmountPure)
-								item.createdaccounts[i].AmountFpa = Number(accountJustUpdated[0].AmountFpa)
-								item.createdaccounts[i].AmountTotal = Number(accountJustUpdated[0].AmountTotal)
+								item.createdaccounts[i].Start = accountJustUpdated.Start
+								item.createdaccounts[i].End = accountJustUpdated.End
+								item.createdaccounts[i].AmountPure = Number(accountJustUpdated.AmountPure)
+								item.createdaccounts[i].AmountFpa = Number(accountJustUpdated.AmountFpa)
+								item.createdaccounts[i].AmountTotal = Number(accountJustUpdated.AmountTotal)
 							}
 						}
 					}

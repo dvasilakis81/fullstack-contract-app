@@ -12,8 +12,8 @@ class ProtocolInput extends Component {
   render() {
 
     return (
-      <div style={{ margin: '10px', border: '1px solid black'}} >
-        <InputTitle title={this.props.title} />
+      <div style={{ margin: '10px', border: '1px solid black', width: '300px'}} >
+        <InputTitle title={this.props.title} style={{width: '100%'}}/>
         <div style={{ backgroundColor: 'white'}}>
           <MyTextField {...this.props} tm={this.props.tm1} partOfProtocol={true} inputProps={{ style: { textAlign: "right", width: '100px' } }} id={this.props.idn} tp={this.props.tp1} stateValue={this.props.protocolNumber}/>
           <span style={{ fontSize: '22px', margin: '0px' }}>/</span>

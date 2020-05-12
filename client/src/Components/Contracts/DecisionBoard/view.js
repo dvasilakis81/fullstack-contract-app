@@ -103,6 +103,17 @@ class DecisionBoardView extends Component {
     })
   }
 
+  resetState() {
+    this.setState({      
+      addNewItem: false, editItem: false, deleteItem: false, 
+      ProtocolNumber: '',
+      ProtocolYear: '',
+      ScaleNumber: '',
+      APDANumber: '',
+      APDADate: '',
+      orderNo: 0
+    });
+  }  
   resetMsgInfo() {
     setTimeout(function () {
       this.setState({ openMessage: false, message: '', msgPadding: '0px', ProtocolNumber: '', ProtocolDate: '', Content: '', ADA: '', orderNo: 0 });
@@ -117,21 +128,21 @@ class DecisionBoardView extends Component {
       this.props.processContractInfo(this.state, this.props.token.data.token, 'insertdecisionboard').then(res => {
         var msg = 'Η Α.Δ.Σ. με πρωτόκολλο "' + this.state.ProtocolNumber + '/' + getDateFormatForDocument(this.state.ProtocolDate) + '" δημιουργήθηκε επιτυχώς!!!'
         this.setState({ openMessage: true, message: msg, variant: 'success', msgPadding: '10px', submitButtonDisabled: false, addNewItem: false, editItem: false });
+        this.resetState();
         this.resetMsgInfo();
       }).catch(error => {
         var msg = 'Αποτυχία δημιουργίας Α.Δ.Σ. !!\n' + error;
-        this.setState({ openMessage: true, message: <><div>{msg}</div><div>{getServerErrorResponseMessage(error)}</div></>, openMessage: true, variant: 'error', msgPadding: '10px', submitButtonDisabled: false });
-        this.resetMsgInfo();
+        this.setState({ openMessage: true, message: <><div>{msg}</div><div>{getServerErrorResponseMessage(error)}</div></>, openMessage: true, variant: 'error', msgPadding: '10px', submitButtonDisabled: false });        
       })
     } else if (this.state.editItem === true) {
       this.props.processContractInfo(this.state, this.props.token.data.token, 'updatedecisionboard').then(res => {
         var msg = 'Η Α.Δ.Σ. με πρωτόκολλο "' + this.state.ProtocolNumber + '/' + getDateFormatForDocument(this.state.ProtocolDate) + '" επεξεργάστηκε επιτυχώς!!!'
         this.setState({ message: msg, openMessage: true, variant: 'success', msgPadding: '10px', submitButtonDisabled: false, addNewItem: false, editItem: false });
+        this.resetState();
         this.resetMsgInfo();
       }).catch(error => {
         var msg = 'Αποτυχία δημιουργίας Α.Δ.Σ. !!\n' + error;
-        this.setState({ message: <><div>{msg}</div><div>{getServerErrorResponseMessage(error)}</div></>, openMessage: true, variant: 'error', msgPadding: '10px', submitButtonDisabled: false });
-        this.resetMsgInfo();
+        this.setState({ message: <><div>{msg}</div><div>{getServerErrorResponseMessage(error)}</div></>, openMessage: true, variant: 'error', msgPadding: '10px', submitButtonDisabled: false });        
       })
     }
 
@@ -146,11 +157,11 @@ class DecisionBoardView extends Component {
     this.props.processContractInfo(this.state, this.props.token.data.token, 'deleteDecisionBoard').then(res => {
       var msg = 'Η Α.Δ.Σ. με πρωτόκολλο "' + this.state.ProtocolNumber + '/' + getDateFormatForDocument(this.state.ProtocolDate) + '" διεγράφει επιτυχώς!!!'
       this.setState({ openMessage: true, message: msg, variant: 'success', msgPadding: '10px', submitButtonDisabled: false, addNewItem: false, editItem: false, deleteItem: false });
+      this.resetState();
       this.resetMsgInfo();
     }).catch(error => {
       var msg = 'Αποτυχία διαγραφής Α.Δ.Σ. !!\n' + error;
       this.setState({ openMessage: true, message: <><div>{msg}</div><div>{getServerErrorResponseMessage(error)}</div></>, openMessage: true, variant: 'error', msgPadding: '0px', submitButtonDisabled: false });
-      this.resetMsgInfo();
     })
   }
 
@@ -192,8 +203,7 @@ class DecisionBoardView extends Component {
                 color='secondary'
                 style={{ fontSize: '18px', textAlign: 'center', padding: '5px', margin: '5px' }}
                 onClick={() => {
-                  this.setState({ addNewItem: false, editItem: false });
-                  this.resetMsgInfo();
+                  this.resetState()
                 }}>
                 ΑΚΥΡΩΣΗ
                   <Icon>cancel</Icon>
@@ -266,9 +276,8 @@ class DecisionBoardView extends Component {
         variant={this.state.variant}>
         <div style={{ display: 'flex', flexFlow: 'row', height: 'auto', background: 'lightgreen', justifyContent: 'center', padding: this.msgPadding }}>
           <span style={{ fontSize: '22px', textAlign: 'center', fontWeight: 'bold', padding: this.state.msgPadding }}>{this.state.message}</span>
-        </div>
-        <div style={{ display: 'flex', flexFlow: 'row', flex: '1', overflowY: 'scroll', overflowX: 'auto', flexWrap: 'wrap' }}>
-          <div style={{ display: 'flex', flexFlow: 'column', flex: '1', backgroundColor: '#fff' }}>
+        </div>        
+          <div style={{ display: 'flex', flexFlow: 'column', flex: '1', backgroundColor: '#fff', overflowY: 'scroll', overflowX: 'auto', flexWrap: 'wrap', height:'600px' }}>
             {
               this.props.contractDetails.decisionboard ? this.props.contractDetails.decisionboard.map((item, index) => {
                 return (<Grid item key={index}>
@@ -286,8 +295,7 @@ class DecisionBoardView extends Component {
                   </Paper>
                 </Grid>)
               }) : <></>
-            }
-          </div>
+            }          
         </div>
         {this.decisionBoardItemForm(length)}
         <div style={{ display: 'flex', flexFlow: 'row', height: 'auto', backgroundColor: '#fff', background: 'white', justifyContent: 'center' }}>

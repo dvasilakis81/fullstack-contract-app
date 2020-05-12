@@ -103,18 +103,22 @@ class CourtOfAuditorsView extends Component {
     })
   }
 
+  resetState() {
+    this.setState({      
+      ProtocolNumber: '',
+      ProtocolYear: '',
+      ScaleNumber: '',
+      APDANumber: '',
+      APDADate: '',
+      orderNo: 0
+    });
+  }
   resetMsgInfo() {
     setTimeout(function () {
       this.setState({
         openMessage: false,
         message: '',
-        msgPadding: '0px',
-        ProtocolNumber: '',
-        ProtocolYear: '',
-        ScaleNumber: '',
-        APDANumber: '',
-        APDADate: '',
-        orderNo: 0
+        msgPadding: '0px'       
       });
     }.bind(this), 5000);
   }
@@ -127,21 +131,20 @@ class CourtOfAuditorsView extends Component {
       this.props.processContractInfo(this.state, this.props.token.data.token, 'insertcourtofauditors').then(res => {
         var msg = 'To Ελεγκτικό Συνέδριο δημιουργήθηκε επιτυχώς!!!'
         this.setState({ openMessage: true, message: msg, msgColor: 'lightGreen', msgPadding: '10px', submitButtonDisabled: false, addNewItem: false, editItem: false });
+        this.resetState();
         this.resetMsgInfo();
       }).catch(error => {
         var msg = 'Αποτυχία δημιουργίας!\n' + error;
         this.setState({ openMessage: true, message: <><div>{msg}</div><div>{getServerErrorResponseMessage(error)}</div></>, openMessage: true, variant: 'error', msgColor: 'red', msgPadding: '10px', submitButtonDisabled: false });
-        this.resetMsgInfo();
       })
     } else if (this.state.editItem === true) {
       this.props.processContractInfo(this.state, this.props.token.data.token, 'updatecourtofauditors').then(res => {
         var msg = 'Το Ελεγκτικό Συνέδριο επεξεργάστηκε επιτυχώς!!!'
-        this.setState({ message: msg, openMessage: true, msgColor: 'lightGreen', msgPadding: '10px', submitButtonDisabled: false, addNewItem: false, editItem: false });
+        this.resetState();
         this.resetMsgInfo();
       }).catch(error => {
         var msg = 'Αποτυχία δημιουργίας !!\n' + error;
         this.setState({ message: <><div>{msg}</div><div>{getServerErrorResponseMessage(error)}</div></>, openMessage: true, msgColor: 'red', msgPadding: '10px', submitButtonDisabled: false });
-        this.resetMsgInfo();
       })
     }
   }
@@ -152,6 +155,7 @@ class CourtOfAuditorsView extends Component {
     this.props.processContractInfo(this.state, this.props.token.data.token, 'deletecourtofauditors').then(res => {
       var msg = 'Το Ελεγκτικό Συνέδριο διαγράφηκε επιτυχώς!!!'
       this.setState({ openMessage: true, message: msg, variant: 'success', msgPadding: '10px', submitButtonDisabled: false, addNewItem: false, editItem: false, deleteItem: false });
+      this.resetState();
       this.resetMsgInfo();
     }).catch(error => {
       var msg = 'Αποτυχία διαγραφής Ελεγκτικού Συνεδρίου !!\n' + error;
@@ -186,7 +190,7 @@ class CourtOfAuditorsView extends Component {
                 style={{ fontSize: '18px', textAlign: 'center', padding: '5px', margin: '5px' }}
                 onClick={() => {
                   this.setState({ addNewItem: false, editItem: false })
-                  this.resetMsgInfo();
+                  this.resetState();
                 }}>
                 ΑΚΥΡΩΣΗ
                   <Icon>cancel</Icon>

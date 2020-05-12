@@ -28,11 +28,11 @@ class ContractsPopup extends Component {
     console.log('ContractsPopup: message: ' + this.state.message)
     return (
       <>
-        <div style={{ display: 'flex', flexDirection: 'column', background: 'green', width: '800px', height: '800px', border: '3px solid #33C1FF', overflowX: 'hidden', overflowY: 'hidden' }}>
+        <div style={{ display: 'flex', flexDirection: 'column', width: '800px', height: '800px', border: '3px solid #33C1FF', overflowX: "hidden", overflowY: 'hidden' }}>
           <div style={{ display: 'flex', background: '#33C1FF', color: 'white', fontSize: '20px', fontWeight: '900', padding: '20px', justifyContent: 'center', alignItems: 'center', height: '30px' }}>
             {this.props.header}
           </div>
-          <div style={{ display: 'flex', flex: '1', flexFlow: 'column', flexWrap: 'wrap', width: '100%', height: '100%', overflowX: 'hidden', overflowY: 'hidden' }}>
+          <div style={{ display: 'flex', flex: '1', flexFlow: 'column', flexWrap: 'wrap', overflowX: 'hidden', overflowY: 'hidden' }}>
             {this.props.children}
           </div>
         </div>

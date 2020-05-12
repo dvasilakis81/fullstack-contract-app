@@ -4,9 +4,24 @@ const util = require('util');
 // import { getWord } from '../../../HelperMethods/helpermethods'
 
 module.exports = {
+
+	//Τεχνοπολις 2)  1)	Την με ΑΠ 162990/11.06.2019 Προγραμματική Σύμβαση και ειδικότερα το άρθρο 9 Πόροι - Εκταμίευση, αυτής
 	getAttachment1: function (body) {
-		var rText = util.format('Τη με Α.Π. %s/%s Προγραμματική Σύμβαση και ειδικότερα το άρθρο %s “Πόροι – Χρηματοδότηση – Προϋπολογισμός” αυτής.',
-			body.Contract[0].Protocol[0].Number, body.Contract[0].Protocol[0].Date, body.Account[0].DownpaymentLawArticle)
+		ContractType
+		var contractProtocolNumber = body.Contract[0].Protocol[0].Number
+		var contractProtocolDate = body.Contract[0].Protocol[0].Date
+		var DownpaymentLawArticle = body.Contract[0].DownpaymentLawArticle
+		var contractId = body.Contract[0].ContractId;
+		var contractTypeLabel = (contractId == 1 ? 'Δημόσια Σύμβαση Ανάθεσης' : 'Προγραμματική Σύμβαση')
+		var rText = '';
+		if (contractId == 1)
+			rText = util.format('Τη με Α.Π. %s/%s %s', contractProtocolNumber, contractProtocolDate, contractTypeLabel)
+		else {
+			if (DownpaymentLawArticle)
+				rText = util.format('Τη με Α.Π. %s/%s %s και ειδικότερα το άρθρο %s αυτής.', contractProtocolNumber, contractProtocolDate, contractTypeLabel, DownpaymentLawArticle)
+			else
+				rText = util.format('Τη με Α.Π. %s/%s %s', contractProtocolNumber, contractProtocolDate, contractTypeLabel)
+		}
 
 		return '<w:p w:rsidR="00057639" w:rsidRDefault="00262B9D" w:rsidP="00057639">' +
 			'<w:pPr>' +
@@ -37,157 +52,105 @@ module.exports = {
 			'</w:p>'
 	},
 	getAttachment2: function (body) {
+		var ret = '';
 		if (body.DecisionBoard) {
-			var text = util.format('Τη με αρ. %s/%s Απόφαση του Δημοτικού Συμβουλίου (Α.Δ.Σ.) Αθηναίων με την οποία εγκρίθηκαν: ' +
-				'η υπογραφή των όρων, το σχέδιο και τα ανά έτος ποσά της προαναφερθείσας Προγραμματικής Σύμβασης. ',
-				body.DecisionBoard[0].Protocol[0].Number, body.DecisionBoard[0].Protocol[0].Date)
-			return '<w:p w:rsidR="0067614F" w:rsidRPr="0067614F" w:rsidRDefault="00262B9D" w:rsidP="0067614F">' +
-				'<w:pPr>' +
-				'<w:numPr>' +
-				'<w:ilvl w:val="0"/>' +
-				'<w:numId w:val="2"/>' +
-				'</w:numPr>' +
-				// '<w:tabs>' +
-				// '<w:tab w:val="left" w:pos="142"/>' +
-				// '<w:tab w:val="left" w:pos="284"/>' +
-				// '<w:tab w:val="left" w:pos="6195"/>' +
-				// '</w:tabs>' +
-				'<w:spacing w:line="276" w:lineRule="auto"/>' +
-				'<w:ind w:left="-142" w:hanging="426" />' +
-				'<w:jc w:val="both"/>' +
-				'<w:rPr>' +
-				'<w:rFonts w:ascii="Garamond" w:hAnsi="Garamond"/>' +
-				'</w:rPr>' +
-				'</w:pPr>' +
-				'<w:r w:rsidRPr="00F871E2">' +
-				'<w:rPr>' +
-				'<w:rFonts w:ascii="Garamond" w:hAnsi="Garamond"/>' +
-				'<w:sz w:val="28" />' +
-				'<w:szCs w:val="28" />' +
-				'</w:rPr>' +
-				util.format('<w:t>%s</w:t>', text) +
-				'</w:r>' +
-				'</w:p>'
+			for (let index = 0; index < body.DecisionBoard.length; index++) {
+				const element = body.DecisionBoard[index];
+				var text = '';
+				if (index === 0)
+					text = util.format('Τη με αρ. %s/%s Απόφαση του Δημοτικού Συμβουλίου (Α.Δ.Σ.) Αθηναίων με την οποία εγκρίθηκαν: ' +
+						'η υπογραφή των όρων, το σχέδιο και τα ανά έτος ποσά της προαναφερθείσας Προγραμματικής Σύμβασης. ',
+						element.ProtocolNumber, element.ProtocolDate)
+				else
+					text = util.format('Τη με αρ. %s/%s Α.Δ.Σ. με την οποία διορθώθηκε η ανωτέρω Α.Δ.Σ. “%s”. ',
+						element.ProtocolNumber, element.ProtocolDate, body.DecisionBoard.ProtocolContent)
+
+				ret += '<w:p w:rsidR="0067614F" w:rsidRPr="0067614F" w:rsidRDefault="00262B9D" w:rsidP="0067614F">' +
+					'<w:pPr>' +
+					'<w:numPr>' +
+					'<w:ilvl w:val="0"/>' +
+					'<w:numId w:val="2"/>' +
+					'</w:numPr>' +
+					// '<w:tabs>' +
+					// '<w:tab w:val="left" w:pos="142"/>' +
+					// '<w:tab w:val="left" w:pos="284"/>' +
+					// '<w:tab w:val="left" w:pos="6195"/>' +
+					// '</w:tabs>' +
+					'<w:spacing w:line="276" w:lineRule="auto"/>' +
+					'<w:ind w:left="-142" w:hanging="426" />' +
+					'<w:jc w:val="both"/>' +
+					'<w:rPr>' +
+					'<w:rFonts w:ascii="Garamond" w:hAnsi="Garamond"/>' +
+					'</w:rPr>' +
+					'</w:pPr>' +
+					'<w:r w:rsidRPr="00F871E2">' +
+					'<w:rPr>' +
+					'<w:rFonts w:ascii="Garamond" w:hAnsi="Garamond"/>' +
+					'<w:sz w:val="28" />' +
+					'<w:szCs w:val="28" />' +
+					'</w:rPr>' +
+					util.format('<w:t>%s</w:t>', text) +
+					'</w:r>' +
+					'</w:p>'
+			}
 		}
+		return ret;
 	},
 	getAttachment3: function (body) {
 		var ret = '';
-		if (body.DecisionBoard && body.DecisionBoard[0].Protocol[1]) {
+		if (body.DecisionCoordinatorDecentrilizedAdministration) {
+			for (let index = 0; index < body.DecisionCoordinatorDecentrilizedAdministration.length; index++) {
+				const element = body.DecisionCoordinatorDecentrilizedAdministration[index];
+				var text = util.format('Τη με Α.Π. %s/%s Απόφαση του Συντονιστή της Αποκεντρωμένης Διοίκησης Αττικής', element.ProtocolNumber, element.ProtocolDate);
+				if (body.DecisionBoard) {
+					if (body.DecisionBoard[index])
+						text += util.format(' για τη νόμιμη λήψη της %s/%s Α.Δ.Σ. ', body.DecisionBoard.ProtocolNumber, body.DecisionBoard.ProtocolDate)
+				}
 
-			var text = util.format('Τη με αρ. %s/%s Α.Δ.Σ. με την οποία διορθώθηκε η ανωτέρω Α.Δ.Σ. “%s”. ',
-				body.DecisionBoard[0].Protocol[1].Number, body.DecisionBoard[0].Protocol[1].Date, body.DecisionBoard[0].Protocol[1].Content)
-
-			ret = '<w:p w:rsidR="00840235" w:rsidRPr="00840235" w:rsidRDefault="00262B9D" w:rsidP="0067614F">' +
-				'<w:pPr>' +
-				'<w:numPr>' +
-				'<w:ilvl w:val="0"/>' +
-				'<w:numId w:val="2"/>' +
-				'</w:numPr>' +
-				// '<w:tabs>' +
-				// '<w:tab w:val="left" w:pos="142"/>' +
-				// '<w:tab w:val="left" w:pos="284"/>' +
-				// '<w:tab w:val="left" w:pos="6195"/>' +
-				// '</w:tabs>' +
-				'<w:spacing w:line="276" w:lineRule="auto"/>' +
-				'<w:ind w:left="-142" w:hanging="426" />' +
-				'<w:jc w:val="both"/>' +
-				'<w:rPr>' +
-				'<w:rFonts w:ascii="Garamond" w:hAnsi="Garamond"/>' +
-				'</w:rPr>' +
-				'</w:pPr>' +
-				'<w:r w:rsidRPr="00840235">' +
-				'<w:rPr>' +
-				'<w:rFonts w:ascii="Garamond" w:hAnsi="Garamond"/>' +
-				'<w:sz w:val="28" />' +
-				'<w:szCs w:val="28" />' +
-				'</w:rPr>' +
-				util.format('<w:t>%s</w:t>', text) +
-				'</w:r>' +
-				'</w:p>'
+				ret += '<w:p w:rsidR="00057639" w:rsidRPr="00840235" w:rsidRDefault="00262B9D" w:rsidP="0067614F">' +
+					'<w:pPr>' +
+					'<w:numPr>' +
+					'<w:ilvl w:val="0"/>' +
+					'<w:numId w:val="2"/>' +
+					'</w:numPr>' +
+					// '<w:tabs>' +
+					// '<w:tab w:val="left" w:pos="142"/>' +
+					// '<w:tab w:val="left" w:pos="284"/>' +
+					// '<w:tab w:val="left" w:pos="6195"/>' +
+					// '</w:tabs>' +
+					'<w:spacing w:line="276" w:lineRule="auto"/>' +
+					'<w:ind w:left="-142" w:hanging="426" />' +
+					'<w:jc w:val="both"/>' +
+					'<w:rPr>' +
+					'<w:rFonts w:ascii="Garamond" w:hAnsi="Garamond"/>' +
+					'</w:rPr>' +
+					'</w:pPr>' +
+					'<w:r w:rsidRPr="00840235">' +
+					'<w:rPr>' +
+					'<w:rFonts w:ascii="Garamond" w:hAnsi="Garamond"/>' +
+					'<w:sz w:val="28" />' +
+					'<w:szCs w:val="28" />' +
+					'</w:rPr>' +
+					util.format('<w:t>%s</w:t>', text) +
+					'</w:r>' +
+					'</w:p>'
+			}
 		}
-
 		return ret;
 	},
 	getAttachment4: function (body) {
-		if (body.DecisionSADA) {
-			var text = util.format('Τη με Α.Π. %s/%s Απόφαση του Συντονιστή της Αποκεντρωμένης Διοίκησης Αττικής για τη νόμιμη λήψη της %s/%s Α.Δ.Σ.',
-				body.DecisionSADA[0].Protocol[0].Number, body.DecisionSADA[0].Protocol[0].Date,
-				body.DecisionBoard[0].Protocol[0].Number, body.DecisionBoard[0].Protocol[0].Date);
-			return '<w:p w:rsidR="00057639" w:rsidRPr="00840235" w:rsidRDefault="00262B9D" w:rsidP="0067614F">' +
-				'<w:pPr>' +
-				'<w:numPr>' +
-				'<w:ilvl w:val="0"/>' +
-				'<w:numId w:val="2"/>' +
-				'</w:numPr>' +
-				// '<w:tabs>' +
-				// '<w:tab w:val="left" w:pos="142"/>' +
-				// '<w:tab w:val="left" w:pos="284"/>' +
-				// '<w:tab w:val="left" w:pos="6195"/>' +
-				// '</w:tabs>' +
-				'<w:spacing w:line="276" w:lineRule="auto"/>' +
-				'<w:ind w:left="-142" w:hanging="426" />' +
-				'<w:jc w:val="both"/>' +
-				'<w:rPr>' +
-				'<w:rFonts w:ascii="Garamond" w:hAnsi="Garamond"/>' +
-				'</w:rPr>' +
-				'</w:pPr>' +
-				'<w:r w:rsidRPr="00840235">' +
-				'<w:rPr>' +
-				'<w:rFonts w:ascii="Garamond" w:hAnsi="Garamond"/>' +
-				'<w:sz w:val="28" />' +
-				'<w:szCs w:val="28" />' +
-				'</w:rPr>' +
-				util.format('<w:t>%s</w:t>', text) +
-				'</w:r>' +
-				'</w:p>'
-		}
-	},
-	getAttachment5: function (body) {
-		var ret = '';
-		if (body.DecisionBoard && body.DecisionBoard[0].Protocol[1]) {
-			var text = util.format('Tη με Α.Π. %s/%s Απόφαση του Συντονιστή της Αποκεντρωμένης Διοίκησης Αττικής για τη νόμιμη λήψη της %s/%s Α.Δ.Σ.',
-				body.DecisionSADA[0].Protocol[1].Number, body.DecisionSADA[0].Protocol[1].Date,
-				body.DecisionBoard[0].Protocol[1].Number, body.DecisionBoard[0].Protocol[1].Date)
-			ret = '<w:p w:rsidR="00057639" w:rsidRPr="00F871E2" w:rsidRDefault="00262B9D" w:rsidP="004D48B8">' +
-				'<w:pPr>' +
-				'<w:numPr>' +
-				'<w:ilvl w:val="0"/>' +
-				'<w:numId w:val="2"/>' +
-				'</w:numPr>' +
-				// '<w:tabs>' +
-				// '<w:tab w:val="left" w:pos="142"/>' +
-				// '<w:tab w:val="left" w:pos="6195"/>' +
-				// '</w:tabs>' +
-				'<w:spacing w:line="276" w:lineRule="auto"/>' +
-				'<w:ind w:left="-142" w:hanging="426" />' +
-				'<w:jc w:val="both"/>' +
-				'<w:rPr>' +
-				'<w:rFonts w:ascii="Garamond" w:hAnsi="Garamond"/>' +
-				'</w:rPr>' +
-				'</w:pPr>' +
-				'<w:r>' +
-				'<w:rPr>' +
-				'<w:rFonts w:ascii="Garamond" w:hAnsi="Garamond"/>' +
-				'<w:sz w:val="28" />' +
-				'<w:szCs w:val="28" />' +
-				'</w:rPr>' +
-				util.format('<w:t>%s</w:t>', text) +
-				'</w:r>' +
-				'</w:p>'
-		}
-
-		return ret;
-	},
-	getAttachment6: function (body) {
 		var ret = '';
 		if (body.CourtOfAuditors) {
-			var text = util.format('Τη με αρ. %s/%s Πράξη του %s Κλιμακίου του Ελεγκτικού Συνεδρίου περί μη κωλύματος της υπογραφής του σχεδίου της εν θέματι Προγραμματικής Σύμβασης.',
-				body.CourtOfAuditors[0].Action[0].Number,
-				body.CourtOfAuditors[0].Action[0].Year,
-				body.CourtOfAuditors[0].Scale[0].Letter)
+			for (let index = 0; index < body.CourtOfAuditors.length; index++) {
+				const element = body.CourtOfAuditors[index];
+				var text = util.format('Τη με αρ. %s/%s Πράξη του %s Κλιμακίου του Ελεγκτικού Συνεδρίου περί μη κωλύματος της υπογραφής του σχεδίου της εν θέματι Προγραμματικής Σύμβασης.',
+					element.ProtocolNumber,
+					element.ProtocolYear,
+					element.ScaleNumber,
+					element.APDA_ProtocolNumber,
+					element.APDA_ProtocolDate)
 
-			if (body.CourtOfAuditors[0].HasCourtOfAuditors === true) {
-				ret = '<w:p w:rsidR="00212912" w:rsidRPr="00DB37DE" w:rsidRDefault="00262B9D" w:rsidP="00F871E2">' +
+				ret += '<w:p w:rsidR="00212912" w:rsidRPr="00DB37DE" w:rsidRDefault="00262B9D" w:rsidP="00F871E2">' +
 					'<w:pPr>' +
 					'<w:numPr>' +
 					'<w:ilvl w:val="0"/>' +
@@ -214,46 +177,43 @@ module.exports = {
 					'</w:r>' +
 					'</w:p>'
 			}
-
-			return ret;
 		}
+		return ret;
 	},
 	getAttachment7: function (body) {
-		if (body.Account && body.Account[0].AYY) {
-			var text = util.format('<w:t>Τη με αρ. %s/%s (Αριθμός ΑΑΥ) με ΕΑΔ %s (Α.Π. %s/%s) και ΑΔΑ %s Απόφαση Ανάληψης Υποχρέωσης</w:t>',
-				body.Account[0].AYY[0].Value,
-				body.Account[0].AYY[0].Year,
-				body.Account[0].AYY[0].EADNumber,
-				body.Account[0].AYY[0].ProtocolNumber,
-				body.Account[0].AYY[0].ProtocolDate,
-				body.Account[0].AYY[0].ADA);
-			return '<w:p w:rsidR="00212912" w:rsidRPr="00F871E2" w:rsidRDefault="00262B9D" w:rsidP="00F871E2">' +
-				'<w:pPr>' +
-				'<w:numPr>' +
-				'<w:ilvl w:val="0"/>' +
-				'<w:numId w:val="2"/>' +
-				'</w:numPr>' +
-				// '<w:tabs>' +
-				// '<w:tab w:val="left" w:pos="142"/>' +
-				// '<w:tab w:val="left" w:pos="6195"/>' +
-				// '</w:tabs>' +
-				'<w:spacing w:line="276" w:lineRule="auto"/>' +
-				'<w:ind w:left="-142" w:hanging="426" />' +
-				'<w:jc w:val="both"/>' +
-				'<w:rPr>' +
-				'<w:rFonts w:ascii="Garamond" w:hAnsi="Garamond"/>' +
-				'</w:rPr>' +
-				'</w:pPr>' +
-				'<w:r w:rsidRPr="00DB37DE">' +
-				'<w:rPr>' +
-				'<w:rFonts w:ascii="Garamond" w:hAnsi="Garamond"/>' +
-				'<w:sz w:val="28" />' +
-				'<w:szCs w:val="28" />' +
-				'</w:rPr>' +
-				util.format('<w:t>%s</w:t>', text) +
-				'</w:r>' +
-				'</w:p>'
-		}
+		var rText = util.format('<w:t>Τη με αρ. %s/%s (Αριθμός ΑΑΥ) με ΕΑΔ %s (Α.Π. %s/%s) και ΑΔΑ %s Απόφαση Ανάληψης Υποχρέωσης</w:t>',
+			body.Account[0].AYY[0].Value,
+			body.Account[0].AYY[0].Year,
+			body.Account[0].AYY[0].EADNumber,
+			body.Account[0].AYY[0].ProtocolNumber,
+			body.Account[0].AYY[0].ProtocolDate,
+			body.Account[0].AYY[0].ADA);
+		return '<w:p w:rsidR="00212912" w:rsidRPr="00F871E2" w:rsidRDefault="00262B9D" w:rsidP="00F871E2">' +
+			'<w:pPr>' +
+			'<w:numPr>' +
+			'<w:ilvl w:val="0"/>' +
+			'<w:numId w:val="2"/>' +
+			'</w:numPr>' +
+			// '<w:tabs>' +
+			// '<w:tab w:val="left" w:pos="142"/>' +
+			// '<w:tab w:val="left" w:pos="6195"/>' +
+			// '</w:tabs>' +
+			'<w:spacing w:line="276" w:lineRule="auto"/>' +
+			'<w:ind w:left="-142" w:hanging="426" />' +
+			'<w:jc w:val="both"/>' +
+			'<w:rPr>' +
+			'<w:rFonts w:ascii="Garamond" w:hAnsi="Garamond"/>' +
+			'</w:rPr>' +
+			'</w:pPr>' +
+			'<w:r w:rsidRPr="00DB37DE">' +
+			'<w:rPr>' +
+			'<w:rFonts w:ascii="Garamond" w:hAnsi="Garamond"/>' +
+			'<w:sz w:val="28" />' +
+			'<w:szCs w:val="28" />' +
+			'</w:rPr>' +
+			util.format('<w:t>%s</w:t>', rText) +
+			'</w:r>' +
+			'</w:p>'
 	},
 	getAttachment8: function (body) {
 		if (body.Account && body.Invoice[0]) {

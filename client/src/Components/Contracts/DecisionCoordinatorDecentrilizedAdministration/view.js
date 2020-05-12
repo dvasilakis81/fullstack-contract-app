@@ -116,22 +116,22 @@ class DecisionCoordinatorDecentrilizedAdministrationView extends Component {
     if (this.state.addNewItem === true) {
       this.props.processContractInfo(this.state, this.props.token.data.token, 'insertdecisioncoordinatordecentrilizedadministration').then(res => {
         var msg = 'Η Σ.Α.Δ.Α με πρωτόκολλο "' + this.state.ProtocolNumber + '/' + getDateFormatForDocument(this.state.ProtocolDate) + '" δημιουργήθηκε επιτυχώς!!!'
-        this.setState({ openMessage: true, message: msg, msgColor: 'lightGreen', msgPadding: '10px', submitButtonDisabled: false, addNewItem: false, editItem: false });
+        this.setState({ openMessage: true, message: msg, msgColor: 'lightGreen', msgPadding: '10px', submitButtonDisabled: false });
+        this.resetState();
         this.resetMsgInfo();
       }).catch(error => {
         var msg = 'Αποτυχία δημιουργίας!\n' + error;
         this.setState({ openMessage: true, message: <><div>{msg}</div><div>{getServerErrorResponseMessage(error)}</div></>, openMessage: true, variant: 'error', msgColor: 'red', msgPadding: '10px', submitButtonDisabled: false });
-        this.resetMsgInfo();
       })
     } else if (this.state.editItem === true) {
       this.props.processContractInfo(this.state, this.props.token.data.token, 'updatedecisioncoordinatordecentrilizedadministration').then(res => {
         var msg = 'Η Σ.Α.Δ.Α. με πρωτόκολλο "' + this.state.ProtocolNumber + '/' + getDateFormatForDocument(this.state.ProtocolDate) + '" επεξεργάστηκε επιτυχώς!!!'
-        this.setState({ message: msg, openMessage: true, msgColor: 'lightGreen', msgPadding: '10px', submitButtonDisabled: false, addNewItem: false, editItem: false });
+        this.setState({ message: msg, openMessage: true, msgColor: 'lightGreen', msgPadding: '10px', submitButtonDisabled: false });
+        this.resetState();
         this.resetMsgInfo();
       }).catch(error => {
         var msg = 'Αποτυχία δημιουργίας !!\n' + error;
         this.setState({ message: <><div>{msg}</div><div>{getServerErrorResponseMessage(error)}</div></>, openMessage: true, msgColor: 'red', msgPadding: '10px', submitButtonDisabled: false });
-        this.resetMsgInfo();
       })
     }
   }
@@ -141,10 +141,9 @@ class DecisionCoordinatorDecentrilizedAdministrationView extends Component {
 
     this.props.processContractInfo(this.state, this.props.token.data.token, 'deletedecisioncoordinatordecentrilizedadministration').then(res => {
       var msg = 'Η Σ.Α.Δ.Α. με πρωτόκολλο "' + this.state.ProtocolNumber + '/' + getDateFormatForDocument(this.state.ProtocolDate) + '" διεγράφει επιτυχώς!!!'
-      this.setState({ openMessage: true, message: msg, variant: 'success', msgPadding: '10px', submitButtonDisabled: false, addNewItem: false, editItem: false, deleteItem: false });
-      setTimeout(function () {
-        this.setState({ openMessage: false, message: '', variant: '', msgPadding: '10px' });
-      }.bind(this), 3000);
+      this.setState({ openMessage: true, message: msg, variant: 'success', msgPadding: '10px', submitButtonDisabled: false });
+      this.resetState();
+      this.resetMsgInfo();
     }).catch(error => {
       var msg = 'Αποτυχία διαγραφής Σ.Α.Δ.Α. !!\n' + error;
       this.setState({ openMessage: true, message: <><div>{msg}</div><div>{getServerErrorResponseMessage(error)}</div></>, openMessage: true, variant: 'error', msgPadding: '0px', submitButtonDisabled: false });
@@ -184,14 +183,13 @@ class DecisionCoordinatorDecentrilizedAdministrationView extends Component {
                 })
               }}>
               {getSubmitButton('contained', 'primary', { fontSize: '18px', padding: '5px', margin: '5px' }, null, 'ΑΠΟΘΗΚΕΥΣΗ', <Icon>save</Icon>, this.state.submitButtonDisabled)}
-              <Button 
-                disabled={this.state.submitButtonDisabled} 
+              <Button
+                disabled={this.state.submitButtonDisabled}
                 variant='contained'
                 color='secondary'
                 style={{ fontSize: '18px', textAlign: 'center', padding: '5px', margin: '5px' }}
-                onClick={() => {
-                  this.setState({ addNewItem: false, editItem: false })
-                  this.resetMsgInfo()
+                onClick={() => {                  
+                  this.resetState()
                 }}>
                 ΑΚΥΡΩΣΗ
                   <Icon>cancel</Icon>

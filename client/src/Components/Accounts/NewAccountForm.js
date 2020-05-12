@@ -97,20 +97,6 @@ const useStyles = {
 	sltCC: {
 		width: '700px',
 		maxWidth: '700px'
-	},
-	tooltip: {
-		fontSize: "16px",
-		color: 'white'
-	},
-	tooltipTitle: {
-		margin: '2px',
-		fontSize: '16px',
-		color: 'black',
-		fontWeight: 'bold'
-	},
-	tooltipIndicate: {
-		fontSize: "16px",
-		color: '#00ff3e'
 	}
 };
 
@@ -124,8 +110,7 @@ class NewAccountForm extends Component {
 			submitButtonDisabled: false,
 			isEdit: this.props.location.state.isEdit,
 			ContractId: this.props.location.state.ContractId,
-			IsDownpayment: this.props.location.state.isDownpayment,
-			DownpaymentLawArticle: this.props.location.state.DownpaymentLawArticle,
+			IsDownpayment: this.props.location.state.isDownpayment,			
 			ContractTypeId: this.props.location.state.ContractTypeId,
 			AccountId: this.props.location.state.AccountId,
 			AccountNumber: this.props.location.state.AccountNumber,
@@ -169,14 +154,13 @@ class NewAccountForm extends Component {
 			SignName4: this.props.location.state.SignName4,
 			AbsenseOfDirector1: this.props.location.state.AbsenseOfDirector1,
 			AbsenseOfDirector2: this.props.location.state.AbsenseOfDirector2,
-			MonitoringCommittee: this.props.location.state.MonitoringCommittee,
-			HasMonitoringCommittee: false,
-			MonitoringCommitteeMayorDecisionForMembersProtocolNumber: this.props.location.state.MonitoringCommitteeMayorDecisionForMembersProtocolNumber,
-			MonitoringCommitteeMayorDecisionForMembersProtocolDate: this.props.location.state.MonitoringCommitteeMayorDecisionForMembersProtocolDate,
-			MonitoringCommitteeDocumentProtocolNumber: this.props.location.state.MonitoringCommitteeDocumentProtocolNumber,
-			MonitoringCommitteeDocumentProtocolDate: this.props.location.state.MonitoringCommitteeDocumentProtocolDate,
-			MonitoringCommitteePracticalDate: this.props.location.state.MonitoringCommitteePracticalDate,
-			MonitoringCommitteeContentGivenWorkTime: this.props.location.state.MonitoringCommitteeContentGivenWorkTime,
+			HasMonitoringCommittee: this.props.location.state.MonitoringCommittee ? true : false,
+			MayorDecisionForMembersProtocolNumber: this.props.location.state.MonitoringCommittee ? this.props.location.state.MonitoringCommittee[0].MayorDecisionForMembersProtocolNumber : '',
+			MayorDecisionForMembersProtocolDate: this.props.location.state.MonitoringCommittee ? this.props.location.state.MonitoringCommittee[0].MayorDecisionForMembersProtocolDate : '',
+			TransmissionDocumentProtocolNumber: this.props.location.state.MonitoringCommittee ? this.props.location.state.MonitoringCommittee[0].TransmissionDocumentProtocolNumber : '',
+			TransmissionDocumentProtocolDate: this.props.location.state.MonitoringCommittee ? this.props.location.state.MonitoringCommittee[0].TransmissionDocumentProtocolDate : '',
+			PracticalDate: this.props.location.state.MonitoringCommittee ? this.props.location.state.MonitoringCommittee[0].PracticalDate : '',
+			GivenPhysicalObjectContentTime: this.props.location.state.MonitoringCommittee ? this.props.location.state.MonitoringCommittee[0].GivenPhysicalObjectContentTime : '',
 			cc: this.props.location.state.cc ? this.props.location.state.cc : []
 		}
 
@@ -515,7 +499,7 @@ class NewAccountForm extends Component {
 	}
 	getAAYPreviousYear() {
 		if (this.state.IsDownpayment === false)
-			return <MyTextField tp='number' title='ΑΑΥ Προηγούμενου Έτος (για δαπάνες ΠΟΕ)' id='AayPreviousYear' stateValue={this.state.AayPreviousYear} isRequired={false} isDisabled={false} onChange={this.onChange} inputProps={{ style: { textAlign: 'center' } }} />
+			return <MyTextField tp='number' title='ΑΑΥ Προηγούμενου Έτος (για δαπάνες ΠΟΕ)' id='AayPreviousYear' stateValue={this.state.AayPreviousYear} isRequired={false} isDisabled={false} onChange={this.onChange} inputProps={{ style: { textAlign: 'center' } }} width='400px'/>
 	}
 
 	getDocumentsInfo() {
@@ -553,7 +537,7 @@ class NewAccountForm extends Component {
 				{getButton('contained', 'small', null, useStyles.btnAuto, this.autoComplete, 'ΥΠΟΛΟΓΙΣΜΟΣ', null, false)}
 			</div>
 			<div style={useStyles.divRowFlex}>
-				<MyTextField tp='text' title='Ποσό Ολογράφως' id='AmountFullWritten' stateValue={this.state.AmountFullWritten} isRequired={true} isDisabled={false} onChange={this.onChange} inputProps={{ style: { textAlign: 'center', width: '800px' } }} />
+				<MyTextField tp='text' title='Ποσό Ολογράφως' id='AmountFullWritten' stateValue={this.state.AmountFullWritten} isRequired={true} isDisabled={false} onChange={this.onChange} inputProps={{ style: { textAlign: 'center' } }} width='945px'/>
 				{getButton('contained', 'small', null, useStyles.btnAuto, this.autoCompleteFullWritten, 'ΥΠΟΛΟΓΙΣΜΟΣ', null, false)}
 			</div>
 			<div style={useStyles.divRowFlex}>
@@ -608,30 +592,13 @@ class NewAccountForm extends Component {
 		</>
 	}
 
-	getDownpaymentInfo() {
-		if (this.state.IsDownpayment === true) {
-			return <>
-				{this.getTemplateForDownpaymentLawArticle()}
-			</>
-		}
-	}
-
-	getTemplateForDownpaymentLawArticle() {
-		return (<>
-			<header style={useStyles.category}>“Πόροι – Χρηματοδότηση – Προϋπολογισμός”</header>
-			<div style={useStyles.divRowFlex}>
-				{getTextFieldWithTooltip(getLawArticleTooltip(useStyles, this.state, this.props.contractDetails), 'number', 'DownpaymentLawArticle', 'Άρθρο', 'outlined', this.state.DownpaymentLawArticle, true, useStyles.accountInfoItem, false, null, { shrink: true }, this.onChange)}
-			</div>
-		</>)
-	}
-
 	addMonitoringCommittee() {
-		let newValue = this.state.HasMonitoringCommittee ? false : true
+		let newValue = (this.state.HasMonitoringCommittee === true? false : true)
 		this.setState({ HasMonitoringCommittee: newValue })
 	}
 
 	removeMonitoringCommittee() {
-		let newValue = this.state.HasMonitoringCommittee ? false : true
+		let newValue = (this.state.HasMonitoringCommittee === true ? false : true)
 		this.setState({ HasMonitoringCommittee: newValue })
 	}
 
@@ -643,9 +610,9 @@ class NewAccountForm extends Component {
 				<div>
 					<div style={useStyles.divRowFlex}>
 						<ProtocolInput tm1={getMayorDecisionProtocolTooltip(useStyles, this.state, 1)} tm2={getMayorDecisionProtocolTooltip(useStyles, this.state, 2)} title='Α.Π. Απόφασης Δημάρχου' idn='MayorDecisionForMembersProtocolNumber' idd='MayorDecisionForMembersProtocolDate' protocolNumber={this.state.MayorDecisionForMembersProtocolNumber} protocolDate={this.state.MayorDecisionForMembersProtocolDate} onChange={this.onChange} tp1='text' tp2='date' />
-						<MyTextField tm={getMonitoringCommitteePracticalTooltip(useStyles, this.state, this.state.AccountNumber, 1)} tp='date' title='Ημ. Πρακτικού Συνεδρίασης' id='MonitoringCommitteePracticalDate' stateValue={this.state.MonitoringCommitteePracticalDate} isRequired={true} isDisabled={false} onChange={this.onChange} style={{ width: 'auto' }} />
+						<MyTextField tm={getMonitoringCommitteePracticalTooltip(useStyles, this.state, this.state.AccountNumber, 1)} tp='date' title='Ημ. Πρακτικού Συνεδρίασης' id='PracticalDate' stateValue={this.state.PracticalDate} isRequired={true} isDisabled={false} onChange={this.onChange} style={{ width: 'auto' }} />
 						<ProtocolInput tm1={getMonitoringCommitteeTooltipTemplate(useStyles, this.state, contractDetails, this.state.AccountNumber, 1)} tm2={getMonitoringCommitteeTooltipTemplate(useStyles, this.state, contractDetails, this.state.AccountNumber, 2)} title='Α.Π. διαβιβαστικού εγγράφου' idn='TransmissionDocumentProtocolNumber' idd='TransmissionDocumentProtocolDate' protocolNumber={this.state.TransmissionDocumentProtocolNumber} protocolDate={this.state.TransmissionDocumentProtocolDate} onChange={this.onChange} tp1='text' tp2='date' />
-						<MyTextField tm={getMonitoringCommitteeTooltipTemplate(useStyles, this.state, contractDetails.ConcessionaireName, this.state.AccountNumber, 3)} tp='text' title='Χρονικός ορίζοντας των περιεχομένων του παραδοτέου του φυσικού αντικειμένου' id='MonitoringCommitteeContentGivenWorkTime' stateValue={this.state.MonitoringCommitteeContentGivenWorkTime} isRequired={true} isDisabled={false} onChange={this.onChange} />
+						<MyTextField tm={getMonitoringCommitteeTooltipTemplate(useStyles, this.state, contractDetails.ConcessionaireName, this.state.AccountNumber, 3)} tp='text' title='Χρονικός ορίζοντας των περιεχομένων του παραδοτέου του φυσικού αντικειμένου' id='GivenPhysicalObjectContentTime' stateValue={this.state.GivenPhysicalObjectContentTime} isRequired={true} isDisabled={false} onChange={this.onChange} width='700px'/>
 					</div>
 				</div> : <></>}
 			<div>

@@ -21,6 +21,8 @@ import { Scrollbars } from 'react-custom-scrollbars';
 import SaveAltIcon from '@material-ui/icons/SaveAlt';
 import EditIcon from '@material-ui/icons/Edit';
 
+import createTransmissionDocument from './PostDataCreateDocument'
+
 var downloadjs = require('downloadjs');
 var currencyFormatter = require('currency-formatter');
 const format = require('string-format')
@@ -108,6 +110,7 @@ class AccountInfo extends React.Component {
 				InvoiceDeliveredDate: accountDetails.invoice && accountDetails.invoice[0] && accountDetails.invoice[0].DeliveredDate ? accountDetails.invoice[0].DeliveredDate : '',
 				InvoiceDeliveredDateProtocolNumber: accountDetails.invoice && accountDetails.invoice[0] && accountDetails.invoice[0].DeliveredDateProtocolNumber ? accountDetails.invoice[0].DeliveredDateProtocolNumber : '',
 				InvoiceDeliveredDateProtocolDate: accountDetails.invoice && accountDetails.invoice[0] && accountDetails.invoice[0].DeliveredDateProtocolDate ? getValidMaterialDateFormat(accountDetails.invoice[0].DeliveredDateProtocolDate) : '',
+				MonitoringCommittee: accountDetails.monitoringcommittee,
 				CC1Value1: accountDetails.cc && accountDetails.cc[0] && accountDetails.cc[0].CC1 ? accountDetails.cc[0].CC1 : '-1',
 				CC1Value2: accountDetails.cc && accountDetails.cc[0] && accountDetails.cc[0].CC2 ? accountDetails.cc[0].CC2 : '-1',
 				CC2Value1: accountDetails.cc && accountDetails.cc[1] && accountDetails.cc[1].CC1 ? accountDetails.cc[1].CC1 : '-1',
@@ -188,122 +191,7 @@ class AccountInfo extends React.Component {
 	}
 	//#endregion
 
-	//#region create documents  
-	getAAYDataToPost(accountDetails) {
-		var AAY = (accountDetails.aay && accountDetails.aay.length > 0 ? accountDetails.aay[0] : {});
-		var AAYValue = (AAY.Value || '');
-		var AAYProtocolNumber = (AAY.ProtocolNumber || '');
-		var AAYProtocolDate = (getDateFormatForDocument(AAY.ProtocolDate) || '');
-		var AAYYear = extractYearFromDate(AAY.ProtocolDate)
-		var AAYEadNumber = (AAY.EadNumber || '')
-		var AAYPreviousYear = (AAY.PreviousYear || '')
-		var AAYADA = (AAY.ADA || '')
-
-		return [{
-			Value: AAYValue,
-			Year: AAYYear,
-			ProtocolNumber: AAYProtocolNumber,
-			ProtocolDate: AAYProtocolDate,
-			EADNumber: AAYEadNumber,
-			PreviousYearValue: AAYPreviousYear,
-			ADA: AAYADA
-		}]
-	}
-	getInvoiceDataToPost(accountDetails) {
-
-		var Invoice = (accountDetails.invoice && accountDetails.invoice.length > 0 ? accountDetails.invoice[0] : {})
-		var InvoiceNumber = (Invoice.Number || '')
-		var InvoiceDate = (getDateFormatForDocument(Invoice.Date) || '')
-		var InvoiceDeliveredDate = (getDateFormatForDocument(Invoice.DeliveredDate) || '')
-		var InvoiceDeliveredDateProtocolNumber = (Invoice.DeliveredDateProtocolNumber || '')
-		var InvoiceDeliveredDateProtocolDate = (getDateFormatForDocument(Invoice.DeliveredDateProtocolDate) || '')
-
-		return [{
-			Number: InvoiceNumber,
-			Date: InvoiceDate,
-			DeliveredDate: InvoiceDeliveredDate,
-			DeliveredDateProtocol: [{ Number: InvoiceDeliveredDateProtocolNumber, Date: InvoiceDeliveredDateProtocolDate }]
-		}]
-
-	}
-
-	getCCDataToPost(contractDetails, accountDetails) {
-
-		var CC1 = accountDetails.cc[0];
-		var CC2 = accountDetails.cc[1];
-
-		var cc1Value = '';
-		var cc2Value = '';
-
-		var directionValue = '';
-		var departmentValue = '';
-		if (CC1 && CC1.cc1value1 && CC1.cc1value1[0])
-			directionValue = format('Διεύθυνση {}', CC1.cc1value1[0].DirectionName)
-		if (CC1 && CC1.cc1value2 && CC1.cc1value2[0] && CC1.cc1value2[0].DepartmentName)
-			departmentValue = '-Τμήμα ' + CC1.cc1value2[0].DepartmentName
-		cc1Value = format('{}{}', directionValue, departmentValue)
-
-		directionValue = '';
-		departmentValue = '';
-		if (contractDetails.ContractTypeId == 1) {
-			if (CC2 && CC2.cc2value1 && CC2.cc2value1[0])
-				directionValue = format('Διεύθυνση {}', CC2.cc2value1[0].DirectionName)
-			if (CC2 && CC2.cc2value2 && CC2.cc2value2[0] && CC2.cc2value2[0].DepartmentName)
-				departmentValue = '-Τμήμα ' + CC2.cc2value2[0].DepartmentName
-			cc2Value = format('{}{}', directionValue, departmentValue)
-		}
-		else {
-			if (CC2 && CC2.ccagencyvalue && CC2.ccagencyvalue[0])
-				cc2Value = CC2.ccagencyvalue[0].Name
-		}
-
-		return [{ CC1: cc1Value, CC2: cc2Value }]
-	}
-
-	getDecisionBoardValues() {
-		let ret = undefined;
-		// let ad = this.props.account;
-		// let decisionDS1Number = (ad && ad.decisionboard ? ad.decisionboard[0].ProtocolNumber : null)
-		// let decisionDS1Date = (ad && ad.decisionboard ? ad.decisionboard[0].ProtocolDate : null)
-
-		// if (decisionDS1Number) {
-		// 	ret = []
-		// 	ret.push({ Number: decisionDS1Number, Date: getDateFormatForDocument(decisionDS1Date) })
-		// 	if (ad && ad.decisionboard && ad.decisionboard.length > 1)
-		// 		ret.push({ Number: ad.decisionboard[1].ProtocolNumber, Date: getDateFormatForDocument(ad.decisionboard[1].ProtocolDate), Content: ad.decisionboard[1].Content })
-		// }
-		// console.log('getDecisionBoardValues: ' + ret)
-		return ret;
-	}
-
-	getDecisionSADAValues() {
-		let ret = [];
-
-		var ad = this.props.account;
-		let Decision1SADANumber = (ad && ad.decisioncoordinatordecentrilizedadministration ? ad.decisioncoordinatordecentrilizedadministration[0].ProtocolNumber : null)
-		let Decision1SADADate = (ad && ad.decisioncoordinatordecentrilizedadministration ? ad.decisioncoordinatordecentrilizedadministration[0].ProtocolDate : null)
-		if (Decision1SADANumber) {
-			ret.push({ Number: Decision1SADANumber, Date: getDateFormatForDocument(Decision1SADADate) })
-			if (ad && ad.decisioncoordinatordecentrilizedadministration && ad.decisioncoordinatordecentrilizedadministration.length > 1)
-				ret.push({ Number: ad.decisioncoordinatordecentrilizedadministration[1].ProtocolNumber, Date: getDateFormatForDocument(ad.decisioncoordinatordecentrilizedadministration[1].ProtocolDate) })
-		}
-
-		return ret;
-	}
-
-	getCourtOfAuditorsValues() {
-		let ret = [];
-		var accountDetails = this.props.account;
-		ret.push({
-			HasCourtOfAuditors: accountDetails.courtofauditors ? true : false,
-			Action: [{ Number: accountDetails.courtofauditors ? accountDetails.courtofauditors[0].ProtocolNumber : null, Year: accountDetails.courtofauditors ? accountDetails.courtofauditors[0].ProtocolYear : null }],
-			Scale: [{ Letter: accountDetails.courtofauditors ? accountDetails.courtofauditors[0].ScaleNumber : null }],
-			APDA: [{ Number: accountDetails.courtofauditors ? accountDetails.courtofauditors[0].APDA_ProtocolNumber : null, APDADate: accountDetails.courtofauditors ? accountDetails.courtofauditors[0].APDA_ProtocolDate : null }],
-		})
-
-		return ret;
-	}
-
+	//#region create documents  	
 	createDocument1(e) {
 		e.preventDefault();
 
@@ -311,88 +199,26 @@ class AccountInfo extends React.Component {
 
 		var contractDetails = this.props.isSearchMode ? this.props.contractDetailsSearchMode : this.props.contractDetails;
 		var accountDetails = this.props.account;
-
-		var firstAccountProtocol = ''
-		if (accountDetails.firstprotocolinfo && accountDetails.firstprotocolinfo[0] && accountDetails.firstprotocolinfo[0].firstaccountprotocolnumber)
-			firstAccountProtocol = format('{}/{}', accountDetails.firstprotocolinfo[0].firstaccountprotocolnumber, accountDetails.firstprotocolinfo[0].firstaccountprotocoldate)
-
-		// eslint-disable-next-line eqeqeq
-		var contractTypeName = (contractDetails.ContractTypeId == 1 ? 'Σύμβασης Δημόσιας Ανάθεσης' : 'Προγραμματικής Σύμβασης')
-		var dirName, dirAddress, dirPostalCode, dirCity, depSupervisor, depTelephone, depEmail = '';
-		if (contractDetails.direction && contractDetails.direction[0]) {
-			dirName = contractDetails.direction[0].DirectionName;
-			dirAddress = contractDetails.direction[0].DirectionAddress;
-			dirPostalCode = contractDetails.direction[0].DirectionPostCode;
-			dirCity = contractDetails.direction[0].DirectionCity;
-			depSupervisor = contractDetails.department[0].DepartmentSupervisor;
-			depTelephone = contractDetails.department[0].DepartmentTelephone;
-			depEmail = contractDetails.department[0].DepartmentEmail;
-		}
-
-		var departmentName = contractDetails.department && contractDetails.department[0] ? contractDetails.department[0].DepartmentName : ''
-		var dataToPost = {
-			DocumentDate: getDateFormatWithDash(accountDetails.DocumentDate),
-			WorkConfirmationDate: getDateFormatForDocument(accountDetails.WorkConfirmationDate),
-			DeliveryGoodsDate: getDateFormatForDocument(accountDetails.DeliveryGoodsDate),
-			Attachments2: [{ StartPhrase: accountDetails.IsFirstOfTheYear ? 'Πρωτότυπο και φωτ/φο' : 'Δύο (2) φωτ/φα' }], //if not the first account of this year then 'Δύο(2) φωτ/φα'
-			Direction: [{
-				Name: dirName ? dirName.toUpperCase() : '',
-				NameInLower: dirName,
-				Department: [{
-					Name: departmentName ? departmentName.toUpperCase() : '',
-					NameInLower: departmentName,
-					Address: dirAddress,
-					PostalCode: dirPostalCode,
-					City: dirCity,
-					Supervisor: [{ Name: depSupervisor, Tel: depTelephone, Email: depEmail }]
-				}]
-			}],
-			CC: this.getCCDataToPost(contractDetails, accountDetails),
-			Contract: [{
-				ContractType: contractTypeName,
-				Concessionaire: [{ Article: 'της', Name: contractDetails.ConcessionaireName, Afm: contractDetails.ConcessionaireAFM }],
-				Title: [{ Article: 'τη', Value: contractDetails.Title }],
-				Protocol: [{ Number: contractDetails.ProtocolNumber, Date: getDateFormatForDocument(contractDetails.ProtocolDate) }],
-				Kae: contractDetails.KAE,
-				Actor: contractDetails.Actor,
-				CodeDirection: contractDetails.CodeDirection,
-				Date: [{ Start: getDateFormatForDocument(contractDetails.Start), End: getDateFormatForDocument(contractDetails.End) }],
-				Award: [{ Number: contractDetails.AwardNumber, Date: getDateFormatForDocument(contractDetails.AwardDate), Ada: contractDetails.AwardAda }],
-				CPV: [{ Code: contractDetails.CpvCode, Title: contractDetails.CpvTitle }],
-				Balance: currencyFormatter.format(Number(contractDetails.AmountTotal) - (Number(paidAmountTotalUntilToday) + Number(accountDetails.AmountTotal)), { symbol: '€', decimal: ',', thousand: '.', precision: 2, format: '%v%s' }),
-			}],
-			Account: [{
-				Number: accountDetails.Number,
-				NumberWord: this.getAccountNumberLex(accountDetails.Number),
-				LastMessage: (accountDetails.Number == contractDetails.NumberOfAccounts ? '(και τελευταίου)' : ''),
-				Start: getDateFormatForDocument(accountDetails.Start),
-				End: getDateFormatForDocument(accountDetails.End),
-				Amount: currencyFormatter.format(accountDetails.AmountTotal, { symbol: '€', decimal: ',', thousand: '.', precision: 2, format: '%v%s' }),
-				Invoice: this.getInvoiceDataToPost(accountDetails),
-				AYY: this.getAAYDataToPost(accountDetails),
-				FirstAccountProtocol: firstAccountProtocol
-			}],
-			DecisionDS: [{
-				Protocol: this.getDecisionBoardValues()
-			}],
-			DecisionSADA: [{
-				Protocol: this.getDecisionSADAValues()
-			}],
-			CourtOfAuditors: this.getCourtOfAuditorsValues(),
-			Signature: [{
-				SignatoryTitle: accountDetails.documentsignatory[3].signatorytype[0].Name,
-				Kaa: accountDetails.documentsignatory[3].Absense ? 'κ.κ.α' : '',
-				SignatoryName: accountDetails.documentsignatory[3].signatory[0].Name
-			}]
-		};
+		var dataToPost = createTransmissionDocument(contractDetails, accountDetails, paidAmountTotalUntilToday)
 
 		var config = {
 			headers: { 'Content-Type': 'application/json;charset=utf-8', Authorization: 'Bearer ' + this.props.token.data.token },
 			responseType: 'arraybuffer'
 		};
 
-		if (contractDetails.HasDownPayment && accountDetails.Number == 1) {
-			axios.post(getHostUrl() + '/getDownpaymentTransmissionWordDocument', dataToPost, config)
+		// if (contractDetails.HasDownPayment && accountDetails.Number == 1) {
+		// 	axios.post(getHostUrl() + '/getDownpaymentTransmissionWordDocument', dataToPost, config)
+		// 		.then(res => {
+		// 			var blob = new Blob([res.data]);
+		// 			var fileName = 'ΔΙΑΒΙΒΑΣΤΙΚΟ ΕΓΓΡΑΦΟ ' + accountDetails.Number + 'ου ΛΟΓΑΡΙΑΣΜΟΥ (ΠΡΟΚΑΤΑΒΟΛΗ).docx';
+		// 			downloadjs(blob, fileName, 'application/octet-stream');
+		// 			this.setState({ message: '', openMessage: false, variant: 'success', submitButtonDisabled: false });
+		// 		}).catch(error => {
+		// 			this.setState({ message: <><div>Αποτυχής προσπάθεια δημιουργίας αρχείου!</div><div>{getServerErrorResponseMessage(error)}</div></>, openMessage: true, variant: 'error', submitButtonDisabled: false });
+		// 		})
+		// }
+		// else {
+			axios.post(getHostUrl() + '/createTransmissionDocument', dataToPost, config)
 				.then(res => {
 					var blob = new Blob([res.data]);
 					var fileName = 'ΔΙΑΒΙΒΑΣΤΙΚΟ ΕΓΓΡΑΦΟ ' + accountDetails.Number + 'ου ΛΟΓΑΡΙΑΣΜΟΥ (ΠΡΟΚΑΤΑΒΟΛΗ).docx';
@@ -402,18 +228,7 @@ class AccountInfo extends React.Component {
 					this.setState({ message: <><div>Αποτυχής προσπάθεια δημιουργίας αρχείου!</div><div>{getServerErrorResponseMessage(error)}</div></>, openMessage: true, variant: 'error', submitButtonDisabled: false });
 				})
 		}
-		else {
-			axios.post(getHostUrl() + '/diavlog', dataToPost, config)
-				.then(res => {
-					var blob = new Blob([res.data]);
-					var fileName = 'ΔΙΑΒΙΒΑΣΤΙΚΟ ΕΓΓΡΑΦΟ ' + accountDetails.Number + 'ου ΛΟΓΑΡΙΑΣΜΟΥ (ΠΡΟΚΑΤΑΒΟΛΗ).docx';
-					downloadjs(blob, fileName, 'application/octet-stream');
-					this.setState({ message: '', openMessage: false, variant: 'success', submitButtonDisabled: false });
-				}).catch(error => {
-					this.setState({ message: <><div>Αποτυχής προσπάθεια δημιουργίας αρχείου!</div><div>{getServerErrorResponseMessage(error)}</div></>, openMessage: true, variant: 'error', submitButtonDisabled: false });
-				})
-		}
-	}
+	//}
 
 	createDocument2(e) {
 		e.preventDefault();
@@ -582,40 +397,7 @@ class AccountInfo extends React.Component {
 		}
 
 		return ret;
-	}
-	getAccountNumberLex(number) {
-		var ret = '';
-		if (number == 1)
-			ret = 'πρώτου'
-		else if (number == 2)
-			ret = 'δεύτερου'
-		else if (number == 3)
-			ret = 'τρίτου'
-		else if (number == 4)
-			ret = 'τέταρου'
-		else if (number == 5)
-			ret = 'πέμπτου'
-		else if (number == 6)
-			ret = 'έκτου'
-		else if (number == 7)
-			ret = 'έβδομου'
-		else if (number == 8)
-			ret = 'όγδοου'
-		else if (number == 9)
-			ret = 'ένατου'
-		else if (number == 10)
-			ret = 'δέκατου'
-		else if (number == 11)
-			ret = 'ένδεκατου'
-		else if (number == 12)
-			ret = 'δωδέκατου'
-		else if (number == 13)
-			ret = 'δέκατου τρίτου'
-		else if (number == 14)
-			ret = 'δέκατου τέταρτου'
-
-		return ret;
-	}
+	}	
 	//#endregion
 
 	//#region CC template

@@ -10,16 +10,19 @@ class MyTextField extends Component {
   }
 
   render() {
+    let divWidth = '300px'
+    if (this.props.width)
+      divWidth = this.props.width;
 
-    return (
+    return (      
       this.props.partOfProtocol === true
         ?
         <StyledTextField {...this.props} />
         :
-        <div style={{ margin: '10px', width: this.props.width, border: '1px solid black' }}>
+        <div style={{ margin: '10px', width: divWidth, border: '1px solid black' }}>
           <InputTitle title={this.props.title} />
           <div style={{ backgroundColor: 'white' }}>
-            <StyledTextField {...this.props} style={{ width: '100%', minWidth: '250px' }} />
+            <StyledTextField {...this.props} style={{ width: '100%' }} />
           </div>
         </div>
     )

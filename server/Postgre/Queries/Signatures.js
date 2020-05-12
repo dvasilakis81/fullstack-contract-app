@@ -106,8 +106,9 @@ const updateSignatory4 = (req, res, next, accountInfo) => {
       next(error);
     else {
       helper.consoleLog('UpdateSignatory4: Rows affected: ' + results.rowCount + ' Account Id: ' + req.body.AccountId);
-      if (accountInfo.HasMonitoringCommittee)
-        MonitoringCommittee.updateMonitoringCommittee(req, res, next);
+      if (req.body.HasMonitoringCommittee === true){
+        MonitoringCommittee.processMonitoringCommittee(req, res, next, accountInfo);
+      }
       else
         MonitoringCommittee.deleteMonitoringCommittee(req, res, next, accountInfo);      
     }
