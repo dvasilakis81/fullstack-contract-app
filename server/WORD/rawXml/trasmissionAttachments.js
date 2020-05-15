@@ -1,4 +1,4 @@
-const helper = require('../../../HelperMethods/helpermethods')
+const helper = require('../../HelperMethods/helpermethods')
 const util = require('util');
 
 // import { getWord } from '../../../HelperMethods/helpermethods'
@@ -20,7 +20,7 @@ module.exports = {
 		if (accountNo == 1)
 			rText = util.format('Πρωτότυπο και φωτοαντίγραφο της με Α.Π. %s/%s %s', contractProtocolNumber, contractProtocolDate, contractTypeLabel)
 		else
-			rText = util.format('Δύο (2) φωτ/φα της με Α.Π. %s/%s %s', contractProtocolNumber, contractProtocolDate, contractTypeLabel, DownpaymentLawArticle)
+			rText = util.format('Δύο (2) φωτ/φα της με Α.Π. %s/%s %s', contractProtocolNumber, contractProtocolDate, contractTypeLabel)
 
 		return '<w:p w:rsidR="00057639" w:rsidRDefault="00262B9D" w:rsidP="00057639">' +
 			'<w:pPr>' +
@@ -52,7 +52,10 @@ module.exports = {
 		if (body.DecisionBoard) {
 			for (let index = 0; index < body.DecisionBoard.length; index++) {
 				const element = body.DecisionBoard[index];
-				var rText = util.format('Δύο (2) φωτοαντίγραφα της με αρ. %s/%s Απόφασης του Δημοτικού Συμβουλίου (Α.Δ.Σ.) με Α.Δ.Α.', element.ProtocolNumber, element.ProtocolDate)
+				var rText = util.format('Δύο (2) φωτοαντίγραφα της με αρ. %s/%s Απόφασης του Δημοτικού Συμβουλίου (Α.Δ.Σ.) ', element.ProtocolNumber, element.ProtocolDate);
+				if (element.ADA)
+					rText += util.format('με Α.Δ.Α. ', element.ADA);
+				rText += ' .';
 
 				ret += '<w:p w:rsidR="0067614F" w:rsidRPr="0067614F" w:rsidRDefault="00262B9D" w:rsidP="0067614F">' +
 					'<w:pPr>' +
@@ -88,7 +91,10 @@ module.exports = {
 		if (body.DecisionCoordinatorDecentrilizedAdministration) {
 			for (let index = 0; index < body.DecisionCoordinatorDecentrilizedAdministration.length; index++) {
 				const element = body.DecisionCoordinatorDecentrilizedAdministration[index];
-				var rText = util.format('Δύο (2) φωτοαντίγραφα της με Α.Π. %s/%s Απόφασης του Συντονιστή της Αποκεντρωμένης Διοίκησης Αττικής.', element.ProtocolNumber, element.ProtocolDate)
+				var rText = util.format('Δύο (2) φωτοαντίγραφα της με Α.Π. %s/%s Απόφασης του Συντονιστή της Αποκεντρωμένης Διοίκησης Αττικής', element.ProtocolNumber, element.ProtocolDate)
+				if (element.ADA)
+					rText += util.format('με Α.Δ.Α. ', element.ADA);
+				rText += util.format('.');
 
 				ret += '<w:p w:rsidR="00057639" w:rsidRPr="00840235" w:rsidRDefault="00262B9D" w:rsidP="0067614F">' +
 					'<w:pPr>' +
@@ -230,11 +236,11 @@ module.exports = {
 				'</w:r>' +
 				'</w:p>'
 		};
-	},	
+	},
 	getAttachment7: function (body) {
 		//4.	Δύο (2) πρωτότυπα της από {dcd} Βεβαίωσης Έργου του Τμήματος {dep_name_lower} της Διεύθυνσης {dir_name_lower} αναφορικά με την υλοποίηση της Σύμβασης από την {c_conc} κατά το χρονικό διάστημα από {a_sd} έως και {a_ed}.
 
-		var WorkConfirmationDate = body.WorkConfirmationDate;
+		var workConfirmationDate = body.WorkConfirmationDate;
 		var directionNameLower = body.Direction[0].NameInLower;
 		var departmentNameLower = body.Direction[0].Department[0].NameInLower;
 		var concessionaireName = body.Contract[0].Concessionaire[0].Name;
@@ -242,7 +248,7 @@ module.exports = {
 		var end = body.Account[0].End;
 
 		var rText = util.format('Δύο (2) πρωτότυπα της από %s Βεβαίωσης Έργου του Τμήματος %s της Διεύθυνσης %s αναφορικά με την υλοποίηση της Σύμβασης από την %s κατά το χρονικό διάστημα από %s έως και %s.',
-			WorkConfirmationDate,
+			workConfirmationDate,
 			departmentNameLower,
 			directionNameLower,
 			concessionaireName,
@@ -368,8 +374,99 @@ module.exports = {
 			'</w:r>' +
 			'</w:p>';
 	},
+	getAttachment11: function (body) {
+		// return '';	
+		// return '<w:p w14:paraId="3988C141" w14:textId="77777777" w:rsidR="00811BA5" w:rsidRDefault="00811BA5" w:rsidP="00811BA5"><w:pPr><w:pStyle w:val="ListParagraph"/><w:numPr><w:ilvl w:val="0"/><w:numId w:val="4"/></w:numPr></w:pPr><w:proofErr w:type="spellStart"/><w:r><w:t>Sdfsdf</w:t></w:r><w:proofErr w:type="spellEnd"/><w:r><w:t xml:space="preserve"> </w:t></w:r></w:p>' +
+		//   '<w:p w14:paraId="3EEC54F5" w14:textId="60490F78" w:rsidR="00811BA5" w:rsidRDefault="00811BA5" w:rsidP="00811BA5">' +
+		// 	'<w:pPr>' +
+		// 	'<w:pStyle w:val="ListParagraph"/>' +
+		// 	'<w:numPr>' +
+		// 	'<w:ilvl w:val="1"/>' +
+		// 	'<w:numId w:val="4"/>' +
+		// 	'</w:numPr>' +
+		// 	'</w:pPr>' +
+		// 	'<w:r><w:t>11</w:t></w:r></w:p>' +
+		// 	'<w:p w14:paraId="68A4EFFB" w14:textId="085A5E7B" w:rsidR="00811BA5" w:rsidRDefault="00811BA5" w:rsidP="00811BA5">' +
+		// 	'<w:pPr>' +
+		// 	'<w:pStyle w:val="ListParagraph"/>' +
+		// 	'<w:numPr>' +
+		// 	'<w:ilvl w:val="1"/>' +
+		// 	'<w:numId w:val="4"/>' +
+		// 	'</w:numPr>' +
+		// 	'</w:pPr>' +
+		// 	'<w:r>' +
+		// 	'<w:t>222</w:t>' +
+		// 	'</w:r></w:p>'
+
+		return '<w:p w:rsidR="00212912" w:rsidRPr="00F871E2" w:rsidRDefault="00262B9D" w:rsidP="00F871E2">' +
+			'<w:pPr>' +
+			'<w:numPr>' +
+			'<w:ilvl w:val="0"/>' +
+			'<w:numId w:val="2"/>' +
+			'</w:numPr>' +
+			'<w:tabs>' +
+			'<w:tab w:val="left" w:pos="142"/>' +
+			'<w:tab w:val="left" w:pos="284"/>' +
+			'<w:tab w:val="left" w:pos="6195"/>' +
+			'</w:tabs>' +
+			'<w:spacing w:line="276" w:lineRule="auto"/>' +
+			'<w:jc w:val="both"/>' +
+			'<w:rPr>' +
+			'<w:rFonts w:ascii="Garamond" w:hAnsi="Garamond"/>' +
+			'</w:rPr>' +
+			'</w:pPr>' +
+			'<w:r w:rsidRPr="00F871E2">' +
+			'<w:rPr>' +
+			'<w:rFonts w:ascii="Garamond" w:hAnsi="Garamond"/>' +
+			'</w:rPr>' +
+			'<w:t>Δύο (2) φωτοαντίγραφα του με ΑΠ. 318192/12.12.2019 εγγράφου της Τεχνόπολις του Δήμου Αθηναίων με το οποίο διαβιβάζονται: </w:t>' +
+			'</w:r>' +
+			'</w:p>' +
+			
+			'<w:p>' +
+			'<w:pPr>' +
+			'<w:numPr>' +
+			'<w:ilvl w:val="1"/>' +
+			'<w:numId w:val="2"/>' +
+			'</w:numPr>' +
+			// '<w:tabs>' +
+			// '<w:tab w:val="left" w:pos="142"/>' +
+			// '<w:tab w:val="left" w:pos="284"/>' +
+			// '<w:tab w:val="left" w:pos="6195"/>' +
+			// '</w:tabs>' +
+			'<w:spacing w:line="276" w:lineRule="auto"/>' +
+			'<w:jc w:val="both"/>' +
+			'<w:rPr>' +
+			'<w:rFonts w:ascii="Garamond" w:hAnsi="Garamond"/>' +
+			'</w:rPr>' +
+			'</w:pPr>' +
+			'<w:r w:rsidRPr="00F871E2">' +
+			'<w:rPr>' +
+			'<w:rFonts w:ascii="Garamond" w:hAnsi="Garamond"/>' +
+			'</w:rPr>' +
+			'<w:t>Το πρακτικό της 2 </w:t>' +
+			'</w:r>' +
+			'</w:p>'
+		// 	'<w:p><w:pPr><w:pStyle w:val="ae"/>' +
+		// 	'<w:numPr><w:ilvl w:val="0"/><w:numId w:val="5"/></w:numPr><w:tabs><w:tab w:val="left" w:pos="5670"/></w:tabs>' +
+		// 	'<w:ind w:left="851" w:hanging="142"/><w:rPr><w:sz w:val="22"/><w:szCs w:val="22"/></w:rPr></w:pPr>' +
+		// 	'<w:r><w:rPr><w:sz w:val="22"/><w:szCs w:val="22"/></w:rPr><w:t>Το πρακτικό της 2</w:t></w:r>' +
+		// 	'<w:r><w:rPr><w:sz w:val="22"/><w:szCs w:val="22"/><w:vertAlign w:val="superscript"/></w:rPr><w:t>ης</w:t></w:r>' +
+		// 	'<w:r><w:rPr><w:sz w:val="22"/><w:szCs w:val="22"/></w:rPr><w:t xml:space="preserve"> συνεδρίασης της Επιτροπής Παρακολούθησης για την Προγραμματική Σύμβαση για το σχεδιασμό και υλοποίηση του Προγράμματος «Το παιδί, Η πόλη και τα Μνημεία» που πραγματοποιήθηκε στις 06.12.2019.</w:t></w:r>' +
+		// 	'<w:p><w:pPr><w:pStyle w:val="ae"/>' +
+		// 	'<w:numPr><w:ilvl w:val="0"/><w:numId w:val="5"/></w:numPr>' +
+		// 	'<w:tabs><w:tab w:val="left" w:pos="5670"/></w:tabs>' +
+		// 	'<w:ind w:left="851" w:hanging="142"/>' +
+		// 	'<w:rPr><w:sz w:val="22"/><w:szCs w:val="22"/></w:rPr></w:pPr>' +
+		// 	'<w:r><w:rPr><w:sz w:val="22"/><w:szCs w:val="22"/></w:rPr><w:t xml:space="preserve">Τα περιεχόμενα του παραδοτέου του φυσικού αντικειμένου, που αφορά στο πρώτο τετράμηνο, Ιούνιος-Οκτώβριος  2019.</w:t></w:r>' +
+		// 	'<w:r><w:rPr><w:sz w:val="22"/><w:szCs w:val="22"/></w:rPr><w:tab/></w:r>' +
+		// 	'</w:p>' +
+		// 	'<w:p><w:pPr><w:tabs><w:tab w:val="left" w:pos="5670"/></w:tabs><w:jc w:val="center"/><w:rPr><w:sz w:val="22"/><w:szCs w:val="22"/></w:rPr></w:pPr></w:p>' +
+		// 	'<w:p><w:pPr><w:tabs><w:tab w:val="left" w:pos="5670"/></w:tabs><w:rPr><w:sz w:val="22"/><w:szCs w:val="22"/></w:rPr></w:pPr></w:p>' +
+		// 	'<w:p><w:pPr><w:tabs><w:tab w:val="left" w:pos="5670"/></w:tabs><w:rPr><w:sz w:val="22"/><w:szCs w:val="22"/></w:rPr></w:pPr></w:p>'
+	},
 	getAttachmentsXmlValue: function (body) {
-		var ret = '<w:p w:rsidR="00A44D6F" w:rsidRDefault="00262B9D" w:rsidP="00CB4B70">' +
+		var ret = '<w:p w:rsidR="00C24AC4" w:rsidRPr="00AF3FEB" w:rsidRDefault="006269FB" w:rsidP="00C24AC4">' +
 			'<w:pPr>' +
 			'<w:spacing w:before="240"/>' +
 			'<w:jc w:val="both"/>' +
@@ -412,7 +509,8 @@ module.exports = {
 			this.getAttachment7(body) +
 			this.getAttachment8(body) +
 			this.getAttachment9(body) +
-			this.getAttachment10(body)
+			this.getAttachment10(body) +
+			this.getAttachment11(body)
 
 		return ret;
 	}

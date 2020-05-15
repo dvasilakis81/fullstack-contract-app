@@ -1,11 +1,16 @@
-var rawtabledata = require('../WORD/rawXml/raw_xml');
+var rawtabledata = require('../WORD/rawXml/tableData');
+var transmissionAttachments = require('../WORD/rawXml/trasmissionAttachments');
+var accountAttachments = require('../WORD/rawXml/accountAttachments');
 
 module.exports = {
 
-  setDataForTransmissionAccount: function (body) {
+  setDataForTransmissionDocument: function (body) {
     var ret = '';
+    var attachmentsRawData = transmissionAttachments.getAttachmentsXmlValue(body);
+
     if (body) {
       ret = {
+        attachments: attachmentsRawData,
         dd: body.DocumentDate,
         dir_name: body.Direction[0].Name,
         dir_name_lower: body.Direction[0].NameInLower,
@@ -37,16 +42,14 @@ module.exports = {
         c_dir: body.Contract[0].CodeDirection,
         c_cpv_code: body.Contract[0].CPV[0].Code,
         c_cpv_title: body.Contract[0].CPV[0].Title,
-        c_bal: body.Contract[0].Balance,
+        c_bal: body.Contract[0].Balance,        
         a_n: body.Account[0].Number,
-        a_n_w: body.Account[0].NumberWord,
-        a_lm: body.Account[0].LastMessage,
+        a_n_w: body.Account[0].NumberWord,        
         a_sd: body.Account[0].Start,
         a_ed: body.Account[0].End,
         a_ta: body.Account[0].Amount,
-        ft_pn: body.Account[0].FirstAccountProtocol,
         a_in: body.Account[0].Invoice[0].Number,
-        a_id: body.Account[0].Invoice[0].Date,
+        a_id: body.Account[0].Invoice[0].Date,        
         a_idd: body.Account[0].Invoice[0].DeliveredDate,
         a_iddpn: body.Account[0].Invoice[0].DeliveredDateProtocol[0].Number,
         a_iddpd: body.Account[0].Invoice[0].DeliveredDateProtocol[0].Date,
@@ -55,28 +58,31 @@ module.exports = {
         aay_pn: body.Account[0].AYY[0].ProtocolNumber,
         aay_pdt: body.Account[0].AYY[0].ProtocolDate,
         aay_ead_n: body.Account[0].AYY[0].EADNumber,
-        att_st_ph: body.Attachments2[0].StartPhrase,
-        att_ada: body.Account[0].AYY[0].ADA,
-        aay_pr_year: body.Account[0].AYY[0].PreviousYearValue || '',
-        dcd: body.WorkConfirmationDate,
-        ddg: body.DeliveryGoodsDate,
         sign_title: body.Signature[0].SignatoryTitle,
-        kaa: body.Signature[0].Kaa,
+        kaa: (body.Signature[0].Kaa || ''),
         sign_name: body.Signature[0].SignatoryName.toLowerCase().includes("κακριδ") ? '' : body.Signature[0].SignatoryName,
-        sign_sv: body.Signature[0].SignatoryName.toLowerCase().includes("κακριδ") ? body.Signature[0].SignatoryName : ''
+        sign_sv: body.Signature[0].SignatoryName.toLowerCase().includes("κακριδ") ? body.Signature[0].SignatoryName : '',
+        ft_pn: body.Account[0].FirstAccountProtocol || '',
+        att_ada: body.Account[0].AYY[0].ADA || '',
+        aay_pr_year: body.Account[0].AYY[0].PreviousYearValue || ''
       }
     }
 
     return ret;
   },
-  setDataForAccount: function (body) {
+  setDataForAccountDocument: function (body) {
     var ret = '';
-    var rawTableDataValue = rawtabledata.getRawXmlTableValue(body);
+    
+    var attachmentsRawData = accountAttachments.getAttachmentsXmlValue(body);
+    var rawTableDataValue = rawtabledata.getRawXmlTableValue(body, true);
 
     if (body) {
+
       ret = {
         rawTableData: rawTableDataValue,
+        attachments: attachmentsRawData,
         year: body.BudgetExpenditureYear,
+        la: body.LawArticle,
         dd: body.DocumentDate,
         dcd: body.WorkConfirmationDate,
         ddg: body.DeliveryGoodsDate,
@@ -98,30 +104,26 @@ module.exports = {
         c_title: body.Contract[0].Title[0].Value,
         c_pn: body.Contract[0].Protocol[0].Number,
         c_pd: body.Contract[0].Protocol[0].Date,
-        fpa_v: body.Contract[0].FpaValue,
+        c_la: body.Account[0].DownpaymentLawArticle,
         kae: body.Contract[0].Kae,
         ac: body.Contract[0].Actor,
-        cd: body.Contract[0].CodeDirection,
-        a_n: body.Account[0].Number,
+        cd: body.Contract[0].CodeDirection,        
+        fpa_v: body.Contract[0].FpaValue,
+        a_n: body.Account[0].No,
         a_n_w: body.Account[0].numberWord,
         a_ca: body.Account[0].AmountPure,
         a_fpa: body.Account[0].AmountFpa,
         a_ta: body.Account[0].AmountTotal,
-        a_words: body.Account[0].AmountInWords,
+        a_word: body.Account[0].AmountInWords,
         a_word_cap: body.Account[0].AmountInWordsCapital,
         a_sd: body.Account[0].Start,
         a_ed: body.Account[0].End,
         a_in: body.Account[0].Invoice[0].Number,
         a_id: body.Account[0].Invoice[0].Date,
-        a_id: body.Account[0].Invoice[0].Date,
-        a_iddpn: body.Account[0].Invoice[0].DeliveredDateProtocol[0].Number,
-        a_iddpd: body.Account[0].Invoice[0].DeliveredDateProtocol[0].Date,
-        aay: body.Account[0].AYY[0].Value,
-        aay_year: body.Account[0].AYY[0].Year,
-        aay_pn: body.Account[0].AYY[0].ProtocolNumber,
-        aay_pdt: body.Account[0].AYY[0].ProtocolDate,
-        aay_ead_n: body.Account[0].AYY[0].EADNumber,
-        aay_ada: body.Account[0].AYY[0].ADA,
+        aay: body.Account[0].AAY[0].Value,
+        aay_pn: body.Account[0].AAY[0].ProtocolNumber,
+        aay_pdt: body.Account[0].AAY[0].ProtocolDate,
+        aay_ead_n: body.Account[0].AAY[0].EADNumber,
         a_mra: body.Account[0].MixedRemainApproval,
         kaa: body.Signature[0].Kaa,
         writer_title: body.Signature[0].WriterTitle,
@@ -136,4 +138,4 @@ module.exports = {
 
     return ret;
   }
-}
+};

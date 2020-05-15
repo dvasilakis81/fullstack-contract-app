@@ -5,8 +5,7 @@ var fs = require('fs');
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
-var accountData = require('./FileData/AccountData');
-var downpaymentData = require('./FileData/DownPaymentData');
+var InputData = require('./InputData/InputData');
 var docxTemplatorMethods = require('./DocxTemplater/DocxTemplaterMethods');
 const util = require('util');
 
@@ -37,38 +36,38 @@ app.use(express.static(path.join(__dirname, "./WORD/templates")));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
-app.post('/createTransmissionDocument', dbLogin.checkToken, function (req, res, next) {
+// app.post('/createTransmissionDocument', dbLogin.checkToken, function (req, res, next) {
+//   var fs = require('fs');
+//   let d = new Date();
+
+//   var inputPath = path.resolve(__dirname, 'WORD/templates/in1.docx');
+//   var outputPath = path.resolve(__dirname, 'WORD/templates/' + d.getHours() + d.getMinutes() + d.getSeconds() + '.docx');
+//   var inputData = accountData.setDataForTransmissionAccount(req.body);
+//   docxTemplatorMethods.generateDocx(inputPath, outputPath, inputData);
+//   var pathUrl = req.path;
+//   if (pathUrl !== '/') {
+//     res.download(outputPath, function (err) {
+//       if (err) {
+//         helper.consoleLog('Handle error, but keep in mind the response may be partially-sent')
+//       } else {
+//         helper.consoleLog('decrement a download credit, etc.');
+//       }
+//       if (fs.existsSync(outputPath))
+//         fs.unlinkSync(outputPath);
+//     });
+//   }
+//   else {
+//     next();
+//   }
+// });
+
+app.post('/createAccountDocument', dbLogin.checkToken, function (req, res, next) {
   var fs = require('fs');
-  let d = new Date();
-
-  var inputPath = path.resolve(__dirname, 'WORD/templates/in1.docx');
-  var outputPath = path.resolve(__dirname, 'WORD/templates/' + d.getHours() + d.getMinutes() + d.getSeconds() + '.docx');
-  var inputData = accountData.setDataForTransmissionAccount(req.body);
-  docxTemplatorMethods.generateDocx(inputPath, outputPath, inputData);
-  var pathUrl = req.path;
-  if (pathUrl !== '/') {
-    res.download(outputPath, function (err) {
-      if (err) {
-        helper.consoleLog('Handle error, but keep in mind the response may be partially-sent')
-      } else {
-        helper.consoleLog('decrement a download credit, etc.');
-      }
-      if (fs.existsSync(outputPath))
-        fs.unlinkSync(outputPath);
-    });
-  }
-  else {
-    next();
-  }
-});
-
-app.post('/accountdocument', dbLogin.checkToken, function (req, res, next) {
-  var fs = require('fs');
 
   let d = new Date();
-  var inputPath = path.join(__dirname, "WORD/templates/in2.docx")
+  var inputPath = path.join(__dirname, "WORD/templates/account.docx")
   var outputPath = path.resolve(__dirname, 'WORD/templates/' + d.getHours() + d.getMinutes() + d.getSeconds() + '.docx');
-  var inputData = accountData.setDataForAccount(req.body);
+  var inputData = InputData.setDataForAccountDocument(req.body);
   docxTemplatorMethods.generateDocx(inputPath, outputPath, inputData);
   var pathUrl = req.path;
   if (pathUrl !== '/') {
@@ -87,13 +86,13 @@ app.post('/accountdocument', dbLogin.checkToken, function (req, res, next) {
   }
 });
 
-app.post('/getDownpaymentTransmissionWordDocument', dbLogin.checkToken, function (req, res, next) {
+app.post('/createTransmissionDocument', dbLogin.checkToken, function (req, res, next) {
   var fs = require('fs');
 
   let d = new Date();
-  var inputPath = path.join(__dirname, "WORD/templates/Downpayment/transmission.docx")
-  var outputPath = path.resolve(__dirname, 'WORD/templates/Downpayment/' + d.getHours() + d.getMinutes() + d.getSeconds() + '.docx');
-  var inputData = downpaymentData.setDataForDownpaymentTransmissionDocument(req.body);
+  var inputPath = path.join(__dirname, "WORD/templates/transmission.docx")
+  var outputPath = path.resolve(__dirname, 'WORD/templates/' + d.getHours() + d.getMinutes() + d.getSeconds() + '.docx');
+  var inputData = InputData.setDataForTransmissionDocument(req.body);
   docxTemplatorMethods.generateDocx(inputPath, outputPath, inputData);
   var pathUrl = req.path;
   if (pathUrl !== '/') {
@@ -111,13 +110,13 @@ app.post('/getDownpaymentTransmissionWordDocument', dbLogin.checkToken, function
   }
 });
 
-app.post('/getDownpaymentAccountWordDocument', function (req, res, next) {
+app.post('/createAccountDocument', function (req, res, next) {
   var fs = require('fs');
 
   let d = new Date();
-  var inputPath = path.join(__dirname, "WORD/templates/Downpayment/account.docx")
-  var outputPath = path.resolve(__dirname, 'WORD/templates/Downpayment/' + d.getHours() + d.getMinutes() + d.getSeconds() + '.docx');
-  var inputData = downpaymentData.setDataForDownpaymentAccountDocument(req.body);
+  var inputPath = path.join(__dirname, "WORD/templates/account.docx")
+  var outputPath = path.resolve(__dirname, 'WORD/templates/' + d.getHours() + d.getMinutes() + d.getSeconds() + '.docx');
+  var inputData = InputData.setDataForAccountDocument(req.body);
   docxTemplatorMethods.generateDocx(inputPath, outputPath, inputData);
   var pathUrl = req.path;
   if (pathUrl !== '/') {
@@ -181,7 +180,7 @@ app.get('/userroles', dbLogin.checkToken, dbParametric.getUserRoles);
 app.get('/reservations', dbLogin.checkToken, dbParametric.getReservations);
 app.post('/contractexists', dbLogin.checkToken, dbContract.contractExists);
 app.get('/contracts', dbLogin.checkToken, dbContract.getContracts);
-app.get('/contracts_webix', dbContract.getContracts_WEBIX);
+//app.get('/contracts_webix', dbContract.getContracts_WEBIX);
 app.get('/searchcontracts', dbContract.searchContracts);
 app.post('/insertcontract', dbLogin.checkToken, dbContract.insertContract);
 app.post('/deletecontract', dbLogin.checkToken, dbContract.deleteContract);

@@ -8,67 +8,64 @@ const util = require('util')
 // });
 //database: 'new_db',
 
-const getContracts_WEBIX = (request, response, next) => {
-  var offset;
-  var limit;
+// const getContracts_WEBIX = (request, response, next) => {
+//   var offset;
+//   var limit;
 
-  if (request.query.start instanceof Array) {
-    offset = request.query.start[request.query.start.length - 1];
-    limit = request.query.count[request.query.count.length - 1];
-  } else {
-    offset = parseInt(request.query.start);
-    limit = parseInt(request.query.count);
-  }
+//   if (request.query.start instanceof Array) {
+//     offset = request.query.start[request.query.start.length - 1];
+//     limit = request.query.count[request.query.count.length - 1];
+//   } else {
+//     offset = parseInt(request.query.start);
+//     limit = parseInt(request.query.count);
+//   }
 
-  var sqlQuery = 'SELECT *,' +
-    '(SELECT COUNT(*) AS "Total" FROM "Ordering"."Contract"), ' +
-    '(SELECT json_agg(ContractType) FROM (SELECT * FROM "Ordering"."ContractType" as ct WHERE c."ContractTypeId" = ct."ContractTypeId") ContractType) AS ContractType, ' +
-    '(SELECT json_agg(Direction) FROM (SELECT * FROM "Ordering"."Direction" as dir WHERE c."DirectionId" = dir."DirectionId") Direction) AS Direction, ' +
-    '(SELECT json_agg(Department) FROM (SELECT * FROM "Ordering"."Department" as dep WHERE c."DepartmentId" = dep."DepartmentId") Department) AS Department ' +
-    'FROM "Ordering"."Contract" as c ' +
-    'ORDER BY c."DateCreated" DESC ' +
-    'OFFSET ' + offset + ' LIMIT ' + limit
+//   var sqlQuery = 'SELECT *,' +
+//     '(SELECT COUNT(*) AS "Total" FROM "Ordering"."Contract"), ' +
+//     '(SELECT json_agg(ContractType) FROM (SELECT * FROM "Ordering"."ContractType" as ct WHERE c."ContractTypeId" = ct."ContractTypeId") ContractType) AS ContractType, ' +
+//     '(SELECT json_agg(Direction) FROM (SELECT * FROM "Ordering"."Direction" as dir WHERE c."DirectionId" = dir."DirectionId") Direction) AS Direction, ' +
+//     '(SELECT json_agg(Department) FROM (SELECT * FROM "Ordering"."Department" as dep WHERE c."DepartmentId" = dep."DepartmentId") Department) AS Department ' +
+//     'FROM "Ordering"."Contract" as c ' +
+//     'ORDER BY c."DateCreated" DESC ' +
+//     'OFFSET ' + offset + ' LIMIT ' + limit
 
-  pool.query(sqlQuery, (error, results) => {
-    if (error) {
-      next(error);
-      helper.consoleLog("Failed to get contracts: \n" + error.message);
-    }
-    else {
-      helper.consoleLog("Contracts requested\n");
+//   pool.query(sqlQuery, (error, results) => {
+//     if (error) {
+//       next(error);
+//       helper.consoleLog("Failed to get contracts: \n" + error.message);
+//     }
+//     else {
+//       helper.consoleLog("Contracts requested\n");
 
-      var retObject = {} // empty Object
-      var key = 'data';
-      retObject[key] = []; // empty Array, which you can push() values into
-      retObject[key] = results.rows
+//       var retObject = {} // empty Object
+//       var key = 'data';
+//       retObject[key] = []; // empty Array, which you can push() values into
+//       retObject[key] = results.rows
 
-      key = 'pos';
-      retObject[key] = [];
-      retObject[key] = offset;
+//       key = 'pos';
+//       retObject[key] = [];
+//       retObject[key] = offset;
 
-      key = 'total_count';
-      retObject[key] = [];
-      retObject[key] = results.rows && results.rows.length > 0 ? results.rows[0].Total : 0;
+//       key = 'total_count';
+//       retObject[key] = [];
+//       retObject[key] = results.rows && results.rows.length > 0 ? results.rows[0].Total : 0;
 
-      var jstr = JSON.stringify(retObject);
+//       var jstr = JSON.stringify(retObject);
 
-      response.send(jstr);
-    }
-  })
+//       response.send(jstr);
+//     }
+//   })
+// }
+function getQueryTotalContractsByUser(loginUserId) {
+  return loginUserId ? util.format('(SELECT COUNT(*) AS "Total" FROM "Ordering"."Contract" as c ' +
+    'WHERE (c."OwnerId"=%s OR c."AllUsers"=true OR (%s IN (SELECT cus."UserId" FROM "Ordering"."ContractUsers" as cus WHERE cus."ContractId"=c."Id")))), ',
+    loginUserId, loginUserId) : '(SELECT COUNT(*) AS "Total" FROM "Ordering"."Contract"), ';
 }
 
-const getContracts = (request, response, next) => {
+function getSelectFromClauses(loginUserId) {
 
-  var loginUserId = parseInt(request.query.loginuserid) 
-  var offset = parseInt(request.query.offset)
-  var limit = parseInt(request.query.limit)
-
-  var queryTotal = util.format('(SELECT COUNT(*) AS "Total" FROM "Ordering"."Contract" as c ' +
-    'WHERE (c."OwnerId"=%s OR c."AllUsers"=true OR (%s IN (SELECT cus."UserId" FROM "Ordering"."ContractUsers" as cus WHERE cus."ContractId"=c."Id")))), ',
-    loginUserId, loginUserId);
-
-  var sqlQuery = util.format('SELECT *, ' +
-    queryTotal +
+  return 'SELECT *, ' +
+    getQueryTotalContractsByUser(loginUserId) +
     '(SELECT json_agg(Account) FROM (SELECT acct."Number",acct."Start",acct."End",acct."AmountPure", acct."AmountFpa", acct."AmountTotal" FROM "Ordering"."Account" as acct WHERE c."Id" = acct."ContractId" ORDER BY acct."Number") Account) AS CreatedAccounts, ' +
     '(SELECT json_agg(ContractType) FROM (SELECT * FROM "Ordering"."ContractType" as ct WHERE c."ContractTypeId" = ct."ContractTypeId") ContractType) AS ContractType, ' +
     '(SELECT json_agg(Direction) FROM (SELECT * FROM "Ordering"."Direction" as dir WHERE c."DirectionId" = dir."DirectionId") Direction) AS Direction, ' +
@@ -78,13 +75,21 @@ const getContracts = (request, response, next) => {
     '(SELECT json_agg(DecisionCoordinatorDecentrilizedAdministration) FROM (SELECT * FROM "Ordering"."DecisionCoordinatorDecentrilizedAdministration" as dp WHERE dp."ContractId" = c."Id" ORDER BY dp."OrderNo") DecisionCoordinatorDecentrilizedAdministration) AS DecisionCoordinatorDecentrilizedAdministration, ' +
     '(SELECT json_agg(CourtOfAuditors) FROM (SELECT * FROM "Ordering"."CourtOfAuditors" as dp WHERE dp."ContractId" = c."Id" ORDER BY dp."OrderNo") CourtOfAuditors) AS CourtOfAuditors, ' +
     '(SELECT json_agg(Owner) FROM (SELECT * FROM "Ordering"."User" as usr WHERE c."OwnerId" = usr."Id") Owner) AS Owner ' +
-    'FROM "Ordering"."Contract" as c ' +
-    'WHERE (c."OwnerId"=%s ' +
-    'OR c."AllUsers"=true ' +
-    'OR %s IN (SELECT cus."UserId" FROM "Ordering"."ContractUsers" as cus WHERE cus."ContractId"=c."Id")) ' +
-    'ORDER BY c."DateCreated" DESC ' +
-    'OFFSET %s LIMIT %s', loginUserId, loginUserId, offset, limit)
+    'FROM "Ordering"."Contract" as c '
+}
 
+function gerOrderBy() {
+  return 'ORDER BY c."DateCreated" DESC '
+}
+
+const getContracts = (request, response, next) => {
+
+  var loginUserId = parseInt(request.query.loginuserid);
+  var offset = parseInt(request.query.offset);
+  var limit = parseInt(request.query.limit);
+  var where = util.format('WHERE (c."OwnerId"=%s OR c."AllUsers"=true OR %s IN (SELECT cus."UserId" FROM "Ordering"."ContractUsers" as cus WHERE cus."ContractId"=c."Id")) ', loginUserId, loginUserId);
+  var sqlQuery = util.format('%s %s %s OFFSET %s LIMIT %s', getSelectFromClauses(loginUserId), where, gerOrderBy(), offset, limit);
+  console.log('sqlQuery: ' + sqlQuery)
   pool.query(sqlQuery, (error, results) => {
     if (error) {
       next(error);
@@ -97,22 +102,9 @@ const getContracts = (request, response, next) => {
   })
 }
 
-const getContractById = (req, res, next, contractId) => {  
-  
-  var sqlQuery = 'SELECT *,' +
-    '(SELECT COUNT(*) AS "Total" FROM "Ordering"."Contract"), ' +
-    '(SELECT json_agg(Account) FROM (SELECT acct."Number",acct."Start",acct."End",acct."AmountPure", acct."AmountFpa", acct."AmountTotal" FROM "Ordering"."Account" as acct WHERE c."Id" = acct."ContractId" ORDER BY acct."Number") Account) AS CreatedAccounts, ' +
-    '(SELECT json_agg(ContractType) FROM (SELECT * FROM "Ordering"."ContractType" as ct WHERE c."ContractTypeId" = ct."ContractTypeId") ContractType) AS ContractType, ' +
-    '(SELECT json_agg(Direction) FROM (SELECT * FROM "Ordering"."Direction" as dir WHERE c."DirectionId" = dir."DirectionId") Direction) AS Direction, ' +
-    '(SELECT json_agg(Department) FROM (SELECT * FROM "Ordering"."Department" as dep WHERE c."DepartmentId" = dep."DepartmentId") Department) AS Department,  ' +
-    '(SELECT json_agg(DecisionBoard) FROM (SELECT * FROM "Ordering"."DecisionBoard" as dp WHERE dp."ContractId" = c."Id" ORDER BY dp."OrderNo") DecisionBoard) AS DecisionBoard, ' +
-    '(SELECT json_agg(DecisionCoordinatorDecentrilizedAdministration) FROM (SELECT * FROM "Ordering"."DecisionCoordinatorDecentrilizedAdministration" as dp WHERE dp."ContractId" = c."Id" ORDER BY dp."OrderNo") DecisionCoordinatorDecentrilizedAdministration) AS DecisionCoordinatorDecentrilizedAdministration, ' +
-    '(SELECT json_agg(CourtOfAuditors) FROM (SELECT * FROM "Ordering"."CourtOfAuditors" as dp WHERE dp."ContractId" = c."Id" ORDER BY dp."OrderNo") CourtOfAuditors) AS CourtOfAuditors, ' +
-    '(SELECT json_agg(ContractUsers) FROM (SELECT * FROM "Ordering"."ContractUsers" as cus WHERE c."Id" = cus."ContractId") ContractUsers) AS ContractUsers, ' +
-    '(SELECT json_agg(Owner) FROM (SELECT * FROM "Ordering"."User" as usr WHERE c."OwnerId" = usr."Id") Owner) AS Owner ' +
-    'FROM "Ordering"."Contract" as c ' +
-    'WHERE c."Id"=' + contractId
-  'ORDER BY c."DateCreated" DESC '
+const getContractById = (req, res, next, contractId) => {
+  var where = 'WHERE c."Id"=' + contractId;
+  var sqlQuery = util.format('%s %s %s', getSelectFromClauses(), where, gerOrderBy())
 
   pool.query(sqlQuery, (error, results) => {
     if (error) {
@@ -138,23 +130,10 @@ const getContractTypes = (request, response, next) => {
 const searchContracts = (request, response, next) => {
   var filter = request.query.filter
   var loginUserId = parseInt(request.query.loginuserid)
+  var where = 'WHERE ((LOWER(c."Title") LIKE LOWER(\'%' + filter + '%\')' + ' OR LOWER(c."ConcessionaireName") LIKE LOWER(\'%' + filter + '%\')) ' +
+    'AND (c."OwnerId"=' + loginUserId + ' OR c."AllUsers"=true OR ' + loginUserId + ' IN (SELECT cus."UserId" FROM "Ordering"."ContractUsers" as cus WHERE cus."ContractId"=c."Id"))) ';
 
-  var sqlQuery = 'SELECT *,' +
-    '(SELECT COUNT(*) AS "Total" FROM "Ordering"."Contract"), ' +
-    '(SELECT json_agg(Account) FROM (SELECT acct."Number",acct."Start",acct."End",acct."AmountPure", acct."AmountFpa", acct."AmountTotal" FROM "Ordering"."Account" as acct WHERE c."Id" = acct."ContractId" ORDER BY acct."Number") Account) AS CreatedAccounts, ' +
-    '(SELECT json_agg(ContractType) FROM (SELECT * FROM "Ordering"."ContractType" as ct WHERE c."ContractTypeId" = ct."ContractTypeId") ContractType) AS ContractType, ' +
-    '(SELECT json_agg(Direction) FROM (SELECT * FROM "Ordering"."Direction" as dir WHERE c."DirectionId" = dir."DirectionId") Direction) AS Direction, ' +
-    '(SELECT json_agg(Department) FROM (SELECT * FROM "Ordering"."Department" as dep WHERE c."DepartmentId" = dep."DepartmentId") Department) AS Department, ' +
-    '(SELECT json_agg(DecisionBoard) FROM (SELECT * FROM "Ordering"."DecisionBoard" as dp WHERE dp."ContractId" = c."Id" ORDER BY dp."OrderNo") DecisionBoard) AS DecisionBoard, ' +
-    '(SELECT json_agg(DecisionCoordinatorDecentrilizedAdministration) FROM (SELECT * FROM "Ordering"."DecisionCoordinatorDecentrilizedAdministration" as dp WHERE dp."ContractId" = c."Id" ORDER BY dp."OrderNo") DecisionCoordinatorDecentrilizedAdministration) AS DecisionCoordinatorDecentrilizedAdministration, ' +
-    '(SELECT json_agg(CourtOfAuditors) FROM (SELECT * FROM "Ordering"."CourtOfAuditors" as dp WHERE dp."ContractId" = c."Id" ORDER BY dp."OrderNo") CourtOfAuditors) AS CourtOfAuditors, ' +
-    '(SELECT json_agg(ContractUsers) FROM (SELECT * FROM "Ordering"."ContractUsers" as cus WHERE c."Id" = cus."ContractId") ContractUsers) AS ContractUsers, ' +
-    '(SELECT json_agg(Owner) FROM (SELECT * FROM "Ordering"."User" as usr WHERE c."OwnerId" = usr."Id") Owner) AS Owner ' +
-    'FROM "Ordering"."Contract" as c ' +
-    'WHERE ((LOWER(c."Title") LIKE LOWER(\'%' + filter + '%\')' + ' OR LOWER(c."ConcessionaireName") LIKE LOWER(\'%' + filter + '%\')) ' +
-    'AND (c."OwnerId"=' + loginUserId + ' OR c."AllUsers"=true OR ' + loginUserId + ' IN (SELECT cus."UserId" FROM "Ordering"."ContractUsers" as cus WHERE cus."ContractId"=c."Id"))) ' +
-    'ORDER BY c."DateCreated" DESC ' +
-    'OFFSET 0 LIMIT 100'
+  var sqlQuery = util.format('%s %s %s %s', getSelectFromClauses(loginUserId), where, gerOrderBy(), 'OFFSET 0 LIMIT 100')
 
   pool.query(sqlQuery, (error, results) => {
     if (error) {
@@ -167,6 +146,7 @@ const searchContracts = (request, response, next) => {
     }
   })
 }
+
 const contractExists = (req, res, next) => {
   var sqlQuery = util.format('SELECT * ' +
     'FROM "Ordering"."Contract" ' +
@@ -218,7 +198,8 @@ const insertContract = (req, res, next) => {
     req.body.HasDownPayment,
     helper.addQuotes(req.body.FpaValue),
     helper.addQuotes(req.body.OwnerId),
-    req.body.AllUsers)
+    req.body.AllUsers,
+    helper.addQuotes(req.body.LawArticle))
 
   pool.query(sqlQuery, (error, results) => {
     if (error)
@@ -338,7 +319,7 @@ const updateContract = (req, res, next) => {
     'SET "ContractTypeId"=%s,"Title"=%s,"ProtocolNumber"=%s,"ProtocolDate"=%s,"KAE"=%s,"Actor"=%s,' +
     '"CodeDirection"=%s,"AwardNumber"=%s,"AwardDate"=%s,"AwardAda"=%s,"CpvCode"=%s,"CpvTitle"=%s,"AmountPure"=%s,"AmountFpa"=%s,"AmountTotal"=%s,' +
     '"Balance"=%s,"Start"=%s,"End"=%s,"NumberOfAccounts"=%s,"DirectionId"=%s,' +
-    '"DepartmentId"=%s,"DateModified"=%s,"ConcessionaireName"=%s,"ConcessionaireAFM"=%s,"HasDownPayment"=%s,"FpaValue"=%s, "AllUsers"=%s ' +
+    '"DepartmentId"=%s,"DateModified"=%s,"ConcessionaireName"=%s,"ConcessionaireAFM"=%s,"HasDownPayment"=%s,"FpaValue"=%s, "AllUsers"=%s,"LawArticle"=%s ' +
     'WHERE "Id"=%s ' +
     'RETURNING * ',
     helper.addQuotes(req.body.ContractTypeId),
@@ -368,6 +349,7 @@ const updateContract = (req, res, next) => {
     req.body.HasDownPayment,
     helper.addQuotes(req.body.FpaValue),
     req.body.AllUsers,
+    helper.addQuotes(req.body.LawArticle),
     req.body.ContractId);
 
   pool.query(sqlQuery, (error, results) => {
@@ -413,7 +395,6 @@ const deleteContract = (req, res, next) => {
 
 module.exports = {
   searchContracts,
-  getContracts_WEBIX,
   getContracts,
   getContractTypes,
   insertContract,
