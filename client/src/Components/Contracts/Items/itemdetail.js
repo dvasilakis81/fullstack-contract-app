@@ -612,12 +612,22 @@ class ItemDetail extends React.Component {
 		// })		
 	}
 
-	getItemTemplate(contractDetails, windowHeight) {
+	getLawArticle(contractInfo) {
+		let ret = '';
+
+		if (contractInfo.contracttype && contractInfo.contracttype[0].ContractTypeId == 2)
+			ret = <span style={{ marginLeft: '5px' }}><b>Άρθρο προγραμματικής</b> {contractInfo.LawArticle || ''}</span>
+		else
+			ret = <></>
+
+		return ret;
+	}
+	getContractInfoTemplate(contractInfo, windowHeight) {
 
 		return (
 			<Scrollbars style={{ display: 'flex', flex: '1', flexFlow: 'column', overflowY: 'auto', overflowX: 'hidden' }}>
 				<Grid container xl style={{ flexGrow: '1', flexFlow: 'column', alignItems: 'stretch', height: '100%', maxHeight: windowHeight, overflowX: 'hidden' }}>
-					{this.getActionsTemplate(contractDetails)}
+					{this.getActionsTemplate(contractInfo)}
 					<Grid item>
 						<Paper style={{ padding: '5px', fontSize: '20px', background: 'lightYellow', border: '1px solid black', display: 'flex', justifyContent: 'center' }} square={true}>
 							<Typography>
@@ -632,7 +642,7 @@ class ItemDetail extends React.Component {
 									<ListItem style={{ width: 'auto', margin: '0px', padding: '0px', wordWrap: 'normal', whiteSpace: 'noWrap' }}><b>Δημιουργός σύμβασης</b></ListItem>
 									<ListItem>
 										<List style={{ display: 'flex', flexDirection: 'row', padding: '0px', flexWrap: 'wrap' }}>
-											{contractDetails.owner ? (this.getContractUserTemplate(contractDetails.owner[0], 'gold')) : ''}
+											{contractInfo.owner ? (this.getContractUserTemplate(contractInfo.owner[0], 'gold')) : ''}
 										</List>
 									</ListItem>
 								</List>
@@ -642,7 +652,7 @@ class ItemDetail extends React.Component {
 					<Grid item>
 						<Paper style={styles.paperContractInfo} square={true}>
 							<Typography>
-								{this.getContractUsersTemplate(contractDetails)}
+								{this.getContractUsersTemplate(contractInfo)}
 							</Typography>
 						</Paper>
 					</Grid>
@@ -663,67 +673,75 @@ class ItemDetail extends React.Component {
 											<Grid item>
 												<Paper style={styles.paperMoreContractInfo} square={true}>
 													<Typography>
-														<b>Διεύθυνση</b> {contractDetails.direction ? contractDetails.direction[0].DirectionName : ''}
-														<span style={{ marginLeft: '5px' }}><b>Τμήμα</b> {contractDetails.department ? contractDetails.department[0].DepartmentName : ''}</span>
+														<b>Διεύθυνση</b> {contractInfo.direction ? contractInfo.direction[0].DirectionName : ''}
+														<span style={{ marginLeft: '5px' }}><b>Τμήμα</b> {contractInfo.department ? contractInfo.department[0].DepartmentName : ''}</span>
 													</Typography>
 												</Paper>
 											</Grid>
 											<Grid item>
 												<Paper style={styles.paperMoreContractInfo} square={true}>
 													<Typography>
-														<b>K.A.E.</b> {contractDetails.KAE}
+														<b>K.A.E.</b> {contractInfo.KAE}
 														<span style={{ marginLeft: '10px' }}></span>
-														<b>Φ.</b>{contractDetails.Actor}
+														<b>Φ.</b>{contractInfo.Actor}
 														<span style={{ marginLeft: '10px' }}></span>
-														<b>Δ.</b>{contractDetails.CodeDirection}
+														<b>Δ.</b>{contractInfo.CodeDirection}
 													</Typography>
 												</Paper>
 											</Grid>
 											<Grid item>
 												<Paper style={styles.paperMoreContractInfo} square={true}>
 													<Typography>
-														<b>Τύπος</b> {contractDetails.contracttype ? contractDetails.contracttype[0].ContractTypeName : ''}
+														<b>Τύπος</b> {contractInfo.contracttype ? contractInfo.contracttype[0].ContractTypeName : ''}
+														{this.getLawArticle(contractInfo)}
 													</Typography>
 												</Paper>
 											</Grid>
+											{contractInfo.contracttype && contractInfo.contracttype[0].ContractTypeId == 2 ? <Grid item>
+												<Paper style={styles.paperMoreContractInfo} square={true}>
+													<Typography>
+														<b>Άρθρο Προγραμματική</b> {contractInfo.LawArticle || ''}
+													</Typography>
+												</Paper>
+											</Grid> : <></>}
 											<Grid item>
 												<Paper style={styles.paperMoreContractInfo} square={true}>
 													<Typography>
-														<b>Έναρξη</b> {getDateFormat(contractDetails.Start)}
+														<b>Έναρξη</b> {getDateFormat(contractInfo.Start)}
 														<span style={{ marginLeft: '10px' }}></span>
-														<b>Λήξη</b> {getDateFormat(contractDetails.End)}
+														<b>Λήξη</b> {getDateFormat(contractInfo.End)}
 													</Typography>
 												</Paper>
 											</Grid>
 											<Grid item>
 												<Paper style={styles.paperMoreContractInfo} square={true}>
 													<Typography>
-														<b>Ανάδοχος</b> {contractDetails.ConcessionaireName}  <b style={{ marginLeft: '5px' }}>Α.Φ.Μ.</b>: {contractDetails.ConcessionaireAFM}
+														<b>Ανάδοχος</b> {contractInfo.ConcessionaireName}  <b style={{ marginLeft: '5px' }}>Α.Φ.Μ.</b>: {contractInfo.ConcessionaireAFM}
 													</Typography>
 												</Paper>
 											</Grid>
 											<Grid item>
 												<Paper style={styles.paperMoreContractInfo} square={true}>
 													<Typography>
-														<b>Τίτλος</b> {contractDetails.Title}
+														<b>Τίτλος</b> {contractInfo.Title}
 													</Typography>
 												</Paper>
 											</Grid>
-											{this.getCPVTemplate(contractDetails)}
-											{this.getBoardDecisionsInfoTemplate(contractDetails)}
-											{this.getSADAInfoTemplate(contractDetails)}
-											{this.getCourtOfAuditorsInfoTemplate(contractDetails)}
+											{this.getCPVTemplate(contractInfo)}
+											{this.getBoardDecisionsInfoTemplate(contractInfo)}
+											{this.getSADAInfoTemplate(contractInfo)}
+											{this.getCourtOfAuditorsInfoTemplate(contractInfo)}
 											<Grid item>
 												<Paper style={styles.paperMoreContractInfo} square={true}>
 													<Typography>
-														<b>Α.Π.</b> {contractDetails.ProtocolNumber}/{getDateFormatForDocument(contractDetails.ProtocolDate)}
+														<b>Α.Π.</b> {contractInfo.ProtocolNumber}/{getDateFormatForDocument(contractInfo.ProtocolDate)}
 													</Typography>
 												</Paper>
 											</Grid>
 											<Grid item>
 												<Paper style={styles.paperMoreContractInfo} square={true}>
 													<Typography>
-														<b>Αρ.Απόφασης Κατακύρωσης</b> {contractDetails.AwardNumber}/{getDateFormatForDocument(contractDetails.AwardDate)}{' '}(ΑΔΑ: {contractDetails.AwardAda})
+														<b>Αρ.Απόφασης Κατακύρωσης</b> {contractInfo.AwardNumber}/{getDateFormatForDocument(contractInfo.AwardDate)}{' '}(ΑΔΑ: {contractInfo.AwardAda})
             			</Typography>
 												</Paper>
 											</Grid>
@@ -733,19 +751,19 @@ class ItemDetail extends React.Component {
 							</Typography>
 						</Paper>
 					</Grid>
-					{this.getContractMonetaryTemplate(contractDetails)}
+					{this.getContractMonetaryTemplate(contractInfo)}
 					<Grid item>
 						<Paper style={styles.paperContractInfo} square={true}>
 							<Typography>
-								<b># λογαριασμών</b> {contractDetails.NumberOfAccounts} {contractDetails.HasDownPayment === true ? '(Ο πρώτος λογαριασμός είναι η προκαταβολή)' : ''}
-								{this.getAccountsCreatedMessage(contractDetails)}
+								<b># λογαριασμών</b> {contractInfo.NumberOfAccounts} {contractInfo.HasDownPayment === true ? '(Ο πρώτος λογαριασμός είναι η προκαταβολή)' : ''}
+								{this.getAccountsCreatedMessage(contractInfo)}
 							</Typography>
 						</Paper>
 					</Grid>
 					<Grid item>
 						<Paper style={styles.paperContractInfoLast} square={true}>
 							<Typography>
-								{this.drawAccountButtons(contractDetails)}
+								{this.drawAccountButtons(contractInfo)}
 							</Typography>
 						</Paper>
 					</Grid>
@@ -816,7 +834,7 @@ class ItemDetail extends React.Component {
 		}
 		else {
 			return (
-				detailItem ? this.getItemTemplate(detailItem, this.props.windowsHeight) : null
+				detailItem ? this.getContractInfoTemplate(detailItem, this.props.windowsHeight) : null
 			)
 		}
 	}

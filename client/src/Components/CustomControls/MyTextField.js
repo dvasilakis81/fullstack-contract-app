@@ -14,12 +14,14 @@ class MyTextField extends Component {
     if (this.props.width)
       divWidth = this.props.width;
 
-    return (      
+    return (
       this.props.partOfProtocol === true
         ?
-        <StyledTextField {...this.props} />
+        <span style={{ height: 'fit-content' }}>
+          <StyledTextField {...this.props} />
+        </span>
         :
-        <div style={{ margin: '10px', width: divWidth, border: '1px solid black' }}>
+        <div style={{ margin: '10px', width: divWidth, border: '1px solid black', height: 'fit-content' }}>
           <InputTitle title={this.props.title} />
           <div style={{ backgroundColor: 'white' }}>
             <StyledTextField {...this.props} style={{ width: '100%' }} />

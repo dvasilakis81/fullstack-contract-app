@@ -6,6 +6,8 @@ import { bindActionCreators } from 'redux';
 import { getAccount } from '../../Redux/Actions';
 import AccountInfo from './ΑccountΙnfo';
 import { getFailedConnectionWithServer, showGenericMessage } from '../Common/templates'
+import { resetData } from '../../Helper/helpermethods';
+import store from '../../Redux/Store/store'
 
 class AccountContainer extends Component {
   constructor(props) {
@@ -85,8 +87,13 @@ class AccountContainer extends Component {
 
   render() {
 
-    if (this.props.account && this.props.account.tokenIsValid === false)
-      return <Redirect push to='/login' />
+    if (this.props.account && this.props.account.tokenIsValid === false){
+      resetData(store)
+      return <Redirect push to={{
+				pathname: '/login',
+				state: { expired: true }
+			}} />
+    }
     else
       return (this.getAccountTemplate())    
   }

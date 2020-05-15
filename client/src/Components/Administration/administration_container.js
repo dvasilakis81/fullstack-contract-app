@@ -8,12 +8,14 @@ import MaterialTable, { MTableToolbar } from 'material-table';
 import axios from 'axios';
 
 import { connect } from 'react-redux';
-import store from '../../Redux/Store/store';
 
 import { getHostUrl, getHeaderHeight, getFooterHeight, getBodyHeight, getDateTimeFormat, getServerErrorResponseMessage } from '../../Helper/helpermethods';
 import MySnackbar from '../Common/MySnackbar';
 import { getFooterTemplate } from '../Common/templates'
 import Body from '../../HOC/Body/body'
+
+import { resetData } from '../../Helper/helpermethods';
+import store from '../../Redux/Store/store'
 
 const styles = {
   stickyActionsColumn: {
@@ -968,8 +970,13 @@ class AdministrationContainer extends Component {
 
   render() {
 
-    if (this.state.navigateToLogin)
-      return <Redirect to='/login' />
+    if (this.state.navigateToLogin){
+      resetData(store)
+      return <Redirect push to={{
+				pathname: '/login',
+				state: { expired: true }
+			}} />
+    }     
     else {
       return (
         <Body>

@@ -21,7 +21,7 @@ import { Scrollbars } from 'react-custom-scrollbars';
 import SaveAltIcon from '@material-ui/icons/SaveAlt';
 import EditIcon from '@material-ui/icons/Edit';
 
-import createTransmissionDocument from './PostDataCreateDocument'
+import { createTransmissionDocument, createAccountDocument } from './PostDataCreateDocument'
 
 var downloadjs = require('downloadjs');
 var currencyFormatter = require('currency-formatter');
@@ -42,9 +42,10 @@ const useStyles = {
 	reservationsStyle: {}
 };
 
-var paidAmountPureUntilToday = 0;
-var paidAmountFpaUntilToday = 0;
-var paidAmountTotalUntilToday = 0;
+var paidAmount = {};
+// paidAmountPureUntilToday = 0;
+// var paidAmountFpaUntilToday = 0;
+// var paidAmountTotalUntilToday = 0;
 var cantComputeRemainContractAmount = false;
 class AccountInfo extends React.Component {
 	constructor(props) {
@@ -71,7 +72,7 @@ class AccountInfo extends React.Component {
 	editAccount(e) {
 		this.setState({ navigateToEditAccount: true });
 	}
-	navigateToEditAccountForm(contractDetails, accountDetails) {			
+	navigateToEditAccountForm(contractDetails, accountDetails) {
 		return <Redirect push to={{
 			pathname: '/newaccount',
 			state: {
@@ -199,204 +200,54 @@ class AccountInfo extends React.Component {
 
 		var contractDetails = this.props.isSearchMode ? this.props.contractDetailsSearchMode : this.props.contractDetails;
 		var accountDetails = this.props.account;
-		var dataToPost = createTransmissionDocument(contractDetails, accountDetails, paidAmountTotalUntilToday)
+		var dataToPost = createTransmissionDocument(contractDetails, accountDetails, paidAmount)
 
 		var config = {
 			headers: { 'Content-Type': 'application/json;charset=utf-8', Authorization: 'Bearer ' + this.props.token.data.token },
 			responseType: 'arraybuffer'
 		};
-
-		// if (contractDetails.HasDownPayment && accountDetails.Number == 1) {
-		// 	axios.post(getHostUrl() + '/getDownpaymentTransmissionWordDocument', dataToPost, config)
-		// 		.then(res => {
-		// 			var blob = new Blob([res.data]);
-		// 			var fileName = 'ΔΙΑΒΙΒΑΣΤΙΚΟ ΕΓΓΡΑΦΟ ' + accountDetails.Number + 'ου ΛΟΓΑΡΙΑΣΜΟΥ (ΠΡΟΚΑΤΑΒΟΛΗ).docx';
-		// 			downloadjs(blob, fileName, 'application/octet-stream');
-		// 			this.setState({ message: '', openMessage: false, variant: 'success', submitButtonDisabled: false });
-		// 		}).catch(error => {
-		// 			this.setState({ message: <><div>Αποτυχής προσπάθεια δημιουργίας αρχείου!</div><div>{getServerErrorResponseMessage(error)}</div></>, openMessage: true, variant: 'error', submitButtonDisabled: false });
-		// 		})
-		// }
-		// else {
-			axios.post(getHostUrl() + '/createTransmissionDocument', dataToPost, config)
-				.then(res => {
-					var blob = new Blob([res.data]);
-					var fileName = 'ΔΙΑΒΙΒΑΣΤΙΚΟ ΕΓΓΡΑΦΟ ' + accountDetails.Number + 'ου ΛΟΓΑΡΙΑΣΜΟΥ (ΠΡΟΚΑΤΑΒΟΛΗ).docx';
-					downloadjs(blob, fileName, 'application/octet-stream');
-					this.setState({ message: '', openMessage: false, variant: 'success', submitButtonDisabled: false });
-				}).catch(error => {
-					this.setState({ message: <><div>Αποτυχής προσπάθεια δημιουργίας αρχείου!</div><div>{getServerErrorResponseMessage(error)}</div></>, openMessage: true, variant: 'error', submitButtonDisabled: false });
-				})
-		}
+		
+		axios.post(getHostUrl() + '/createTransmissionDocument', dataToPost, config)
+			.then(res => {
+				var blob = new Blob([res.data]);
+				var fileName = 'ΔΙΑΒΙΒΑΣΤΙΚΟ ΕΓΓΡΑΦΟ ' + accountDetails.Number + 'ου ΛΟΓΑΡΙΑΣΜΟΥ.docx';
+				downloadjs(blob, fileName, 'application/octet-stream');
+				this.setState({ message: '', openMessage: false, variant: 'success', submitButtonDisabled: false });
+			}).catch(error => {
+				this.setState({ message: <><div>Αποτυχής προσπάθεια δημιουργίας αρχείου!</div><div>{getServerErrorResponseMessage(error)}</div></>, openMessage: true, variant: 'error', submitButtonDisabled: false });
+			})
+	}
 	//}
 
 	createDocument2(e) {
 		e.preventDefault();
 
-		var contractDetails = this.props.isSearchMode ? this.props.contractDetailsSearchMode : this.props.contractDetails;
-		var accountDetails = this.props.account;
+		var contractInfo = this.props.isSearchMode ? this.props.contractDetailsSearchMode : this.props.contractDetails;
+		var accountInfo = this.props.account;
 
 		this.setState({ submitButtonDisabled: true });
 
-		var contractTypeValue1 = (contractDetails.ContractTypeId === "1" ? 'Σύμβασης Δημόσιας Ανάθεσης' : 'Προγραμματικής Σύμβασης')
-		var contractTypeValue2 = (contractDetails.ContractTypeId === "1" ? 'Δημόσιας' : 'Προγραμματικής')
-
-		var WriterTitle = '';
-		var WriterName = '';
-		var ForemanDepartmentTitle = '';
-		var ForemanDepartmentName = '';
-		var ForemanDirectionTitle = '';
-		var ForemanDirectionName = '';
-		var ForemanDirectionAbsense = '';
-
-		if (accountDetails.documentsignatory) {
-			for (let index = 0; index < accountDetails.documentsignatory.length; index++) {
-				const documentSignatory = accountDetails.documentsignatory[index];
-
-				if (documentSignatory.signatorytype[0].Id === 1 || documentSignatory.signatorytype[0].Id === 2) {
-					WriterTitle = documentSignatory.signatorytype[0].Name
-					WriterName = documentSignatory.signatory[0].Name;
-				} else if (documentSignatory.signatorytype[0].Id === 3 || documentSignatory.signatorytype[0].Id === 4) {
-					ForemanDirectionAbsense = documentSignatory.Absense ? 'κ.α.α' : '';
-					ForemanDirectionTitle = documentSignatory.signatorytype[0].Name;
-					ForemanDirectionName = documentSignatory.signatory[0].Name;
-				} else if (documentSignatory.signatorytype[0].Id === 5 || documentSignatory.signatorytype[0].Id === 6) {
-					ForemanDepartmentTitle = documentSignatory.signatorytype[0].Name
-					ForemanDepartmentName = documentSignatory.signatory[0].Name;
-				}
-			}
-		}
-
-		var dirName = '';
-		if (contractDetails.direction && contractDetails.direction[0]) {
-			dirName = contractDetails.direction[0].DirectionName;
-		}
-		var depName = contractDetails.department && contractDetails.department[0] ? contractDetails.department[0].DepartmentName : ''
-		var dataToPost = {
-			BudgetExpenditureYear: new Date(accountDetails.DocumentDate).getFullYear(),
-			DocumentDate: getDateFormatWithDash(accountDetails.DocumentDate),
-			WorkConfirmationDate: getDateFormatForDocument(accountDetails.WorkConfirmationDate),
-			DeliveryGoodsDate: getDateFormatForDocument(accountDetails.DeliveryGoodsDate),
-			Direction: [{
-				Name: dirName.toUpperCase(),
-				NameInLower: dirName,
-				Department: [{ Name: depName.toUpperCase(), NameInLower: depName }]
-			}],
-			Contract: [{
-				ContractTypeValue1: contractTypeValue1,
-				ContractTypeValue2: contractTypeValue2,
-				Concessionaire: [{ Article: 'THN', Name: contractDetails.ConcessionaireName }],
-				Title: [{ Article: 'τη', Value: contractDetails.Title }],
-				Protocol: [{ Number: contractDetails.ProtocolNumber, Date: getDateFormatForDocument(contractDetails.ProtocolDate) }],
-				Kae: contractDetails.KAE,
-				Actor: contractDetails.Actor,
-				CodeDirection: contractDetails.CodeDirection,
-				AmountPure: currencyFormatter.format(contractDetails.AmountPure, { symbol: '€', decimal: ',', thousand: '.', precision: 2, format: '%v%s' }),
-				AmountFpa: currencyFormatter.format(contractDetails.AmountFpa, { symbol: '€', decimal: ',', thousand: '.', precision: 2, format: '%v%s' }),
-				AmountTotal: currencyFormatter.format(contractDetails.AmountTotal, { symbol: '€', decimal: ',', thousand: '.', precision: 2, format: '%v%s' }),
-				PaidAmountPureUntilToday: currencyFormatter.format(paidAmountPureUntilToday, { symbol: '€', decimal: ',', thousand: '.', precision: 2, format: '%v%s' }),
-				PaidAmountFpaUntilToday: currencyFormatter.format(paidAmountFpaUntilToday, { symbol: '€', decimal: ',', thousand: '.', precision: 2, format: '%v%s' }),
-				PaidAmountTotalUntilToday: currencyFormatter.format(paidAmountTotalUntilToday, { symbol: '€', decimal: ',', thousand: '.', precision: 2, format: '%v%s' }),
-				FpaValue: format('{}%', contractDetails.FpaValue)
-			}],
-			Account: [{
-				Number: accountDetails.Number,
-				AmountPure: currencyFormatter.format(accountDetails.AmountPure, { symbol: '€', decimal: ',', thousand: '.', precision: 2, format: '%v%s' }),
-				AmountFpa: currencyFormatter.format(accountDetails.AmountFpa, { symbol: '€', decimal: ',', thousand: '.', precision: 2, format: '%v%s' }),
-				AmountTotal: currencyFormatter.format(accountDetails.AmountTotal, { symbol: '€', decimal: ',', thousand: '.', precision: 2, format: '%v%s' }),
-				AmountInWords: getAmountInWords(accountDetails.AmountTotal, false),
-				AmountInWordsCapital: getAmountInWords(accountDetails.AmountTotal, true),
-				Start: getDateFormatForDocument(accountDetails.Start),
-				End: getDateFormatForDocument(accountDetails.End),
-				Invoice: this.getInvoiceDataToPost(accountDetails),
-				AYY: this.getAAYDataToPost(accountDetails),
-				Reservations: this.getReservationsToPost(accountDetails.AmountPure),
-				MixedRemainApproval: currencyFormatter.format(Number(contractDetails.AmountTotal) - (Number(paidAmountTotalUntilToday) + Number(accountDetails.AmountTotal)), { symbol: '€', decimal: ',', thousand: '.', precision: 2, format: '%v%s' }),
-				DownpaymentLawArticle: accountDetails.DownpaymentLawArticle
-			}],
-			Accounts: contractDetails.createdaccounts,
-			DecisionBoard: [{
-				Protocol: this.getDecisionBoardValues()
-			}],
-			DecisionSADA: [{
-				Protocol: this.getDecisionSADAValues()
-			}],
-			CourtOfAuditors: this.getCourtOfAuditorsValues(),
-			Signature: [
-				{
-					Kaa: ForemanDirectionAbsense,
-					WriterTitle: WriterTitle,
-					WriterName: WriterName,
-					ForemanDepartmentTitle: ForemanDepartmentTitle,
-					ForemanDepartmentName: ForemanDepartmentName,
-					ForemanDirectionTitle: ForemanDirectionTitle,
-					ForemanDirectionName: ForemanDirectionName
-				}]
-		};
-
+		var dataToPost = createAccountDocument(contractInfo, accountInfo, paidAmount, this.props.reservations)
 		var config = {
 			headers: { 'Content-Type': 'application/json;charset=utf-8', Authorization: 'Bearer ' + this.props.token.data.token },
 			responseType: 'arraybuffer'
 		};
 
-		if (contractDetails.HasDownPayment && accountDetails.Number == 1) {
-			axios.post(getHostUrl() + '/getDownpaymentAccountWordDocument', dataToPost, config)
-				.then(res => {
-					var blob = new Blob([res.data]);
-					var fileName = accountDetails.Number + 'ος Λογαριασμός.docx';
-					downloadjs(blob, fileName, 'application/octet-stream');
-					this.setState({ message: '', openMessage: false, variant: 'success', submitButtonDisabled: false });
-				}).catch(error => {
-					this.setState({ message: <><div>Αποτυχής προσπάθεια δημιουργίας αρχείου!</div><div>{getServerErrorResponseMessage(error)}</div></>, openMessage: true, variant: 'error', submitButtonDisabled: false });
-				})
-		}
-		else {
-			axios.post(getHostUrl() + '/accountdocument', dataToPost, config)
-				.then(res => {
-					var blob = new Blob([res.data]);
-					var fileName = accountDetails.Number + 'ος Λογαριασμός.docx';
-					downloadjs(blob, fileName, 'application/octet-stream');
-					this.setState({ message: '', openMessage: false, variant: 'success', submitButtonDisabled: false });
-				}).catch(error => {
-					this.setState({ message: <><div>Αποτυχής προσπάθεια δημιουργίας αρχείου!</div><div>{getServerErrorResponseMessage(error)}</div></>, openMessage: true, variant: 'error', submitButtonDisabled: false });
-				})
-		}
+		axios.post(getHostUrl() + '/createAccountDocument', dataToPost, config)
+			.then(res => {
+				var blob = new Blob([res.data]);
+				var fileName = accountInfo.Number + 'ος Λογαριασμός.docx';
+				downloadjs(blob, fileName, 'application/octet-stream');
+				this.setState({ message: '', openMessage: false, variant: 'success', submitButtonDisabled: false });
+			}).catch(error => {
+				this.setState({ message: <><div>Αποτυχής προσπάθεια δημιουργίας αρχείου!</div><div>{getServerErrorResponseMessage(error)}</div></>, openMessage: true, variant: 'error', submitButtonDisabled: false });
+			})
 
-		// }).catch(error => {
-		// 	var errMsg = 'Αποτυχής προσπάθεια δημιουργίας αρχείου!' + error;
-		// 	this.setState({ message: errMsg, openMessage: true, variant: 'error', submitButtonDisabled: false });
-		// })
 	}
+
 	getRemainAmountOfContract(am1) {
 		var contractDetails = this.props.isSearchMode ? this.props.contractDetailsSearchMode : this.props.contractDetails;
 		return Number(contractDetails.TotalAmount) - Number(am1)
-	}
-	getReservationsToPost(Amount) {
-		let ret = [];
-
-		if (this.props.reservations) {
-			for (let index = 0; index < this.props.reservations.length; index++) {
-				const value = this.props.reservations[index];
-
-				if (value.IsReservation) {
-					let a1 = (Number(Amount) * Number(value.Percentage / 100)).toFixed(2);
-					let a2 = '';
-					let a3 = '';
-					if (value.Stamp > 0) {
-						a2 = (Number(a1) * Number(value.Stamp / 100)).toFixed(2);
-						a3 = (Number(a2) * Number(value.StampOGA / 100)).toFixed(2);
-					}
-
-					let per = Number(value.Percentage);
-					if (value.Stamp > 0)
-						ret.push({ name: value.Name, percentage: per, value: a1, stamp: a2, stampPer: value.Stamp, StampOGAPer: value.StampOGA, stampoga: a3 })
-					else
-						ret.push({ name: value.Name, percentage: per, value: a1 })
-				}
-			}
-		}
-
-		return ret;
 	}	
 	//#endregion
 
@@ -630,7 +481,7 @@ class AccountInfo extends React.Component {
 	}
 
 	getRemainAmountOfContractTemplate(contractDetails, accountDetails) {
-		var remainAmountOfContract = Number(contractDetails.AmountTotal) - (Number(paidAmountTotalUntilToday) + Number(accountDetails.AmountTotal))
+		var remainAmountOfContract = Number(contractDetails.AmountTotal) - (Number(paidAmount.TotalUntilToday) + Number(accountDetails.AmountTotal))
 		if (cantComputeRemainContractAmount)
 			return <Grid item>
 				<Paper style={{ padding: '5px' }} square={true}>
@@ -850,6 +701,50 @@ class AccountInfo extends React.Component {
 			)
 		}
 	}
+	getMonitoringCommitteeInfoTemplate(contractInfo, accountInfo) {    
+    
+		let title = accountInfo.monitoringcommittee ? <Grid item style={{ background: 'lightGrey' }}>
+			<Paper style={useStyles.category} square={true}>
+				<Typography>
+					<b>Στοιχεία Επιτροπής Παρακολούθησης</b>
+				</Typography>
+			</Paper>
+		</Grid> : <></>
+
+		let grid1 = accountInfo.monitoringcommittee ? <Grid item>
+			<Paper style={{ padding: '5px' }} square={true}>
+				<Typography>
+					<b>Α.Π. Απόφασης Δημάρχου</b>: {accountInfo.monitoringcommittee[0].MayorDecisionForMembersProtocolNumber}/{accountInfo.monitoringcommittee[0].MayorDecisionForMembersProtocolDate}
+				</Typography>
+			</Paper>
+		</Grid> : <></>
+
+		let grid2 = accountInfo.monitoringcommittee ? <Grid item>
+			<Paper style={{ padding: '5px' }} square={true}>
+				<Typography>
+					<b>Ημ. Πρακτικού Συνεδρίασης</b>: {accountInfo.monitoringcommittee[0].PracticalDate}
+				</Typography>
+			</Paper>
+		</Grid> : <></>
+
+		let grid3 = accountInfo.monitoringcommittee ? <Grid item>
+			<Paper style={{ padding: '5px' }} square={true}>
+				<Typography>
+					<b>Α.Π. διαβιβαστικού εγγράφου</b>: {accountInfo.monitoringcommittee[0].TransmissionDocumentProtocolNumber}/{accountInfo.monitoringcommittee[0].TransmissionDocumentProtocolDate}
+				</Typography>
+			</Paper>
+		</Grid> : <></>
+
+		if (accountInfo.monitoringcommittee) {
+			return (<>
+				{title}
+				{grid1}
+				{grid2}
+				{grid3}
+			</>
+			)
+		}
+	}	
 	//#endregion
 
 	//#region signatory
@@ -1011,10 +906,10 @@ class AccountInfo extends React.Component {
 	//#endregion
 	//#endregion
 
-	getAccountDetailsTemplate(accountDetails) {
+	getAccountInfoTemplate(accountInfo) {
 
-		var contractDetails = this.props.isSearchMode ? this.props.contractDetailsSearchMode : this.props.contractDetails;
-		if (accountDetails)
+		var contractInfo = this.props.isSearchMode ? this.props.contractDetailsSearchMode : this.props.contractDetails;
+		if (accountInfo)
 			return (
 				<Body>
 					<div style={{ width: '100%', height: '100%', display: 'flex', flexFlow: 'column', flexWrap: 'wrap', overflowY: 'hidden' }}>
@@ -1031,18 +926,19 @@ class AccountInfo extends React.Component {
 										})
 									}}>
 									<Grid container xl style={{ flexGrow: '1', alignItems: 'stretch' }} direction='column' >
-										{this.getDocumentsInfo(contractDetails, accountDetails)}
-										{this.getCCInfoTemplate(contractDetails, accountDetails)}
-										{this.getGeneralAccountInfo(contractDetails, accountDetails)}
-										{this.getReservationsTemplate(contractDetails, accountDetails)}
-										{this.getAAYTemplate(contractDetails, accountDetails)}
-										{this.getInvoiceTemplate(contractDetails, accountDetails)}
-										{this.getLawArticleForDownpaymentTemplate(accountDetails)}
-										{this.getDecisionBoardTemplate(contractDetails, accountDetails)}
-										{this.getDecisionCoordinatorDecentrilizedAdministrationTemplate(contractDetails, accountDetails)}
-										{this.getCourtOfAuditorsInfoTemplate(contractDetails, accountDetails)}
-										{this.getSignatoriesForDocument1(contractDetails, accountDetails)}
-										{this.getSignatoriesForDocument2(contractDetails, accountDetails)}
+										{this.getDocumentsInfo(contractInfo, accountInfo)}
+										{this.getCCInfoTemplate(contractInfo, accountInfo)}
+										{this.getGeneralAccountInfo(contractInfo, accountInfo)}
+										{this.getReservationsTemplate(contractInfo, accountInfo)}
+										{this.getAAYTemplate(contractInfo, accountInfo)}
+										{this.getInvoiceTemplate(contractInfo, accountInfo)}
+										{this.getLawArticleForDownpaymentTemplate(accountInfo)}
+										{this.getDecisionBoardTemplate(contractInfo, accountInfo)}
+										{this.getDecisionCoordinatorDecentrilizedAdministrationTemplate(contractInfo, accountInfo)}
+										{this.getCourtOfAuditorsInfoTemplate(contractInfo, accountInfo)}
+										{this.getMonitoringCommitteeInfoTemplate(contractInfo, accountInfo)}
+										{this.getSignatoriesForDocument1(contractInfo, accountInfo)}
+										{this.getSignatoriesForDocument2(contractInfo, accountInfo)}
 									</Grid>
 								</LoadingOverlay>
 							</Scrollbars>
@@ -1060,21 +956,21 @@ class AccountInfo extends React.Component {
 
 		const accountInfo = this.props.account;
 		if (accountInfo && accountInfo.tokenIsValid) {
-		  console.log('Account Info: RESET_ACTION')
+			console.log('Account Info: RESET_ACTION')
 			store.dispatch({ type: "RESET_ACTION", payload: null });
 			return <Redirect push to="/login" />;
 		} else {
 			if (accountInfo) {
 				var contractDetails = this.props.isSearchMode ? this.props.contractDetailsSearchMode : this.props.contractDetails;
-				paidAmountPureUntilToday = 0;
-				paidAmountFpaUntilToday = 0;
-				paidAmountTotalUntilToday = 0;
+				paidAmount.PureUntilToday = 0;
+				paidAmount.FpaUntilToday = 0;
+				paidAmount.TotalUntilToday = 0;
 				if (contractDetails && contractDetails.createdaccounts) {
 					for (let i = 0; i < contractDetails.createdaccounts.length; i++) {
 						if (contractDetails.createdaccounts[i].Number < accountInfo.Number) {
-							paidAmountPureUntilToday += Number(contractDetails.createdaccounts[i].AmountPure);
-							paidAmountFpaUntilToday += Number(contractDetails.createdaccounts[i].AmountFpa);
-							paidAmountTotalUntilToday += Number(contractDetails.createdaccounts[i].AmountTotal);
+							paidAmount.PureUntilToday += Number(contractDetails.createdaccounts[i].AmountPure);
+							paidAmount.FpaUntilToday += Number(contractDetails.createdaccounts[i].AmountFpa);
+							paidAmount.TotalUntilToday += Number(contractDetails.createdaccounts[i].AmountTotal);
 						}
 					}
 					cantComputeRemainContractAmount = false
@@ -1085,7 +981,7 @@ class AccountInfo extends React.Component {
 				if (this.state.navigateToEditAccount)
 					return this.navigateToEditAccountForm(contractDetails, accountInfo)
 				else
-					return this.getAccountDetailsTemplate(accountInfo)
+					return this.getAccountInfoTemplate(accountInfo)
 			}
 			else
 				return showGenericMessage('Ο λογαριασμός δεν βρέθηκε!. Παρακαλώ ξαναπροσπαθήστε!', true)

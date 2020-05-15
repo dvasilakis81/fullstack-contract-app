@@ -43,8 +43,7 @@ class Login extends Component {
     this.state = {
       openMessage: false,
       message: '',
-      variant: '',
-      submitButtonDisabled: false,
+      variant: '',      
       username: '',
       password: '',
       loginsuccess: false
@@ -55,6 +54,11 @@ class Login extends Component {
     this.handleClose = this.handleClose.bind(this, '');
   }
 
+  componentDidMount() {
+    if (this.props.expired === true) {
+      this.setState({ message: 'Η συνεδρία έληξε!', openMessage: true, variant: 'info' });
+    }
+  }
   componentWillMount() {
     store.dispatch({ type: 'RESET_TOKEN_JWT_REJECTED', payload: undefined })
   }
@@ -63,25 +67,25 @@ class Login extends Component {
     e.preventDefault();
 
     if (this.state.username === '')
-      this.setState({ loginsuccess: false, message: 'Εισάγετε Όνομα Χρήστη!', openMessage: true, variant: 'info', submitButtonDisabled: false });
+      this.setState({ loginsuccess: false, message: 'Εισάγετε Όνομα Χρήστη!', openMessage: true, variant: 'info' });
     else if (this.state.password === '')
-      this.setState({ loginsuccess: false, message: 'Εισάγετε Κωδικό!', openMessage: true, variant: 'info', submitButtonDisabled: false });
+      this.setState({ loginsuccess: false, message: 'Εισάγετε Κωδικό!', openMessage: true, variant: 'info' });
     else {
       this.props.login(this.state.username, this.state.password).then(response => {
         console.log('response.value.data.token: ' + response.value.data.token)
         if (response.value.data.token)
           this.setState({ loginsuccess: true });
         else
-          this.setState({ loginsuccess: false, message: response.value.data.message, openMessage: true, variant: 'error', submitButtonDisabled: false });
+          this.setState({ loginsuccess: false, message: response.value.data.message, openMessage: true, variant: 'error' });
       }).catch(error => {
         var msg = 'Αποτυχία σύνδεσης στον διακομιστή!'
-        this.setState({ message: <><div>{msg}</div><div>{getServerErrorResponseMessage(error)}</div></>, openMessage: true, variant: 'error', submitButtonDisabled: false });
+        this.setState({ message: <><div>{msg}</div><div>{getServerErrorResponseMessage(error)}</div></>, openMessage: true, variant: 'error' });
       })
     }
   }
 
   handleClose = (event, reason) => {
-    this.setState({ message: '', openMessage: false, submitButtonDisabled: false });
+    this.setState({ message: '', openMessage: false });
     store.dispatch({ type: 'RESET_TOKEN_JWT_REJECTED', payload: undefined })
   };
 
@@ -115,7 +119,7 @@ class Login extends Component {
                 <MySnackbar state={this.state} duration={5000} handleClose={this.handleClose} vertical='bottom' horizontal='center' useScreenDimensions={false} />
               </div>
             </div>
-          </Body>          
+          </Body>
         </LoadingOverlay >
       )
     }

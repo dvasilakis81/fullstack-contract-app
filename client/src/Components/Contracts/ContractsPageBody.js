@@ -13,9 +13,10 @@ import ItemsList from '../Contracts/Items/itemslist';
 import ItemDetail from '../Contracts/Items/itemdetail';
 import { getFooterTemplate, showErrorMessageFromServer, getFailedConnectionWithServer, showGenericMessage } from '../Common/templates'
 import { getContracts, searchContracts } from '../../Redux/Actions';
-import store from '../../Redux/Store/store';
 import Body from '../../HOC/Body/body';
 import { getHostUrl, getContractsLimit } from '../../Helper/helpermethods';
+import { resetData } from '../../Helper/helpermethods';
+import store from '../../Redux/Store/store'
 
 const styles = {
   clipperStyle: {
@@ -291,8 +292,13 @@ class ContractsPageBody extends Component {
 
     let isSearchMode = ((this.state.searchValue && this.state.searchValue.length > 2) || this.props.isSearchMode)
     let contractsList = isSearchMode ? this.props.searchContractsList : this.props.contracts
-    if (this.state.navigateToLogin)
-      return <Redirect to='/login' />
+    if (this.state.navigateToLogin){
+      resetData(store)
+      return <Redirect push to={{
+				pathname: '/login',
+				state: { expired: true }
+			}} />
+    }     
     else if (this.props.contractsRejected) {
       var msgToShow = '';
       if (this.props.contractsRejected && this.props.contractsRejected.message === 'Network Error') {
