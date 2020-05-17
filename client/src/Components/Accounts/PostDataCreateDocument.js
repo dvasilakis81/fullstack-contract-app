@@ -297,6 +297,7 @@ export function createAccountDocument(contractInfo, accountInfo, paidAmount, res
       End: getDateFormatForDocument(accountInfo.End),
       Invoice: getInvoiceDataToPost(accountInfo),
       AAY: getAAYDataToPost(accountInfo),
+      MonitoringCommittee: accountInfo.monitoringcommittee,
       Reservations: getReservationsToPost(reservations, accountInfo.AmountPure),
       MixedRemainApproval: currencyFormatter.format(Number(contractInfo.AmountTotal) - (Number(paidAmount.TotalUntilToday) + Number(accountInfo.AmountTotal)), { symbol: '€', decimal: ',', thousand: '.', precision: 2, format: '%v%s' }),
       DownpaymentLawArticle: accountInfo.DownpaymentLawArticle
