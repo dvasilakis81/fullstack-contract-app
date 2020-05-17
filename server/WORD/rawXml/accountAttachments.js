@@ -265,7 +265,7 @@ module.exports = {
 		if (body.WorkConfirmationDate) {
 			var workConfirmationDate = body.WorkConfirmationDate;
 			var directionNameLower = body.Direction[0].NameInLower;
-			var departmentNameLower = body.Direction[0].Department[0].NameInLower;			
+			var departmentNameLower = body.Direction[0].Department[0].NameInLower;
 			var start = body.Account[0].Start;
 			var end = body.Account[0].End;
 
@@ -401,6 +401,190 @@ module.exports = {
 				'</w:p>';
 		}
 	},
+	getAttachmentsForMonitoringCommittee: function (body) {
+		var ret = '';
+		if (body.Account[0].MonitoringCommittee) {
+			var rText = '';
+			// 		6)	Την Απόφαση Δημάρχου με Α.Π. 312848/06.12.2019 για τον ορισμό των μελών της Επιτροπής Παρακολούθησης. 
+
+			// 8)	Το με ΑΠ. 318192/12.12.2019 έγγραφο της Τεχνόπολις του Δήμου Αθηναίων με το οποίο διαβιβάζονται:
+			// 	Το πρακτικό της 2ης συνεδρίασης της Επιτροπής Παρακολούθησης για την Προγραμματική Σύμβαση για το σχεδιασμό και υλοποίηση του Προγράμματος 
+			// «Το παιδί, Η πόλη και τα Μνημεία» που πραγματοποιήθηκε στις 06.12.2019.
+			// 	Τα περιεχόμενα του παραδοτέου του φυσικού αντικειμένου, που αφορά στο πρώτο τετράμηνο, Ιούνιος-Οκτώβριος  2019.
+
+			rText = util.format('Την Απόφαση Δημάρχου με Α.Π. %s/%s για τον ορισμό των μελών της Επιτροπής Παρακολούθησης.',
+				body.Account[0].MonitoringCommittee[0].MayorDecisionForMembersProtocolNumber, body.Account[0].MonitoringCommittee[0].MayorDecisionForMembersProtocolDate);
+			ret = '<w:p>' +
+				'<w:pPr>' +
+				'<w:numPr>' +
+				'<w:ilvl w:val="0"/>' +
+				'<w:numId w:val="2"/>' +
+				'</w:numPr>' +
+				//'<w:tabs>' +
+				// '<w:tab w:val="left" w:pos="142"/>' +
+				// '<w:tab w:val="left" w:pos="284"/>' +
+				// '<w:tab w:val="left" w:pos="6195"/>' +
+				// '</w:tabs>' +
+				'<w:spacing w:line="276" w:lineRule="auto"/>' +
+				'<w:ind w:left="-142" w:hanging="426" />' +				
+				'<w:jc w:val="both"/>' +
+				'<w:rPr>' +
+				'<w:rFonts w:ascii="Garamond" w:hAnsi="Garamond"/>' +
+				'</w:rPr>' +
+				'</w:pPr>' +
+				'<w:r>' +
+				'<w:rPr>' +
+				'<w:rFonts w:ascii="Garamond" w:hAnsi="Garamond"/>' +
+				'<w:sz w:val="28" />' +
+				'<w:szCs w:val="28" />' +
+				'</w:rPr>' +
+				util.format('<w:t>%s</w:t>', rText) +
+				'</w:r>' +
+				'</w:p>'
+
+			// 7)	Το από  06.12.2019 πρακτικό της (2ης) δεύτερης συνεδρίασης Επιτροπής Παρακολούθησης της Προγραμματικής Σύμβασης
+			rText = util.format('Το από %s πρακτικό της (%sης) %s συνεδρίασης Επιτροπής Παρακολούθησης της Προγραμματικής Σύμβασης',
+				body.Account[0].MonitoringCommittee[0].PracticalDate, body.Account[0].No, helper.getNumberLectical(body.Account[0].No))
+
+			ret += '<w:p>' +
+				'<w:pPr>' +
+				'<w:numPr>' +
+				'<w:ilvl w:val="0"/>' +
+				'<w:numId w:val="2"/>' +
+				'</w:numPr>' +
+				'<w:tabs>' +
+				'<w:tab w:val="left" w:pos="142"/>' +
+				'<w:tab w:val="left" w:pos="284"/>' +
+				'<w:tab w:val="left" w:pos="6195"/>' +
+				'</w:tabs>' +
+				'<w:spacing w:line="276" w:lineRule="auto"/>' +
+				'<w:ind w:left="-142" w:hanging="426" />' +				
+				'<w:jc w:val="both"/>' +
+				'<w:rPr>' +
+				'<w:rFonts w:ascii="Garamond" w:hAnsi="Garamond"/>' +
+				'</w:rPr>' +
+				'</w:pPr>' +
+				'<w:r>' +
+				'<w:rPr>' +
+				'<w:rFonts w:ascii="Garamond" w:hAnsi="Garamond"/>' +
+				'<w:sz w:val="28" />' +
+				'<w:szCs w:val="28" />' +
+				'</w:rPr>' +
+				util.format('<w:t>%s</w:t>', rText) +
+				'</w:r>' +
+				'</w:p>'
+
+			rText = util.format('Δύο (2) φωτοαντίγραφα του με Α.Π. %s/%s εγγράφου της %s του Δήμου Αθηναίων με το οποίο διαβιβάζονται:',
+				body.Account[0].MonitoringCommittee[0].TransmissionDocumentProtocolNumber,
+				body.Account[0].MonitoringCommittee[0].TransmissionDocumentProtocolDate,
+				body.Contract[0].Concessionaire[0].Name);
+			var s1_1 = util.format('Το πρακτικό της %s', body.Account[0].No);
+			var s1_2 = util.format(' συνεδρίασης της Επιτροπής Παρακολούθησης για την Προγραμματική Σύμβαση για το σχεδιασμό και υλοποίηση του Προγράμματος «%s» που πραγματοποιήθηκε στις %s.', body.Contract[0].Title[0].Value, body.Account[0].MonitoringCommittee[0].PracticalDate);
+			var s2 = util.format('Τα περιεχόμενα του παραδοτέου του φυσικού αντικειμένου, που αφορά στο %s', body.Account[0].MonitoringCommittee[0].GivenPhysicalObjectContentTime);
+
+			ret += '<w:p>' +
+				'<w:pPr>' +
+				'<w:numPr>' +
+				'<w:ilvl w:val="0"/>' +
+				'<w:numId w:val="2"/>' +
+				'</w:numPr>' +
+				'<w:tabs>' +
+				'<w:tab w:val="left" w:pos="142"/>' +
+				'<w:tab w:val="left" w:pos="284"/>' +
+				'<w:tab w:val="left" w:pos="6195"/>' +
+				'</w:tabs>' +
+				'<w:spacing w:line="276" w:lineRule="auto"/>' +
+				'<w:ind w:left="-142" w:hanging="426" />' +
+				'<w:jc w:val="both"/>' +
+				'<w:rPr>' +
+				'<w:rFonts w:ascii="Garamond" w:hAnsi="Garamond"/>' +
+				'</w:rPr>' +
+				'</w:pPr>' +
+				'<w:r>' +
+				'<w:rPr>' +
+				'<w:rFonts w:ascii="Garamond" w:hAnsi="Garamond"/>' +
+				'<w:sz w:val="28" />' +
+				'<w:szCs w:val="28" />' +
+				'</w:rPr>' +
+				util.format('<w:t>%s</w:t>', rText) +
+				'</w:r>' +
+				'</w:p>' +
+				'<w:p>' +
+				'<w:pPr>' +
+				'<w:numPr>' +
+				'<w:ilvl w:val="1"/>' +
+				'<w:numId w:val="2"/>' +
+				'</w:numPr>' +
+				'<w:spacing w:line="276" w:lineRule="auto"/>' +
+				//'<w:ind w:left="-142" w:hanging="426" />' +
+				'<w:jc w:val="both"/>' +
+				'<w:rPr>' +
+				'<w:rFonts w:ascii="Garamond" w:hAnsi="Garamond"/>' +
+				'</w:rPr>' +
+				'</w:pPr>' +
+				'<w:r>' +
+				'<w:rPr>' +
+				'<w:rFonts w:ascii="Garamond" w:hAnsi="Garamond"/>' +
+				'<w:sz w:val="28" />' +
+				'<w:szCs w:val="28" />' +				
+				'</w:rPr>' +
+				util.format('<w:t>%s</w:t>', s1_1) +
+				'</w:r>' +
+				'<w:r><w:rPr><w:vertAlign w:val="superscript"/><w:lang w:val="el-GR"/></w:rPr><w:t>ης</w:t></w:r>' +
+				'<w:r>' +
+				'<w:rPr>' +
+				'<w:rFonts w:ascii="Garamond" w:hAnsi="Garamond"/>' +
+				'<w:sz w:val="28" />' +
+				'<w:szCs w:val="28" />' +
+				'</w:rPr>' +
+				util.format('<w:t xml:space="preserve">%s</w:t>', s1_2) +
+				'</w:r>' +
+				'</w:p>' +
+				'<w:p>' +
+				'<w:pPr>' +
+				'<w:numPr>' +
+				'<w:ilvl w:val="1"/>' +
+				'<w:numId w:val="2"/>' +
+				'</w:numPr>' +
+				'<w:spacing w:line="276" w:lineRule="auto"/>' +
+				//'<w:ind w:left="100" w:hanging="426" />' +
+				'<w:jc w:val="both"/>' +
+				'<w:rPr>' +
+				'<w:rFonts w:ascii="Garamond" w:hAnsi="Garamond"/>' +
+				'<w:sz w:val="28" />' +
+				'<w:szCs w:val="28" />' +
+				'</w:rPr>' +
+				'</w:pPr>' +
+				'<w:r w:rsidRPr="00F871E2">' +
+				'<w:rPr>' +
+				'<w:rFonts w:ascii="Garamond" w:hAnsi="Garamond"/>' +
+				'<w:sz w:val="28" />' +
+				'<w:szCs w:val="28" />' +				
+				'</w:rPr>' +
+				util.format('<w:t>%s</w:t>', s2) +
+				'</w:r>' +
+				'</w:p>'
+
+			// 	'<w:p><w:pPr><w:pStyle w:val="ae"/>' +
+			// 	'<w:numPr><w:ilvl w:val="0"/><w:numId w:val="5"/></w:numPr><w:tabs><w:tab w:val="left" w:pos="5670"/></w:tabs>' +
+			// 	'<w:ind w:left="851" w:hanging="142"/><w:rPr><w:sz w:val="22"/><w:szCs w:val="22"/></w:rPr></w:pPr>' +
+			// 	'<w:r><w:rPr><w:sz w:val="22"/><w:szCs w:val="22"/></w:rPr><w:t>Το πρακτικό της 2</w:t></w:r>' +
+			// 	'<w:r><w:rPr><w:sz w:val="22"/><w:szCs w:val="22"/><w:vertAlign w:val="superscript"/></w:rPr><w:t>ης</w:t></w:r>' +
+			// 	'<w:r><w:rPr><w:sz w:val="22"/><w:szCs w:val="22"/></w:rPr><w:t xml:space="preserve"> συνεδρίασης της Επιτροπής Παρακολούθησης για την Προγραμματική Σύμβαση για το σχεδιασμό και υλοποίηση του Προγράμματος «Το παιδί, Η πόλη και τα Μνημεία» που πραγματοποιήθηκε στις 06.12.2019.</w:t></w:r>' +
+			// 	'<w:p><w:pPr><w:pStyle w:val="ae"/>' +
+			// 	'<w:numPr><w:ilvl w:val="0"/><w:numId w:val="5"/></w:numPr>' +
+			// 	'<w:tabs><w:tab w:val="left" w:pos="5670"/></w:tabs>' +
+			// 	'<w:ind w:left="851" w:hanging="142"/>' +
+			// 	'<w:rPr><w:sz w:val="22"/><w:szCs w:val="22"/></w:rPr></w:pPr>' +
+			// 	'<w:r><w:rPr><w:sz w:val="22"/><w:szCs w:val="22"/></w:rPr><w:t xml:space="preserve">Τα περιεχόμενα του παραδοτέου του φυσικού αντικειμένου, που αφορά στο πρώτο τετράμηνο, Ιούνιος-Οκτώβριος  2019.</w:t></w:r>' +
+			// 	'<w:r><w:rPr><w:sz w:val="22"/><w:szCs w:val="22"/></w:rPr><w:tab/></w:r>' +
+			// 	'</w:p>' +
+			// 	'<w:p><w:pPr><w:tabs><w:tab w:val="left" w:pos="5670"/></w:tabs><w:jc w:val="center"/><w:rPr><w:sz w:val="22"/><w:szCs w:val="22"/></w:rPr></w:pPr></w:p>' +
+			// 	'<w:p><w:pPr><w:tabs><w:tab w:val="left" w:pos="5670"/></w:tabs><w:rPr><w:sz w:val="22"/><w:szCs w:val="22"/></w:rPr></w:pPr></w:p>' +
+			// 	'<w:p><w:pPr><w:tabs><w:tab w:val="left" w:pos="5670"/></w:tabs><w:rPr><w:sz w:val="22"/><w:szCs w:val="22"/></w:rPr></w:pPr></w:p>'
+		}
+		return ret;
+	},
 	getAttachmentsXmlValue: function (body) {
 		// var ret = '<w:p w:rsidR="00A44D6F" w:rsidRDefault="00262B9D" w:rsidP="00CB4B70">' +
 		// 	'<w:pPr>' +
@@ -445,7 +629,8 @@ module.exports = {
 			this.getAttachment7(body) +
 			this.getAttachment8(body) +
 			this.getAttachment9(body) +
-			this.getAttachment10(body)
+			this.getAttachment10(body) +
+			this.getAttachmentsForMonitoringCommittee(body)
 	}
 
 }

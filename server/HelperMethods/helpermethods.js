@@ -75,11 +75,38 @@ function getWord(number) {
   return ret;
 }
 
+function getNumberLectical(number) {
+  var ret = ''
+  if (number === 1)
+    ret = 'πρώτης'
+  else if (number === 2)
+    ret = 'δεύτερης'
+  else if (number === 3)
+    ret = 'τρίτης'
+  else if (number === 4)
+    ret = 'τέταρτης'
+  else if (number === 5)
+    ret = 'πέμπτης'
+  else if (number === 6)
+    ret = 'έκτης'
+  else if (number === 7)
+    ret = 'έβδομης'
+  else if (number === 8)
+    ret = 'όγδοοης'
+  else if (number === 9)
+    ret = 'ένατης'
+  else if (number === 10)
+    ret = 'δέκατης'
+
+  return ret;
+}
+
 module.exports = {
   addQuotes,
   fixTextForRawXml,
   consoleLog,
-  getWord
+  getWord,
+  getNumberLectical
 }
 
 

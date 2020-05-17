@@ -342,7 +342,7 @@ module.exports = {
 			'<w:rPr>' +
 			'<w:rFonts w:ascii="Garamond" w:hAnsi="Garamond"/>' +
 			'</w:rPr>' +
-			'<w:t> Λογαριασμού</w:t>' +
+			'<w:t xml:space="preserve"> Λογαριασμού</w:t>' +
 			'</w:r>' +
 			'</w:p>';
 
@@ -374,96 +374,170 @@ module.exports = {
 			'</w:r>' +
 			'</w:p>';
 	},
-	getAttachment11: function (body) {
-		// return '';	
-		// return '<w:p w14:paraId="3988C141" w14:textId="77777777" w:rsidR="00811BA5" w:rsidRDefault="00811BA5" w:rsidP="00811BA5"><w:pPr><w:pStyle w:val="ListParagraph"/><w:numPr><w:ilvl w:val="0"/><w:numId w:val="4"/></w:numPr></w:pPr><w:proofErr w:type="spellStart"/><w:r><w:t>Sdfsdf</w:t></w:r><w:proofErr w:type="spellEnd"/><w:r><w:t xml:space="preserve"> </w:t></w:r></w:p>' +
-		//   '<w:p w14:paraId="3EEC54F5" w14:textId="60490F78" w:rsidR="00811BA5" w:rsidRDefault="00811BA5" w:rsidP="00811BA5">' +
-		// 	'<w:pPr>' +
-		// 	'<w:pStyle w:val="ListParagraph"/>' +
-		// 	'<w:numPr>' +
-		// 	'<w:ilvl w:val="1"/>' +
-		// 	'<w:numId w:val="4"/>' +
-		// 	'</w:numPr>' +
-		// 	'</w:pPr>' +
-		// 	'<w:r><w:t>11</w:t></w:r></w:p>' +
-		// 	'<w:p w14:paraId="68A4EFFB" w14:textId="085A5E7B" w:rsidR="00811BA5" w:rsidRDefault="00811BA5" w:rsidP="00811BA5">' +
-		// 	'<w:pPr>' +
-		// 	'<w:pStyle w:val="ListParagraph"/>' +
-		// 	'<w:numPr>' +
-		// 	'<w:ilvl w:val="1"/>' +
-		// 	'<w:numId w:val="4"/>' +
-		// 	'</w:numPr>' +
-		// 	'</w:pPr>' +
-		// 	'<w:r>' +
-		// 	'<w:t>222</w:t>' +
-		// 	'</w:r></w:p>'
+	getAttachmentsForMonitoringCommittee: function (body) {
+		var ret = '';
+		if (body.Account[0].MonitoringCommittee) {
+			var rText = '';
+			// 		6)	Την Απόφαση Δημάρχου με Α.Π. 312848/06.12.2019 για τον ορισμό των μελών της Επιτροπής Παρακολούθησης. 
 
-		return '<w:p w:rsidR="00212912" w:rsidRPr="00F871E2" w:rsidRDefault="00262B9D" w:rsidP="00F871E2">' +
-			'<w:pPr>' +
-			'<w:numPr>' +
-			'<w:ilvl w:val="0"/>' +
-			'<w:numId w:val="2"/>' +
-			'</w:numPr>' +
-			'<w:tabs>' +
-			'<w:tab w:val="left" w:pos="142"/>' +
-			'<w:tab w:val="left" w:pos="284"/>' +
-			'<w:tab w:val="left" w:pos="6195"/>' +
-			'</w:tabs>' +
-			'<w:spacing w:line="276" w:lineRule="auto"/>' +
-			'<w:jc w:val="both"/>' +
-			'<w:rPr>' +
-			'<w:rFonts w:ascii="Garamond" w:hAnsi="Garamond"/>' +
-			'</w:rPr>' +
-			'</w:pPr>' +
-			'<w:r w:rsidRPr="00F871E2">' +
-			'<w:rPr>' +
-			'<w:rFonts w:ascii="Garamond" w:hAnsi="Garamond"/>' +
-			'</w:rPr>' +
-			'<w:t>Δύο (2) φωτοαντίγραφα του με ΑΠ. 318192/12.12.2019 εγγράφου της Τεχνόπολις του Δήμου Αθηναίων με το οποίο διαβιβάζονται: </w:t>' +
-			'</w:r>' +
-			'</w:p>' +
-			
-			'<w:p>' +
-			'<w:pPr>' +
-			'<w:numPr>' +
-			'<w:ilvl w:val="1"/>' +
-			'<w:numId w:val="2"/>' +
-			'</w:numPr>' +
-			// '<w:tabs>' +
-			// '<w:tab w:val="left" w:pos="142"/>' +
-			// '<w:tab w:val="left" w:pos="284"/>' +
-			// '<w:tab w:val="left" w:pos="6195"/>' +
-			// '</w:tabs>' +
-			'<w:spacing w:line="276" w:lineRule="auto"/>' +
-			'<w:jc w:val="both"/>' +
-			'<w:rPr>' +
-			'<w:rFonts w:ascii="Garamond" w:hAnsi="Garamond"/>' +
-			'</w:rPr>' +
-			'</w:pPr>' +
-			'<w:r w:rsidRPr="00F871E2">' +
-			'<w:rPr>' +
-			'<w:rFonts w:ascii="Garamond" w:hAnsi="Garamond"/>' +
-			'</w:rPr>' +
-			'<w:t>Το πρακτικό της 2 </w:t>' +
-			'</w:r>' +
-			'</w:p>'
-		// 	'<w:p><w:pPr><w:pStyle w:val="ae"/>' +
-		// 	'<w:numPr><w:ilvl w:val="0"/><w:numId w:val="5"/></w:numPr><w:tabs><w:tab w:val="left" w:pos="5670"/></w:tabs>' +
-		// 	'<w:ind w:left="851" w:hanging="142"/><w:rPr><w:sz w:val="22"/><w:szCs w:val="22"/></w:rPr></w:pPr>' +
-		// 	'<w:r><w:rPr><w:sz w:val="22"/><w:szCs w:val="22"/></w:rPr><w:t>Το πρακτικό της 2</w:t></w:r>' +
-		// 	'<w:r><w:rPr><w:sz w:val="22"/><w:szCs w:val="22"/><w:vertAlign w:val="superscript"/></w:rPr><w:t>ης</w:t></w:r>' +
-		// 	'<w:r><w:rPr><w:sz w:val="22"/><w:szCs w:val="22"/></w:rPr><w:t xml:space="preserve"> συνεδρίασης της Επιτροπής Παρακολούθησης για την Προγραμματική Σύμβαση για το σχεδιασμό και υλοποίηση του Προγράμματος «Το παιδί, Η πόλη και τα Μνημεία» που πραγματοποιήθηκε στις 06.12.2019.</w:t></w:r>' +
-		// 	'<w:p><w:pPr><w:pStyle w:val="ae"/>' +
-		// 	'<w:numPr><w:ilvl w:val="0"/><w:numId w:val="5"/></w:numPr>' +
-		// 	'<w:tabs><w:tab w:val="left" w:pos="5670"/></w:tabs>' +
-		// 	'<w:ind w:left="851" w:hanging="142"/>' +
-		// 	'<w:rPr><w:sz w:val="22"/><w:szCs w:val="22"/></w:rPr></w:pPr>' +
-		// 	'<w:r><w:rPr><w:sz w:val="22"/><w:szCs w:val="22"/></w:rPr><w:t xml:space="preserve">Τα περιεχόμενα του παραδοτέου του φυσικού αντικειμένου, που αφορά στο πρώτο τετράμηνο, Ιούνιος-Οκτώβριος  2019.</w:t></w:r>' +
-		// 	'<w:r><w:rPr><w:sz w:val="22"/><w:szCs w:val="22"/></w:rPr><w:tab/></w:r>' +
-		// 	'</w:p>' +
-		// 	'<w:p><w:pPr><w:tabs><w:tab w:val="left" w:pos="5670"/></w:tabs><w:jc w:val="center"/><w:rPr><w:sz w:val="22"/><w:szCs w:val="22"/></w:rPr></w:pPr></w:p>' +
-		// 	'<w:p><w:pPr><w:tabs><w:tab w:val="left" w:pos="5670"/></w:tabs><w:rPr><w:sz w:val="22"/><w:szCs w:val="22"/></w:rPr></w:pPr></w:p>' +
-		// 	'<w:p><w:pPr><w:tabs><w:tab w:val="left" w:pos="5670"/></w:tabs><w:rPr><w:sz w:val="22"/><w:szCs w:val="22"/></w:rPr></w:pPr></w:p>'
+			// 8)	Το με ΑΠ. 318192/12.12.2019 έγγραφο της Τεχνόπολις του Δήμου Αθηναίων με το οποίο διαβιβάζονται:
+			// 	Το πρακτικό της 2ης συνεδρίασης της Επιτροπής Παρακολούθησης για την Προγραμματική Σύμβαση για το σχεδιασμό και υλοποίηση του Προγράμματος 
+			// «Το παιδί, Η πόλη και τα Μνημεία» που πραγματοποιήθηκε στις 06.12.2019.
+			// 	Τα περιεχόμενα του παραδοτέου του φυσικού αντικειμένου, που αφορά στο πρώτο τετράμηνο, Ιούνιος-Οκτώβριος  2019.
+
+			rText = util.format('Την Απόφαση Δημάρχου με Α.Π. %s/%s για τον ορισμό των μελών της Επιτροπής Παρακολούθησης.',
+				body.Account[0].MonitoringCommittee[0].MayorDecisionForMembersProtocolNumber, body.Account[0].MonitoringCommittee[0].MayorDecisionForMembersProtocolDate);
+			ret = '<w:p>' +
+				'<w:pPr>' +
+				'<w:numPr>' +
+				'<w:ilvl w:val="0"/>' +
+				'<w:numId w:val="2"/>' +
+				'</w:numPr>' +
+				'<w:tabs>' +
+				'<w:tab w:val="left" w:pos="142"/>' +
+				'<w:tab w:val="left" w:pos="284"/>' +
+				'<w:tab w:val="left" w:pos="6195"/>' +
+				'</w:tabs>' +
+				'<w:spacing w:line="276" w:lineRule="auto"/>' +
+				'<w:jc w:val="both"/>' +
+				'<w:rPr>' +
+				'<w:rFonts w:ascii="Garamond" w:hAnsi="Garamond"/>' +
+				'</w:rPr>' +
+				'</w:pPr>' +
+				'<w:r>' +
+				'<w:rPr>' +
+				'<w:rFonts w:ascii="Garamond" w:hAnsi="Garamond"/>' +
+				'</w:rPr>' +
+				util.format('<w:t>%s</w:t>', rText) +
+				'</w:r>' +
+				'</w:p>'
+
+			// 7)	Το από  06.12.2019 πρακτικό της (2ης) δεύτερης συνεδρίασης Επιτροπής Παρακολούθησης της Προγραμματικής Σύμβασης
+			rText = util.format('Το από %s πρακτικό της (%sης) %s συνεδρίασης Επιτροπής Παρακολούθησης της Προγραμματικής Σύμβασης',
+				body.Account[0].MonitoringCommittee[0].PracticalDate, body.Account[0].No, helper.getNumberLectical(body.Account[0].No))
+
+			ret += '<w:p>' +
+				'<w:pPr>' +
+				'<w:numPr>' +
+				'<w:ilvl w:val="0"/>' +
+				'<w:numId w:val="2"/>' +
+				'</w:numPr>' +
+				'<w:tabs>' +
+				'<w:tab w:val="left" w:pos="142"/>' +
+				'<w:tab w:val="left" w:pos="284"/>' +
+				'<w:tab w:val="left" w:pos="6195"/>' +
+				'</w:tabs>' +
+				'<w:spacing w:line="276" w:lineRule="auto"/>' +
+				'<w:jc w:val="both"/>' +
+				'<w:rPr>' +
+				'<w:rFonts w:ascii="Garamond" w:hAnsi="Garamond"/>' +
+				'</w:rPr>' +
+				'</w:pPr>' +
+				'<w:r>' +
+				'<w:rPr>' +
+				'<w:rFonts w:ascii="Garamond" w:hAnsi="Garamond"/>' +
+				'</w:rPr>' +
+				util.format('<w:t>%s</w:t>', rText) +
+				'</w:r>' +
+				'</w:p>'
+
+			rText = util.format('Δύο (2) φωτοαντίγραφα του με Α.Π. %s/%s εγγράφου της %s του Δήμου Αθηναίων με το οποίο διαβιβάζονται:',
+				body.Account[0].MonitoringCommittee[0].TransmissionDocumentProtocolNumber,
+				body.Account[0].MonitoringCommittee[0].TransmissionDocumentProtocolDate,
+				body.Contract[0].Concessionaire[0].Name);
+			var s1_1 = util.format('Το πρακτικό της %s', body.Account[0].No);
+			var s1_2 = util.format(' συνεδρίασης της Επιτροπής Παρακολούθησης για την Προγραμματική Σύμβαση για το σχεδιασμό και υλοποίηση του Προγράμματος «%s» που πραγματοποιήθηκε στις %s.', body.Contract[0].Title[0].Value, body.Account[0].MonitoringCommittee[0].PracticalDate);
+			var s2 = util.format('Τα περιεχόμενα του παραδοτέου του φυσικού αντικειμένου, που αφορά στο %s', body.Account[0].MonitoringCommittee[0].GivenPhysicalObjectContentTime);
+
+			ret += '<w:p>' +
+				'<w:pPr>' +
+				'<w:numPr>' +
+				'<w:ilvl w:val="0"/>' +
+				'<w:numId w:val="2"/>' +
+				'</w:numPr>' +
+				'<w:tabs>' +
+				'<w:tab w:val="left" w:pos="142"/>' +
+				'<w:tab w:val="left" w:pos="284"/>' +
+				'<w:tab w:val="left" w:pos="6195"/>' +
+				'</w:tabs>' +
+				'<w:spacing w:line="276" w:lineRule="auto"/>' +
+				'<w:jc w:val="both"/>' +
+				'<w:rPr>' +
+				'<w:rFonts w:ascii="Garamond" w:hAnsi="Garamond"/>' +
+				'</w:rPr>' +
+				'</w:pPr>' +
+				'<w:r>' +
+				'<w:rPr>' +
+				'<w:rFonts w:ascii="Garamond" w:hAnsi="Garamond"/>' +
+				'</w:rPr>' +
+				util.format('<w:t>%s</w:t>', rText) +
+				'</w:r>' +
+				'</w:p>' +
+				'<w:p>' +
+				'<w:pPr>' +
+				'<w:numPr>' +
+				'<w:ilvl w:val="1"/>' +
+				'<w:numId w:val="2"/>' +
+				'</w:numPr>' +
+				'<w:spacing w:line="276" w:lineRule="auto"/>' +
+				'<w:jc w:val="both"/>' +
+				'<w:rPr>' +
+				'<w:rFonts w:ascii="Garamond" w:hAnsi="Garamond"/>' +
+				'</w:rPr>' +
+				'</w:pPr>' +
+				'<w:r>' +
+				'<w:rPr>' +
+				'<w:rFonts w:ascii="Garamond" w:hAnsi="Garamond"/>' +
+				'</w:rPr>' +
+				util.format('<w:t>%s</w:t>', s1_1) +
+				'</w:r>' +
+				'<w:r><w:rPr><w:vertAlign w:val="superscript"/><w:lang w:val="el-GR"/></w:rPr><w:t>ης</w:t></w:r>' +
+				'<w:r>' +
+				'<w:rPr>' +
+				'<w:rFonts w:ascii="Garamond" w:hAnsi="Garamond"/>' +
+				'</w:rPr>' +
+				util.format('<w:t xml:space="preserve">%s</w:t>', s1_2) +
+				'</w:r>' +
+				'</w:p>' +
+				'<w:p>' +
+				'<w:pPr>' +
+				'<w:numPr>' +
+				'<w:ilvl w:val="1"/>' +
+				'<w:numId w:val="2"/>' +
+				'</w:numPr>' +
+				'<w:spacing w:line="276" w:lineRule="auto"/>' +
+				'<w:jc w:val="both"/>' +
+				'<w:rPr>' +
+				'<w:rFonts w:ascii="Garamond" w:hAnsi="Garamond"/>' +
+				'</w:rPr>' +
+				'</w:pPr>' +
+				'<w:r w:rsidRPr="00F871E2">' +
+				'<w:rPr>' +
+				'<w:rFonts w:ascii="Garamond" w:hAnsi="Garamond"/>' +
+				'</w:rPr>' +
+				util.format('<w:t>%s</w:t>', s2) +
+				'</w:r>' +
+				'</w:p>'
+
+			// 	'<w:p><w:pPr><w:pStyle w:val="ae"/>' +
+			// 	'<w:numPr><w:ilvl w:val="0"/><w:numId w:val="5"/></w:numPr><w:tabs><w:tab w:val="left" w:pos="5670"/></w:tabs>' +
+			// 	'<w:ind w:left="851" w:hanging="142"/><w:rPr><w:sz w:val="22"/><w:szCs w:val="22"/></w:rPr></w:pPr>' +
+			// 	'<w:r><w:rPr><w:sz w:val="22"/><w:szCs w:val="22"/></w:rPr><w:t>Το πρακτικό της 2</w:t></w:r>' +
+			// 	'<w:r><w:rPr><w:sz w:val="22"/><w:szCs w:val="22"/><w:vertAlign w:val="superscript"/></w:rPr><w:t>ης</w:t></w:r>' +
+			// 	'<w:r><w:rPr><w:sz w:val="22"/><w:szCs w:val="22"/></w:rPr><w:t xml:space="preserve"> συνεδρίασης της Επιτροπής Παρακολούθησης για την Προγραμματική Σύμβαση για το σχεδιασμό και υλοποίηση του Προγράμματος «Το παιδί, Η πόλη και τα Μνημεία» που πραγματοποιήθηκε στις 06.12.2019.</w:t></w:r>' +
+			// 	'<w:p><w:pPr><w:pStyle w:val="ae"/>' +
+			// 	'<w:numPr><w:ilvl w:val="0"/><w:numId w:val="5"/></w:numPr>' +
+			// 	'<w:tabs><w:tab w:val="left" w:pos="5670"/></w:tabs>' +
+			// 	'<w:ind w:left="851" w:hanging="142"/>' +
+			// 	'<w:rPr><w:sz w:val="22"/><w:szCs w:val="22"/></w:rPr></w:pPr>' +
+			// 	'<w:r><w:rPr><w:sz w:val="22"/><w:szCs w:val="22"/></w:rPr><w:t xml:space="preserve">Τα περιεχόμενα του παραδοτέου του φυσικού αντικειμένου, που αφορά στο πρώτο τετράμηνο, Ιούνιος-Οκτώβριος  2019.</w:t></w:r>' +
+			// 	'<w:r><w:rPr><w:sz w:val="22"/><w:szCs w:val="22"/></w:rPr><w:tab/></w:r>' +
+			// 	'</w:p>' +
+			// 	'<w:p><w:pPr><w:tabs><w:tab w:val="left" w:pos="5670"/></w:tabs><w:jc w:val="center"/><w:rPr><w:sz w:val="22"/><w:szCs w:val="22"/></w:rPr></w:pPr></w:p>' +
+			// 	'<w:p><w:pPr><w:tabs><w:tab w:val="left" w:pos="5670"/></w:tabs><w:rPr><w:sz w:val="22"/><w:szCs w:val="22"/></w:rPr></w:pPr></w:p>' +
+			// 	'<w:p><w:pPr><w:tabs><w:tab w:val="left" w:pos="5670"/></w:tabs><w:rPr><w:sz w:val="22"/><w:szCs w:val="22"/></w:rPr></w:pPr></w:p>'
+		}
+		return ret;
 	},
 	getAttachmentsXmlValue: function (body) {
 		var ret = '<w:p w:rsidR="00C24AC4" w:rsidRPr="00AF3FEB" w:rsidRDefault="006269FB" w:rsidP="00C24AC4">' +
@@ -510,9 +584,33 @@ module.exports = {
 			this.getAttachment8(body) +
 			this.getAttachment9(body) +
 			this.getAttachment10(body) +
-			this.getAttachment11(body)
+			this.getAttachmentsForMonitoringCommittee(body)
 
 		return ret;
 	}
 
 }
+
+
+// return '';	
+		// return '<w:p w14:paraId="3988C141" w14:textId="77777777" w:rsidR="00811BA5" w:rsidRDefault="00811BA5" w:rsidP="00811BA5"><w:pPr><w:pStyle w:val="ListParagraph"/><w:numPr><w:ilvl w:val="0"/><w:numId w:val="4"/></w:numPr></w:pPr><w:proofErr w:type="spellStart"/><w:r><w:t>Sdfsdf</w:t></w:r><w:proofErr w:type="spellEnd"/><w:r><w:t xml:space="preserve"> </w:t></w:r></w:p>' +
+		//   '<w:p w14:paraId="3EEC54F5" w14:textId="60490F78" w:rsidR="00811BA5" w:rsidRDefault="00811BA5" w:rsidP="00811BA5">' +
+		// 	'<w:pPr>' +
+		// 	'<w:pStyle w:val="ListParagraph"/>' +
+		// 	'<w:numPr>' +
+		// 	'<w:ilvl w:val="1"/>' +
+		// 	'<w:numId w:val="4"/>' +
+		// 	'</w:numPr>' +
+		// 	'</w:pPr>' +
+		// 	'<w:r><w:t>11</w:t></w:r></w:p>' +
+		// 	'<w:p w14:paraId="68A4EFFB" w14:textId="085A5E7B" w:rsidR="00811BA5" w:rsidRDefault="00811BA5" w:rsidP="00811BA5">' +
+		// 	'<w:pPr>' +
+		// 	'<w:pStyle w:val="ListParagraph"/>' +
+		// 	'<w:numPr>' +
+		// 	'<w:ilvl w:val="1"/>' +
+		// 	'<w:numId w:val="4"/>' +
+		// 	'</w:numPr>' +
+		// 	'</w:pPr>' +
+		// 	'<w:r>' +
+		// 	'<w:t>222</w:t>' +
+		// 	'</w:r></w:p>'

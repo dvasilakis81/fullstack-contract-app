@@ -1,13 +1,13 @@
 var rawtabledata = require('../WORD/rawXml/tableData');
 var transmissionAttachments = require('../WORD/rawXml/trasmissionAttachments');
 var accountAttachments = require('../WORD/rawXml/accountAttachments');
-
+var accountAffirmation = require('../WORD/rawXml/accountAffirmation')
 module.exports = {
 
   setDataForTransmissionDocument: function (body) {
     var ret = '';
     var attachmentsRawData = transmissionAttachments.getAttachmentsXmlValue(body);
-
+    
     if (body) {
       ret = {
         attachments: attachmentsRawData,
@@ -74,13 +74,15 @@ module.exports = {
     var ret = '';
     
     var attachmentsRawData = accountAttachments.getAttachmentsXmlValue(body);
+    var affirmationRawData = accountAffirmation.getText(body);
     var rawTableDataValue = rawtabledata.getRawXmlTableValue(body, true);
 
     if (body) {
 
       ret = {
-        rawTableData: rawTableDataValue,
+        rawTableData: rawTableDataValue,        
         attachments: attachmentsRawData,
+        affirmation: affirmationRawData,
         year: body.BudgetExpenditureYear,
         la: body.LawArticle,
         dd: body.DocumentDate,
@@ -104,7 +106,7 @@ module.exports = {
         c_title: body.Contract[0].Title[0].Value,
         c_pn: body.Contract[0].Protocol[0].Number,
         c_pd: body.Contract[0].Protocol[0].Date,
-        c_la: body.Account[0].DownpaymentLawArticle,
+        c_la: body.Contract[0].LawArticle,
         kae: body.Contract[0].Kae,
         ac: body.Contract[0].Actor,
         cd: body.Contract[0].CodeDirection,        
