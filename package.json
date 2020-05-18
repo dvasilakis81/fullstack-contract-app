@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "fullstack contract app",
   "engines": {
-    "node": "11.10.x"
+    "node": "12.6.3"
   },
   "scripts": {
     "dev": "concurrently \"npm run server\" \"npm run client\"",
