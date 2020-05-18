@@ -284,7 +284,8 @@ export function createAccountDocument(contractInfo, accountInfo, paidAmount, res
       PaidAmountPureUntilToday: currencyFormatter.format(paidAmount.PureUntilToday, { symbol: '€', decimal: ',', thousand: '.', precision: 2, format: '%v%s' }),
       PaidAmountFpaUntilToday: currencyFormatter.format(paidAmount.FpaUntilToday, { symbol: '€', decimal: ',', thousand: '.', precision: 2, format: '%v%s' }),
       PaidAmountTotalUntilToday: currencyFormatter.format(paidAmount.TotalUntilToday, { symbol: '€', decimal: ',', thousand: '.', precision: 2, format: '%v%s' }),
-      FpaValue: format('{}%', contractInfo.FpaValue)
+      FpaValue: format('{}%', contractInfo.FpaValue),
+      HasDownpayment: contractInfo.HasDownpayment
     }],
     Account: [{
       No: accountInfo.Number,

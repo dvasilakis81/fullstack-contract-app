@@ -103,6 +103,16 @@ class DecisionCoordinatorDecentrilizedAdministrationView extends Component {
     })
   }
 
+  resetState() {
+    this.setState({      
+      addNewItem: false, editItem: false, deleteItem: false,
+      ProtocolNumber: '',
+      ProtocolDate: '',
+      Content: '',
+      ADA: '',
+      orderNo: 0
+    });
+  }  
   resetMsgInfo() {
     setTimeout(function () {
       this.setState({ openMessage: false, message: '', msgPadding: '0px', ProtocolNumber: '', ProtocolDate: '', Content: '', ADA: '', orderNo: 0 });
@@ -188,7 +198,7 @@ class DecisionCoordinatorDecentrilizedAdministrationView extends Component {
                 variant='contained'
                 color='secondary'
                 style={{ fontSize: '18px', textAlign: 'center', padding: '5px', margin: '5px' }}
-                onClick={() => {                  
+                onClick={() => {
                   this.resetState()
                 }}>
                 ΑΚΥΡΩΣΗ

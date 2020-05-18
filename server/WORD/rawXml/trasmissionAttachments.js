@@ -348,31 +348,32 @@ module.exports = {
 
 	},
 	getAttachment10: function (body) {
-
-		return '<w:p w:rsidR="00212912" w:rsidRPr="00F871E2" w:rsidRDefault="00262B9D" w:rsidP="00F871E2">' +
-			'<w:pPr>' +
-			'<w:numPr>' +
-			'<w:ilvl w:val="0"/>' +
-			'<w:numId w:val="2"/>' +
-			'</w:numPr>' +
-			'<w:tabs>' +
-			'<w:tab w:val="left" w:pos="142"/>' +
-			'<w:tab w:val="left" w:pos="284"/>' +
-			'<w:tab w:val="left" w:pos="6195"/>' +
-			'</w:tabs>' +
-			'<w:spacing w:line="276" w:lineRule="auto"/>' +
-			'<w:jc w:val="both"/>' +
-			'<w:rPr>' +
-			'<w:rFonts w:ascii="Garamond" w:hAnsi="Garamond"/>' +
-			'</w:rPr>' +
-			'</w:pPr>' +
-			'<w:r w:rsidRPr="00F871E2">' +
-			'<w:rPr>' +
-			'<w:rFonts w:ascii="Garamond" w:hAnsi="Garamond"/>' +
-			'</w:rPr>' +
-			util.format('<w:t>Ενημερωτικός Πίνακας της με Α.Π. %s/%s Προγραμματικής Σύμβασης.</w:t>', body.Contract[0].Protocol[0].Number, body.Contract[0].Protocol[0].Date) +
-			'</w:r>' +
-			'</w:p>';
+		if (body.Contract[0].HasDownpayment && body.Account[0].No) {
+			return '<w:p w:rsidR="00212912" w:rsidRPr="00F871E2" w:rsidRDefault="00262B9D" w:rsidP="00F871E2">' +
+				'<w:pPr>' +
+				'<w:numPr>' +
+				'<w:ilvl w:val="0"/>' +
+				'<w:numId w:val="2"/>' +
+				'</w:numPr>' +
+				'<w:tabs>' +
+				'<w:tab w:val="left" w:pos="142"/>' +
+				'<w:tab w:val="left" w:pos="284"/>' +
+				'<w:tab w:val="left" w:pos="6195"/>' +
+				'</w:tabs>' +
+				'<w:spacing w:line="276" w:lineRule="auto"/>' +
+				'<w:jc w:val="both"/>' +
+				'<w:rPr>' +
+				'<w:rFonts w:ascii="Garamond" w:hAnsi="Garamond"/>' +
+				'</w:rPr>' +
+				'</w:pPr>' +
+				'<w:r w:rsidRPr="00F871E2">' +
+				'<w:rPr>' +
+				'<w:rFonts w:ascii="Garamond" w:hAnsi="Garamond"/>' +
+				'</w:rPr>' +
+				util.format('<w:t>Ενημερωτικός Πίνακας της με Α.Π. %s/%s Προγραμματικής Σύμβασης.</w:t>', body.Contract[0].Protocol[0].Number, body.Contract[0].Protocol[0].Date) +
+				'</w:r>' +
+				'</w:p>';
+		}
 	},
 	getAttachmentsForMonitoringCommittee: function (body) {
 		var ret = '';

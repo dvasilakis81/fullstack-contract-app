@@ -5,10 +5,15 @@ import { Redirect } from "react-router-dom";
 class Home extends Component {
 
   RedirectTo() {
-    var tokenjwt = this.props.token;    
-    if (tokenjwt && tokenjwt.data && tokenjwt.data.token)
-      return <Redirect push to='/contracts' />
-    else
+    var tokenjwt = this.props.token;
+    var dtNow = new Date()
+    if (this.props.token && this.props.token.data && this.props.token.data.expiresAt) {
+      var tokenExpiresAt = new Date(this.props.token.data.expiresAt);
+      if (tokenExpiresAt <= dtNow)
+        return <Redirect push to='/login' />
+      else
+        return <Redirect push to='/contracts' />
+    } else
       return <Redirect push to='/login' />
   }
 
