@@ -1,12 +1,10 @@
-Message: MonitoringCommittee is not defined
-Stack: ReferenceError: MonitoringCommittee is not defined
-    at Object.getAttachmentsForMonitoringCommittee (C:\Projects\Node\fullstack-contract-app\server\WORD\rawXml\accountAttachments.js:406:3)
-    at Object.getAttachmentsXmlValue (C:\Projects\Node\fullstack-contract-app\server\WORD\rawXml\accountAttachments.js:614:9)
-    at Object.setDataForAccountDocument (C:\Projects\Node\fullstack-contract-app\server\InputData\InputData.js:76:49)
-    at C:\Projects\Node\fullstack-contract-app\server\app.js:70:29
-    at Layer.handle [as handle_request] (C:\Projects\Node\fullstack-contract-app\node_modules\express\lib\router\layer.js:95:5)
-    at next (C:\Projects\Node\fullstack-contract-app\node_modules\express\lib\router\route.js:137:13)
-    at jwt.verify (C:\Projects\Node\fullstack-contract-app\server\Postgre\Queries\Login.js:220:9)
-    at C:\Projects\Node\fullstack-contract-app\node_modules\jsonwebtoken\verify.js:223:12
-    at getSecret (C:\Projects\Node\fullstack-contract-app\node_modules\jsonwebtoken\verify.js:90:14)
-    at Object.module.exports [as verify] (C:\Projects\Node\fullstack-contract-app\node_modules\jsonwebtoken\verify.js:94:10)
+Message: value too long for type character varying(2000)
+Stack: error: value too long for type character varying(2000)
+    at Connection.parseE (c:\Projects\Node\fullstack-contract-app\node_modules\pg\lib\connection.js:614:13)
+    at Connection.parseMessage (c:\Projects\Node\fullstack-contract-app\node_modules\pg\lib\connection.js:413:19)
+    at Socket.<anonymous> (c:\Projects\Node\fullstack-contract-app\node_modules\pg\lib\connection.js:129:22)
+    at Socket.emit (events.js:310:20)
+    at addChunk (_stream_readable.js:286:12)
+    at readableAddChunk (_stream_readable.js:268:9)
+    at Socket.Readable.push (_stream_readable.js:209:10)
+    at TCP.onStreamRead (internal/stream_base_commons.js:186:23)

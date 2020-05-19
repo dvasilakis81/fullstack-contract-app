@@ -1,6 +1,6 @@
 import React from 'react'
 import './template.css'
-import { getFooterHeight, getDateFormat } from '../../Helper/helpermethods';
+import { getFooterHeight, getDateFormat, tokenExpiresAt } from '../../Helper/helpermethods';
 import Header from "../Header/header";
 
 export function getFailedConnectionWithServer() {
@@ -26,9 +26,13 @@ export function showGenericMessage(errorMessage, isError, hasHeader) {
   </div>)
 }
 
-export function getFooterTemplate() {
+export function getFooterTemplate(token) {
   //'#03ebfc'
+
   return <div style={{ display: 'flex', flexFlow: 'row', backgroundColor: '#eeeeee', height: getFooterHeight() }}>
+    <div style={{ display: 'flex', flexDirection: 'row', flexBasis: '100%', flex: '1', justifyContent: 'flex-start', marginRight: '30px' }}>
+      <span style={{ fontWeight: '900', paddingTop: '5px' }}>{tokenExpiresAt(token)}</span>
+    </div>
     <div style={{ display: 'flex', flexDirection: 'row', flexBasis: '100%', flex: '1', justifyContent: 'flex-end', marginRight: '30px' }}>
       <span style={{ fontWeight: '900', paddingTop: '5px' }}>{getDateFormat(new Date())} Δήμος Αθηναίων</span>
     </div>

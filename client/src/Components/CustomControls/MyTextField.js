@@ -10,7 +10,7 @@ class MyTextField extends Component {
   }
 
   render() {
-    let divWidth = '300px'
+    let divWidth = '300px';
     if (this.props.width)
       divWidth = this.props.width;
 
@@ -18,7 +18,7 @@ class MyTextField extends Component {
       this.props.partOfProtocol === true
         ?
         <span style={{ height: 'fit-content' }}>
-          <StyledTextField {...this.props} />
+          <StyledTextField {...this.props} style={{ width: '45%' }}/>
         </span>
         :
         <div style={{ margin: '10px', width: divWidth, border: '1px solid black', height: 'fit-content' }}>

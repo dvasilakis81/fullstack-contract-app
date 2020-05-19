@@ -35,7 +35,7 @@ class SelectContractStuff extends Component {
     return (
       <div style={{ display: 'flex', flexFlow: 'row'}}>
         {!this.props.isAllStuffChecked ?
-          <div style={{ margin: '5px', border: '1px solid black', width:'945px' }}>
+          <div style={{ margin: '5px', border: '1px solid black', width:'100%' }}>
             <InputTitle title='Προσωπικό με πρόσβαση' />
             <div style={{ backgroundColor: 'white' }}>
               <Autocomplete

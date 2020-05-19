@@ -15,6 +15,7 @@
     "env-cmd": "^9.0.3",
     "material-table": "^1.54.1",
     "material-ui-search-bar": "^1.0.0-beta.14",
+    "moment-timezone": "^0.5.31",
     "react": "^16.13.1",
     "react-custom-scrollbars": "^4.2.1",
     "react-dom": "^16.13.1",

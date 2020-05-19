@@ -356,7 +356,7 @@ class ContractsPageBody extends Component {
                 </div>
               </div>
 
-              {getFooterTemplate()}
+              {getFooterTemplate(this.props.token)}
             </div>
           </Body>
         </LoadingOverlay>

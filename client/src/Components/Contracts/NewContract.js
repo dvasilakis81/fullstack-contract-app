@@ -60,9 +60,11 @@ const styles = {
 		background: 'lightGreen'
 	},
 	divRow: {
-		display: 'flex',
+		display: 'flex',		
 		flexFlow: 'row',		
-		justifyContent: 'start'		
+		flex: 1,
+		width: '100%',
+		justifyContent: 'start'
 	}
 };
 
@@ -289,7 +291,7 @@ class NewContract extends Component {
 	}
 
 	render() {
-
+		var divWidth = this.props.screenDimensions.width > this.props.screenDimensions.height ? '80%' : '100%'
 		return (
 			<div>
 				<Header
@@ -297,65 +299,63 @@ class NewContract extends Component {
 					showAdministrationOption={false}
 					showNewContractOption={false} />
 				<Body>
-					<div style={{ width: '100%', height: '100%', display: 'flex', flexFlow: 'column', flexWrap: 'wrap' }}>
+					<div style={{ width: '100%', height: '100%', display: 'flex', flexFlow: 'column', flexWrap: 'wrap', overflowY: 'hidden', overflowX: 'hidden'}}>
 						<div style={{ width: '100%', height: '100%', display: 'flex', flexFlow: 'row', flex: '1', overflowY: 'hidden', overflowX: 'hidden', flexWrap: 'wrap' }}>
-							<div style={{ width: '100%', height: '100%', display: 'flex', flexFlow: 'column', flexWrap: 'wrap', flexBasis: '100%', flex: '1', backgroundColor: '#fff', overflowY: 'auto' }}>
+							<div style={{ width: divWidth, height: '100%', display: 'flex', flexFlow: 'column', flexWrap: 'wrap', overflowY: 'normal', overflowX: 'hidden' }}>
 								<form style={{ padding: '10px' }} autoComplete="off" onSubmit={this.handleSubmit}>
 									{getSubmitButton('contained', 'primary', { position: 'fixed', left: this.props.screenDimensions.width - 250, top: this.props.screenDimensions.height - (getHeaderHeight() + getFooterHeight()) }, null, 'Αποθήκευση', <Icon style={{ marginLeft: '10px', padding: '10px' }}>save</Icon>, this.state.submitButtonDisabled)}
-									<div style={{ display: 'flex', flexFlow: 'column', width: '80%', flexWrap: 'wrap' }}>
-										<div style={{ margin: '10px', width: '945px' }}>
+									<div style={{ display: 'flex', flexFlow: 'column', width: '100%', flexWrap: 'wrap' }}>
+										<div style={{ margin: '10px', width: '100%' }}>
 											{this.getSelectUsersTemplate()}
 										</div>
 										<div style={styles.divRow}>
-											<MyTextField title='Διεύθυνση' id='DirectionId' stateValue={this.state.DirectionId} values={this.loadSelectMunicipalityDirections()} isRequired={true} isDisabled={false} onChange={this.onChange} select={true} width='460px' />
-											<MyTextField title='Τμήμα' id='DepartmentId' stateValue={this.state.DepartmentId} values={this.loadMunicipalityDirectionDepartments(this.state.DirectionId)} isRequired={true} isDisabled={false} onChange={this.onChange} select={true} width='460px' />
+											<MyTextField title='Διεύθυνση' id='DirectionId' stateValue={this.state.DirectionId} values={this.loadSelectMunicipalityDirections()} isRequired={true} isDisabled={false} onChange={this.onChange} select={true} width='50%'/>
+											<MyTextField title='Τμήμα' id='DepartmentId' stateValue={this.state.DepartmentId} values={this.loadMunicipalityDirectionDepartments(this.state.DirectionId)} isRequired={true} isDisabled={false} onChange={this.onChange} select={true} width='50%'/>
 										</div>
 										<div style={styles.divRow}>
-											<ProtocolInput title='Α.Π.' idn='ProtocolNumber' idd='ProtocolDate' protocolNumber={this.state.ProtocolNumber} protocolDate={this.state.ProtocolDate} onChange={this.onChange} tp1='text' tp2='date' />
-											<MyTextField tp='date' title='Έναρξη Σύμβασης' id='Start' stateValue={this.state.Start} isRequired={true} isDisabled={false} onChange={this.onChange} inputProps={{ style: { textAlign: 'center' } }} />
-											<MyTextField tp='date' title='Λήξη Σύμβασης' id='End' stateValue={this.state.End} isRequired={true} isDisabled={false} onChange={this.onChange} inputProps={{ style: { textAlign: 'center' } }} />
+											<ProtocolInput title='Α.Π.' idn='ProtocolNumber' idd='ProtocolDate' protocolNumber={this.state.ProtocolNumber} protocolDate={this.state.ProtocolDate} onChange={this.onChange} tp1='text' tp2='date' width='33.33%'/>
+											<MyTextField tp='date' title='Έναρξη Σύμβασης' id='Start' stateValue={this.state.Start} isRequired={true} isDisabled={false} onChange={this.onChange} inputProps={{ style: { textAlign: 'center' } }} width='33.33%'/>
+											<MyTextField tp='date' title='Λήξη Σύμβασης' id='End' stateValue={this.state.End} isRequired={true} isDisabled={false} onChange={this.onChange} inputProps={{ style: { textAlign: 'center' } }} width='33.33%'/>
 										</div>
 										<div style={styles.divRow}>
-											<MyTextField title='Τύπος' id='ContractTypeId' stateValue={this.state.ContractTypeId} values={this.loadContractTypes(this.state.ContractTypeId)} isRequired={true} isDisabled={false} onChange={this.onChange} select={true} />
+											<MyTextField title='Τύπος' id='ContractTypeId' stateValue={this.state.ContractTypeId} values={this.loadContractTypes(this.state.ContractTypeId)} isRequired={true} isDisabled={false} onChange={this.onChange} select={true} width='20%'/>
 											{this.state.ContractTypeId == 2 ?
-												<MyTextField tm={getLawArticleTooltip(this.state)} title='Άρθρο Προγραμματικής' id='LawArticle' stateValue={this.state.LawArticle} isRequired={true} isDisabled={false} onChange={this.onChange} width='620px' />
+												<MyTextField tm={getLawArticleTooltip(this.state)} title='Άρθρο Προγραμματικής' id='LawArticle' stateValue={this.state.LawArticle} isRequired={true} isDisabled={false} onChange={this.onChange} width='80%'/>
 												:
 												<></>}
 										</div>
 										<div style={styles.divRow}>
-											<ProtocolInput title='Α.Α.Κ. Α.Π.' idn='AwardNumber' idd='AwardDate' protocolNumber={this.state.AwardNumber} protocolDate={this.state.AwardDate} onChange={this.onChange} tp1='text' tp2='date' />
-											<MyTextField tp='text' title='Α.Α.Κ. ΑΔΑ' id='AwardAda' stateValue={this.state.AwardAda} isRequired={true} isDisabled={false} onChange={this.onChange} inputProps={{ style: { textAlign: 'center' } }} />
+											<MyTextField tp='text' title='K.A.E.' id='KAE' stateValue={this.state.KAE} isRequired={true} isDisabled={false} onChange={this.onChange} inputProps={{ style: { textAlign: 'center' }, inputProps: { maxLength: 20 } }} width='20%' />
+											<MyTextField tp='text' title='Φ.' id='Actor' stateValue={this.state.Actor} isRequired={true} isDisabled={false} onChange={this.onChange} inputProps={{ style: { textAlign: 'center' }, inputProps: { maxLength: 5 } }} width='20%' />
+											<MyTextField tp='text' title='Δ.' id='CodeDirection' stateValue={this.state.CodeDirection} isRequired={true} isDisabled={false} onChange={this.onChange} inputProps={{ style: { textAlign: 'center' }, inputProps: { maxLength: 5 } }} width='20%' />
+											<ProtocolInput title='Α.Α.Κ. Α.Π.' idn='AwardNumber' idd='AwardDate' protocolNumber={this.state.AwardNumber} protocolDate={this.state.AwardDate} onChange={this.onChange} tp1='text' tp2='date' width='20%' />
+											<MyTextField tp='text' title='Α.Α.Κ. ΑΔΑ' id='AwardAda' stateValue={this.state.AwardAda} isRequired={true} isDisabled={false} onChange={this.onChange} inputProps={{ style: { textAlign: 'center' } }} width='20%' />
 										</div>
 										{
-											this.state.ContractTypeId == 1 ? <div style={{ display: 'flex', flexFlow: 'row', flexWrap: "wrap", justifyContent: 'start' }}>
-												<MyTextField tp='text' title='CPV Κωδικός' id='CpvCode' stateValue={this.state.CpvCode} isRequired={false} isDisabled={false} onChange={this.onChange} inputProps={{ style: { textAlign: 'center' }, inputProps: { maxLength: 20 } }} />
-												<MyTextField tp='text' title='CPV Τίτλος' id='CpvTitle' stateValue={this.state.CpvTitle} isRequired={false} isDisabled={false} onChange={this.onChange} inputProps={{ style: { width: '500px', textAlign: 'center' }, inputProps: { maxLength: 355 } }} />
+											this.state.ContractTypeId == 1 ? <div style={styles.divRow}>
+												<MyTextField tp='text' title='CPV Κωδικός' id='CpvCode' stateValue={this.state.CpvCode} isRequired={false} isDisabled={false} onChange={this.onChange} inputProps={{ style: { textAlign: 'center' }, inputProps: { maxLength: 20 } }} width='20%'/>
+												<MyTextField tp='text' title='CPV Τίτλος' id='CpvTitle' stateValue={this.state.CpvTitle} isRequired={false} isDisabled={false} onChange={this.onChange} inputProps={{ style: { textAlign: 'center' }, inputProps: { maxLength: 355 } }} width='80%'/>
 											</div> : <></>
-										}
+										}										
 										<div style={styles.divRow}>
-											<MyTextField tp='text' title='K.A.E.' id='KAE' stateValue={this.state.KAE} isRequired={true} isDisabled={false} onChange={this.onChange} inputProps={{ style: { textAlign: 'center' }, inputProps: { maxLength: 20 } }} />
-											<MyTextField tp='text' title='Φ.' id='Actor' stateValue={this.state.Actor} isRequired={true} isDisabled={false} onChange={this.onChange} inputProps={{ style: { textAlign: 'center' }, inputProps: { maxLength: 5 } }} />
-											<MyTextField tp='text' title='Δ.' id='CodeDirection' stateValue={this.state.CodeDirection} isRequired={true} isDisabled={false} onChange={this.onChange} inputProps={{ style: { textAlign: 'center' }, inputProps: { maxLength: 5 } }} />
+											<MyTextField tp='text' title='Όνομα Αναδόχου' id='ConcessionaireName' stateValue={this.state.ConcessionaireName} isRequired={true} isDisabled={false} onChange={this.onChange} inputProps={{ style: { textAlign: 'center' } }} width='80%' />
+											<MyTextField tp='text' title='Α.Φ.Μ. Αναδόχου' id='ConcessionaireAFM' stateValue={this.state.ConcessionaireAFM} isRequired={true} isDisabled={false} onChange={this.onChange} inputProps={{ style: { textAlign: 'center' } }} width='20%' />
 										</div>
 										<div style={styles.divRow}>
-											<MyTextField tp='text' title='Όνομα Αναδόχου' id='ConcessionaireName' stateValue={this.state.ConcessionaireName} isRequired={true} isDisabled={false} onChange={this.onChange} inputProps={{ style: { textAlign: 'center' } }} width='720px' />
-											<MyTextField tp='text' title='Α.Φ.Μ. Αναδόχου' id='ConcessionaireAFM' stateValue={this.state.ConcessionaireAFM} isRequired={true} isDisabled={false} onChange={this.onChange} inputProps={{ style: { textAlign: 'center' } }} width='200px' />
+											<MyTextField tp='text' title='Τίτλος' id='Title' stateValue={this.state.Title} isRequired={true} isDisabled={false} onChange={this.onChange} inputProps={{ style: { textAlign: 'center', inputProps: { maxLength: 2000 } } }} multiline={true} width='100%' />
 										</div>
 										<div style={styles.divRow}>
-											<MyTextField tp='number' title='Καθαρό Ποσό' id='AmountPure' stateValue={this.state.AmountPure} isRequired={true} isDisabled={false} onChange={this.onChange} inputProps={{ style: { textAlign: "center" } }} InputProps={{ endAdornment: <InputAdornment position="end"><span style={{ fontWeight: 'bolder', marginRight: '10px' }}>€</span></InputAdornment> }} />
-											<MyTextField tp='number' title={getFpaLabel(getFpaValueFromReservations(this.props.reservations))} id='AmountFpa' stateValue={this.state.AmountFpa} isRequired={true} isDisabled={false} onChange={this.onChange} inputProps={{ style: { textAlign: "center" } }} InputProps={{ endAdornment: <InputAdornment position="end"><span style={{ fontWeight: 'bolder', marginRight: '10px' }}>€</span></InputAdornment> }} />
-											<MyTextField tp='number' title='Συνολικό Ποσό' id='AmountTotal' stateValue={this.state.AmountTotal} isRequired={true} isDisabled={false} onChange={this.onChange} inputProps={{ style: { textAlign: "center" } }} InputProps={{ endAdornment: <InputAdornment position="end"><span style={{ fontWeight: 'bolder', marginRight: '10px' }}>€</span></InputAdornment> }} />
+											<MyTextField tp='number' title='Καθαρό Ποσό' id='AmountPure' stateValue={this.state.AmountPure} isRequired={true} isDisabled={false} onChange={this.onChange} inputProps={{ style: { textAlign: "center" } }} InputProps={{ endAdornment: <InputAdornment position="end"><span style={{ fontWeight: 'bolder', marginRight: '10px' }}>€</span></InputAdornment> }} width='20%'/>
+											<MyTextField tp='number' title={getFpaLabel(getFpaValueFromReservations(this.props.reservations))} id='AmountFpa' stateValue={this.state.AmountFpa} isRequired={true} isDisabled={false} onChange={this.onChange} inputProps={{ style: { textAlign: "center" } }} InputProps={{ endAdornment: <InputAdornment position="end"><span style={{ fontWeight: 'bolder', marginRight: '10px' }}>€</span></InputAdornment> }} width='20%'/>
+											<MyTextField tp='number' title='Συνολικό Ποσό' id='AmountTotal' stateValue={this.state.AmountTotal} isRequired={true} isDisabled={false} onChange={this.onChange} inputProps={{ style: { textAlign: "center" } }} InputProps={{ endAdornment: <InputAdornment position="end"><span style={{ fontWeight: 'bolder', marginRight: '10px' }}>€</span></InputAdornment> }} width='20%'/>
 											{getButton('contained', 'small', null, styles.btnAuto, this.autoCompleteBudget, 'ΥΠΟΛΟΓΙΣΜΟΣ', null, false)}
-										</div>
-										<div style={styles.divRow}>
-											<MyTextField tp='text' title='Τίτλος' id='Title' stateValue={this.state.Title} isRequired={true} isDisabled={false} onChange={this.onChange} inputProps={{ style: { width: '1000px', textAlign: 'center', inputProps: { maxLength: 2000 } } }} multiline={true} width='945px' />
-										</div>
+										</div>	
 										<div style={styles.divRow}>
 											<MyTextField tp='number' title='# Παραδοτέων (Λογαριασμών)' id='NumberOfAccounts' stateValue={this.state.NumberOfAccounts} isRequired={true} isDisabled={false} onChange={this.onChange} inputProps={{ style: { textAlign: "center" }, inputProps: { min: 0, max: 100 } }} />
 											{getCheckboxField('HasDownPayment', 'Eχει προκαταβολή (Αν ναι θα είναι ο 1ος λογαριασμός)', this.state.HasDownPayment, null, this.setCheckboxValue)}
 										</div>
-									</div>
-								</form >
+									</div> 
+								</form>
 							</div>
 						</div>
 						{getFooterTemplate()}

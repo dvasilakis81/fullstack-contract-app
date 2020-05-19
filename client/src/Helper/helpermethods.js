@@ -1,6 +1,44 @@
 import { ExpandLessRounded } from '@material-ui/icons';
 
+import format from 'string-format'
+
 var dateFormat = require('dateformat');
+
+export function isTokenExpired(tokenjwt) {
+
+  var dtNow = new Date();
+  if (tokenjwt && tokenjwt.data && tokenjwt.data.expiresAt) {
+    var tokenExpiresAt = new Date(tokenjwt.data.expiresAt);
+    if (tokenExpiresAt <= dtNow)
+      return true;
+    else
+      return false;
+  } else
+    return true;
+}
+
+export function tokenExpiresAt(tokenjwt) {
+  var ret = ''
+
+  var dtNow = new Date()
+  if (tokenjwt && tokenjwt.data) {
+    var dtTokeExpiresAt = new Date(tokenjwt.data.expiresAt);
+    var dtDiffs = (dtTokeExpiresAt - dtNow)
+    if (Math.abs(dtDiffs) <= 0)
+      this.setState({ redirectToLogin: true });
+    else {
+      var diffMins = Math.round(dtDiffs / 60000);
+      return format('H συνεδρία θα λήξει σε {} {}! {}', diffMins, diffMins > 1 ? 'λεπτά' : 'λεπτό', diffMins < 5 ? 'Θα ήταν προτιμότερο να γίνει έξοδος!' : '');
+    }
+  }
+
+  // if (tokenjwt && tokenjwt.data && tokenjwt.data.expiresAt)
+  //   return <Moment toNow> {new Date(tokenjwt.data.expiresAt).toString('YYYY-MM-DDTHH:mm:ssZ')}</Moment>
+  // // return <Moment toNow> {tokenjwt.data.expiresAt.format('YYYY-MM-DD HH:mm:ss')}</Moment>
+  // // return <Moment toNow>2020-5-19 17:41:18</Moment>
+
+  return ret;
+}
 
 export function setDimensions(store) {
   let windowDimensions = getWindowDimensions(window.innerWidth, window.innerHeight, document.getElementById('root').style.transform)
@@ -53,8 +91,8 @@ export function getContractsLimit(loadedContracts) {
 export function getHostUrl() {
   if (process.env.NODE_ENV === 'production')
     return ''
-  else 
-   return window.SERVER_URL
+  else
+    return window.SERVER_URL
 }
 
 const capitalize = (s) => {
@@ -72,7 +110,7 @@ export function getServerErrorResponseMessage(serverError) {
     ret = serverError.response && serverError.response.statusText ? serverError.response.statusText : '';
     ret += serverError.response && serverError.response.status ? '(' + serverError.response.status + ')' : '';
   } else
-   ret = serverError.message
+    ret = serverError.message
 
   return ret;
 }
