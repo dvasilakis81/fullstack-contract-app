@@ -9,7 +9,7 @@ import NumberFormat from 'react-number-format';
 import LoadingOverlay from 'react-loading-overlay'
 
 import {
-	getAmountInWords, getHostUrl, getDateFormat, getDateFormatForDocument, getDateFormatWithDash,
+	getAmountInWords, getHostUrl, getDateFormat, getDateFormatForDocument,
 	extractYearFromDate, getValidMaterialDateFormat, getFpaLabel,
 	getServerErrorResponseMessage
 } from '../../Helper/helpermethods';
@@ -24,8 +24,6 @@ import EditIcon from '@material-ui/icons/Edit';
 import { createTransmissionDocument, createAccountDocument } from './PostDataCreateDocument'
 
 var downloadjs = require('downloadjs');
-var currencyFormatter = require('currency-formatter');
-const format = require('string-format')
 
 const useStyles = {
 	container: {
@@ -206,7 +204,7 @@ class AccountInfo extends React.Component {
 			headers: { 'Content-Type': 'application/json;charset=utf-8', Authorization: 'Bearer ' + this.props.token.data.token },
 			responseType: 'arraybuffer'
 		};
-		
+
 		axios.post(getHostUrl() + '/createTransmissionDocument', dataToPost, config)
 			.then(res => {
 				var blob = new Blob([res.data]);
@@ -248,7 +246,7 @@ class AccountInfo extends React.Component {
 	getRemainAmountOfContract(am1) {
 		var contractDetails = this.props.isSearchMode ? this.props.contractDetailsSearchMode : this.props.contractDetails;
 		return Number(contractDetails.TotalAmount) - Number(am1)
-	}	
+	}
 	//#endregion
 
 	//#region CC template
@@ -306,7 +304,8 @@ class AccountInfo extends React.Component {
 					let a2 = (Number(a1) * Number(stamp / 100)).toFixed(2);
 					let a3 = (Number(a2) * Number(stampOGA / 100)).toFixed(2);
 					return (this.getReservationTemplate(value, Number(a1), Number(a2), Number(a3), index))
-				}
+				} else
+					return <></>
 			}) : null)
 	}
 	getReservationTemplate(value, a1, a2, a3, index) {
@@ -701,8 +700,8 @@ class AccountInfo extends React.Component {
 			)
 		}
 	}
-	getMonitoringCommitteeInfoTemplate(contractInfo, accountInfo) {    
-    
+	getMonitoringCommitteeInfoTemplate(contractInfo, accountInfo) {
+
 		let title = accountInfo.monitoringcommittee ? <Grid item style={{ background: 'lightGrey' }}>
 			<Paper style={useStyles.category} square={true}>
 				<Typography>
@@ -744,7 +743,7 @@ class AccountInfo extends React.Component {
 			</>
 			)
 		}
-	}	
+	}
 	//#endregion
 
 	//#region signatory
@@ -782,6 +781,8 @@ class AccountInfo extends React.Component {
 									</Grid>
 								)
 							}
+							else
+								return <></>
 						})
 					}
 				</>
@@ -810,7 +811,9 @@ class AccountInfo extends React.Component {
 										</Paper>
 									</Grid>
 								)
-							}
+							} 
+							else 
+							return <></>
 						})
 					}
 				</>

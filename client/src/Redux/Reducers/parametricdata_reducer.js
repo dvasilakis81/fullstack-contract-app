@@ -102,12 +102,8 @@ export default function (state = {}, action, root) {
       }
       break;
     case 'DELETE_USER':
-      if (state.users) {
-        let users = state.users.filter((item) => {
-
-          if (item.Id !== action.payload.Id)
-            return item;
-        });
+      if (state.users) {        
+        let users = state.users.filter(item => item.Id !== action.payload.Id).map((item, idx) => item);
 
         state = {
           ...state,
@@ -146,11 +142,7 @@ export default function (state = {}, action, root) {
       break;
     case 'DELETE_CONTRACT_TYPE':
       if (state.contractTypes) {
-        let contractTypes = state.contractTypes.filter((item) => {
-
-          if (item.ContractTypeId !== action.payload.ContractTypeId)
-            return item;
-        });
+        let contractTypes = state.contractTypes.filter(item => item.ContractTypeId !== action.payload.ContractTypeId).map((item, idx) => item);
 
         state = {
           ...state,
@@ -189,12 +181,7 @@ export default function (state = {}, action, root) {
       break;
     case 'DELETE_AGENCY':
       if (state.agencies) {
-        let agencies = state.agencies.filter((item) => {
-
-          if (item.Id !== action.payload.Id)
-            return item;
-        });
-
+        let agencies = state.agencies.filter(item => item.Id !== action.payload.Id).map((item, idx) => item);
         state = {
           ...state,
           agencies: agencies
@@ -233,12 +220,7 @@ export default function (state = {}, action, root) {
       break;
     case 'DELETE_DIRECTION':
       if (state.municipalityDirections) {
-        let municipalityDirections = state.municipalityDirections.filter((item) => {
-
-          if (item.DirectionId !== action.payload.DirectionId)
-            return item;
-        });
-
+        let municipalityDirections = state.agencies.filter(item => item.DirectionId !== action.payload.DirectionId).map((item, idx) => item);
         state = {
           ...state,
           municipalityDirections: municipalityDirections
@@ -297,10 +279,7 @@ export default function (state = {}, action, root) {
 
         let municipalityDirections = state.municipalityDirections.map((item) => {
           if (item.DirectionId === action.payload.DirectionId) {
-            item.department = item.department.filter((item) => {
-              if (item.DepartmentId !== action.payload.DepartmentId)
-                return item;
-            })
+            item.department = item.department.filter(item.DepartmentId !== action.payload.DepartmentId).map((item, idx) => item);
           }
           return item;
         })
@@ -343,12 +322,7 @@ export default function (state = {}, action, root) {
       break;
     case 'DELETE_RESERVATION':
       if (state.reservations) {
-        let reservations = state.reservations.filter((item) => {
-
-          if (item.Id !== action.payload.Id)
-            return item;
-        });
-
+        let reservations = state.reservations.filter(item => item.Id !== action.payload.Id).map((item, idx) => item);
         state = {
           ...state,
           reservations: reservations
@@ -387,12 +361,7 @@ export default function (state = {}, action, root) {
       break;
     case 'DELETE_SIGNATORY':
       if (state.signatories) {
-        let signatories = state.signatories.filter((item) => {
-
-          if (item.Id !== action.payload.Id)
-            return item;
-        });
-
+        let signatories = state.signatories.filter(item => item.Id !== action.payload.Id).map((item, idx) => item);
         state = {
           ...state,
           signatories: signatories
@@ -431,12 +400,7 @@ export default function (state = {}, action, root) {
       break;
     case 'DELETE_SIGNATORY_TYPE':
       if (state.signatories) {
-        let signatorytypes = state.signatorytypes.filter((item) => {
-
-          if (item.Id !== action.payload.Id)
-            return item;
-        });
-
+        let signatorytypes = state.signatorytypes.filter(item => item.Id !== action.payload.Id).map((item, idx) => item);
         state = {
           ...state,
           signatorytypes: signatorytypes
@@ -445,12 +409,7 @@ export default function (state = {}, action, root) {
       break;
     case 'DELETE_ERROR_MESSAGE':
       if (state.errormessages) {
-        let errormessages = state.errormessages.filter((item) => {
-
-          if (item.Id !== action.payload.Id)
-            return item;
-        });
-
+        let errormessages = state.errormessages.filter(item => item.Id !== action.payload.Id).map((item, idx) => item);
         state = {
           ...state,
           errormessages: errormessages

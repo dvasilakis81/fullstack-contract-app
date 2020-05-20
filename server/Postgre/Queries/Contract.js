@@ -89,7 +89,7 @@ const getContracts = (request, response, next) => {
   var limit = parseInt(request.query.limit);
   var where = util.format('WHERE (c."OwnerId"=%s OR c."AllUsers"=true OR %s IN (SELECT cus."UserId" FROM "Ordering"."ContractUsers" as cus WHERE cus."ContractId"=c."Id")) ', loginUserId, loginUserId);
   var sqlQuery = util.format('%s %s %s OFFSET %s LIMIT %s', getSelectFromClauses(loginUserId), where, gerOrderBy(), offset, limit);
-  console.log('sqlQuery: ' + sqlQuery)
+  
   pool.query(sqlQuery, (error, results) => {
     if (error) {
       next(error);
@@ -103,8 +103,9 @@ const getContracts = (request, response, next) => {
 }
 
 const getContractById = (req, res, next, contractId) => {
-  var where = 'WHERE c."Id"=' + contractId;
-  var sqlQuery = util.format('%s %s %s', getSelectFromClauses(), where, gerOrderBy())
+  var loginUserId = parseInt(req.body.loginUserId);
+  var where = util.format('WHERE c."Id"=%s', contractId);
+  var sqlQuery = util.format('%s %s %s', getSelectFromClauses(loginUserId), where, gerOrderBy())
 
   pool.query(sqlQuery, (error, results) => {
     if (error) {

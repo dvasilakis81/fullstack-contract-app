@@ -2,8 +2,6 @@ import React, { Component } from 'react';
 import Header from "../Header/header";
 import AdministrationContainer from './administration_container'
 import { connect } from 'react-redux';
-import { Redirect } from "react-router-dom";
-import format from 'string-format';
 import MySnackbar from '../Common/MySnackbar';
 
 class Administration extends Component {

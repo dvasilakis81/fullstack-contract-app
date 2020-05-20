@@ -13,8 +13,6 @@ import MySnackbar from '../Common/MySnackbar'
 import '../Common/templates'
 import { getServerErrorResponseMessage } from '../../Helper/helpermethods'
 
-import ReactIsCapsLockActive from '@matsun/reactiscapslockactive'
-
 const pageStyles = {
   container: {
     display: "flex",
@@ -143,18 +141,3 @@ function mapDispatchToProps(dispatch) {
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(withStyles(pageStyles)(Login))
-
-
-
-
-{/* <ReactIsCapsLockActive>                  
-                  {
-                    active =>
-                      <div style={{ display: 'flex', flexDirection: 'row' }}>
-                        <span style={{ color: '#fff' }}>Caps lock</span>
-                        <span style={{ backgroundColor: active ? '#00FF00' : 'white', width: 15, height: 15, borderRadius: 15 / 2, alignSelf: 'center', marginLeft: '5px' }}></span>
-                      </div>
-                  }
-                </ReactIsCapsLockActive> 
-                
-                */}

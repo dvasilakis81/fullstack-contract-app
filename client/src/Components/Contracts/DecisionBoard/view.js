@@ -1,4 +1,4 @@
-import React, { Component, Fragment } from 'react';
+import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Grid, Paper, Typography, Button } from '@material-ui/core';
 import ContractsPopup from '../../../HOC/Contracts/ContractsPopup';
@@ -9,7 +9,7 @@ import LoadingOverlay from 'react-loading-overlay'
 import Icon from '@material-ui/core/Icon';
 
 import { getDateFormatForDocument, getServerErrorResponseMessage } from '../../../Helper/helpermethods';
-import { getSubmitButton, getTextFieldWithTooltip } from '../../MaterialObjects/materialobjects';
+import { getSubmitButton } from '../../MaterialObjects/materialobjects';
 import { bindActionCreators } from 'redux';
 import { processContractInfo } from '../../../Redux/Actions';
 
@@ -51,6 +51,7 @@ class DecisionBoardView extends Component {
     super(props);
 
     this.state = {
+      loginUserId: this.props.token.data.id,
       contractId: this.props.contractDetails.Id,
       submitButtonDisabled: false,
       addNewItem: false,
@@ -95,17 +96,17 @@ class DecisionBoardView extends Component {
 
   openDeleteDecisionBoard(index, decisionBoard) {
     this.setState({
-      decisionBoardIndex: index + 1,
       Id: decisionBoard.Id,
       ProtocolNumber: decisionBoard.ProtocolNumber,
       ProtocolDate: decisionBoard.ProtocolDate,
+      orderNo: index + 1,
       deleteItem: true
     })
   }
 
   resetState() {
-    this.setState({      
-      addNewItem: false, editItem: false, deleteItem: false, 
+    this.setState({
+      addNewItem: false, editItem: false, deleteItem: false,
       ProtocolNumber: '',
       ProtocolYear: '',
       ScaleNumber: '',
@@ -113,10 +114,10 @@ class DecisionBoardView extends Component {
       APDADate: '',
       orderNo: 0
     });
-  }  
+  }
   resetMsgInfo() {
     setTimeout(function () {
-      this.setState({ openMessage: false, message: '', msgPadding: '0px', ProtocolNumber: '', ProtocolDate: '', Content: '', ADA: '', orderNo: 0 });
+      this.setState({ openMessage: false, message: '', msgPadding: '0px'});
     }.bind(this), 5000);
   }
 
@@ -132,7 +133,7 @@ class DecisionBoardView extends Component {
         this.resetMsgInfo();
       }).catch(error => {
         var msg = 'Αποτυχία δημιουργίας Α.Δ.Σ. !!\n' + error;
-        this.setState({ openMessage: true, message: <><div>{msg}</div><div>{getServerErrorResponseMessage(error)}</div></>, openMessage: true, variant: 'error', msgPadding: '10px', submitButtonDisabled: false });        
+        this.setState({ openMessage: true, message: <><div>{msg}</div><div>{getServerErrorResponseMessage(error)}</div></>, variant: 'error', msgPadding: '10px', submitButtonDisabled: false });
       })
     } else if (this.state.editItem === true) {
       this.props.processContractInfo(this.state, this.props.token.data.token, 'updatedecisionboard').then(res => {
@@ -142,13 +143,9 @@ class DecisionBoardView extends Component {
         this.resetMsgInfo();
       }).catch(error => {
         var msg = 'Αποτυχία δημιουργίας Α.Δ.Σ. !!\n' + error;
-        this.setState({ message: <><div>{msg}</div><div>{getServerErrorResponseMessage(error)}</div></>, openMessage: true, variant: 'error', msgPadding: '10px', submitButtonDisabled: false });        
+        this.setState({ message: <><div>{msg}</div><div>{getServerErrorResponseMessage(error)}</div></>, openMessage: true, variant: 'error', msgPadding: '10px', submitButtonDisabled: false });
       })
-    }
-
-    setTimeout(function () {
-      this.setState({ openMessage: false, message: '', variant: '', msgPadding: '0px', ProtocolNumber: '', ProtocolDate: '', Content: '', ADA: '', });
-    }.bind(this), 5000);
+    }    
   }
 
   requestDeleteDecisionBoard() {
@@ -161,7 +158,7 @@ class DecisionBoardView extends Component {
       this.resetMsgInfo();
     }).catch(error => {
       var msg = 'Αποτυχία διαγραφής Α.Δ.Σ. !!\n' + error;
-      this.setState({ openMessage: true, message: <><div>{msg}</div><div>{getServerErrorResponseMessage(error)}</div></>, openMessage: true, variant: 'error', msgPadding: '0px', submitButtonDisabled: false });
+      this.setState({ openMessage: true, message: <><div>{msg}</div><div>{getServerErrorResponseMessage(error)}</div></>, variant: 'error', msgPadding: '0px', submitButtonDisabled: false });
     })
   }
 
@@ -172,20 +169,17 @@ class DecisionBoardView extends Component {
         <form style={{ padding: '10px', backgroundColor: '#fff' }} autoComplete="off" onSubmit={this.handleSubmit}>
           <div style={{ textAlign: 'center', fontSize: '22px', fontWeight: 800, paddingBottom: '10px' }}>{this.state.addNewItem === true ? 'Εισαγωγή' : 'Επεξεργασία'} στοιχείων {this.state.orderNo}ης Απόφασης Δημοτικού Συμβουλίου</div>
           <div style={{ display: 'flex', flexFlow: 'row', height: 'auto', justifyContent: 'left', padding: '10px' }}>
-            <ProtocolInput tm1={getDecisionBoardTooltip(this.state, 1)} tm2={getDecisionBoardTooltip(this.state, 2)} title='Α.Π.' idn='ProtocolNumber' idd='ProtocolDate' protocolNumber={this.state.ProtocolNumber} protocolDate={this.state.ProtocolDate} st={null} onChange={this.onChange} tp1='text' tp2='date' />
-            <MyTextField tm={getDecisionBoardTooltip(this.state, 3)} tp='text' title='ΑΔΑ' label='' id='ADA' stateValue={this.state.ADA} isRequired={false} isDisabled={false} onChange={this.onChange} style={{ width: '100%' }} width='40%' inputProps={{ style: { textAlign: 'center' } }}/>
+            <ProtocolInput tm1={getDecisionBoardTooltip(this.state, 1)} tm2={getDecisionBoardTooltip(this.state, 2)} title='Α.Π.' idn='ProtocolNumber' idd='ProtocolDate' protocolNumber={this.state.ProtocolNumber} protocolDate={this.state.ProtocolDate} st={null} onChange={this.onChange} tp1='text' tp2='date' width='50%' />
+            <MyTextField tm={getDecisionBoardTooltip(this.state, 3)} tp='text' title='ΑΔΑ' label='' id='ADA' stateValue={this.state.ADA} isRequired={false} isDisabled={false} onChange={this.onChange} style={{ width: '100%' }} inputProps={{ style: { textAlign: 'center' } }} width='50%' />
           </div>
           {
             this.state.orderNo > 1 ?
-              <div style={{ display: 'flex', flexFlow: 'column', height: 'auto', justifyContent: 'left', padding: '10px'  }}>
-                <MyTextField tm={getDecisionBoardTooltip(this.state, 4)} tp='text' title='Περιεχόμενο' label='' id='Content' stateValue={this.state.Content} isRequired={false} isDisabled={false} onChange={this.onChange} width='90%' />
+              <div style={{ display: 'flex', flexFlow: 'row', height: 'auto', justifyContent: 'left', padding: '10px' }}>
+                <MyTextField tm={getDecisionBoardTooltip(this.state, 4)} tp='text' title='Περιεχόμενο' label='' id='Content' stateValue={this.state.Content} isRequired={false} isDisabled={false} onChange={this.onChange} width='100%' />
               </div>
               :
               <></>
           }
-          {/* <div style={{ display: 'flex', flexFlow: 'column', height: 'auto', justifyContent: 'left', padding: '10px' }}>
-            <MyTextField tm={getDecisionBoardTooltip(this.state, 3)} tp='text' title='ΑΔΑ' label='' id='ADA' stateValue={this.state.ADA} isRequired={false} isDisabled={false} onChange={this.onChange} style={{ width: '100%' }} width='40%' />
-          </div> */}
           <div style={{ display: 'flex', flexFlow: 'row', height: 'auto', justifyContent: 'center', padding: '10px' }}>
             <LoadingOverlay
               active={this.props.insertContractInfoPending === true}
@@ -253,18 +247,21 @@ class DecisionBoardView extends Component {
     return <IconButton
       disabled={this.state.addNewItem === true || this.state.editItem === true}
       size="medium" color={index < this.props.contractDetails.decisionboard.length - 1 ? "disabled" : "inherit"}
-      onClick={() => { this.openDeleteDecisionBoard(index, item) }} style={{ textAlign: 'top', padding: '10px', justifyContent: 'end' }}>
+      onClick={() => {
+        if (index.toString() === (this.props.contractDetails.decisionboard.length - 1).toString())
+          this.openDeleteDecisionBoard(index, item)
+      }}
+      style={{ textAlign: 'top', padding: '10px', justifyContent: 'end' }}>
       <DeleteIcon />
     </IconButton>
   }
   renderItemOptions(index, item) {
-    if (index > 0) {
-      return <>
-        {item.ADA ? <span> με <b>ΑΔΑ</b> {item.ADA}</span> : ''}
-        <span style={{ marginLeft: '10px' }}></span>
-        {item.Content ? <span style={{ fontStyle: 'italic' }}> και με <b>περιεχόμενο</b> {item.Content}</span> : ''}
-      </>
-    }
+
+    return <>
+      {item.ADA ? <span> με <b>ΑΔΑ</b> {item.ADA}</span> : ''}
+      <span style={{ marginLeft: '10px' }}></span>
+      {item.Content ? <span style={{ fontStyle: 'italic' }}> και με <b>περιεχόμενο</b> {item.Content}</span> : ''}
+    </>
   }
   render() {
     var length = this.props.contractDetails.decisionboard ? this.props.contractDetails.decisionboard.length : 0
@@ -276,26 +273,26 @@ class DecisionBoardView extends Component {
         variant={this.state.variant}>
         <div style={{ display: 'flex', flexFlow: 'row', height: 'auto', background: 'lightgreen', justifyContent: 'center', padding: this.msgPadding }}>
           <span style={{ fontSize: '22px', textAlign: 'center', fontWeight: 'bold', padding: this.state.msgPadding }}>{this.state.message}</span>
-        </div>        
-          <div style={{ display: 'flex', flexFlow: 'column', flex: '1', backgroundColor: '#fff', overflowY: 'scroll', overflowX: 'auto', flexWrap: 'wrap', height:'600px' }}>
-            {
-              this.props.contractDetails.decisionboard ? this.props.contractDetails.decisionboard.map((item, index) => {
-                return (<Grid item key={index}>
-                  <Paper style={styles.paperMoreContractInfo} square={true}>
-                    <Typography>
-                      <div style={{ display: 'flex', flexFlow: 'row', fontSize: '18px' }}>
-                        <span style={{ flex: '1' }}>
-                          <b>{index + 1}η Απόφαση Δημοτικού Συμβουλίου με A.Π.</b> {item.ProtocolNumber ? item.ProtocolNumber : ''}/{item.ProtocolDate ? getDateFormatForDocument(item.ProtocolDate) : ''}
-                          {this.renderItemOptions(index, item)}
-                        </span>
-                        {this.renderEditOption(index, item)}
-                        {this.renderDeleteOption(index, item)}
-                      </div>
-                    </Typography>
-                  </Paper>
-                </Grid>)
-              }) : <></>
-            }          
+        </div>
+        <div style={{ display: 'flex', flexFlow: 'column', flex: '1', backgroundColor: '#fff', overflowY: 'scroll', overflowX: 'auto', flexWrap: 'nowrap', height: '600px' }}>
+          {
+            this.props.contractDetails.decisionboard ? this.props.contractDetails.decisionboard.map((item, index) => {
+              return (<Grid item key={index}>
+                <Paper style={styles.paperMoreContractInfo} square={true}>
+                  <Typography>
+                    <div style={{ display: 'flex', flexFlow: 'row', fontSize: '18px' }}>
+                      <span style={{ flex: '1' }}>
+                        <b>{index + 1}η Απόφαση Δημοτικού Συμβουλίου με A.Π.</b> {item.ProtocolNumber ? item.ProtocolNumber : ''}/{item.ProtocolDate ? getDateFormatForDocument(item.ProtocolDate) : ''}
+                        {this.renderItemOptions(index, item)}
+                      </span>
+                      {this.renderEditOption(index, item)}
+                      {this.renderDeleteOption(index, item)}
+                    </div>
+                  </Typography>
+                </Paper>
+              </Grid>)
+            }) : <></>
+          }
         </div>
         {this.decisionBoardItemForm(length)}
         <div style={{ display: 'flex', flexFlow: 'row', height: 'auto', backgroundColor: '#fff', background: 'white', justifyContent: 'center' }}>

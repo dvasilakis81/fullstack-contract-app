@@ -1,5 +1,3 @@
-import { ExpandLessRounded } from '@material-ui/icons';
-
 import format from 'string-format'
 
 var dateFormat = require('dateformat');

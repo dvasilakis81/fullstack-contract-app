@@ -1,5 +1,3 @@
-import store from '../Store/store'
-
 export default function (state = {}, action, root) {
 	//console.log(action.type);	
 	switch (action.type) {
@@ -80,13 +78,13 @@ export default function (state = {}, action, root) {
 			break;
 		case 'DELETE_CONTRACT':
 
-			let contracts = state.contractsList.filter((item) => {
+			let contracts = state.contractsList.forEach((item) => {
 				let found = false;
 				item.Total = parseInt(item.Total) - 1;
-				if (item.Id == action.payload.Id)
+				if (item.Id.toString() === action.payload.Id.toString())
 					found = true;
 
-				if (!found)
+				if (found === false)
 					return item;
 			});
 
@@ -118,7 +116,8 @@ export default function (state = {}, action, root) {
 					contractsRejected: undefined,
 					contractsList: action.payload
 				};
-			} else {
+			} else {			
+
 				var selectedContract = state.contractDetails;
 				let contracts = action.payload.filter((item) => {
 					let found = false;
@@ -134,7 +133,7 @@ export default function (state = {}, action, root) {
 						}
 					}
 
-					if (!found && item)
+					if (found === false && item)
 						return item;
 				});
 
@@ -194,7 +193,7 @@ export default function (state = {}, action, root) {
 				let updatedContractsList = state.contractsList.map((item) => {
 
 					var accountJustAdded = action.payload.data;
-					if (item.Id == accountJustAdded[0].ContractId) {
+					if (item.Id.toString() === accountJustAdded[0].ContractId.toString()) {
 						if (item.createdaccounts === undefined || item.createdaccounts === null)
 							item.createdaccounts = [];
 						item.createdaccounts.push({
@@ -256,9 +255,9 @@ export default function (state = {}, action, root) {
 				let updatedContractsList = state.contractsList.map((item) => {
 
 					var accountJustUpdated = action.payload.data;
-					if (item.Id == accountJustUpdated.ContractId) {
+					if (item.Id.toString() === accountJustUpdated.ContractId.toString()) {
 						for (let i = 0; i < item.createdaccounts.length; i++) {
-							if (item.createdaccounts[i].Number == accountJustUpdated.Number) {
+							if (item.createdaccounts[i].Number.toString() === accountJustUpdated.Number.toString()) {
 								item.createdaccounts[i].Start = accountJustUpdated.Start
 								item.createdaccounts[i].End = accountJustUpdated.End
 								item.createdaccounts[i].AmountPure = accountJustUpdated.AmountPure
@@ -281,9 +280,9 @@ export default function (state = {}, action, root) {
 				let updatedContractsSearchList = state.searchContractsList.map((item) => {
 
 					var accountJustUpdated = action.payload.data;
-					if (item.Id == accountJustUpdated.ContractId) {
+					if (item.Id.toString() === accountJustUpdated.ContractId.toString()) {
 						for (let i = 0; i < item.createdaccounts.length; i++) {
-							if (item.createdaccounts[i].Number == accountJustUpdated.Number) {
+							if (item.createdaccounts[i].Number.toString() === accountJustUpdated.Number.toString()) {
 								item.createdaccounts[i].Start = accountJustUpdated.Start
 								item.createdaccounts[i].End = accountJustUpdated.End
 								item.createdaccounts[i].AmountPure = Number(accountJustUpdated.AmountPure)
@@ -324,7 +323,7 @@ export default function (state = {}, action, root) {
 				let updatedContractsList = state.contractsList.map((item) => {
 					console.log('ContractId:' + action.payload.data.Id)
 					var contractItem = action.payload.data;
-					if (item.Id == contractItem.Id)
+					if (item.Id.toString() === contractItem.Id.toString())
 						item = contractItem
 
 					return item;
@@ -343,7 +342,7 @@ export default function (state = {}, action, root) {
 				let updatedContractsSearchList = state.searchContractsList.map((item) => {
 
 					var contractItem = action.payload.data;
-					if (item.Id == contractItem[0].Id)
+					if (item.Id.toString() === contractItem[0].Id.toString())
 						item = contractItem[0]
 
 					return item;
@@ -380,7 +379,7 @@ export default function (state = {}, action, root) {
 				let updatedContractsList = state.contractsList.map((item) => {
 
 					var contractItem = action.payload.data;
-					if (item.Id == contractItem.Id)
+					if (item.Id.toString() === contractItem.Id.toString())
 						item = contractItem
 
 					return item;
@@ -397,7 +396,7 @@ export default function (state = {}, action, root) {
 				let updatedContractsSearchList = state.searchContractsList.map((item) => {
 
 					var contractItem = action.payload.data;
-					if (item.Id == contractItem.Id)
+					if (item.Id.toString() === contractItem.Id.toString())
 						item = contractItem
 
 					return item;
@@ -433,7 +432,7 @@ export default function (state = {}, action, root) {
 				let updatedContractsList = state.contractsList.map((item) => {
 
 					var contractItem = action.payload.data;
-					if (item.Id == contractItem.Id)
+					if (item.Id.toString() === contractItem.Id.toString())
 						item = contractItem
 
 					return item;
@@ -452,7 +451,7 @@ export default function (state = {}, action, root) {
 				let updatedContractsSearchList = state.searchContractsList.map((item) => {
 
 					var contractItem = action.payload.data;
-					if (item.Id == contractItem[0].Id)
+					if (item.Id.toString() === contractItem[0].Id.toString())
 						item = contractItem[0]
 
 					return item;
@@ -467,7 +466,7 @@ export default function (state = {}, action, root) {
 				};
 			}
 
-			break;		
+			break;
 		default:
 			break;
 	}

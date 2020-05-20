@@ -3,3 +3,44 @@
 2) Αay προηγουμενου ετος
 3) Contracts αρθρο input
 -- Δικαιολογητηικα Ενημερωτικός Πίνακας πότε μπαίνει
+
+
+
+{/* <VirtualizedTable
+								data={contractDetails.createdaccounts}
+								columns={[
+									{
+										Header: "#",
+										accessor: "Number",
+										width: '50',
+									},
+									{
+										Header: "Έναρξη",
+										accessor: "Start",
+										width: 'auto',
+									},
+									{
+										Header: "Τέλος",
+										accessor: "End",
+										width: 'auto',
+									},
+									{
+										Header: "Καθαρό Ποσό",
+										accessor: "AmountPure",
+										width: 'auto'
+									},
+									{
+										Header: getFpaLabel(contractDetails.FpaValue),
+										accessor: "AmountFpa",
+										width: 'auto',
+									},
+									{
+										Header: "Σύνολο",
+										accessor: "AmountTotal",
+										width: 'auto'
+									}
+								]}
+								className="-striped -highlight"
+								style={{ width: '800px', height: '400px' }}
+							/> */}
+{/* <AnalyticAccountPaymentUntilToday createdAccounts={contractDetails.createdaccounts} fpaValue={contractDetails.FpaValue} /> */ }

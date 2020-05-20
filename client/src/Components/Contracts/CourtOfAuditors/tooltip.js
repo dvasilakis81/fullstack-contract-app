@@ -1,7 +1,5 @@
 import React from 'react';
-import { getDateFormatForDocument } from '../../../Helper/helpermethods';
 import '../../../Styles/styles.css';
-import tooltipStyle from '../../../Styles/styles.js'
 
 const useStyles = {
   tooltip: {

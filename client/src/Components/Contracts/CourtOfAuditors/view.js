@@ -1,4 +1,4 @@
-import React, { Component, Fragment } from 'react';
+import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Grid, Paper, Typography, Button } from '@material-ui/core';
 import ContractsPopup from '../../../HOC/Contracts/ContractsPopup';
@@ -9,7 +9,7 @@ import LoadingOverlay from 'react-loading-overlay'
 import Icon from '@material-ui/core/Icon';
 
 import { getDateFormatForDocument, getServerErrorResponseMessage } from '../../../Helper/helpermethods';
-import { getSubmitButton, getTextFieldWithTooltip, getCheckboxField } from '../../MaterialObjects/materialobjects';
+import { getSubmitButton } from '../../MaterialObjects/materialobjects';
 import { bindActionCreators } from 'redux';
 import { processContractInfo } from '../../../Redux/Actions';
 
@@ -51,6 +51,7 @@ class CourtOfAuditorsView extends Component {
     super(props);
 
     this.state = {
+      loginUserId: this.props.token.data.id,
       contractId: this.props.contractDetails.Id,
       submitButtonDisabled: false,
       addNewItem: false,
@@ -97,14 +98,14 @@ class CourtOfAuditorsView extends Component {
 
   openDeleteCourtOfAuditors(index, courtOfAuditors) {
     this.setState({
-      orderNo: index + 1,
       Id: courtOfAuditors.Id,
+      orderNo: index + 1,
       deleteItem: true
     })
   }
 
   resetState() {
-    this.setState({      
+    this.setState({
       ProtocolNumber: '',
       ProtocolYear: '',
       ScaleNumber: '',
@@ -118,7 +119,7 @@ class CourtOfAuditorsView extends Component {
       this.setState({
         openMessage: false,
         message: '',
-        msgPadding: '0px'       
+        msgPadding: '0px'
       });
     }.bind(this), 5000);
   }
@@ -135,11 +136,12 @@ class CourtOfAuditorsView extends Component {
         this.resetMsgInfo();
       }).catch(error => {
         var msg = 'Αποτυχία δημιουργίας!\n' + error;
-        this.setState({ openMessage: true, message: <><div>{msg}</div><div>{getServerErrorResponseMessage(error)}</div></>, openMessage: true, variant: 'error', msgColor: 'red', msgPadding: '10px', submitButtonDisabled: false });
+        this.setState({ openMessage: true, message: <><div>{msg}</div><div>{getServerErrorResponseMessage(error)}</div></>, variant: 'error', msgColor: 'red', msgPadding: '10px', submitButtonDisabled: false });
       })
     } else if (this.state.editItem === true) {
       this.props.processContractInfo(this.state, this.props.token.data.token, 'updatecourtofauditors').then(res => {
         var msg = 'Το Ελεγκτικό Συνέδριο επεξεργάστηκε επιτυχώς!!!'
+        this.setState({ openMessage: true, message: msg, msgColor: 'lightGreen', msgPadding: '10px', submitButtonDisabled: false, addNewItem: false, editItem: false });
         this.resetState();
         this.resetMsgInfo();
       }).catch(error => {
@@ -153,13 +155,13 @@ class CourtOfAuditorsView extends Component {
     this.setState({ submitButtonDisabled: true });
 
     this.props.processContractInfo(this.state, this.props.token.data.token, 'deletecourtofauditors').then(res => {
-      var msg = 'Το Ελεγκτικό Συνέδριο διαγράφηκε επιτυχώς!!!'
+      var msg = 'Η διαγραφή έγινε επιτυχώς!!!'
       this.setState({ openMessage: true, message: msg, variant: 'success', msgPadding: '10px', submitButtonDisabled: false, addNewItem: false, editItem: false, deleteItem: false });
       this.resetState();
       this.resetMsgInfo();
     }).catch(error => {
-      var msg = 'Αποτυχία διαγραφής Ελεγκτικού Συνεδρίου !!\n' + error;
-      this.setState({ openMessage: true, message: <><div>{msg}</div><div>{getServerErrorResponseMessage(error)}</div></>, openMessage: true, variant: 'error', msgPadding: '0px', submitButtonDisabled: false });
+      var msg = 'Αποτυχία διαγραφής!!\n' + error;
+      this.setState({ openMessage: true, message: <><div>{msg}</div><div>{getServerErrorResponseMessage(error)}</div></>, variant: 'error', msgPadding: '0px', submitButtonDisabled: false });
     })
   }
 
@@ -240,7 +242,11 @@ class CourtOfAuditorsView extends Component {
     return <IconButton
       disabled={this.state.addNewItem === true || this.state.editItem === true}
       size="medium" color={index < this.props.contractDetails.courtofauditors.length - 1 ? "disabled" : "inherit"}
-      onClick={() => { this.openDeleteCourtOfAuditors(index, item) }} style={{ textAlign: 'top', padding: '10px', justifyContent: 'end' }}>
+      onClick={() => {
+        if (index.toString() === (this.props.contractDetails.courtofauditors.length - 1).toString())
+          this.openDeleteCourtOfAuditors(index, item)
+      }}
+      style={{ textAlign: 'top', padding: '10px', justifyContent: 'end' }}>
       <DeleteIcon />
     </IconButton>
   }
@@ -287,11 +293,9 @@ class CourtOfAuditorsView extends Component {
                 return (<Grid item key={index}>
                   <Paper style={styles.paperMoreContractInfo} square={true}>
                     <Typography>
-                      <div style={{ display: 'flex', flexFlow: 'row', fontSize: '18px' }}>
+                      <div style={{ display: 'flex', flexFlow: 'row', fontSize: '18px', flexWrap: 'nowrap' }}>
                         <span style={{ flex: '1' }}>
                           <b>{index + 1}ο Ελεγκτικό Συνέδριο</b> με αρ. {item.ProtocolNumber}/{item.ProtocolYear} Πράξης του {item.ScaleNumber} Κλιμακίου του Ελεγκτικού Συνεδρίου (Α.Π.Δ.Α. {item.APDA_ProtocolNumber}/{getDateFormatForDocument(item.APDA_ProtocolDate)})
-                          {/* {this.renderCourtOfAuditors(index, item)} */}
-                          {/* {this.renderItemOptions(index, item)} */}
                         </span>
                         {this.renderEditOption(index, item)}
                         {this.renderDeleteOption(index, item)}

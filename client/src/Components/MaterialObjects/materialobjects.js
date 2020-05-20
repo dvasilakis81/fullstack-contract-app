@@ -7,9 +7,8 @@ import SnackbarContent from '@material-ui/core/SnackbarContent';
 import Button from '@material-ui/core/Button';
 import Typography from "@material-ui/core/Typography";
 
-import { createMuiTheme, MuiThemeProvider, withStyles } from "@material-ui/core/styles";
+import { withStyles } from "@material-ui/core/styles";
 import Tooltip from '@material-ui/core/Tooltip';
-
 
 export function getSelectFieldWithTooltip(tl, id, label, values, isRequired, style, setValue) {
 

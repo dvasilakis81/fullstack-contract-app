@@ -29,7 +29,7 @@ export function showGenericMessage(errorMessage, isError, hasHeader) {
 export function getFooterTemplate(token) {
   //'#03ebfc'
 
-  return <div style={{ display: 'flex', flexFlow: 'row', backgroundColor: '#eeeeee', height: getFooterHeight() }}>
+  return <div style={{ display: 'flex', flexFlow: 'row', backgroundColor: '#dddddd', height: getFooterHeight() }}>
     <div style={{ display: 'flex', flexDirection: 'row', flexBasis: '100%', flex: '1', justifyContent: 'flex-start', marginRight: '30px' }}>
       <span style={{ fontWeight: '900', paddingTop: '5px' }}>{tokenExpiresAt(token)}</span>
     </div>

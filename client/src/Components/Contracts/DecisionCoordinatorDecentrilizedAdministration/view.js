@@ -1,4 +1,4 @@
-import React, { Component, Fragment } from 'react';
+import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Grid, Paper, Typography, Button } from '@material-ui/core';
 import ContractsPopup from '../../../HOC/Contracts/ContractsPopup';
@@ -9,7 +9,7 @@ import LoadingOverlay from 'react-loading-overlay'
 import Icon from '@material-ui/core/Icon';
 
 import { getDateFormatForDocument, getServerErrorResponseMessage } from '../../../Helper/helpermethods';
-import { getSubmitButton, getTextFieldWithTooltip } from '../../MaterialObjects/materialobjects';
+import { getSubmitButton } from '../../MaterialObjects/materialobjects';
 import { bindActionCreators } from 'redux';
 import { processContractInfo } from '../../../Redux/Actions';
 
@@ -51,6 +51,7 @@ class DecisionCoordinatorDecentrilizedAdministrationView extends Component {
     super(props);
 
     this.state = {
+      loginUserId: this.props.token.data.id,
       contractId: this.props.contractDetails.Id,
       submitButtonDisabled: false,
       addNewItem: false,
@@ -95,16 +96,16 @@ class DecisionCoordinatorDecentrilizedAdministrationView extends Component {
 
   openDeleteDecisionCoordinatorDecentrilizedAdministration(index, decisionCoordinatorDecentrilizedAdministration) {
     this.setState({
-      orderNo: index + 1,
       Id: decisionCoordinatorDecentrilizedAdministration.Id,
       ProtocolNumber: decisionCoordinatorDecentrilizedAdministration.ProtocolNumber,
       ProtocolDate: decisionCoordinatorDecentrilizedAdministration.ProtocolDate,
+      orderNo: index + 1,
       deleteItem: true
     })
   }
 
   resetState() {
-    this.setState({      
+    this.setState({
       addNewItem: false, editItem: false, deleteItem: false,
       ProtocolNumber: '',
       ProtocolDate: '',
@@ -112,10 +113,10 @@ class DecisionCoordinatorDecentrilizedAdministrationView extends Component {
       ADA: '',
       orderNo: 0
     });
-  }  
+  }
   resetMsgInfo() {
     setTimeout(function () {
-      this.setState({ openMessage: false, message: '', msgPadding: '0px', ProtocolNumber: '', ProtocolDate: '', Content: '', ADA: '', orderNo: 0 });
+      this.setState({ openMessage: false, message: '', msgPadding: '0px'});
     }.bind(this), 5000);
   }
 
@@ -131,7 +132,7 @@ class DecisionCoordinatorDecentrilizedAdministrationView extends Component {
         this.resetMsgInfo();
       }).catch(error => {
         var msg = 'Αποτυχία δημιουργίας!\n' + error;
-        this.setState({ openMessage: true, message: <><div>{msg}</div><div>{getServerErrorResponseMessage(error)}</div></>, openMessage: true, variant: 'error', msgColor: 'red', msgPadding: '10px', submitButtonDisabled: false });
+        this.setState({ openMessage: true, message: <><div>{msg}</div><div>{getServerErrorResponseMessage(error)}</div></>, variant: 'error', msgColor: 'red', msgPadding: '10px', submitButtonDisabled: false });
       })
     } else if (this.state.editItem === true) {
       this.props.processContractInfo(this.state, this.props.token.data.token, 'updatedecisioncoordinatordecentrilizedadministration').then(res => {
@@ -150,13 +151,13 @@ class DecisionCoordinatorDecentrilizedAdministrationView extends Component {
     this.setState({ submitButtonDisabled: true });
 
     this.props.processContractInfo(this.state, this.props.token.data.token, 'deletedecisioncoordinatordecentrilizedadministration').then(res => {
-      var msg = 'Η Σ.Α.Δ.Α. με πρωτόκολλο "' + this.state.ProtocolNumber + '/' + getDateFormatForDocument(this.state.ProtocolDate) + '" διεγράφει επιτυχώς!!!'
+      var msg = 'Η διαγραφή έγινε επιτυχώς!!!'
       this.setState({ openMessage: true, message: msg, variant: 'success', msgPadding: '10px', submitButtonDisabled: false });
       this.resetState();
       this.resetMsgInfo();
     }).catch(error => {
-      var msg = 'Αποτυχία διαγραφής Σ.Α.Δ.Α. !!\n' + error;
-      this.setState({ openMessage: true, message: <><div>{msg}</div><div>{getServerErrorResponseMessage(error)}</div></>, openMessage: true, variant: 'error', msgPadding: '0px', submitButtonDisabled: false });
+      var msg = 'Αποτυχία διαγραφής !!\n' + error;
+      this.setState({ openMessage: true, message: <><div>{msg}</div><div>{getServerErrorResponseMessage(error)}</div></>, variant: 'error', msgPadding: '0px', submitButtonDisabled: false });
     })
   }
 
@@ -249,18 +250,21 @@ class DecisionCoordinatorDecentrilizedAdministrationView extends Component {
     return <IconButton
       disabled={this.state.addNewItem === true || this.state.editItem === true}
       size="medium" color={index < this.props.contractDetails.decisioncoordinatordecentrilizedadministration.length - 1 ? "disabled" : "inherit"}
-      onClick={() => { this.openDeleteDecisionCoordinatorDecentrilizedAdministration(index, item) }} style={{ textAlign: 'top', padding: '10px', justifyContent: 'end' }}>
+      onClick={() => {
+        if (index.toString() === (this.props.contractDetails.decisioncoordinatordecentrilizedadministration.length - 1).toString())
+          this.openDeleteDecisionCoordinatorDecentrilizedAdministration(index, item)
+      }}
+      style={{ textAlign: 'top', padding: '10px', justifyContent: 'end' }}>
       <DeleteIcon />
     </IconButton>
   }
   renderItemOptions(index, item) {
-    if (index > 0) {
-      return <>
-        {item.ADA ? <span> με <b>ΑΔΑ</b> {item.ADA}</span> : ''}
-        <span style={{ marginLeft: '10px' }}></span>
-        {item.Content ? <span style={{ fontStyle: 'italic' }}> και με <b>περιεχόμενο</b> {item.Content}</span> : ''}
-      </>
-    }
+
+    return <>
+      {item.ADA ? <span> με <b>ΑΔΑ</b> {item.ADA}</span> : ''}
+      <span style={{ marginLeft: '10px' }}></span>
+      {item.Content ? <span style={{ fontStyle: 'italic' }}> και με <b>περιεχόμενο</b> {item.Content}</span> : ''}
+    </>
   }
   renderServerResponse() {
 
@@ -286,7 +290,7 @@ class DecisionCoordinatorDecentrilizedAdministrationView extends Component {
                 return (<Grid item key={index}>
                   <Paper style={styles.paperMoreContractInfo} square={true}>
                     <Typography>
-                      <div style={{ display: 'flex', flexFlow: 'row', fontSize: '18px' }}>
+                      <div style={{ display: 'flex', flexFlow: 'row', fontSize: '18px', flexWrap: 'nowrap' }}>
                         <span style={{ flex: '1' }}>
                           <b>{index + 1}η Απόφαση Ελέγχου της Αποκεντρωμένης Διοίκησης με A.Π.</b> {item.ProtocolNumber ? item.ProtocolNumber : ''}/{item.ProtocolDate ? getDateFormatForDocument(item.ProtocolDate) : ''}
                           {this.renderItemOptions(index, item)}

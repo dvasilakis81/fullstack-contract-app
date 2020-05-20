@@ -97,15 +97,6 @@ class AdministrationContainer extends Component {
     this.handleClose = this.handleClose.bind(this, '');
   }
 
-  getUserRoleName(roleId) {
-    var userRole = this.props.userroles.data.find(function (item) {
-      if (item.Id == roleId)
-        return item
-    });
-
-    return userRole.Name;
-  }
-
   loadUserRoles() {
     let ret = '';
 
@@ -182,7 +173,7 @@ class AdministrationContainer extends Component {
   getColumnsForUsers(data) {
 
     var lookupRoles = {};
-    this.props.userroles.data.map(x => { lookupRoles[x.Id] = x.Name; });
+    this.props.userroles.data.forEach(x => { lookupRoles[x.Id] = x.Name; });
 
     let columns = [
       {
@@ -216,7 +207,7 @@ class AdministrationContainer extends Component {
       { title: 'Ρόλος', field: 'Role', lookup: lookupRoles, cellStyle: { width: '0px' } }
     ];
 
-    this.props.users.map(x => {
+    this.props.users.forEach(x => {
       data.push({ 'Id': x.Id, 'Firstname': x.Firstname, 'Lastname': x.Lastname, 'Username': x.Username, 'Password': '', 'Role': x.Role });
     });
 
@@ -238,7 +229,7 @@ class AdministrationContainer extends Component {
       }
     ];
 
-    this.props.contractTypes.map(x => {
+    this.props.contractTypes.forEach(x => {
       data.push({ 'ContractTypeId': x.ContractTypeId, 'ContractTypeName': x.ContractTypeName });
     });
 
@@ -260,7 +251,7 @@ class AdministrationContainer extends Component {
       }
     ];
 
-    this.props.agencies.map(x => {
+    this.props.agencies.forEach(x => {
       data.push({ 'Id': x.Id, 'Name': x.Name });
     });
 
@@ -349,7 +340,7 @@ class AdministrationContainer extends Component {
     ];
 
     if (this.props.municipalityDirections) {
-      this.props.municipalityDirections.map(x => {
+      this.props.municipalityDirections.forEach(x => {
         data.push({
           'DirectionId': x.DirectionId, 'DirectionName': x.DirectionName, 'DirectionSupervisor': x.DirectionSupervisor,
           'DirectionTelephone': x.DirectionTelephone, 'DirectionEmail': x.DirectionEmail, 'DirectionAddress': x.DirectionAddress,
@@ -363,7 +354,7 @@ class AdministrationContainer extends Component {
 
   getColumnsForDepartments(data) {
     var lookupDirections = {};
-    this.props.municipalityDirections.map(x => {
+    this.props.municipalityDirections.forEach(x => {
       lookupDirections[x.DirectionId] = x.DirectionName;
     });
 
@@ -416,9 +407,9 @@ class AdministrationContainer extends Component {
     ];
 
     if (this.props.municipalityDirections) {
-      this.props.municipalityDirections.map(direction => {
+      this.props.municipalityDirections.forEach(direction => {
         if (direction.department) {
-          direction.department.map(department => {
+          direction.department.forEach(department => {
             if (department) {
               data.push({
                 'DepartmentId': department.DepartmentId, 'DirectionId': department.DirectionId,
@@ -502,7 +493,7 @@ class AdministrationContainer extends Component {
 
     ];
 
-    this.props.reservations.map(x => {
+    this.props.reservations.forEach(x => {
       data.push({ 'Id': x.Id, 'Name': x.Name, 'Percentage': x.Percentage ? parseFloat(x.Percentage) : '', 'Stamp': x.Stamp ? parseFloat(x.Stamp) : '', 'StampOGA': x.StampOGA ? parseFloat(x.StampOGA) : '', 'IsReservation': x.IsReservation ? 'Ναι' : 'Όχι', 'Order': x.Order });
     });
 
@@ -524,7 +515,7 @@ class AdministrationContainer extends Component {
       }
     ];
 
-    this.props.signatories.map(x => {
+    this.props.signatories.forEach(x => {
       data.push({ 'Id': x.Id, 'Name': x.Name, 'Signatorytype': x.SignatoryType });
     });
 
@@ -546,7 +537,7 @@ class AdministrationContainer extends Component {
       }
     ];
 
-    this.props.signatorytypes.map(x => {
+    this.props.signatorytypes.forEach(x => {
       data.push({ 'Id': x.Id, 'Name': x.Name, 'Signatorytype': x.SignatoryType });
     });
 
@@ -560,7 +551,7 @@ class AdministrationContainer extends Component {
       { title: 'Σφάλμα', field: 'ErrorMessage', cellStyle: { width: '800px', wordBreak: 'break-word' } }
     ];
 
-    this.props.errormessages.map(x => {
+    this.props.errormessages.forEach(x => {
       data.push({ 'Id': x.Id, 'Username': x.Username, 'ErrorMessage': x.ErrorMessage, 'DateCreated': getDateTimeFormat(x.DateCreated) });
     });
 
@@ -970,13 +961,13 @@ class AdministrationContainer extends Component {
 
   render() {
 
-    if (this.state.navigateToLogin){
+    if (this.state.navigateToLogin) {
       resetData(store)
       return <Redirect push to={{
-				pathname: '/login',
-				state: { expired: true }
-			}} />
-    }     
+        pathname: '/login',
+        state: { expired: true }
+      }} />
+    }
     else {
       return (
         <Body>

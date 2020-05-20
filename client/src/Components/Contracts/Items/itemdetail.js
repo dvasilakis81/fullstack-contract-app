@@ -4,7 +4,7 @@ import { Redirect } from "react-router-dom";
 import NumberFormat from 'react-number-format';
 import { Link } from 'react-router-dom';
 
-import { List, ListItem, Grid, Row, Col, Paper, Typography, Button } from '@material-ui/core';
+import { List, ListItem, Grid, Paper, Typography, Button } from '@material-ui/core';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
@@ -431,7 +431,7 @@ class ItemDetail extends React.Component {
 				let user = this.props.users[i];
 				for (let j = 0; j < contractDetails.contractusers.length; j++) {
 					const userHasPermission = contractDetails.contractusers[j];
-					if (userHasPermission.UserId == user.Id) {
+					if (userHasPermission.UserId.toString() === user.Id.toString()) {
 						users.push(user)
 						break;
 					}
@@ -498,7 +498,7 @@ class ItemDetail extends React.Component {
 	}
 
 	getCPVTemplate(contractDetails) {
-		if (contractDetails.contractTypeId == 1)
+		if (contractDetails.ContractTypeId.toString() === "1")
 			return (<Grid item>
 				<Paper style={styles.paperMoreContractInfo} square={true}>
 					<Typography>
@@ -615,7 +615,7 @@ class ItemDetail extends React.Component {
 	getLawArticle(contractInfo) {
 		let ret = '';
 
-		if (contractInfo.contracttype && contractInfo.contracttype[0].ContractTypeId == 2)
+		if (contractInfo.contracttype && contractInfo.contracttype[0].ContractTypeId.toString() === "2")
 			ret = <span style={{ marginLeft: '5px' }}><b>Άρθρο προγραμματικής</b> {contractInfo.LawArticle || ''}</span>
 		else
 			ret = <></>
@@ -697,7 +697,7 @@ class ItemDetail extends React.Component {
 													</Typography>
 												</Paper>
 											</Grid>
-											{contractInfo.contracttype && contractInfo.contracttype[0].ContractTypeId == 2 ? <Grid item>
+											{contractInfo.contracttype && contractInfo.contracttype[0].ContractTypeId.toString() === "2" ? <Grid item>
 												<Paper style={styles.paperMoreContractInfo} square={true}>
 													<Typography>
 														<b>Άρθρο Προγραμματική</b> {contractInfo.LawArticle || ''}
@@ -851,42 +851,3 @@ function mapStateToProps(state) {
 }
 
 export default connect(mapStateToProps, null)(withStyles(styles)(ItemDetail))
-
-{/* <VirtualizedTable
-								data={contractDetails.createdaccounts}
-								columns={[
-									{
-										Header: "#",
-										accessor: "Number",
-										width: '50',
-									},
-									{
-										Header: "Έναρξη",
-										accessor: "Start",
-										width: 'auto',
-									},
-									{
-										Header: "Τέλος",
-										accessor: "End",
-										width: 'auto',
-									},
-									{
-										Header: "Καθαρό Ποσό",
-										accessor: "AmountPure",
-										width: 'auto'
-									},
-									{
-										Header: getFpaLabel(contractDetails.FpaValue),
-										accessor: "AmountFpa",
-										width: 'auto',
-									},
-									{
-										Header: "Σύνολο",
-										accessor: "AmountTotal",
-										width: 'auto'
-									}
-								]}
-								className="-striped -highlight"
-								style={{ width: '800px', height: '400px' }}
-							/> */}
-{/* <AnalyticAccountPaymentUntilToday createdAccounts={contractDetails.createdaccounts} fpaValue={contractDetails.FpaValue} /> */ }

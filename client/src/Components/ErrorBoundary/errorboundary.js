@@ -5,11 +5,9 @@ import axios from 'axios';
 import { getHostUrl, setDimensions, resetData } from '../../Helper/helpermethods';
 import Body from '../../HOC/Body/body';
 import Header from '../../Components/Header/header';
-import { getFooterTemplate } from '../Common/templates'
 import store from '../../Redux/Store/store'
 import windowSize from 'react-window-size';
 import { getButton } from '../../Components/MaterialObjects/materialobjects';
-import { Redirect } from "react-router-dom";
 
 class ErrorBoundary extends React.Component {
   constructor(props) {

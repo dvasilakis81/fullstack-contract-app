@@ -1,5 +1,5 @@
 import React from 'react';
-import { AppBar, Toolbar, Typography, Button } from '@material-ui/core';
+import { AppBar, Toolbar, Typography } from '@material-ui/core';
 import { withStyles } from '@material-ui/core/styles';
 import { ArrowBack } from '@material-ui/icons';
 import { withRouter } from 'react-router-dom';
@@ -11,7 +11,6 @@ import { getHeaderHeight, resetData } from '../../Helper/helpermethods';
 import IconButton from '@material-ui/core/IconButton';
 import AccountCircle from '@material-ui/icons/AccountCircle';
 import Menu from '@material-ui/core/Menu';
-import MenuIcon from '@material-ui/icons/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
 import SettingsIcon from '@material-ui/icons/Settings';
 import AddIcon from '@material-ui/icons/Add';
@@ -151,7 +150,7 @@ class Header extends React.Component {
   getAdministrationAction(showAdministrationOption) {
     var accessToAdmin = false
     if (this.props.token && this.props.token.data) {
-      if (this.props.token.data.role == 1 && showAdministrationOption === true)
+      if (this.props.token.data.role.toString() === "1" && showAdministrationOption === true)
         accessToAdmin = true
     }
 

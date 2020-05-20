@@ -11,7 +11,7 @@ import LoadingOverlay from 'react-loading-overlay'
 
 import ItemsList from '../Contracts/Items/itemslist';
 import ItemDetail from '../Contracts/Items/itemdetail';
-import { getFooterTemplate, showErrorMessageFromServer, getFailedConnectionWithServer, showGenericMessage } from '../Common/templates'
+import { getFooterTemplate, showErrorMessageFromServer, showGenericMessage } from '../Common/templates'
 import { getContracts, searchContracts } from '../../Redux/Actions';
 import Body from '../../HOC/Body/body';
 import { getHostUrl, getContractsLimit } from '../../Helper/helpermethods';

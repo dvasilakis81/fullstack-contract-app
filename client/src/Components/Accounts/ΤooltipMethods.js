@@ -1,7 +1,24 @@
 import React from 'react';
 import { getDateFormatForDocument } from '../../Helper/helpermethods';
 
-export function getLawArticleTooltip(useStyles, state, contractDetails) {
+const useStyles = {
+  tooltip: {
+    fontSize: "16px",
+    color: 'white'
+  },
+  tooltipTitle: {
+    margin: '2px',
+    fontSize: '16px',
+    color: 'black',
+    fontWeight: 'bold'
+  },
+  tooltipIndicate: {
+    fontSize: "16px",
+    color: '#00ff3e'
+  }
+};
+
+export function getLawArticleTooltip( state, contractDetails) {
   //1.	Τη με Α.Π. 260100/17-10-2018 Προγραμματική Σύμβαση και ειδικότερα το άρθρο 5 “Πόροι – Χρηματοδότηση – Προϋπολογισμός” αυτής.
   return (<>
     <div style={useStyles.tooltipTitle}>ΣΥΝΗΜΜΕΝΑ ΔΙΚΑΙΟΛΟΓΗΤΙΚΑ</div>
@@ -13,7 +30,7 @@ export function getLawArticleTooltip(useStyles, state, contractDetails) {
   </>)
 }
 
-export function getDocumentDateTooltipTemplate(useStyles, state) {
+export function getDocumentDateTooltipTemplate(state) {
 
   return (<>
     <span style={useStyles.tooltip}>Ημερομηνία δημιουργίας των εγγράφων </span>
@@ -21,14 +38,14 @@ export function getDocumentDateTooltipTemplate(useStyles, state) {
   </>)
 }
 
-export function getAccountStartDateTooltipTemplate(useStyles, state) {
+export function getAccountStartDateTooltipTemplate(state) {
 
   return (<>
     <span style={useStyles.tooltip}>Ημερομηνία έναρξης του λογαριασμού </span>
     <span style={useStyles.tooltipIndicate}>{state.Start ? getDateFormatForDocument(state.Start) : '__-__-____'}</span>
   </>)
 }
-export function getAccountEndDateTooltipTemplate(useStyles, state) {
+export function getAccountEndDateTooltipTemplate(state) {
 
   return (<>
     <span style={useStyles.tooltip}>Ημερομηνία λήξης του λογαριασμού </span>
@@ -37,7 +54,7 @@ export function getAccountEndDateTooltipTemplate(useStyles, state) {
 }
 
 //#region CC - suspended
-export function getCCTooltipTemplate(useStyles, CC1Value1, CC1Value2, CC2Value1, CC2Value2, ind) {
+export function getCCTooltipTemplate(CC1Value1, CC1Value2, CC2Value1, CC2Value2, ind) {
   var style1 = (ind === 1 ? useStyles.tooltipIndicate : useStyles.tooltip)
   var style2 = (ind === 2 ? useStyles.tooltipIndicate : useStyles.tooltip)
 
@@ -57,7 +74,7 @@ export function getCCTooltipTemplate(useStyles, CC1Value1, CC1Value2, CC2Value1,
 }
 //#endregion
 
-export function getFirstTrasmissionProtocolTooltip(useStyles, pn, pd, ind) {
+export function getFirstTrasmissionProtocolTooltip(pn, pd, ind) {
   var style1 = (ind === 1 ? useStyles.tooltipIndicate : useStyles.tooltip)
   var style2 = (ind === 2 ? useStyles.tooltipIndicate : useStyles.tooltip)
 
@@ -68,7 +85,7 @@ export function getFirstTrasmissionProtocolTooltip(useStyles, pn, pd, ind) {
     <span style={style2}>{pd ? getDateFormatForDocument(pd) : '__-__-____'}</span>
   </>)
 }
-export function getAccountProtocolTooltip(useStyles, pn, pd, ind) {
+export function getAccountProtocolTooltip(pn, pd, ind) {
   var style1 = (ind === 1 ? useStyles.tooltipIndicate : useStyles.tooltip)
   var style2 = (ind === 2 ? useStyles.tooltipIndicate : useStyles.tooltip)
 
@@ -79,7 +96,7 @@ export function getAccountProtocolTooltip(useStyles, pn, pd, ind) {
     <span style={style2}>{pd ? getDateFormatForDocument(pd) : '01-01-2019'}</span>
   </>)
 }
-export function getWorkConfirmationDateTooltip(useStyles, wcd) {
+export function getWorkConfirmationDateTooltip(wcd) {
   //4.	Δύο (2) πρωτότυπα της από {dcd} Βεβαίωσης Έργου του Τμήματος {dep_name_lower} της Διεύθυνσης {dir_name_lower} αναφορικά με την υλοποίηση της Σύμβασης από την {c_conc} κατά το χρονικό διάστημα από {a_sd} έως και {a_ed}
   return (<>
     <div style={useStyles.tooltipTitle}>ΣΥΝΗΜΜΕΝΑ ΔΙΚΑΙΟΛΟΓΗΤΙΚΑ</div>
@@ -91,7 +108,7 @@ export function getWorkConfirmationDateTooltip(useStyles, wcd) {
     </div>
   </>)
 }
-export function getDeliveredGoodDateTooltip(useStyles, dgd) {
+export function getDeliveredGoodDateTooltip(dgd) {
 
   return (<>
     <div style={useStyles.tooltipTitle}>ΣΥΝΗΜΜΕΝΑ ΔΙΚΑΙΟΛΟΓΗΤΙΚΑ</div>
@@ -129,7 +146,7 @@ function getNumberLectical(number) {
   return ret;
 }
 
-export function getMayorDecisionProtocolTooltip(useStyles, state, ind) {
+export function getMayorDecisionProtocolTooltip(state, ind) {
   var style1 = (ind === 1 ? useStyles.tooltipIndicate : useStyles.tooltip)
   var style2 = (ind === 2 ? useStyles.tooltipIndicate : useStyles.tooltip)
   //6)	Την Απόφαση Δημάρχου με Α.Π. 312848/06.12.2019 για τον ορισμό των μελών της Επιτροπής Παρακολούθησης
@@ -145,7 +162,7 @@ export function getMayorDecisionProtocolTooltip(useStyles, state, ind) {
   </>)
 }
 
-export function getMonitoringCommitteePracticalTooltip(useStyles, state, an, ind) {
+export function getMonitoringCommitteePracticalTooltip(state, an, ind) {
   var style1 = (ind === 1 ? useStyles.tooltipIndicate : useStyles.tooltip)
   return (<>
     {/* 7)	Το από  06.12.2019 πρακτικό της (2ης) δεύτερης συνεδρίασης Επιτροπής Παρακολούθησης της Προγραμματικής Σύμβασης. */}
@@ -158,7 +175,7 @@ export function getMonitoringCommitteePracticalTooltip(useStyles, state, an, ind
 //6)	Την Απόφαση Δημάρχου με Α.Π. 312848/06.12.2019 για τον ορισμό των μελών 
 //της Επιτροπής Παρακολούθησης
 
-export function getMonitoringCommitteeTooltipTemplate(useStyles, state, contractDetails, an, ind) {
+export function getMonitoringCommitteeTooltipTemplate(state, contractDetails, an, ind) {
   var style1 = (ind === 1 ? useStyles.tooltipIndicate : useStyles.tooltip)
   var style2 = (ind === 2 ? useStyles.tooltipIndicate : useStyles.tooltip)
   var style3 = (ind === 3 ? useStyles.tooltipIndicate : useStyles.tooltip)
@@ -184,7 +201,7 @@ export function getMonitoringCommitteeTooltipTemplate(useStyles, state, contract
   </>)
 }
 
-export function getInvoiceTooltipTemplate(useStyles, state, conc, ind) {
+export function getInvoiceTooltipTemplate(state, conc, ind) {
   var style1 = (ind === 1 ? useStyles.tooltipIndicate : useStyles.tooltip)
   var style2 = (ind === 2 ? useStyles.tooltipIndicate : useStyles.tooltip)
   var style3 = (ind === 3 ? useStyles.tooltipIndicate : useStyles.tooltip)
@@ -221,7 +238,7 @@ export function getInvoiceTooltipTemplate(useStyles, state, conc, ind) {
 }
 
 //#region AAY
-export function getAayTooltipTemplate(useStyles, state, ind) {
+export function getAayTooltipTemplate(state, ind) {
   var style1 = (ind === 1 ? useStyles.tooltipIndicate : useStyles.tooltip)
   var style2 = (ind === 2 ? useStyles.tooltipIndicate : useStyles.tooltip)
   var style3 = (ind === 3 ? useStyles.tooltipIndicate : useStyles.tooltip)

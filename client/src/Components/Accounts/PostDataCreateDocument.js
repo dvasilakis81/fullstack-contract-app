@@ -1,9 +1,6 @@
-import React from 'react';
-
 import {
-  getAmountInWords, getHostUrl, getDateFormat, getDateFormatForDocument, getDateFormatWithDash,
-  extractYearFromDate, getValidMaterialDateFormat, getFpaLabel,
-  getServerErrorResponseMessage
+  getAmountInWords, getDateFormatForDocument, 
+  getDateFormatWithDash, extractYearFromDate 
 } from '../../Helper/helpermethods';
 
 const format = require('string-format')
@@ -50,33 +47,33 @@ function getInvoiceDataToPost(accountDetails) {
 
 function getAccountNumberLex(number) {
   var ret = '';
-  if (number == 1)
+  if (number.toString() === '1')
     ret = 'πρώτου'
-  else if (number == 2)
+  else if (number.toString() === '2')
     ret = 'δεύτερου'
-  else if (number == 3)
+  else if (number.toString() === '3')
     ret = 'τρίτου'
-  else if (number == 4)
+  else if (number.toString() === '4')
     ret = 'τέταρου'
-  else if (number == 5)
+  else if (number.toString() === '5')
     ret = 'πέμπτου'
-  else if (number == 6)
+  else if (number.toString() === '6')
     ret = 'έκτου'
-  else if (number == 7)
+  else if (number.toString() === '7')
     ret = 'έβδομου'
-  else if (number == 8)
+  else if (number.toString() === '8')
     ret = 'όγδοου'
-  else if (number == 9)
+  else if (number.toString() === '9')
     ret = 'ένατου'
-  else if (number == 10)
+  else if (number.toString() === '10')
     ret = 'δέκατου'
-  else if (number == 11)
+  else if (number.toString() === '11')
     ret = 'ένδεκατου'
-  else if (number == 12)
+  else if (number.toString() === '12')
     ret = 'δωδέκατου'
-  else if (number == 13)
+  else if (number.toString() === '13')
     ret = 'δέκατου τρίτου'
-  else if (number == 14)
+  else if (number.toString() === '14')
     ret = 'δέκατου τέταρτου'
 
   return ret;
@@ -128,7 +125,7 @@ function getCCDataToPost(contractDetails, accountDetails) {
 
   directionValue = '';
   departmentValue = '';
-  if (contractDetails.ContractTypeId == 1) {
+  if (contractDetails.ContractTypeId.toString() === '1') {
     if (CC2 && CC2.cc2value1 && CC2.cc2value1[0])
       directionValue = format('Διεύθυνση {}', CC2.cc2value1[0].DirectionName)
     if (CC2 && CC2.cc2value2 && CC2.cc2value2[0] && CC2.cc2value2[0].DepartmentName)
@@ -198,7 +195,7 @@ export function createTransmissionDocument(contractInfo, accountInfo, paidAmount
     Account: [{
       No: accountInfo.Number,
       NumberWord: getAccountNumberLex(accountInfo.Number),
-      LastMessage: (accountInfo.Number == contractInfo.NumberOfAccounts ? '(και τελευταίου)' : ''),
+      LastMessage: (accountInfo.Number.toString() === contractInfo.NumberOfAccounts.toString() ? '(και τελευταίου)' : ''),
       Start: getDateFormatForDocument(accountInfo.Start),
       End: getDateFormatForDocument(accountInfo.End),
       Amount: currencyFormatter.format(accountInfo.AmountTotal, { symbol: '€', decimal: ',', thousand: '.', precision: 2, format: '%v%s' }),
@@ -269,8 +266,7 @@ export function createAccountDocument(contractInfo, accountInfo, paidAmount, res
     }],
     Contract: [{
       ContractTypeValue1: contractTypeValue1,
-      ContractTypeValue2: contractTypeValue2,
-      Concessionaire: [{ Article: 'THN', Name: contractInfo.ConcessionaireName }],
+      ContractTypeValue2: contractTypeValue2,      
       LawArticle: contractInfo.LawArticle,
       Title: [{ Article: 'τη', Value: contractInfo.Title }],
       Protocol: [{ Number: contractInfo.ProtocolNumber, Date: getDateFormatForDocument(contractInfo.ProtocolDate) }],
