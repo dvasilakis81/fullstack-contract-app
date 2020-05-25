@@ -52,8 +52,9 @@ import { withStyles } from "@material-ui/core/styles";
 const useStyles = {
 	category: {
 		padding: '5px',
-		background: '#2C528C',
-		color: 'white'		
+		///background: '#2C528C',
+		background: '#ddd',
+		color: 'black'
 	},
 	accountInfoItem: {
 		width: '200px',
@@ -138,10 +139,6 @@ class NewAccountForm extends Component {
 			InvoiceDeliveredDate: this.props.location.state.InvoiceDeliveredDate,
 			InvoiceDeliveredDateProtocolNumber: this.props.location.state.InvoiceDeliveredDateProtocolNumber,
 			InvoiceDeliveredDateProtocolDate: this.props.location.state.InvoiceDeliveredDateProtocolDate,
-			CC1Value1: this.props.location.state.CC1Value1,
-			CC1Value2: this.props.location.state.CC1Value2,
-			CC2Value1: this.props.location.state.CC2Value1,
-			CC2Value2: this.props.location.state.CC2Value2,
 			SignType1: this.props.location.state.SignType1,
 			SignType2: this.props.location.state.SignType2,
 			SignType3: this.props.location.state.SignType3,
@@ -164,7 +161,6 @@ class NewAccountForm extends Component {
 
 		this.setCheckboxValue = this.setCheckboxValue.bind(this);
 		this.onChange = this.onChange.bind(this);
-		this.setCC1Value1TextValue = this.setCC1Value1TextValue.bind(this);
 		this.handleSubmit = this.handleSubmit.bind(this);
 		this.autoComplete = this.autoComplete.bind(this);
 		this.autoCompleteFullWritten = this.autoCompleteFullWritten.bind(this);
@@ -203,11 +199,6 @@ class NewAccountForm extends Component {
 
 	setCheckboxValue(e) {
 		this.setState({ [e.target.id]: e.target.checked });
-	}
-
-	setCC1Value1TextValue(e) {
-		this.setState({ [e.target.id]: e.target.value });
-		this.setState({ CC1Value2: '-1' });
 	}
 
 	onChange(e) {
@@ -274,48 +265,6 @@ class NewAccountForm extends Component {
 		this.setState((state) => ({
 			AmountFullWritten: getAmountInWords(state.AmountTotal, true)
 		}));
-	}
-
-	loadAgencies(cc2value1) {
-		let ret = '';
-
-		if (this.props.agencies) {
-			ret = this.props.agencies.map((data, index) => {
-				return <option key={index} value={data.Id} selected={cc2value1 == data.Id}>{data.Name}</option>
-			})
-		}
-
-		return ret;
-	}
-
-	loadSelectMunicipalityDirections(cc1value1) {
-		let ret = '';
-
-		if (this.props.municipalityDirections) {
-			ret = this.props.municipalityDirections.map((data, index) => {
-				return <option key={index} value={data.DirectionId} selected={cc1value1 == data.DirectionId}>{data.DirectionName}</option>
-			})
-		}
-
-		return ret;
-	}
-
-	loadMunicipalityDirectionDepartments(DirectionId, cc1value2) {
-		let ret = '';
-
-		if (this.props.municipalityDirections !== undefined) {
-			this.props.municipalityDirections.forEach(function (element) {
-				if (element.DirectionId == DirectionId) {
-					if (element.department != null) {
-						ret = element.department.map((data, index) => {
-							return <option key={index} value={data.DepartmentId} selected={cc1value2 == data.DepartmentId}>{data.DepartmentName}</option>
-						})
-					}
-				}
-			})
-		}
-
-		return ret;
 	}
 
 	loadSignatories(sigId) {
@@ -474,12 +423,12 @@ class NewAccountForm extends Component {
 
 	getWorkConfirmationDate() {
 		if (this.state.IsDownpayment === false)
-			return <MyTextField tp='date' title='Ημ. Βεβαίωσης Έργου' id='WorkConfirmationDate' stateValue={this.state.WorkConfirmationDate} isRequired={true} isDisabled={false} onChange={this.onChange} inputProps={{ style: { textAlign: 'center' } }} />
+			return <MyTextField tp='date' title='Ημ. Βεβαίωσης Έργου' id='WorkConfirmationDate' stateValue={this.state.WorkConfirmationDate} isRequired={true} isDisabled={false} onChange={this.onChange} inputProps={{ style: { textAlign: 'center' } }} isRequired={false} />
 	}
 
 	getDeliveryGoodsDate() {
 		if (this.state.IsDownpayment === false)
-			return <MyTextField tp='date' title='Ημ. οριστικής παραλαβής αγαθών/υπηρεσιων' id='DeliveryGoodsDate' stateValue={this.state.DeliveryGoodsDate} isRequired={true} isDisabled={false} onChange={this.onChange} inputProps={{ style: { textAlign: 'center' } }} width='20%' />
+			return <MyTextField tp='date' title='Ημ. οριστικής παραλαβής αγαθών/υπηρεσιων' id='DeliveryGoodsDate' stateValue={this.state.DeliveryGoodsDate} isRequired={true} isDisabled={false} onChange={this.onChange} inputProps={{ style: { textAlign: 'center' } }} width='20%' isRequired={false} />
 	}
 
 	getAAYInfo() {
@@ -550,9 +499,9 @@ class NewAccountForm extends Component {
 		return <>
 			<header style={useStyles.category}>Στοιχεία Τιμολογίου</header>
 			<div style={useStyles.divRowFlex}>
-				<MyTextField tm={getInvoiceTooltipTemplate(this.state, contractDetails.ConcessionaireName, 5)} tp='date' title='Ημ/νία Παραλαβής Τιμολογίου' id='InvoiceDeliveredDate' stateValue={this.state.InvoiceDeliveredDate} isRequired={true} isDisabled={false} onChange={this.onChange} inputProps={{ style: { textAlign: 'center' } }} />
-				<ProtocolInput tm1={getInvoiceTooltipTemplate(this.state, contractDetails.ConcessionaireName, 3)} tm2={getInvoiceTooltipTemplate(this.state, contractDetails.ConcessionaireName, 4)} title='Α.Π. Ημ/νίας Παραλαβής Τιμολογίου' idn='InvoiceDeliveredDateProtocolNumber' idd='InvoiceDeliveredDateProtocolDate' protocolNumber={this.state.InvoiceDeliveredDateProtocolNumber} protocolDate={this.state.InvoiceDeliveredDateProtocolDate} onChange={this.onChange} tp1='text' tp2='date' />
-				<ProtocolInput tm1={getInvoiceTooltipTemplate(this.state, contractDetails.ConcessionaireName, 1)} tm2={getInvoiceTooltipTemplate(this.state, contractDetails.ConcessionaireName, 2)} title='Α.Π. Τιμολογίου' idn='InvoiceNumber' idd='InvoiceDate' protocolNumber={this.state.InvoiceNumber} protocolDate={this.state.InvoiceDate} onChange={this.onChange} tp1='text' tp2='date' />
+				<MyTextField tm={getInvoiceTooltipTemplate(this.state, contractDetails.ConcessionaireName, 5)} tp='date' title='Ημ/νία Παραλαβής Τιμολογίου' id='InvoiceDeliveredDate' stateValue={this.state.InvoiceDeliveredDate} isRequired={false} isDisabled={false} onChange={this.onChange} inputProps={{ style: { textAlign: 'center' } }} isRequired={false} />
+				<ProtocolInput tm1={getInvoiceTooltipTemplate(this.state, contractDetails.ConcessionaireName, 3)} tm2={getInvoiceTooltipTemplate(this.state, contractDetails.ConcessionaireName, 4)} title='Α.Π. Ημ/νίας Παραλαβής Τιμολογίου' idn='InvoiceDeliveredDateProtocolNumber' idd='InvoiceDeliveredDateProtocolDate' protocolNumber={this.state.InvoiceDeliveredDateProtocolNumber} protocolDate={this.state.InvoiceDeliveredDateProtocolDate} onChange={this.onChange} tp1='text' tp2='date' isRequired={false} />
+				<ProtocolInput tm1={getInvoiceTooltipTemplate(this.state, contractDetails.ConcessionaireName, 1)} tm2={getInvoiceTooltipTemplate(this.state, contractDetails.ConcessionaireName, 2)} title='Α.Π. Τιμολογίου' idn='InvoiceNumber' idd='InvoiceDate' protocolNumber={this.state.InvoiceNumber} protocolDate={this.state.InvoiceDate} onChange={this.onChange} tp1='text' tp2='date' isRequired={true} />
 			</div>
 		</>
 	}
@@ -639,7 +588,7 @@ class NewAccountForm extends Component {
 							<MySnackbar state={this.state} duration={10000} handleClose={this.handleClose} vertical='bottom' horizontal='right' useScreenDimensions={true} />
 						</div>
 					</div>
-					{getFooterTemplate()}
+					{getFooterTemplate(this.props.token)}
 				</div >
 			</Body>
 		);

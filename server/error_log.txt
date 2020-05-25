@@ -1,5 +1,5 @@
-Message: value too long for type character varying(2000)
-Stack: error: value too long for type character varying(2000)
+Message: syntax error at or near "Προμηθειών"
+Stack: error: syntax error at or near "Προμηθειών"
     at Connection.parseE (c:\Projects\Node\fullstack-contract-app\node_modules\pg\lib\connection.js:614:13)
     at Connection.parseMessage (c:\Projects\Node\fullstack-contract-app\node_modules\pg\lib\connection.js:413:19)
     at Socket.<anonymous> (c:\Projects\Node\fullstack-contract-app\node_modules\pg\lib\connection.js:129:22)

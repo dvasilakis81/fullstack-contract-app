@@ -10,11 +10,10 @@ module.exports = {
 
 		var contractProtocolNumber = body.Contract[0].Protocol[0].Number
 		var contractProtocolDate = body.Contract[0].Protocol[0].Date
-		var DownpaymentLawArticle = body.Contract[0].DownpaymentLawArticle
-		var contractId = body.Contract[0].ContractId;
-		var contractTypeLabel = (contractId == 1 ? 'Δημόσια Σύμβαση Ανάθεσης' : 'Προγραμματική Σύμβαση')
+		var DownpaymentLawArticle = body.Contract[0].DownpaymentLawArticle		
+		var contractTypeLabel = (body.Contract[0].ContractTypeId == 1 ? 'Δημόσια Σύμβαση Ανάθεσης' : 'Προγραμματική Σύμβαση')
 		var rText = '';
-		if (contractId == 1)
+		if (body.Contract[0].ContractTypeId == 1)
 			rText = util.format('Τη με Α.Π. %s/%s %s', contractProtocolNumber, contractProtocolDate, contractTypeLabel)
 		else {
 			if (DownpaymentLawArticle)
@@ -365,8 +364,9 @@ module.exports = {
 			'<w:rFonts w:ascii="Garamond" w:hAnsi="Garamond"/>' +
 			'<w:sz w:val="28" />' +
 			'<w:szCs w:val="28" />' +
-			'</w:rPr>' +
-			util.format('<w:t>%s (%s) %s του 1ου Λογαριασμού.</w:t>', helper.getWord(body.PrototypeNumber), body.PrototypeNumber, prototypesPhrase) +
+			'</w:rPr>' +			
+			//util.format('<w:t>Τέσσερα (4) πρωτότυπα του 1ου Λογαριασμού.</w:t>', helper.getWord(body.PrototypeNumber), body.PrototypeNumber, prototypesPhrase) +
+			'<w:t>Τέσσερα (4) πρωτότυπα του 1ου Λογαριασμού.</w:t>' +
 			'</w:r>' +
 			'</w:p>';
 	},

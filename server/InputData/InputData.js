@@ -1,16 +1,20 @@
 var rawtabledata = require('../WORD/rawXml/tableData');
 var transmissionAttachments = require('../WORD/rawXml/trasmissionAttachments');
+var transmissionCC = require('../WORD/rawXml/transmissionCC');
 var accountAttachments = require('../WORD/rawXml/accountAttachments');
-var accountAffirmation = require('../WORD/rawXml/accountAffirmation')
+var accountAffirmation = require('../WORD/rawXml/accountAffirmation');
+
 module.exports = {
 
   setDataForTransmissionDocument: function (body) {
     var ret = '';
     var attachmentsRawData = transmissionAttachments.getAttachmentsXmlValue(body);
+    var ccValuesRawData = transmissionCC.getCCValues(body);
     
     if (body) {
       ret = {
         attachments: attachmentsRawData,
+        CC: ccValuesRawData,
         dd: body.DocumentDate,
         dir_name: body.Direction[0].Name,
         dir_name_lower: body.Direction[0].NameInLower,
@@ -21,9 +25,7 @@ module.exports = {
         dir_ct: body.Direction[0].Department[0].City,
         dir_sv: body.Direction[0].Department[0].Supervisor[0].Name,
         dir_sv_tn: body.Direction[0].Department[0].Supervisor[0].Tel,
-        dir_sv_em: body.Direction[0].Department[0].Supervisor[0].Email,
-        cc1: body.CC[0].CC1,
-        cc2: body.CC[0].CC2,
+        dir_sv_em: body.Direction[0].Department[0].Supervisor[0].Email,        
         c_type: body.Contract[0].ContractType,
         c_conc_a: body.Contract[0].Concessionaire[0].Article,
         c_conc: body.Contract[0].Concessionaire[0].Name,

@@ -16,21 +16,22 @@ export default function (state = {}, action, root) {
 
       let ccPossibleValues = state.ccValues ? state.ccValues : [];
       let directionValue = ''
-      for (let index = 0; index < action.payload.data.length; index++) {
-        const direction = action.payload.data[index];
-        directionValue = 'Διεύθυνση ' + direction.DirectionName
-        let departmentValue = '';
-        if (direction.department && direction.department.length > 0) {
-          for (let index = 0; index < direction.department.length; index++) {
-            departmentValue = direction.department[index].DepartmentName.includes("Τμήμα") === true ? ' - ' + direction.department[index].DepartmentName : ' - Τμήμα ' + direction.department[index].DepartmentName
+      let munDirections = action.payload.data;
+      for (let index = 0; index < munDirections.length; index++) {
+        const munDirection = munDirections[index];
+        directionValue = 'Διεύθυνση ' + munDirection.DirectionName
+        ccPossibleValues.push(directionValue)
+
+        let departmentValue = '';        
+        if (munDirection.department && munDirection.department.length > 0) {
+          for (let index = 0; index < munDirection.department.length; index++) {
+            departmentValue = munDirection.department[index].DepartmentName.includes("Τμήμα") === true ? ' - ' + munDirection.department[index].DepartmentName : ' - Τμήμα ' + munDirection.department[index].DepartmentName
             ccPossibleValues.push(directionValue + '' + departmentValue)
           }
-        }
-        else
-          ccPossibleValues.push(directionValue)
+        } 
       }
-      //ccPossibleValues.push(directionValue)
-      state = { ...state, ccValues: ccPossibleValues };      
+      
+      state = { ...state, ccValues: ccPossibleValues };
       break;
     case 'GET_CONTRACT_TYPES':
       state = { ...state, contractTypes: action.payload.data };

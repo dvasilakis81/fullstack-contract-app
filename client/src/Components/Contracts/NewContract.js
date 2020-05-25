@@ -354,7 +354,7 @@ class NewContract extends Component {
 								</form>
 							</div>
 						</div>
-						{getFooterTemplate()}
+						{getFooterTemplate(this.props.token)}
 					</div>
 					<MySnackbar state={this.state} duration={5000} handleClose={this.handleClose} vertical='bottom' horizontal='right' useScreenDimensions={true} />
 				</Body >

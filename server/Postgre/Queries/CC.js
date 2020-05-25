@@ -17,7 +17,7 @@ const insertCC = (req, res, next, accountInfo) => {
       else {
         var sqlQuery = 'INSERT INTO "Ordering"."CC"("AccountId","CC","Order") VALUES ';
         for (var i = 0; i < ccValues.length; i++) {
-          sqlQuery += util.format('(%s,%s,%s)', accountId, ccValues[i], i);
+          sqlQuery += util.format('(%s,%s,%s)', accountId, helper.addQuotes(ccValues[i].CC), i);
           if (i < ccValues.length - 1)
             sqlQuery += ',';
         }

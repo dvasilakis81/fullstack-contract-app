@@ -175,10 +175,9 @@ export function createTransmissionDocument(contractInfo, accountInfo, paidAmount
         City: dirCity,
         Supervisor: [{ Name: depSupervisor, Tel: depTelephone, Email: depEmail }]
       }]
-    }],
-    CC: getCCDataToPost(contractInfo, accountInfo),
+    }],    
     Contract: [{
-      ContractId: contractInfo.ContractTypeId,
+      ContractTypeId: contractInfo.ContractTypeId,
       ContractType: contractTypeName,
       LawArticle: contractInfo.LawArticle,
       Concessionaire: [{ Article: 'της', Name: contractInfo.ConcessionaireName, Afm: contractInfo.ConcessionaireAFM }],
@@ -203,7 +202,8 @@ export function createTransmissionDocument(contractInfo, accountInfo, paidAmount
       AYY: getAAYDataToPost(accountInfo),
       MonitoringCommittee: accountInfo.monitoringcommittee,
       FirstAccountProtocol: firstAccountProtocol,
-      IsFirstOfTheYear: accountInfo.IsFirstOfTheYear
+      IsFirstOfTheYear: accountInfo.IsFirstOfTheYear,
+      CC: accountInfo.cc
     }],
     DecisionBoard: contractInfo.decisionboard,
     DecisionCoordinatorDecentrilizedAdministration: contractInfo.decisioncoordinatordecentrilizedadministration,

@@ -984,7 +984,7 @@ class AdministrationContainer extends Component {
                 </div>
               </div>
             </div>
-            {getFooterTemplate()}
+            {getFooterTemplate(this.props.token)}
             <MySnackbar state={this.state} duration={5000} handleClose={this.handleClose} vertical='bottom' horizontal='right' useScreenDimensions={true} />
           </div>
         </Body>
