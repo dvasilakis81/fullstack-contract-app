@@ -7,7 +7,7 @@ export function isTokenExpired(tokenjwt) {
   var ret = false;
 
   var dtNow = new Date();
-  if (tokenjwt && tokenjwt.data && tokenjwt.data.expiresAt) {
+  if (tokenjwt && tokenjwt.data && tokenjwt.data.expiresAt) {    
     var tokenExpiresAt = new Date(tokenjwt.data.expiresAt);
     console.log('isTokenExpired');
     console.log('tokenExpiresAt:' + tokenExpiresAt);
