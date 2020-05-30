@@ -1,18 +1,25 @@
 import format from 'string-format'
+import { ContactSupportOutlined } from '@material-ui/icons';
 
 var dateFormat = require('dateformat');
 
 export function isTokenExpired(tokenjwt) {
+  var ret = false;
 
   var dtNow = new Date();
   if (tokenjwt && tokenjwt.data && tokenjwt.data.expiresAt) {
     var tokenExpiresAt = new Date(tokenjwt.data.expiresAt);
+    console.log('isTokenExpired');
+    console.log('tokenExpiresAt:' + tokenExpiresAt);
+    console.log('dtNow:' + dtNow);
     if (tokenExpiresAt <= dtNow)
-      return true;
+      ret = true;
     else
-      return false;
+      ret = false;
   } else
-    return true;
+    ret = true;
+
+  return ret;
 }
 
 export function tokenExpiresAt(tokenjwt) {

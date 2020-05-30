@@ -4,6 +4,7 @@ import { getHeaderHeight } from '../../Helper/helpermethods';
 import store from '../../Redux/Store/store'
 import { Redirect } from 'react-router-dom'
 import { withRouter } from 'react-router-dom';
+import { isTokenExpired } from '../../Helper/helpermethods';
 
 class Body extends Component {
 	constructor(props) {
@@ -21,6 +22,9 @@ class Body extends Component {
 			console.log('this.props.token:' + this.props.token)
 			console.log('this.props.token.data:' + this.props.token.data)
 
+			if (isTokenExpired(this.props.token) === true)
+				this.setState({ redirectToLogin: true });
+		
 			if (this.props.token && this.props.token.data) {
 				var dtTokeExpiresAt = new Date(this.props.token.data.expiresAt);
 				var dtDiffs = (dtTokeExpiresAt - dtNow)
