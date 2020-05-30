@@ -1,8 +1,8 @@
-Message: syntax error at or near "Προμηθειών"
-Stack: error: syntax error at or near "Προμηθειών"
-    at Connection.parseE (c:\Projects\Node\fullstack-contract-app\node_modules\pg\lib\connection.js:614:13)
-    at Connection.parseMessage (c:\Projects\Node\fullstack-contract-app\node_modules\pg\lib\connection.js:413:19)
-    at Socket.<anonymous> (c:\Projects\Node\fullstack-contract-app\node_modules\pg\lib\connection.js:129:22)
+Message: column "undefined" does not exist
+Stack: error: column "undefined" does not exist
+    at Connection.parseE (C:\Projects\Node\fullstack-contract-app\node_modules\pg\lib\connection.js:614:13)
+    at Connection.parseMessage (C:\Projects\Node\fullstack-contract-app\node_modules\pg\lib\connection.js:413:19)
+    at Socket.<anonymous> (C:\Projects\Node\fullstack-contract-app\node_modules\pg\lib\connection.js:129:22)
     at Socket.emit (events.js:310:20)
     at addChunk (_stream_readable.js:286:12)
     at readableAddChunk (_stream_readable.js:268:9)
