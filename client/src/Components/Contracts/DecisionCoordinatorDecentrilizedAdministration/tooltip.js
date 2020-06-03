@@ -51,7 +51,7 @@ export function getDecisionCoordinatorDecentrilizedAdministrationTooltip(state, 
       <span style={useStyles.tooltip}> Απόφαση του Συντονιστή της Αποκεντρωμένης Διοίκησης Αττικής</span>
       <span style={useStyles.tooltip}>{state.ADA ? ' με ΑΔΑ ' : ''}</span>
       <span style={style3}>{state.ADA ? state.ADA : ''}</span>
-      <span>για τη νόμιμη λήψη της  Α.Δ.Σ.</span>
+      <span style={useStyles.tooltip}> για τη νόμιμη λήψη της  Α.Δ.Σ.</span>
     </div>
   </>)
 }

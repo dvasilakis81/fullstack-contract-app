@@ -213,7 +213,10 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 
+console.log('ENVIROMENT: ' + ENV)
+console.log('__dirname: ' + __dirname)
 if (ENV === 'production') {
+  console.log('ENVIROMENT: ' + ENV)
   app.use(express.static(path.join(__dirname, '../client/build')))
   app.use((req, res) => {
     console.log('Redirect to index.html')

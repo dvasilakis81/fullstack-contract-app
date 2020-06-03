@@ -51,13 +51,12 @@ const StyledTextField = props => {
       id={id}
       value={stateValue}
       style={style}
-      onChange={onChange}
+      onChange={onChange}      
       inputProps={inputProps}
       InputProps={InputProps}
       SelectProps={{ native: true }}
       variant='standard'
-      size={size}
-    >
+      size={size}>
       <option />
       {props.values}
     </TextField>

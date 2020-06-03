@@ -22,7 +22,7 @@ class ContractsPopup extends Component {
   }
 
   render() {
-    console.log('ContractsPopup: message: ' + this.state.message)
+    //console.log('ContractsPopup: message: ' + this.state.message)
     return (
       <>
         <div style={{ display: 'flex', flexDirection: 'column', width: '800px', height: '800px', border: '3px solid #33C1FF', overflowX: "hidden", overflowY: 'hidden' }}>

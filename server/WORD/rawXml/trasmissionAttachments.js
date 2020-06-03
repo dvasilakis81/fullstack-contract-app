@@ -204,13 +204,13 @@ module.exports = {
 		// 3.	Πρωτότυπο & φωτ/φο του με αριθμ. {a_in}/{a_id} Τιμολογίου Παροχής Υπηρεσιών της {c_conc}
 		if (body.Account[0].Invoice) {
 			if (body.Account[0].Invoice[0].DeliveredDateProtocol[0].Number)
-				var text = util.format('Το με Α.Π. %s/%s διαβιβαστικό έγγραφο, με το οποίο μας διαβιβάστηκε το υπ’ αριθ. %s/%s Τιμολόγιο της %s στης %s.',
+				var text = util.format('Το με Α.Π. %s/%s διαβιβαστικό έγγραφο, με το οποίο μας διαβιβάστηκε το υπ’ αριθ. %s/%s Τιμολόγιο της %s %s.',
 					body.Account[0].Invoice[0].DeliveredDateProtocol[0].Number,
 					body.Account[0].Invoice[0].DeliveredDateProtocol[0].Date,
 					body.Account[0].Invoice[0].Number,
 					body.Account[0].Invoice[0].Date,
 					body.Contract[0].Concessionaire[0].Name,
-					body.Account[0].Invoice[0].DeliveredDate)
+					util.format('στης %s', body.Account[0].Invoice[0].DeliveredDate))
 			else
 				var text = util.format('Το υπ΄ αρίθμ %s/%s τιμολόγιο του δικαιούχου %s και φωτοαντίγραφο του', body.Account[0].Invoice[0].Number,
 					body.Account[0].Invoice[0].Date, body.Contract[0].Concessionaire[0].Name)

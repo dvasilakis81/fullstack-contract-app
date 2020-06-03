@@ -145,8 +145,8 @@ const insertAccount = (req, res, next) => {
       else {
         var sqlQuery = util.format('INSERT INTO "Ordering"."Account"("ContractId","Number","Start","End", ' +
           '"AmountPure","AmountFpa","AmountTotal","ProtocolNumber","ProtocolDate", "AmountFullWritten", "IsFirstOfTheYear",' +
-          '"WorkConfirmationDate","DeliveryGoodsDate", "DocumentDate", "FirstAccountProtocolNumber", "FirstAccountProtocolDate", "DownpaymentLawArticle", "DateCreated", "DateModified") ' +
-          'VALUES(%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s) ' +
+          '"WorkConfirmationDate","DeliveryGoodsDate", "DocumentDate", "FirstAccountProtocolNumber", "FirstAccountProtocolDate", "DateCreated", "DateModified") ' +
+          'VALUES(%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s) ' +
           'RETURNING * ',
           helper.addQuotes(req.body.ContractId),
           helper.addQuotes(req.body.AccountNumber),
@@ -164,7 +164,6 @@ const insertAccount = (req, res, next) => {
           helper.addQuotes(req.body.DocumentDate),
           helper.addQuotes(req.body.FirstAccountProtocolNumber),
           helper.addQuotes(req.body.FirstAccountProtocolDate),
-          helper.addQuotes(req.body.DownpaymentLawArticle),
           helper.addQuotes(new Date().toLocaleString()),
           helper.addQuotes(new Date().toLocaleString()))
 
@@ -201,7 +200,7 @@ const insertAccount = (req, res, next) => {
 const updateAccount = (req, res, next) => {
   var sqlQuery = util.format('UPDATE "Ordering"."Account" ' +
     'SET "Start"=%s,"End"=%s,"AmountPure"=%s,"AmountFpa"=%s,"AmountTotal"=%s,"ProtocolNumber"=%s,"ProtocolDate"=%s,"AmountFullWritten"=%s,' +
-    '"IsFirstOfTheYear"=%s,"WorkConfirmationDate"=%s,"DeliveryGoodsDate"=%s,"DocumentDate"=%s,"FirstAccountProtocolNumber"=%s,"FirstAccountProtocolDate"=%s,"DownpaymentLawArticle"=%s,"DateModified"=%s ' +
+    '"IsFirstOfTheYear"=%s,"WorkConfirmationDate"=%s,"DeliveryGoodsDate"=%s,"DocumentDate"=%s,"FirstAccountProtocolNumber"=%s,"FirstAccountProtocolDate"=%s, "DateModified"=%s ' +
     'WHERE "Id"=%s ' +
     'RETURNING *',
     helper.addQuotes(req.body.Start),
@@ -217,8 +216,7 @@ const updateAccount = (req, res, next) => {
     helper.addQuotes(req.body.DeliveryGoodsDate),
     helper.addQuotes(req.body.DocumentDate),
     helper.addQuotes(req.body.FirstAccountProtocolNumber),
-    helper.addQuotes(req.body.FirstAccountProtocolDate),
-    helper.addQuotes(req.body.DownpaymentLawArticle),
+    helper.addQuotes(req.body.FirstAccountProtocolDate),    
     helper.addQuotes(new Date().toLocaleDateString()),
     Number(req.body.AccountId));
 

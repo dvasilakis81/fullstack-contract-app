@@ -696,14 +696,7 @@ class ItemDetail extends React.Component {
 														{this.getLawArticle(contractInfo)}
 													</Typography>
 												</Paper>
-											</Grid>
-											{contractInfo.contracttype && contractInfo.contracttype[0].ContractTypeId.toString() === "2" ? <Grid item>
-												<Paper style={styles.paperMoreContractInfo} square={true}>
-													<Typography>
-														<b>Άρθρο Προγραμματική</b> {contractInfo.LawArticle || ''}
-													</Typography>
-												</Paper>
-											</Grid> : <></>}
+											</Grid>											
 											<Grid item>
 												<Paper style={styles.paperMoreContractInfo} square={true}>
 													<Typography>

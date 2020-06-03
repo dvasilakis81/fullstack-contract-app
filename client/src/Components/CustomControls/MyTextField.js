@@ -18,7 +18,7 @@ class MyTextField extends Component {
       this.props.partOfProtocol === true
         ?
         <span style={{ height: 'fit-content' }}>
-          <StyledTextField {...this.props} style={{ width: '45%' }}/>
+          <StyledTextField {...this.props} style={{ width: divWidth }}/>
         </span>
         :
         <div style={{ margin: '10px', width: divWidth, border: '1px solid black', height: 'fit-content' }}>
