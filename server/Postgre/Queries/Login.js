@@ -178,7 +178,7 @@ const login = (request, response, next) => {
             response.status(200).json({ success: false, message: 'Έγινε κάποιο σφάλμα κατά την επιβεβαίωση των στοιχείων' });
           }
           else {
-            //let token = jwt.sign({ username: username }, secretKey, { expiresIn: (process.env.TOKEN_EXPIRES_IN || '2h') });
+            //let token = jwt.sign({ username: username }, secretKey, { expiresIn: (process.env.TOKEN_EXPIRES_IN || '2h') });            
             let token = jwt.sign({ username: username }, secretKey, { expiresIn: ('2h') });
             response.status(200).json({
               success: true,
@@ -237,8 +237,8 @@ const getExpiresAt = (token) => {
       expiresAt.setUTCSeconds(decoded.exp);
     });
   }
-
-  return expiresAt.toLocaleString();
+  
+  return expiresAt;
 };
 
 module.exports = {

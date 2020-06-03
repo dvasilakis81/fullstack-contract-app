@@ -222,13 +222,13 @@ if (ENV === 'production') {
     console.log('Redirect to index.html')
     res.sendFile(path.join(__dirname, '../client/build/index.html'))
   })
-  // app.all('/*', function (req, res, next) {
-  //   console.log('Accessing all urls except all above ...')
-  //   res.sendFile(path.join(__dirname, '../client/build/index.html'))
-  // })
+  app.all('/*', function (req, res, next) {
+    console.log('Accessing all urls except all above ...')
+    res.sendFile(path.join(__dirname, '../client/build/index.html'))
+  })
 }
 else
-  app.use(express.static(path.join(__dirname, 'public')));
+ app.use(express.static(path.join(__dirname, 'public')));
 
 // app.use('/', indexRouter);
 // app.use('/users', usersRouter);
