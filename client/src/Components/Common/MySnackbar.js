@@ -56,13 +56,26 @@ class MySnackbar extends Component {
 
   render() {
     //console.log('x: ' + this.props.screenDimensions.width + ' y: ' + this.props.screenDimensions.height);
-    let variant = this.props.state.variant;
-    let open = this.props.state.openMessage;
-    let message = this.props.state.message;
+
+    let open = false;
+    let message = '';
+    let variant;
+
+    if (this.props.state) {
+      variant = this.props.state.variant;
+      open = this.props.state.openMessage;
+      message = this.props.state.message;
+    }
+    else {
+      variant = this.props.variant;
+      open = this.props.openMessage;
+      message = this.props.message;
+    }
+
     let duration = this.props.duration;
     let width = 400;
     let left = this.props.screenDimensions ? this.props.screenDimensions.width - (width + 50) : 0;
-    let top = this.props.useScreenDimensions === true ? this.props.screenDimensions.height - (getHeaderHeight() + getFooterHeight() + 50) : 0
+    let top = this.props.useScreenDimensions === true ? this.props.screenDimensions.height - (getHeaderHeight() + getFooterHeight() + 150) : 0
     let style = this.props.useScreenDimensions === true ? { width: width + 'px', position: 'absolute', left: left, top: top } : null
 
     //const Icon = variantIcon[variant];
@@ -75,10 +88,10 @@ class MySnackbar extends Component {
         open={open}
         autoHideDuration={duration}
         onClose={this.props.handleClose}
-        style={style} >
+        style={style}>
         <SnackbarContent
           message={
-            <div style={{ display: 'flex', flex: '1', flexFlow: 'row' }}>              
+            <div style={{ display: 'flex', flex: '1', flexFlow: 'row' }}>
               {this.getIcon(variant)}
               <div style={{ flexGrow: '1', flexFlow: 'column', paddingLeft: '5px', paddingRight: '5px', wrap: true }}>
                 {message}

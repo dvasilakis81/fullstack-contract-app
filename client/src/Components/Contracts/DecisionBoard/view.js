@@ -13,7 +13,7 @@ import { getSubmitButton } from '../../MaterialObjects/materialobjects';
 import { bindActionCreators } from 'redux';
 import { processContractInfo } from '../../../Redux/Actions';
 
-import { getDecisionBoardTooltip } from './Tooltip';
+import { getDecisionBoardTooltip } from './tooltip';
 import ProtocolInput from '../../CustomControls/ProtocolInput';
 import MyTextField from '../../CustomControls/MyTextField';
 

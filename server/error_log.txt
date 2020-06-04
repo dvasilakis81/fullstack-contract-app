@@ -1,9 +1,9 @@
-Message: no pg_hba.conf entry for host "10.1.32.32", user "postgres", database "orderingappdb", SSL off
-Stack: error: no pg_hba.conf entry for host "10.1.32.32", user "postgres", database "orderingappdb", SSL off
-    at Parser.parseErrorMessage (C:\Github\Ordering FullStack\node_modules\pg-protocol\dist\parser.js:241:15)
-    at Parser.handlePacket (C:\Github\Ordering FullStack\node_modules\pg-protocol\dist\parser.js:89:29)
-    at Parser.parse (C:\Github\Ordering FullStack\node_modules\pg-protocol\dist\parser.js:41:38)
-    at Socket.<anonymous> (C:\Github\Ordering FullStack\node_modules\pg-protocol\dist\index.js:8:42)
+Message: value too long for type character varying(1000)
+Stack: error: value too long for type character varying(1000)
+    at Parser.parseErrorMessage (c:\Github\Ordering FullStack\node_modules\pg-protocol\dist\parser.js:241:15)
+    at Parser.handlePacket (c:\Github\Ordering FullStack\node_modules\pg-protocol\dist\parser.js:89:29)
+    at Parser.parse (c:\Github\Ordering FullStack\node_modules\pg-protocol\dist\parser.js:41:38)
+    at Socket.<anonymous> (c:\Github\Ordering FullStack\node_modules\pg-protocol\dist\index.js:8:42)
     at Socket.emit (events.js:210:5)
     at addChunk (_stream_readable.js:309:12)
     at readableAddChunk (_stream_readable.js:290:11)

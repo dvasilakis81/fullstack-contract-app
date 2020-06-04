@@ -150,7 +150,7 @@ class Header extends React.Component {
   getAdministrationAction(showAdministrationOption) {
     var accessToAdmin = false
     if (this.props.token && this.props.token.data) {
-      if (this.props.token.data.role.toString() === "1" && showAdministrationOption === true)
+      if (this.props.token.data.role === 1 && showAdministrationOption === true)
         accessToAdmin = true
     }
 

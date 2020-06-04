@@ -17,6 +17,7 @@ import Body from '../../HOC/Body/body';
 import { getHostUrl, getContractsLimit } from '../../Helper/helpermethods';
 import { resetData } from '../../Helper/helpermethods';
 import store from '../../Redux/Store/store'
+import MySnackbar from '../Common/MySnackbar'
 
 const styles = {
   clipperStyle: {
@@ -43,12 +44,17 @@ class ContractsPageBody extends Component {
       navigateToLogin: false,
       searchValue: '',
       windowWidth: window.innerWidth,
-      windowHeight: window.innerHeight      
+      windowHeight: window.innerHeight
     };
 
     this.fetchMore = this.fetchMore.bind(this);
     this.onChangeSearch = this.onChangeSearch.bind(this);
     this.onCancelRequest = this.onCancelRequest.bind(this);
+    this.handleClose = this.handleClose.bind(this);
+  }
+
+  handleClose() {
+    store.dispatch({ type: 'CLOSE_SNACKBAR', payload: false })
   }
 
   onChangeSearch(value) {
@@ -292,13 +298,13 @@ class ContractsPageBody extends Component {
 
     let isSearchMode = ((this.state.searchValue && this.state.searchValue.length > 2) || this.props.isSearchMode)
     let contractsList = isSearchMode ? this.props.searchContractsList : this.props.contracts
-    if (this.state.navigateToLogin){
+    if (this.state.navigateToLogin) {
       resetData(store)
       return <Redirect push to={{
-				pathname: '/login',
-				state: { expired: true }
-			}} />
-    }     
+        pathname: '/login',
+        state: { expired: true }
+      }} />
+    }
     else if (this.props.contractsRejected) {
       var msgToShow = '';
       if (this.props.contractsRejected && this.props.contractsRejected.message === 'Network Error') {
@@ -328,6 +334,7 @@ class ContractsPageBody extends Component {
           }}>
           <Body>
             <div style={{ display: 'flex', flexFlow: 'column', flexWrap: 'wrap', width: '100%', height: '100%' }}>
+              <MySnackbar duration={5000} handleClose={this.handleClose} vertical='bottom' horizontal='right' useScreenDimensions={true} openMessage={this.props.openMessage} message={this.props.message} variant='success' />
               <div style={{ display: 'flex', flexFlow: 'row', flex: '1', overflowY: 'hidden', overflowX: 'hidden', flexWrap: 'wrap' }}>
                 {/* 1st column */}
                 <div style={{ height: '100%', display: 'flex', flexFlow: 'column', flex: '0.3', backgroundColor: '#fff' }}>
@@ -346,7 +353,8 @@ class ContractsPageBody extends Component {
                     {isSearchMode ? null : this.getMoreButton(contractsList)}
                   </div>
                 </div>
-
+                
+                 {/* 2st column */}
                 <div style={{ marginLeft: '10px', marginRight: '15px', display: 'flex', flexFlow: 'column', flexBasis: '100%', flex: '0.7', backgroundColor: '#fff', overflowY: 'auto' }}>
                   <div style={{ display: 'flex', flexFlow: 'row', flex: '1', overflowY: 'auto', overflowX: 'hidden' }}>
                     <div style={{ display: 'flex', flexFlow: 'column', flex: '1', overflowY: 'auto', overflowX: 'hidden', margin: '0px', padding: '0px' }}>
@@ -380,6 +388,8 @@ class ContractsPageBody extends Component {
 function mapStateToProps(state) {
   return {
     //screenDimensions: state.parametricdata_reducer.screenDimensions,
+    openMessage: state.contracts_reducer.openMessage,
+    message: state.contracts_reducer.message,
     doRefresh: state.parametricdata_reducer.doRefresh,
     contracts: state.contracts_reducer.contractsList,
     contractsPending: state.contracts_reducer.contractsPending,

@@ -1,5 +1,6 @@
 import React, { Fragment } from 'react';
 import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
 import { Redirect } from "react-router-dom";
 import NumberFormat from 'react-number-format';
 import { Link } from 'react-router-dom';
@@ -13,12 +14,9 @@ import DialogTitle from '@material-ui/core/DialogTitle';
 import Popover from '@material-ui/core/Popover';
 import { withStyles } from "@material-ui/core/styles";
 import AccountCircleIcon from '@material-ui/icons/AccountCircle';
-
 import { Scrollbars } from 'react-custom-scrollbars';
-import axios from 'axios';
-
 import { getDateFormat, getDateFormatForDocument, getHostUrl, getFpaLabel, getServerErrorResponseMessage } from '../../../Helper/helpermethods';
-import MySnackbar from '../../Common/MySnackbar'
+
 import store from '../../../Redux/Store/store'
 //import AnalyticAccountPaymentUntilToday from '../Contracts/AnalyticAccountPaymentUntilToday';
 import ReactVirtualizedTable from '../../Contracts/VirtualizedAccountsTable';
@@ -34,6 +32,9 @@ import ExpansionPanel from '@material-ui/core/ExpansionPanel';
 import ExpansionPanelSummary from '@material-ui/core/ExpansionPanelSummary';
 import ExpansionPanelDetails from '@material-ui/core/ExpansionPanelDetails';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
+
+import { deleteContract } from '../../../Redux/Actions';
+import axios from 'axios';
 
 //react table virtualzie
 // import "../VirtualizedTable/react-table.css";
@@ -80,7 +81,6 @@ class ItemDetail extends React.Component {
 			variant: '',
 			openDeleteDialog: false,
 			openDialog: false,
-			openMessage: false,
 			anchorEl: null,
 			openDecisionBoardView: null,
 			openDecisionCoordinatorDecentrilizedAdministrationView: null,
@@ -130,18 +130,22 @@ class ItemDetail extends React.Component {
 
 	handleDeleteContract(e) {
 
-		axios.post(getHostUrl() + '/deletecontract', this.props.contractDetails, { headers: { Authorization: 'Bearer ' + this.props.token.data.token } }).then(res => {
-			if (res && res.data && res.data.tokenIsValid === undefined) {
-				var msg = 'Η διαγραφή της σύμβασης έγινε επιτυχώς!!!'
-				this.setState({ openDeleteDialog: false, message: msg, openMessage: true, variant: 'success', submitButtonDisabled: false });
-				store.dispatch({ type: 'DELETE_CONTRACT', payload: res.data })
-			} else {
-				this.setState({ openDeleteDialog: false, message: 'Η συνεδρία έχει λήξει! Ξανακάνετε σύνδεση\n', openMessage: true, variant: 'info', submitButtonDisabled: false, doRedirect: true });
-			}
-		}).catch(error => {
-			var msg = 'Αποτυχία διαγραφής της σύμβασης!!\n';
-			this.setState({ message: <><div>{msg}</div><div>{getServerErrorResponseMessage(error)}</div></>, openMessage: true, variant: 'error', submitButtonDisabled: false });
-		})
+		//axios.post(getHostUrl() + '/deletecontract', this.props.contractDetails, { headers: { Authorization: 'Bearer ' + this.props.token.data.token } }).then(res => {
+		this.props.deleteContract(this.props.contractDetails, this.props.token.data.token);
+		this.setState({ openDeleteDialog: false });
+		// .then(res => {
+		// 	if (res && res.data && res.data.tokenIsValid === undefined) {
+		// 		// 			var msg = 'Η διαγραφή της σύμβασης έγινε επιτυχώς!!!'
+		// 		this.setState({ openDeleteDialog: false });
+		// 			store.dispatch({ type: 'DELETE_CONTRACT', payload: res.data })
+		// 		} else {
+		// 			this.setState({ openDeleteDialog: false, message: 'Η συνεδρία έχει λήξει! Ξανακάνετε σύνδεση\n', openMessage: true, variant: 'info', submitButtonDisabled: false, doRedirect: true });
+		// 		}
+		// 	}).catch(error => {
+		// 		var msg = 'Αποτυχία διαγραφής της σύμβασης!!\n';
+		// 		this.setState({ message: <><div>{msg}</div><div>{getServerErrorResponseMessage(error)}</div></>, openMessage: true, variant: 'error', submitButtonDisabled: false });
+		// 	})
+		//}
 	}
 
 	handleClickOpen() {
@@ -152,7 +156,8 @@ class ItemDetail extends React.Component {
 	}
 
 	handleClose() {
-		this.setState({ openDeleteDialog: false, openMessage: false });
+		store.dispatch({ type: 'CLOSE_SNACKBAR', payload: false })
+		this.setState({ openDeleteDialog: false });
 	}
 
 	getAccountColor(accountNumber, contractCreatedAccounts) {
@@ -259,7 +264,7 @@ class ItemDetail extends React.Component {
 					<DialogTitle id="alert-dialog-title">{"Διαγραφή Σύμβασης"}</DialogTitle>
 					<DialogContent>
 						<DialogContentText id="alert-dialog-description">
-							Θέλετε να διαγράψετε την σύμβαση <b>«{detailItem.Title}»</b> και τους λογαριασμούς που σχετίζονται με αυτή;?
+							Θέλετε να διαγράψετε την σύμβαση <b>«{detailItem.Title}»</b> και τους λογαριασμούς που σχετίζονται με αυτή;
             </DialogContentText>
 					</DialogContent>
 					<DialogActions>
@@ -271,7 +276,6 @@ class ItemDetail extends React.Component {
             </Button>
 					</DialogActions>
 				</Dialog>
-				<MySnackbar state={this.state} duration={5000} handleClose={this.handleClose} vertical='bottom' horizontal='right' useScreenDimensions={true} />
 			</Paper>
 		</Grid>)
 	}
@@ -696,7 +700,7 @@ class ItemDetail extends React.Component {
 														{this.getLawArticle(contractInfo)}
 													</Typography>
 												</Paper>
-											</Grid>											
+											</Grid>
 											<Grid item>
 												<Paper style={styles.paperMoreContractInfo} square={true}>
 													<Typography>
@@ -811,6 +815,7 @@ class ItemDetail extends React.Component {
 				<td><span style={{ marginLeft: '5px' }}>{blueMessage}</span></td>
 			</>
 	}
+
 	render() {
 
 		let detailItem = null;
@@ -826,6 +831,7 @@ class ItemDetail extends React.Component {
 			}} />
 		}
 		else {
+
 			return (
 				detailItem ? this.getContractInfoTemplate(detailItem, this.props.windowsHeight) : null
 			)
@@ -833,8 +839,15 @@ class ItemDetail extends React.Component {
 	}
 }
 
+function mapDispatchToProps(dispatch) {
+	return bindActionCreators({ deleteContract }, dispatch);
+}
+
 function mapStateToProps(state) {
 	return {
+		deleteContractPending: state.contracts_reducer.deleteContractPending,
+		deleteContractRejected: state.contracts_reducer.deleteContractRejected,
+		deletedContractFulfilled: state.contracts_reducer.deletedContractFulfilled,
 		contractDetails: state.contracts_reducer.contractDetails,
 		contractDetailsSearchMode: state.contracts_reducer.contractDetailsSearchMode,
 		isSearchMode: state.contracts_reducer.isSearchMode,
@@ -843,4 +856,4 @@ function mapStateToProps(state) {
 	}
 }
 
-export default connect(mapStateToProps, null)(withStyles(styles)(ItemDetail))
+export default connect(mapStateToProps, mapDispatchToProps)(withStyles(styles)(ItemDetail))

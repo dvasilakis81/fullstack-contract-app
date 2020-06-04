@@ -76,12 +76,40 @@ export default function (state = {}, action, root) {
 				contractDetails: action.payload
 			};
 			break;
-		case 'DELETE_CONTRACT':
+		case 'CLOSE_SNACKBAR':
+			state = {
+				...state,
+				openMessage: false,
+			};
+			break;
+		case 'DELETE_CONTRACT_PENDING':
 
-			let contracts = state.contractsList.forEach((item) => {
+			state = {
+				...state,
+				openMessage: false,
+				deleteContractPending: true,
+				deleteContractRejected: undefined,
+				deletedContractFulfilled: undefined
+			};
+			break;
+		case 'DELETE_CONTRACT_REJECTED':
+
+			state = {
+				...state,
+				variant: 'error',
+				openMessage: true,				
+				message: 'Αποτυχία διαγραφής της σύμβασης! ' + (action.payload ? action.payload.message : ''),
+				deleteContractPending: undefined,
+				deleteContractRejected: true,
+				deletedContractFulfilled: undefined
+			};
+			break;
+		case 'DELETE_CONTRACT_FULFILLED':
+
+			let contracts = state.contractsList.filter((item) => {
 				let found = false;
 				item.Total = parseInt(item.Total) - 1;
-				if (item.Id.toString() === action.payload.Id.toString())
+				if (item.Id.toString() === action.payload.data.Id.toString())
 					found = true;
 
 				if (found === false)
@@ -90,8 +118,14 @@ export default function (state = {}, action, root) {
 
 			state = {
 				...state,
+				variant: 'success',
+				openMessage: true,
+				message: 'Η διαγραφής της σύμβασης έγινε επιτυχώς!',
+				deleteContractPending: undefined,
+				deleteContractRejected: undefined,
+				deletedContractFulfilled: action.payload,
 				contractsList: contracts,
-				contractDetails: contractsList ? contractsList[0] : null
+				contractDetails: contracts ? contracts[0] : null
 			};
 			break;
 		case 'GET_CONTRACTS_PENDING':
@@ -116,7 +150,7 @@ export default function (state = {}, action, root) {
 					contractsRejected: undefined,
 					contractsList: action.payload
 				};
-			} else {			
+			} else {
 
 				var selectedContract = state.contractDetails;
 				let contracts = action.payload.filter((item) => {

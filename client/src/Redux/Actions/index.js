@@ -18,6 +18,22 @@ export function searchContracts(tokenData, filter) {
   }
 }
 
+// export function deleteContract(tokenData) {
+//   const request = axios.get(`${URL}/contracts?loginuserid=` + tokenData.id + '&offset=' + offset + '&limit=' + limit, { headers: { Authorization: 'Bearer ' + tokenData.token } })
+//     .then(response => response.data)
+//   return { type: 'GET_CONTRACTS', payload: request }
+// }
+
+export function deleteContract(data, token) {
+
+  const request = axios.post(`${URL}/deletecontract`, data, { headers: { Authorization: 'Bearer ' + token } })
+  return {
+    type: 'DELETE_CONTRACT',
+    payload: request
+  }
+}
+
+
 export function getAccount(token, contractId, accountNumber) {
   const request = axios.get(`${URL}/account?ci=` + contractId + '&an=' + accountNumber, { headers: { Authorization: 'Bearer ' + token } }).then(response => response.data)
 
@@ -41,15 +57,6 @@ export function updateUser(data) {
   const request = axios.post(`${URL}/updateuser`, data)
   return {
     type: 'UPDATE_USER',
-    payload: request
-  }
-}
-
-export function deleteContract(data, token) {
-
-  const request = axios.post(`${URL}/deletecontract`, data, { headers: { Authorization: 'Bearer ' + token } })
-  return {
-    type: 'DELETE_CONTRACT',
     payload: request
   }
 }
