@@ -76,6 +76,14 @@ export default function (state = {}, action, root) {
 				contractDetails: action.payload
 			};
 			break;
+		case 'SHOW_SNACKBAR':
+			state = {
+				...state,
+				openMessage: action.payload.openMessage,
+				message: action.payload.message,
+				variant: action.payload.variant
+			};
+			break;
 		case 'CLOSE_SNACKBAR':
 			state = {
 				...state,
@@ -97,7 +105,7 @@ export default function (state = {}, action, root) {
 			state = {
 				...state,
 				variant: 'error',
-				openMessage: true,				
+				openMessage: true,
 				message: 'Αποτυχία διαγραφής της σύμβασης! ' + (action.payload ? action.payload.message : ''),
 				deleteContractPending: undefined,
 				deleteContractRejected: true,
@@ -120,7 +128,7 @@ export default function (state = {}, action, root) {
 				...state,
 				variant: 'success',
 				openMessage: true,
-				message: 'Η διαγραφής της σύμβασης έγινε επιτυχώς!',
+				message: 'Η διαγραφή της σύμβασης έγινε επιτυχώς!',
 				deleteContractPending: undefined,
 				deleteContractRejected: undefined,
 				deletedContractFulfilled: action.payload,

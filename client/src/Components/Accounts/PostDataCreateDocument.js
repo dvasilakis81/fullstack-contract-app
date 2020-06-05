@@ -107,39 +107,6 @@ function getReservationsToPost(reservations, Amount) {
   return ret;
 }
 
-function getCCDataToPost(contractDetails, accountDetails) {
-
-  var CC1 = accountDetails.cc[0];
-  var CC2 = accountDetails.cc[1];
-
-  var cc1Value = '';
-  var cc2Value = '';
-
-  var directionValue = '';
-  var departmentValue = '';
-  if (CC1 && CC1.cc1value1 && CC1.cc1value1[0])
-    directionValue = format('Διεύθυνση {}', CC1.cc1value1[0].DirectionName)
-  if (CC1 && CC1.cc1value2 && CC1.cc1value2[0] && CC1.cc1value2[0].DepartmentName)
-    departmentValue = '-Τμήμα ' + CC1.cc1value2[0].DepartmentName
-  cc1Value = format('{}{}', directionValue, departmentValue)
-
-  directionValue = '';
-  departmentValue = '';
-  if (contractDetails.ContractTypeId.toString() === '1') {
-    if (CC2 && CC2.cc2value1 && CC2.cc2value1[0])
-      directionValue = format('Διεύθυνση {}', CC2.cc2value1[0].DirectionName)
-    if (CC2 && CC2.cc2value2 && CC2.cc2value2[0] && CC2.cc2value2[0].DepartmentName)
-      departmentValue = '-Τμήμα ' + CC2.cc2value2[0].DepartmentName
-    cc2Value = format('{}{}', directionValue, departmentValue)
-  }
-  else {
-    if (CC2 && CC2.ccagencyvalue && CC2.ccagencyvalue[0])
-      cc2Value = CC2.ccagencyvalue[0].Name
-  }
-
-  return [{ CC1: cc1Value, CC2: cc2Value }]
-}
-
 export function createTransmissionDocument(contractInfo, accountInfo, paidAmount) {
 
   var firstAccountProtocol = ''
@@ -190,6 +157,7 @@ export function createTransmissionDocument(contractInfo, accountInfo, paidAmount
       Award: [{ Number: contractInfo.AwardNumber, Date: getDateFormatForDocument(contractInfo.AwardDate), Ada: contractInfo.AwardAda }],
       CPV: [{ Code: contractInfo.CpvCode, Title: contractInfo.CpvTitle }],
       Balance: currencyFormatter.format(Number(contractInfo.AmountTotal) - (Number(paidAmount.TotalUntilToday) + Number(accountInfo.AmountTotal)), { symbol: '€', decimal: ',', thousand: '.', precision: 2, format: '%v%s' }),
+      HasDownpayment: contractInfo.HasDownPayment
     }],
     Account: [{
       No: accountInfo.Number,

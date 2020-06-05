@@ -304,8 +304,7 @@ class ContractsPageBody extends Component {
         pathname: '/login',
         state: { expired: true }
       }} />
-    }
-    else if (this.props.contractsRejected) {
+    } else if (this.props.contractsRejected) {
       var msgToShow = '';
       if (this.props.contractsRejected && this.props.contractsRejected.message === 'Network Error') {
         msgToShow = 'Αποτυχία σύνδεσης με τον διακομιστή!'
@@ -334,7 +333,7 @@ class ContractsPageBody extends Component {
           }}>
           <Body>
             <div style={{ display: 'flex', flexFlow: 'column', flexWrap: 'wrap', width: '100%', height: '100%' }}>
-              <MySnackbar duration={5000} handleClose={this.handleClose} vertical='bottom' horizontal='right' useScreenDimensions={true} openMessage={this.props.openMessage} message={this.props.message} variant='success' />
+              <MySnackbar duration={5000} handleClose={this.handleClose} vertical='bottom' horizontal='right' useScreenDimensions={true} openMessage={this.props.openMessage} message={this.props.message} variant={this.props.variant} />
               <div style={{ display: 'flex', flexFlow: 'row', flex: '1', overflowY: 'hidden', overflowX: 'hidden', flexWrap: 'wrap' }}>
                 {/* 1st column */}
                 <div style={{ height: '100%', display: 'flex', flexFlow: 'column', flex: '0.3', backgroundColor: '#fff' }}>
@@ -390,6 +389,7 @@ function mapStateToProps(state) {
     //screenDimensions: state.parametricdata_reducer.screenDimensions,
     openMessage: state.contracts_reducer.openMessage,
     message: state.contracts_reducer.message,
+    variant: state.contracts_reducer.variant,
     doRefresh: state.parametricdata_reducer.doRefresh,
     contracts: state.contracts_reducer.contractsList,
     contractsPending: state.contracts_reducer.contractsPending,

@@ -179,9 +179,16 @@ class NewContract extends Component {
 				}
 				else {
 					axios.post(getHostUrl() + '/insertcontract', this.state, { headers: { Authorization: 'Bearer ' + this.props.token.data.token } }).then(res => {
-						var msg = 'Η σύμβαση με πρωτόκολλο ' + this.state.ProtocolNumber + '/' + this.state.ProtocolDate + ' δημιουργήθηκε επιτυχώς!!!'
+						var msg = 'Η σύμβαση με πρωτόκολλο ' + this.state.ProtocolNumber + '/' + this.state.ProtocolDate + ' δημιουργήθηκε επιτυχώς!!!';
 						this.setState({ message: msg, openMessage: true, variant: 'success', submitButtonDisabled: false });
-						store.dispatch({ type: 'INSERT_CONTRACT', payload: res.data })
+						store.dispatch({ type: 'INSERT_CONTRACT', payload: res.data });
+
+						var snackbarInfo = {}
+						snackbarInfo.openMessage = true;
+						snackbarInfo.message = msg;
+						snackbarInfo.variant = 'success';
+						store.dispatch({ type: 'SHOW_SNACKBAR', payload: snackbarInfo });
+
 						this.props.history.goBack();
 					}).catch(error => {
 						var msg = 'Αποτυχία δημιουργίας σύμβασης !!\n' + error;
@@ -347,7 +354,7 @@ class NewContract extends Component {
 											{getButton('contained', 'small', null, styles.btnAuto, this.autoCompleteBudget, 'ΥΠΟΛΟΓΙΣΜΟΣ', null, false)}
 										</div>
 										<div style={styles.divRow}>
-											<MyTextField tp='number' title='# Παραδοτέων (Λογαριασμών)' id='NumberOfAccounts' stateValue={this.state.NumberOfAccounts} isRequired={true} isDisabled={false} onChange={this.onChange} inputProps={{ style: { textAlign: "center" }, inputProps: { min: 0, max: 100 } }} width='20%'/>
+											<MyTextField tp='number' title='# Παραδοτέων (Λογαριασμών)' id='NumberOfAccounts' stateValue={this.state.NumberOfAccounts} isRequired={true} isDisabled={false} onChange={this.onChange} inputProps={{ style: { textAlign: "center" }, inputProps: { min: 0, max: 100 } }} width='20%' />
 											{getCheckboxField('HasDownPayment', 'Eχει προκαταβολή (Αν ναι θα είναι ο 1ος λογαριασμός)', this.state.HasDownPayment, null, this.setCheckboxValue)}
 										</div>
 									</div>

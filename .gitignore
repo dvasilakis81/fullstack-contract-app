@@ -68,6 +68,9 @@ typings/
 # Origin
 *.orig
 
+#txt files
+*.txt
+
 # Yarn Integrity file
 .yarn-integrity
 

@@ -106,7 +106,8 @@ const getContractById = (req, res, next, contractId) => {
   var loginUserId = parseInt(req.body.loginUserId);
   var where = util.format('WHERE c."Id"=%s', contractId);
   var sqlQuery = util.format('%s %s %s', getSelectFromClauses(loginUserId), where, gerOrderBy())
-
+  
+  console.log('getContractById : sqlQuery: ' + sqlQuery)  
   pool.query(sqlQuery, (error, results) => {
     if (error) {
       next(error);
@@ -221,7 +222,8 @@ const insertContractUsers = (req, res, next, contractId, usersToGiveAccessToCont
     getContractById(req, res, next, req.body.ContractId);
   else {
     for (var i = 0; i < contractUsers.length; i++) {
-      sqlQuery += util.format('(%s,%s)', contractId, contractUsers[i].Id)
+      console.log('insertContractUsers: UserId:' + contractUsers[i].UserId)
+      sqlQuery += util.format('(%s,%s)', contractId, contractUsers[i].UserId)
       if (i < contractUsers.length - 1)
         sqlQuery += ','
     }
@@ -232,7 +234,7 @@ const insertContractUsers = (req, res, next, contractId, usersToGiveAccessToCont
     if (error)
       next(error);
     else
-      getContractById(req, res, next, req.body.ContractId);
+      getContractById(req, res, next, contractId);
   })
 }
 

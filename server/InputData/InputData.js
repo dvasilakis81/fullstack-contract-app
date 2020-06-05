@@ -1,4 +1,5 @@
 var rawtabledata = require('../WORD/rawXml/tableData');
+var transmissionSubject = require('../WORD/rawXml/transmissionSubject');
 var transmissionAttachments = require('../WORD/rawXml/trasmissionAttachments');
 var transmissionCC = require('../WORD/rawXml/transmissionCC');
 var accountAttachments = require('../WORD/rawXml/accountAttachments');
@@ -8,11 +9,13 @@ module.exports = {
 
   setDataForTransmissionDocument: function (body) {
     var ret = '';
+    var subjectRawData = transmissionSubject.getSubjectXmlValue(body);
     var attachmentsRawData = transmissionAttachments.getAttachmentsXmlValue(body);
     var ccValuesRawData = transmissionCC.getCCValues(body);
     
     if (body) {
       ret = {
+        subject: subjectRawData,
         attachments: attachmentsRawData,
         CC: ccValuesRawData,
         dd: body.DocumentDate,
