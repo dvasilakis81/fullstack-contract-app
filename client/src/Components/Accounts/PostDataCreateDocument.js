@@ -173,6 +173,7 @@ export function createTransmissionDocument(contractInfo, accountInfo, paidAmount
       IsFirstOfTheYear: accountInfo.IsFirstOfTheYear,
       CC: accountInfo.cc
     }],
+    AAY: contractInfo.aay,
     DecisionBoard: contractInfo.decisionboard,
     DecisionCoordinatorDecentrilizedAdministration: contractInfo.decisioncoordinatordecentrilizedadministration,
     CourtOfAuditors: contractInfo.courtofauditors,
@@ -271,6 +272,7 @@ export function createAccountDocument(contractInfo, accountInfo, paidAmount, res
     DecisionBoard: contractInfo.decisionboard,
     DecisionCoordinatorDecentrilizedAdministration: contractInfo.decisioncoordinatordecentrilizedadministration,
     CourtOfAuditors: contractInfo.courtofauditors,
+    AAY: contractInfo.aay,
     Signature: [
       {
         Kaa: ForemanDirectionAbsense,

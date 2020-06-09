@@ -36,7 +36,7 @@ import Body from '../../HOC/Body/body';
 //import ProtocolNumber from '../CustomControls/ProtocolNumber';
 
 import {
-	getAayTooltipTemplate, getFirstTrasmissionProtocolTooltip,
+	getFirstTrasmissionProtocolTooltip,
 	getAccountProtocolTooltip,
 	getInvoiceTooltipTemplate,
 	getDocumentDateTooltipTemplate, getAccountStartDateTooltipTemplate,
@@ -429,25 +429,7 @@ class NewAccountForm extends Component {
 	getDeliveryGoodsDate() {
 		if (this.state.IsDownpayment === false)
 			return <MyTextField tp='date' title='Ημ. οριστικής παραλαβής αγαθών/υπηρεσιων' id='DeliveryGoodsDate' stateValue={this.state.DeliveryGoodsDate} isRequired={true} isDisabled={false} onChange={this.onChange} inputProps={{ style: { textAlign: 'center' } }} width='20%' isRequired={false} />
-	}
-
-	getAAYInfo() {
-
-		return <div>
-			<header style={useStyles.category}>Στοιχεία ΑΑΥ</header>
-			<div style={useStyles.divRowFlex}>
-				<ProtocolInput tm1={getAayTooltipTemplate(this.state, 4)} tm2={getAayTooltipTemplate(this.state, 5)} title='Α.Π. Α.Α.Υ.' idn='AayProtocolNumber' idd='AayProtocolDate' protocolNumber={this.state.AayProtocolNumber} protocolDate={this.state.AayProtocolDate} onChange={this.onChange} tp1='text' tp2='date' />
-				<MyTextField tm={getAayTooltipTemplate(this.state, 1)} tp='text' title='Α.Α.Υ' id='AayValue' stateValue={this.state.AayValue} isRequired={true} isDisabled={false} onChange={this.onChange} inputProps={{ style: { textAlign: 'center' }, maxLength: 20 }} />
-				<MyTextField tm={getAayTooltipTemplate(this.state, 3)} tp='number' title='ΕΑΔ αριθμός' id='AayEadNumber' stateValue={this.state.AayEadNumber} isRequired={true} isDisabled={false} onChange={this.onChange} inputProps={{ style: { textAlign: 'center' } }} />
-				<MyTextField tm={getAayTooltipTemplate(this.state, 6)} tp='text' title='ΑΔΑ' id='AayADA' stateValue={this.state.AayADA} isRequired={true} isDisabled={false} onChange={this.onChange} inputProps={{ style: { textAlign: 'center' }, maxLength: 20 }} />
-				{this.getAAYPreviousYear()}
-			</div>
-		</div>
-	}
-	getAAYPreviousYear() {
-		if (this.state.IsDownpayment === false)
-			return <MyTextField tp='number' title='ΑΑΥ Προηγούμενου Έτος (για δαπάνες ΠΟΕ)' id='AayPreviousYear' stateValue={this.state.AayPreviousYear} isRequired={false} isDisabled={false} onChange={this.onChange} inputProps={{ style: { textAlign: 'center' } }} width='400px' />
-	}
+	}	
 
 	getDocumentsInfo() {
 		return <>
@@ -577,8 +559,7 @@ class NewAccountForm extends Component {
 									<Icon style={{ marginLeft: '10px', padding: '10px' }}>save</Icon>,
 									this.state.submitButtonDisabled)}
 								{this.getDocumentsInfo()}
-								{this.getBasicAccountInfo()}
-								{this.getAAYInfo()}
+								{this.getBasicAccountInfo()}								
 								{this.getInvoiceInfo()}
 								{this.getMonitoringCommiteeInfo()}
 								{/* {this.getDownpaymentInfo()} */}

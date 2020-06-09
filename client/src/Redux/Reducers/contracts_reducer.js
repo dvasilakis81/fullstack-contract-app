@@ -457,15 +457,15 @@ export default function (state = {}, action, root) {
 		case 'DELETE_CONTRACTINFO_PENDING':
 			state = {
 				...state,
-				deleteDecicionBoardPending: true,
-				deleteDecicionBoardRejected: false
+				deleteContractInfoPending: true,
+				deleteContractInfoRejected: false
 			};
 			break;
 		case 'DELETE_CONTRACTINFO_REJECTED':
 			state = {
 				...state,
-				deleteDecicionBoardPending: false,
-				deleteDecicionBoardRejected: action.payload
+				deleteContractInfoPending: false,
+				deleteContractInfoRejected: action.payload
 			};
 			break;
 		case 'DELETE_CONTRACTINFO_FULFILLED':
@@ -482,8 +482,8 @@ export default function (state = {}, action, root) {
 
 				state = {
 					...state,
-					deleteDecicionBoardPending: false,
-					deleteDecicionBoardRejected: false,
+					deleteContractInfoPending: false,
+					deleteContractInfoRejected: false,
 					contractsList: updatedContractsList,
 					contractDetails: action.payload.data
 				};
@@ -501,8 +501,8 @@ export default function (state = {}, action, root) {
 
 				state = {
 					...state,
-					deleteDecicionBoardPending: false,
-					deleteDecicionBoardRejected: false,
+					deleteContractInfoPending: false,
+					deleteContractInfoRejected: false,
 					searchContractsList: updatedContractsSearchList,
 					contractDetailsSearchMode: action.payload
 				};

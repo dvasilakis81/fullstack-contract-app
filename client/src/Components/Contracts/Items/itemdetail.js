@@ -20,6 +20,7 @@ import { getDateFormat, getDateFormatForDocument, getHostUrl, getFpaLabel, getSe
 import store from '../../../Redux/Store/store'
 //import AnalyticAccountPaymentUntilToday from '../Contracts/AnalyticAccountPaymentUntilToday';
 import ReactVirtualizedTable from '../../Contracts/VirtualizedAccountsTable';
+import AayView from '../AAY/view';
 import DecisionBoardView from '../DecisionBoard/view';
 import DecisionCoordinatorDecentrilizedAdministrationView from '../DecisionCoordinatorDecentrilizedAdministration/view';
 import CourtOfAuditorsView from '../CourtOfAuditors/view';
@@ -82,6 +83,7 @@ class ItemDetail extends React.Component {
 			openDeleteDialog: false,
 			openDialog: false,
 			anchorEl: null,
+			openAayView: null,
 			openDecisionBoardView: null,
 			openDecisionCoordinatorDecentrilizedAdministrationView: null,
 			openCourtOfAuditorsView: null,
@@ -98,14 +100,18 @@ class ItemDetail extends React.Component {
 		this.handlePopoverClick = this.handlePopoverClick.bind(this);
 		this.handlePopoverClose = this.handlePopoverClose.bind(this);
 
+		this.handleAayClick = this.handleAayClick.bind(this);
 		this.handleDecisionBoardClick = this.handleDecisionBoardClick.bind(this);
 		this.handleDecisionCoordinatorDecentrilizedAdministrationClick = this.handleDecisionCoordinatorDecentrilizedAdministrationClick.bind(this);
 		this.handleCourtOfAuditorsClick = this.handleCourtOfAuditorsClick.bind(this);
-
 	}
 
 	handlePopoverClick(event) {
 		this.setState({ anchorEl: event.currentTarget });
+	}
+
+	handleAayClick(event) {
+		this.setState({ openAayView: event.currentTarget });
 	}
 
 	handleDecisionBoardClick(event) {
@@ -121,7 +127,7 @@ class ItemDetail extends React.Component {
 	}
 
 	handlePopoverClose() {
-		this.setState({ anchorEl: null, openDecisionBoardView: null, openDecisionCoordinatorDecentrilizedAdministrationView: null, openCourtOfAuditorsView: null });
+		this.setState({ anchorEl: null, openAayView: null, openDecisionBoardView: null, openDecisionCoordinatorDecentrilizedAdministrationView: null, openCourtOfAuditorsView: null });
 	}
 
 	editNewContract(e) {
@@ -516,6 +522,35 @@ class ItemDetail extends React.Component {
 			return <></>
 	}
 
+	getAayInfoTemplate(contractDetails) {
+
+		var quantity = contractDetails.aay && contractDetails.aay.length > 0 ? contractDetails.aay.length : 'Δεν έχει';
+		return <Grid>
+			<Paper style={styles.paperMoreContractInfo} square={true}>
+				<Typography>
+					<b>Αποφάση Ανάληψης Υποχρέωσης</b>
+					<span style={{ marginLeft: '10px', fontWeight: '' }}>{quantity}</span>
+					<Button
+						variant='contained'
+						size='small'
+						style={{ margin: '5px', background: '#F3FCFF', color: '#000' }}
+						onClick={this.handleAayClick}>
+						Προβολή
+					</Button>
+					<Popover
+						open={this.state.openAayView ? true : false}
+						onClose={this.handlePopoverClose}
+						anchorReference="anchorPosition"
+						anchorPosition={{ top: this.getPopoverTop(this.state.windowHeight), left: this.getPopoverLeft(this.state.windowWidth) }}
+						style={{ transform: document.getElementById('root').style.transform }}>
+						<AayView contractId={contractDetails.Id} Aay={contractDetails.aay} header='Αποφάσεις Ανάληψεις Υποχρέωσης' />
+					</Popover>
+				</Typography>
+			</Paper>
+		</Grid>
+	}
+
+
 	getBoardDecisionsInfoTemplate(contractDetails) {
 
 		var quantity = contractDetails.decisionboard && contractDetails.decisionboard.length > 0 ? contractDetails.decisionboard.length : 'Δεν έχει';
@@ -725,6 +760,7 @@ class ItemDetail extends React.Component {
 												</Paper>
 											</Grid>
 											{this.getCPVTemplate(contractInfo)}
+											{this.getAayInfoTemplate(contractInfo)}
 											{this.getBoardDecisionsInfoTemplate(contractInfo)}
 											{this.getSADAInfoTemplate(contractInfo)}
 											{this.getCourtOfAuditorsInfoTemplate(contractInfo)}

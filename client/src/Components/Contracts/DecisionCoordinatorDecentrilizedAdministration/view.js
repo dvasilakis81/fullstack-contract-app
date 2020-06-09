@@ -183,7 +183,7 @@ class DecisionCoordinatorDecentrilizedAdministrationView extends Component {
           </div>
           <div style={{ display: 'flex', flexFlow: 'row', height: 'auto', justifyContent: 'center', padding: '10px' }}>
             <LoadingOverlay
-              active={this.props.insertDecisionCoordinatorDecentrilizedAdministrationPending === true}
+              active={this.props.insertContractInfoPending === true}
               spinner
               text='Αναμονή για δημιουργία Σ.Α.Δ.Α. ...'
               styles={{
@@ -214,7 +214,7 @@ class DecisionCoordinatorDecentrilizedAdministrationView extends Component {
         <div style={{ textAlign: 'center', fontSize: '22px', fontWeight: 800, paddingBottom: '10px' }}>Διαγραφή {this.state.orderNo}ης Απόφασης Ελέγχου Νομιμότητας της Αποκεντρωμένης</div>
         <div style={{ display: 'flex', flexFlow: 'row', height: 'auto', backgroundColor: '#33C1FF', justifyContent: 'center', padding: '10px' }}>
           <LoadingOverlay
-            active={this.props.deleteDecisionCoordinatorDecentrilizedAdministrationPending === true}
+            active={this.props.deleteContractInfoPending === true}
             spinner
             text='Αναμονή για διαγραφή Σ.Α.Δ.Α. ...'
             styles={{
@@ -325,6 +325,8 @@ function mapStateToProps(state) {
     screenDimensions: state.parametricdata_reducer.screenDimensions,
     insertContractInfoPending: state.contracts_reducer.insertContractInfoPending,
     insertContractInfoRejected: state.contracts_reducer.insertContractInfoRejected,
+    deleteContractInfoPending: state.contracts_reducer.deleteContractInfoPending,
+    deleteContractInfoRejected: state.contracts_reducer.deleteContractInfoRejected,
     isSearchMode: state.contracts_reducer.isSearchMode,
     contracts: state.contracts_reducer.contractsList,
     contractDetails: state.contracts_reducer.contractDetails,

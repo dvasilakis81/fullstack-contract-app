@@ -237,65 +237,11 @@ export function getInvoiceTooltipTemplate(state, conc, ind) {
   </>)
 }
 
-//#region AAY
-export function getAayTooltipTemplate(state, ind) {
-  var style1 = (ind === 1 ? useStyles.tooltipIndicate : useStyles.tooltip)
-  var style2 = (ind === 2 ? useStyles.tooltipIndicate : useStyles.tooltip)
-  var style3 = (ind === 3 ? useStyles.tooltipIndicate : useStyles.tooltip)
-  var style4 = (ind === 4 ? useStyles.tooltipIndicate : useStyles.tooltip)
-  var style5 = (ind === 5 ? useStyles.tooltipIndicate : useStyles.tooltip)
-  var style6 = (ind === 6 ? useStyles.tooltipIndicate : useStyles.tooltip)
-  var number = (state.isDownpayment === true ? 2 : (state.HasSecondDecisionDS ? 7 : 5))
-
-  //Διαβιβαστικό
-  //(Προκαταβολή)  7.	Πρωτότυπο και φωτοαντίγραφο της με αρ. Π00799/2018 (Α.Π. 179391/11-7-2018) και ΑΔΑ ΩΨ6ΡΩ6Μ-9ΩΠ Απόφασης Ανάληψης Υποχρέωσης
-  //Πρωτότυπο και φωτ/φο της με Α.Π. 56142/20-2-2019 (Α00488) Απόφασης Ανάληψης Υποχρέωσης με ΑΔΑ: 9Ξ4ΔΩ6Μ-ΡΥ4.
-
-  //Λογαριασμός
-  //Προκαταβολή 7.	Τη με αρ. Π00799/2018 (Αριθμός ΑΑΥ) (Α.Π. 179391/11-7-2018) και ΑΔΑ ΩΨ6ΡΩ6Μ-9ΩΠ Απόφαση Ανάληψης Υποχρέωσης
-  //Τη με Α.Π. 56142/20-2-2019 (υπ’ αριθμ. Α00488 – ΕΑΔ 487) Απόφαση Aνάληψης Yποχρέωσης.
-
-  if (ind === 2)
-    return (<>
-      <div style={useStyles.tooltip}>ΑΑΥ/ΕΤΟΣ (ΕΑΔ) :</div>
-      <span style={style1}>{state.AayValue ? state.AayValue : '____'}</span>
-      <span style={useStyles.tooltip}>/</span>
-      <span style={style2}>{state.AayYear ? state.AayYear : '___'}</span>
-      <span style={style3}>{state.AayEadNumber ? state.AayEadNumber : '___'}</span>
-    </>)
-  else
-    return (<>
-      <div style={useStyles.tooltipTitle}>ΣΥΝΗΜΜΕΝΑ ΔΙΚΑΙΟΛΟΓΗΤΙΚΑ(Διαβιβαστικό)</div>
-      <span style={useStyles.tooltip}>{number}.{state.IsFirstOfTheYear ? ' Πρωτότυπο και φωτ/φο' : ' Δύο (2) φωτ/φα'} της με Α.Π. </span>
-      <span style={style4}>{state.AayProtocolNumber ? state.AayProtocolNumber : '_____'}</span>
-      <span style={useStyles.tooltip}>/</span>
-      <span style={style5}>{state.AayProtocolDate ? getDateFormatForDocument(state.AayProtocolDate) : '__-__-____'}</span>
-      <span style={useStyles.tooltip}> (</span>
-      <span style={style1}>{state.AayValue ? state.AayValue : '_____'}</span>
-      <span style={useStyles.tooltip}>)</span>
-      <span style={useStyles.tooltip}> Απόφασης Ανάληψης Υποχρέωσης με ΑΔΑ: </span>
-      <span style={style6}>{state.AayADA ? state.AayADA : '______'}.</span>
-
-      <div style={useStyles.tooltipTitle}>ΣΥΝΗΜΜΕΝΑ ΔΙΚΑΙΟΛΟΓΗΤΙΚΑ(Λογαριασμός)</div>
-      <span style={useStyles.tooltip}>{number}. Τη με Α.Π. </span>
-      <span style={style4}>{state.AayProtocolNumber ? state.AayProtocolNumber : '____'}</span>
-      <span>/</span>
-      <span style={style5}>{state.AayProtocolDate ? getDateFormatForDocument(state.AayProtocolDate) : '__-__-____'}</span>
-      <span style={useStyles.tooltip}> (υπ’ αριθμ. </span>
-      <span style={style1}>{state.AayValue ? state.AayValue : '____'}</span>
-      <span style={useStyles.tooltip}> - ΕΑΔ </span>
-      <span style={style3}>{state.AayEadNumber ? state.AayEadNumber : '___'}</span>
-      <span style={useStyles.tooltip}>) </span>
-      <span style={useStyles.tooltip}>Απόφαση Aνάληψης Yποχρέωσης</span>
-    </>)
-}
-//#endregion
-
 // *** _____________________ ***
 // *** Έγγραφο Διαβιβαστικού ***
 // *** _____________________ ***
 
-  //ΠΡΟΚΑΤΑΒΟΛΗ
+//ΠΡΟΚΑΤΑΒΟΛΗ
 //   1.	Πρωτότυπο και φωτοαντίγραφο της με Α.Π. 260100/17-10-2018 Προγραμματικής Σύμβασης.
 // 2.	Δύο (2) φωτοαντίγραφα της με αρ. 866/14-6-2018 Απόφασης του Δημοτικού Συμβουλίου (Α.Δ.Σ.) με Α.Δ.Α.
 // 3.	Δύο (2) φωτοαντίγραφα της με αρ. 959/28-6-2018 Α.Δ.Σ. με Α.Δ.Α. (Αν υπάρχει δεύτερη απόφαση δημοτικού συμβουλίου

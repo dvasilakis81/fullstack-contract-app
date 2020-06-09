@@ -206,7 +206,7 @@ class CourtOfAuditorsView extends Component {
         <div style={{ textAlign: 'center', fontSize: '22px', fontWeight: 800, paddingBottom: '10px' }}>Διαγραφή {this.state.orderNo}ου Ελεγκτικού</div>
         <div style={{ display: 'flex', flexFlow: 'row', height: 'auto', backgroundColor: '#33C1FF', justifyContent: 'center', padding: '10px' }}>
           <LoadingOverlay
-            active={this.props.deleteCourtOfAuditorsPending === true}
+            active={this.props.deleteContractInfoPending === true}
             spinner
             text='Αναμονή για διαγραφή Ελεγκτικού Συνεδρίου ...'
             styles={{
@@ -327,7 +327,9 @@ function mapStateToProps(state) {
     screenDimensions: state.parametricdata_reducer.screenDimensions,
     insertContractInfoPending: state.contracts_reducer.insertContractInfoPending,
     insertContractInfoPendingRejected: state.contracts_reducer.insertContractInfoRejected,
-    isSearchMode: state.contracts_reducer.isSearchMode,
+    deleteContractInfoPending: state.contracts_reducer.deleteContractInfoPending,
+    deleteContractInfoRejected: state.contracts_reducer.deleteContractInfoRejected,
+    isSearchMode: state.contracts_reducer.isSearchMode,    
     contracts: state.contracts_reducer.contractsList,
     contractDetails: state.contracts_reducer.contractDetails,
     searchContractsList: state.contracts_reducer.searchContractsList,
