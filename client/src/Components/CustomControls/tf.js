@@ -32,7 +32,7 @@ const StyledTextField = props => {
   var tooltipTemplate = props.tm ? props.tm : null;
   var isRequired = props.isRequired ? props.isRequired : true;
   var isDisabled = props.isDisabled ? props.isDisabled : false;
-  var inputLabelProps = { shrink: true };  
+  var inputLabelProps = { shrink: true };
   var type = props.tp;
   var id = props.id;
   var stateValue = props.stateValue;
@@ -42,24 +42,62 @@ const StyledTextField = props => {
   var multiline = props.multiline ? props.multiline : null;
   var style = props.style;
   var size = 'small'
-  
+
   if (props.select === true) {
-    return <TextField
-      select
-      disabled={isDisabled}
-      required={isRequired}
-      id={id}
-      value={stateValue}
-      style={style}
-      onChange={onChange}      
-      inputProps={inputProps}
-      InputProps={InputProps}
-      SelectProps={{ native: true }}
-      variant='standard'
-      size={size}>
-      <option />
-      {props.values}
-    </TextField>
+    if (tooltipTemplate) {
+      return <StyledTooltip
+        placement="top"
+        disableHoverListener={true}
+        title={
+          <React.Fragment>
+            <Typography
+              color="transparent"
+              style={{
+                background: "transparent",
+                padding: "0px",
+                margin: "0px",
+                transform: document.getElementById('root').style.transform
+              }}>
+              {tooltipTemplate}
+            </Typography>
+          </React.Fragment>
+        }>
+        <TextField
+          select
+          disabled={isDisabled}
+          required={isRequired}
+          id={id}
+          value={stateValue}
+          style={style}
+          onChange={onChange}
+          inputProps={inputProps}
+          InputProps={InputProps}
+          SelectProps={{ native: true }}
+          variant='standard'
+          size={size}>
+          <option />
+          {props.values}
+        </TextField>
+      </StyledTooltip>
+    }
+    else {
+      return <TextField
+        select
+        disabled={isDisabled}
+        required={isRequired}
+        id={id}
+        value={stateValue}
+        style={style}
+        onChange={onChange}
+        inputProps={inputProps}
+        InputProps={InputProps}
+        SelectProps={{ native: true }}
+        variant='standard'
+        size={size}>
+        <option />
+        {props.values}
+      </TextField>
+    }
   }
   else {
     if (tooltipTemplate) {
@@ -114,7 +152,7 @@ const StyledTextField = props => {
         InputProps={InputProps}
         InputLabelProps={inputLabelProps}
         size={size}
-      />      
+      />
     }
   }
 };

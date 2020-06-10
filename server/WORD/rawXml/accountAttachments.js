@@ -189,7 +189,7 @@ module.exports = {
 		if (body.AAY) {
 			for (let index = 0; index < body.AAY.length; index++) {
 				const element = body.AAY[index];
-				if (element.Type == 0) {
+				if (element.Type == 0 || element.Type == 1) {
 					//return '<w:p w:rsidR="00212912" w:rsidRPr="00F871E2" w:rsidRDefault="00262B9D" w:rsidP="00F871E2">' +
 					ret += '<w:p>' +
 						'<w:pPr>' +

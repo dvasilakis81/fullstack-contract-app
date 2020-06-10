@@ -133,7 +133,7 @@ class AayView extends Component {
     this.setState({ submitButtonDisabled: true });
 
     if (this.state.addNewItem === true) {
-      this.props.processContractInfo(this.state, this.props.token.data.token, 'insertAay').then(res => {
+      this.props.processContractInfo(this.state, this.props.token.data.token, 'insertaay').then(res => {
         var msg = 'Η Α.A.Y. με πρωτόκολλο "' + this.state.ProtocolNumber + '/' + getDateFormatForDocument(this.state.ProtocolDate) + '" δημιουργήθηκε επιτυχώς!!!'
         this.setState({ openMessage: true, message: msg, variant: 'success', msgPadding: '10px', submitButtonDisabled: false, addNewItem: false, editItem: false });
         this.resetState();
@@ -143,7 +143,7 @@ class AayView extends Component {
         this.setState({ openMessage: true, message: <><div>{msg}</div><div>{getServerErrorResponseMessage(error)}</div></>, variant: 'error', msgPadding: '10px', submitButtonDisabled: false });
       })
     } else if (this.state.editItem === true) {
-      this.props.processContractInfo(this.state, this.props.token.data.token, 'updateAay').then(res => {
+      this.props.processContractInfo(this.state, this.props.token.data.token, 'updateaay').then(res => {
         var msg = 'Η Α.A.Y. με πρωτόκολλο "' + this.state.ProtocolNumber + '/' + getDateFormatForDocument(this.state.ProtocolDate) + '" επεξεργάστηκε επιτυχώς!!!'
         this.setState({ message: msg, openMessage: true, variant: 'success', msgPadding: '10px', submitButtonDisabled: false, addNewItem: false, editItem: false });
         this.resetState();
@@ -158,7 +158,7 @@ class AayView extends Component {
   requestDeleteΑΑΥ() {
     this.setState({ submitButtonDisabled: true });
 
-    this.props.processContractInfo(this.state, this.props.token.data.token, 'deleteAay').then(res => {
+    this.props.processContractInfo(this.state, this.props.token.data.token, 'deleteaay').then(res => {
       var msg = 'Η Απόφαση Ανάληψης Υποχρέωσης με πρωτόκολλο "' + this.state.ProtocolNumber + '/' + getDateFormatForDocument(this.state.ProtocolDate) + '" διεγράφει επιτυχώς!!!'
       this.setState({ openMessage: true, message: msg, variant: 'success', msgPadding: '10px', submitButtonDisabled: false, addNewItem: false, editItem: false, deleteItem: false });
       this.resetState();
@@ -205,27 +205,28 @@ class AayView extends Component {
 
   getEditTemplate() {
 
-    if (this.state.Type == 0) {
+    if (this.state.Type == 0 || this.state.Type == 1) {
       return <>
-        <div style={{ display: 'flex', flexFlow: 'row', height: 'auto', justifyContent: 'center', padding: '10px', flexWrap: 'wrap', width: '90%' }}>
-          <MyTextField tm={getAayTooltipTemplate(this.state, 1)} tp='text' title='Α.Α.Υ' id='AayValue' stateValue={this.state.AayValue} isRequired={true} isDisabled={false} onChange={this.onChange} inputProps={{ style: { textAlign: 'center' }, maxLength: 20 }} width='45%' />
-          <ProtocolInput tm1={getAayTooltipTemplate(this.state, 2)} tm2={getAayTooltipTemplate(this.state, 3)} title='Α.Π. Α.Α.Υ.' idn='ProtocolNumber' idd='ProtocolDate' protocolNumber={this.state.ProtocolNumber} protocolDate={this.state.ProtocolDate} onChange={this.onChange} tp1='text' tp2='date' width='45%' />
+        <div style={{ display: 'flex', flexFlow: 'row', height: 'auto', justifyContent: 'center', padding: '10px', flexWrap: 'nowrap', width: '90%' }}>
+          <MyTextField tm={getAayTooltipTemplate(this.state, 1)} tp='text' title='Α.Α.Υ' id='AayValue' stateValue={this.state.AayValue} isRequired={true} isDisabled={false} onChange={this.onChange} inputProps={{ style: { textAlign: 'center' }, maxLength: 20 }} width='50%' />
+          <ProtocolInput tm1={getAayTooltipTemplate(this.state, 2)} tm2={getAayTooltipTemplate(this.state, 3)} title='Α.Π. Α.Α.Υ.' idn='ProtocolNumber' idd='ProtocolDate' protocolNumber={this.state.ProtocolNumber} protocolDate={this.state.ProtocolDate} onChange={this.onChange} tp1='text' tp2='date' width='50%' />
         </div>
-        <div style={{ display: 'flex', flexFlow: 'row', height: 'auto', justifyContent: 'center', padding: '10px', flexWrap: 'wrap', width: '90%' }}>
-          <MyTextField tm={getAayTooltipTemplate(this.state, 4)} tp='number' title='ΕΑΔ αριθμός' id='EadNumber' stateValue={this.state.EadNumber} isRequired={true} isDisabled={false} onChange={this.onChange} inputProps={{ style: { textAlign: 'center' } }} width='45%' />
-          <MyTextField tm={getAayTooltipTemplate(this.state, 5)} tp='text' title='ΑΔΑ' id='ADA' stateValue={this.state.ADA} isRequired={true} isDisabled={false} onChange={this.onChange} inputProps={{ style: { textAlign: 'center' }, maxLength: 20 }} width='45%' />
+        <div style={{ display: 'flex', flexFlow: 'row', height: 'auto', justifyContent: 'center', padding: '10px', flexWrap: 'nowrap', width: '90%' }}>
+          <MyTextField tm={getAayTooltipTemplate(this.state, 4)} tp='number' title='ΕΑΔ αριθμός' id='EadNumber' stateValue={this.state.EadNumber} isRequired={true} isDisabled={false} onChange={this.onChange} inputProps={{ style: { textAlign: 'center' } }} width='50%' />
+          <MyTextField tm={getAayTooltipTemplate(this.state, 5)} tp='text' title='ΑΔΑ' id='ADA' stateValue={this.state.ADA} isRequired={true} isDisabled={false} onChange={this.onChange} inputProps={{ style: { textAlign: 'center' }, maxLength: 20 }} width='50%' />
         </div>
       </>
     } else if (this.state.Type == 2) {
       return <>
-        <div style={{ display: 'flex', flexFlow: 'row', height: 'auto', justifyContent: 'center', padding: '10px', flexWrap: 'wrap', width: '90%' }}>
-          <ProtocolInput tm1={getAayOverthrowTooltipTemplate(this.state, 1)} tm2={getAayOverthrowTooltipTemplate(this.state, 2)} title='Α.Π. Α.Α.Υ.' idn='ProtocolNumber' idd='ProtocolDate' protocolNumber={this.state.ProtocolNumber} protocolDate={this.state.ProtocolDate} onChange={this.onChange} tp1='text' tp2='date' width='45%' />
-        </div>
-        <div style={{ display: 'flex', flexFlow: 'row', height: 'auto', justifyContent: 'center', padding: '10px', flexWrap: 'wrap', width: '90%' }}>          
-          <MyTextField tm={getAayOverthrowTooltipTemplate(this.state, 3)} tp='text' title='ΑΔΑ' id='ADA' stateValue={this.state.ADA} isRequired={true} isDisabled={false} onChange={this.onChange} inputProps={{ style: { textAlign: 'center' }, maxLength: 20 }} width='45%' />
-        </div>
-        <div style={{ display: 'flex', flexFlow: 'row', height: 'auto', justifyContent: 'center', padding: '10px', flexWrap: 'wrap', width: '90%' }}>
-          <MyTextField tm={getAayOverthrowTooltipTemplate(this.state, 4)} title='Ποια A.A.Y. ανατρέπεται?' id='Overthrow' stateValue={this.state.Overthrow} values={this.getAayValuesToOverthrow()} isRequired={true} isDisabled={false} onChange={this.onChange} select={true} width='45%' />
+        <div style={{ display: 'flex', flexFlow: 'column', height: 'auto', justifyContent: 'center', paddingLeft: '0px', flexWrap: 'nowrap', width: '90%' }}>
+          <div style={{ display: 'flex', flexFlow: 'row', height: 'auto', justifyContent: 'left', margin: '10px', flexWrap: 'nowrap', width: '100%' }}>
+            <ProtocolInput tm1={getAayOverthrowTooltipTemplate(this.state, 1)} tm2={getAayOverthrowTooltipTemplate(this.state, 2)} title='Α.Π. Α.Α.Υ.' idn='ProtocolNumber' idd='ProtocolDate' protocolNumber={this.state.ProtocolNumber} protocolDate={this.state.ProtocolDate} onChange={this.onChange} tp1='text' tp2='date' width='50%' />
+            <MyTextField tm={getAayOverthrowTooltipTemplate(this.state, 3)} tp='text' title='ΑΔΑ' id='ADA' stateValue={this.state.ADA} isRequired={true} isDisabled={false} onChange={this.onChange} inputProps={{ style: { textAlign: 'center' }, maxLength: 20 }} width='50%' />
+          </div>
+          <div style={{ display: 'flex', flexFlow: 'row', height: 'auto', justifyContent: 'left', margin: '10px', flexWrap: 'nowrap', width: '100%' }}>
+            <MyTextField tm={getAayOverthrowTooltipTemplate(this.state, 4)} title='Ποια A.A.Y. ανατρέπεται?' id='Overthrow' stateValue={this.state.Overthrow} values={this.getAayValuesToOverthrow()} isRequired={true} isDisabled={false} onChange={this.onChange} select={true} width='50%' />
+            <div style={{ width: '50%' }}></div>
+          </div>
         </div>
       </>
     }

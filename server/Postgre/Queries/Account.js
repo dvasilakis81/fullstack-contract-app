@@ -2,6 +2,8 @@ const pool = require('../dbConfig').pool
 const util = require('util')
 const helper = require('../../HelperMethods/helpermethods')
 const aayQueries = require('./AAY')
+const invoiceQueries = require('./Invoice')
+
 
 // var types = require('pg').types
 // types.setTypeParser(1700, function(val) {
@@ -73,7 +75,7 @@ const getAccountById = (request, response, next) => {
 
   // try {
   var sqlQuery = util.format('SELECT *, ' +
-    '(SELECT json_agg(Account) FROM (SELECT acc."ProtocolNumber" as firstAccountProtocolNumber, acc."ProtocolDate" as firstAccountProtocolDate FROM "Ordering"."Account" as acc WHERE acc."Number"=1 AND acc."ContractId"=%s) Account) AS FirstProtocolInfo, ' +    
+    '(SELECT json_agg(Account) FROM (SELECT acc."ProtocolNumber" as firstAccountProtocolNumber, acc."ProtocolDate" as firstAccountProtocolDate FROM "Ordering"."Account" as acc WHERE acc."Number"=1 AND acc."ContractId"=%s) Account) AS FirstProtocolInfo, ' +
     '(SELECT json_agg(Invoice) FROM (SELECT * FROM "Ordering"."Invoice" as i WHERE i."AccountId" = a."Id") Invoice) AS Invoice, ' +
     '(SELECT json_agg(CC) FROM (SELECT * FROM "Ordering"."CC" as cc WHERE cc."AccountId" = a."Id") CC) AS CC, ' +
     '(SELECT json_agg(MonitoringCommittee) FROM (SELECT * FROM "Ordering"."MonitoringCommittee" as mm WHERE mm."AccountId" = a."Id") MonitoringCommittee) AS MonitoringCommittee, ' +
@@ -185,7 +187,7 @@ const insertAccount = (req, res, next) => {
                 AmountTotal: results.rows[0].AmountTotal
               })
 
-              aayQueries.insertAAY(req, res, next, accountInfo);
+              invoiceQueries.insertInvoice(req, res, next, accountInfo);
             }
             else
               res.status(408).json('Ο λογαριασμός δεν μπόρεσε να δημιουργηθεί ');
@@ -215,7 +217,7 @@ const updateAccount = (req, res, next) => {
     helper.addQuotes(req.body.DeliveryGoodsDate),
     helper.addQuotes(req.body.DocumentDate),
     helper.addQuotes(req.body.FirstAccountProtocolNumber),
-    helper.addQuotes(req.body.FirstAccountProtocolDate),    
+    helper.addQuotes(req.body.FirstAccountProtocolDate),
     helper.addQuotes(new Date().toLocaleDateString()),
     Number(req.body.AccountId));
 
@@ -237,7 +239,7 @@ const updateAccount = (req, res, next) => {
         AmountTotal: results.rows[0].AmountTotal
       })
 
-      aayQueries.updateAAY(req, res, next, accountInfo);
+      invoiceQueries.updateInvoice(req, res, next, accountInfo);
     }
   })
 }
@@ -248,5 +250,5 @@ module.exports = {
   getRemainAmountOfContract,
   updateAccount,
   insertAccount,
-  getAccountsInfo  
+  getAccountsInfo
 }

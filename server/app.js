@@ -22,6 +22,7 @@ var dbAccount = require('./Postgre/Queries/Account')
 var dbError = require('./Postgre/Queries/Error')
 var dbLogin = require('./Postgre/Queries/Login')
 var dbParametric = require('./Postgre/Queries/Parametric')
+var dbAay = require('./Postgre/Queries/AAY')
 var dbBoardDecision = require('./Postgre/Queries/BoardDecision')
 var dbDecisionCoordinatorDecentrilizedAdministration = require('./Postgre/Queries/DecisionCoordinatorDecentrilizedAdministration')
 var dbCourtOfAuditors = require('./Postgre/Queries/CourtOfAuditors')
@@ -193,6 +194,9 @@ app.get('/getaccountsinfo', dbLogin.checkToken, dbAccount.getAccountsInfo);
 app.post('/insertaccount', dbLogin.checkToken, dbAccount.insertAccount);
 app.post('/updateaccount', dbLogin.checkToken, dbAccount.updateAccount);
 
+app.post('/insertaay', dbLogin.checkToken, dbAay.insert);
+app.post('/updateaay', dbLogin.checkToken, dbAay.update);
+app.post('/deleteaay', dbLogin.checkToken, dbAay.remove);
 app.post('/insertdecisionboard', dbLogin.checkToken, dbBoardDecision.insert);
 app.post('/updatedecisionboard', dbLogin.checkToken, dbBoardDecision.update);
 app.post('/deletedecisionboard', dbLogin.checkToken, dbBoardDecision.remove);

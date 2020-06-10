@@ -2,6 +2,8 @@ const helper = require('../../HelperMethods/helpermethods')
 const util = require('util');
 
 // import { getWord } from '../../../HelperMethods/helpermethods'
+const fontSize = 22
+const fontFamily = 'Arial'
 
 module.exports = {
 	getAttachment1: function (body) {
@@ -166,39 +168,164 @@ module.exports = {
 		return ret;
 	},
 	getAttachment5: function (body) {
-		var AYYValue = body.Account[0].AYY[0].Value;
-		var AYYYear = body.Account[0].AYY[0].Year;
-		var AAYProtocolNumber = body.Account[0].AYY[0].ProtocolNumber;
-		var AAYProtocolDate = body.Account[0].AYY[0].ProtocolDate;
-		var AAYADA = body.Account[0].AYY[0].ADA;
-		var isFirstOfTheYear = body.Account[0].IsFirstOfTheYear
-		var startPhrase = (isFirstOfTheYear === true ? 'Πρωτότυπο και φωτοαντίγραφο' : 'Δύο (2) φωτ/φα');
 
-		var rText = util.format('<w:t>%s της με αρ. %s/%s (Α.Π. %s/%s) και ΑΔΑ %s Απόφασης Ανάληψης Υποχρέωσης.</w:t>', startPhrase, AYYValue, AYYYear, AAYProtocolNumber, AAYProtocolDate, AAYADA);
-		return '<w:p w:rsidR="00212912" w:rsidRPr="00F871E2" w:rsidRDefault="00262B9D" w:rsidP="00F871E2">' +
-			'<w:pPr>' +
-			'<w:numPr>' +
-			'<w:ilvl w:val="0"/>' +
-			'<w:numId w:val="2"/>' +
-			'</w:numPr>' +
-			'<w:tabs>' +
-			'<w:tab w:val="left" w:pos="142"/>' +
-			'<w:tab w:val="left" w:pos="284"/>' +
-			'<w:tab w:val="left" w:pos="6195"/>' +
-			'</w:tabs>' +
-			'<w:spacing w:line="276" w:lineRule="auto"/>' +
-			'<w:jc w:val="both"/>' +
-			'<w:rPr>' +
-			'<w:rFonts w:ascii="Garamond" w:hAnsi="Garamond"/>' +
-			'</w:rPr>' +
-			'</w:pPr>' +
-			'<w:r w:rsidRPr="00DB37DE">' +
-			'<w:rPr>' +
-			'<w:rFonts w:ascii="Garamond" w:hAnsi="Garamond"/>' +
-			'</w:rPr>' +
-			util.format('<w:t>%s</w:t>', rText) +
-			'</w:r>' +
-			'</w:p>'
+		// Πρωτότυπο και φωτοαντίγραφο της με αριθμ. Α01197/254432/08-10-2019 ΕΑΔ 1196 (ΑΔΑ 6ΡΗ5Ω6Μ-ΨΗΚ) Απόφασης Ανάληψης Υποχρέωσης 
+		// Πρωτότυπο και φωτοαντίγραφο της υπ΄ αριθμ. 333293/31-12-2019 (ΑΔΑ ΨΘΡΨΩ6Μ-Λ3Υ) ΑΠΟΦΑΣΗΣ ΑΝΑΤΡΟΠΗΣ ΑΝΑΛΗΨΗΣ ΥΠΟΧΡΕΩΣΗΣ (παρ.2 άρθρο 4 ΠΔ 80/2016), της Α01197/2019 Α.Α.Υ. 
+		var ret = '';
+		if (body.AAY) {
+			for (let index = 0; index < body.AAY.length; index++) {
+				const element = body.AAY[index];
+				if (element.Type == 0 || element.Type == 1) {
+					//return '<w:p w:rsidR="00212912" w:rsidRPr="00F871E2" w:rsidRDefault="00262B9D" w:rsidP="00F871E2">' +
+					ret += '<w:p>' +
+						'<w:pPr>' +
+						'<w:numPr>' +
+						'<w:ilvl w:val="0"/>' +
+						'<w:numId w:val="2"/>' +
+						'</w:numPr>' +
+						// '<w:tabs>' +
+						// '<w:tab w:val="left" w:pos="142"/>' +
+						// '<w:tab w:val="left" w:pos="284"/>' +
+						// '<w:tab w:val="left" w:pos="6195"/>' +
+						// '</w:tabs>' +
+						'<w:spacing w:line="276" w:lineRule="auto"/>' +						
+						'<w:jc w:val="both"/>' +
+						'<w:rPr>' +
+						util.format('<w:rFonts w:ascii="%s" w:hAnsi="%s"/>', fontFamily, fontFamily) +
+						'</w:rPr>' +
+						'</w:pPr>' +
+						'<w:r>' +
+						'<w:rPr>' +
+						util.format('<w:rFonts w:ascii="%s" w:hAnsi="%s"/>', fontFamily, fontFamily) +
+						util.format('<w:sz w:val="%s" />', fontSize) +
+						util.format('<w:szCs w:val="%s" />', fontSize) +
+						'</w:rPr>' +
+						util.format('<w:t xml:space="preserve">Πρωτότυπο και φωτοαντίγραφο της υπ΄ αριθμ %s/%s/%s ΕΑΔ %s (ΑΔΑ </w:t>', element.Value, element.ProtocolNumber, element.ProtocolDate, element.EadNumber) +
+						'</w:r>' +
+						'<w:r>' +
+						'<w:rPr>' +
+						util.format('<w:rFonts w:ascii="%s" w:hAnsi="%s"/>', fontFamily, fontFamily) +
+						'<w:b />' +
+						'<w:bCs />' +
+						util.format('<w:sz w:val="%s" />', fontSize) +
+						util.format('<w:szCs w:val="%s" />', fontSize) +
+						'<w:u w:val="single" />' +
+						'</w:rPr>' +
+						util.format('<w:t xml:space="preserve">%s</w:t>', element.ADA) +
+						'</w:r>' +
+						'<w:r>' +
+						'<w:rPr>' +
+						util.format('<w:rFonts w:ascii="%s" w:hAnsi="%s"/>', fontFamily, fontFamily) +
+						util.format('<w:sz w:val="%s" />', fontSize) +
+						util.format('<w:szCs w:val="%s" />', fontSize) +
+						'</w:rPr>' +
+						'<w:t xml:space="preserve">) Απόφαση Ανάληψης Υποχρέωσης</w:t>' +
+						'</w:r>' +
+						'</w:p>'
+				} else if (element.Type == 2) {
+					ret += '<w:p>' +
+						'<w:pPr>' +
+						'<w:numPr>' +
+						'<w:ilvl w:val="0"/>' +
+						'<w:numId w:val="2"/>' +
+						'</w:numPr>' +
+						// '<w:tabs>' +
+						// '<w:tab w:val="left" w:pos="142"/>' +
+						// '<w:tab w:val="left" w:pos="284"/>' +
+						// '<w:tab w:val="left" w:pos="6195"/>' +
+						// '</w:tabs>' +
+						'<w:spacing w:line="276" w:lineRule="auto"/>' +						
+						'<w:jc w:val="both"/>' +
+						'<w:rPr>' +
+						util.format('<w:rFonts w:ascii="%s" w:hAnsi="%s"/>', fontFamily, fontFamily) +
+						'</w:rPr>' +
+						'</w:pPr>' +
+						'<w:r>' +
+						'<w:rPr>' +
+						util.format('<w:rFonts w:ascii="%s" w:hAnsi="%s"/>', fontFamily, fontFamily) +
+						util.format('<w:sz w:val="%s" />', fontSize) +
+						util.format('<w:szCs w:val="%s" />', fontSize) +
+						'</w:rPr>' +
+						util.format('<w:t xml:space="preserve">Πρωτότυπο και φωτοαντίγραφο της υπ΄ αριθμ. %s/%s (ΑΔΑ </w:t>', element.Value, element.ProtocolNumber, element.ProtocolDate) +
+						'</w:r>' +
+						'<w:r>' +
+						'<w:rPr>' +
+						util.format('<w:rFonts w:ascii="%s" w:hAnsi="%s"/>', fontFamily, fontFamily) +
+						'<w:b />' +
+						'<w:bCs />' +
+						util.format('<w:sz w:val="%s" />', fontSize) +
+						util.format('<w:szCs w:val="%s" />', fontSize) +
+						'<w:u w:val="single" />' +
+						'</w:rPr>' +
+						util.format('<w:t xml:space="preserve">%s</w:t>', element.ADA) +
+						'</w:r>' +
+						'<w:r>' +
+						'<w:rPr>' +
+						util.format('<w:rFonts w:ascii="%s" w:hAnsi="%s"/>', fontFamily, fontFamily) +
+						util.format('<w:sz w:val="%s" />', fontSize) +
+						util.format('<w:szCs w:val="%s" />', fontSize) +
+						'<w:u w:val="single" />' +
+						'</w:rPr>' +
+						util.format('<w:t xml:space="preserve">)</w:t>') +
+						'</w:r>' +
+						'<w:r>' +
+						'<w:rPr>' +
+						util.format('<w:rFonts w:ascii="%s" w:hAnsi="%s"/>', fontFamily, fontFamily) +
+						'<w:b />' +
+						'<w:bCs />' +
+						util.format('<w:sz w:val="%s" />', fontSize) +
+						util.format('<w:szCs w:val="%s" />', fontSize) +
+						'<w:u w:val="single" />' +
+						'</w:rPr>' +
+						util.format('<w:t xml:space="preserve">ΑΠΟΦΑΣΗ ΑΝΑΤΡΟΠΗΣ ΑΝΑΛΗΨΗΣ ΥΠΟΧΡΕΩΣΗΣ</w:t>') +
+						'</w:r>' +
+						'<w:r>' +
+						'<w:rPr>' +
+						util.format('<w:rFonts w:ascii="%s" w:hAnsi="%s"/>', fontFamily, fontFamily) +
+						util.format('<w:sz w:val="%s" />', fontSize) +
+						util.format('<w:szCs w:val="%s" />', fontSize) +
+						'</w:rPr>' +
+						util.format('<w:t xml:space="preserve">(παρ.2 άρθρο 4 ΠΔ 80/2016), της %s</w:t>', element.Overthrow) +
+						'</w:r>' +
+						'</w:p>'
+				}
+			}
+			return ret;
+		}
+
+		// var AYYValue = body.Account[0].AYY[0].Value;
+		// var AYYYear = body.Account[0].AYY[0].Year;
+		// var AAYProtocolNumber = body.Account[0].AYY[0].ProtocolNumber;
+		// var AAYProtocolDate = body.Account[0].AYY[0].ProtocolDate;
+		// var AAYADA = body.Account[0].AYY[0].ADA;
+		// var isFirstOfTheYear = body.Account[0].IsFirstOfTheYear
+		// var startPhrase = (isFirstOfTheYear === true ? 'Πρωτότυπο και φωτοαντίγραφο' : 'Δύο (2) φωτ/φα');
+
+		// var rText = util.format('<w:t>%s της με αρ. %s/%s (Α.Π. %s/%s) και ΑΔΑ %s Απόφασης Ανάληψης Υποχρέωσης.</w:t>', startPhrase, AYYValue, AYYYear, AAYProtocolNumber, AAYProtocolDate, AAYADA);
+		// return '<w:p w:rsidR="00212912" w:rsidRPr="00F871E2" w:rsidRDefault="00262B9D" w:rsidP="00F871E2">' +
+		// 	'<w:pPr>' +
+		// 	'<w:numPr>' +
+		// 	'<w:ilvl w:val="0"/>' +
+		// 	'<w:numId w:val="2"/>' +
+		// 	'</w:numPr>' +
+		// 	'<w:tabs>' +
+		// 	'<w:tab w:val="left" w:pos="142"/>' +
+		// 	'<w:tab w:val="left" w:pos="284"/>' +
+		// 	'<w:tab w:val="left" w:pos="6195"/>' +
+		// 	'</w:tabs>' +
+		// 	'<w:spacing w:line="276" w:lineRule="auto"/>' +
+		// 	'<w:jc w:val="both"/>' +
+		// 	'<w:rPr>' +
+		// 	'<w:rFonts w:ascii="Garamond" w:hAnsi="Garamond"/>' +
+		// 	'</w:rPr>' +
+		// 	'</w:pPr>' +
+		// 	'<w:r w:rsidRPr="00DB37DE">' +
+		// 	'<w:rPr>' +
+		// 	'<w:rFonts w:ascii="Garamond" w:hAnsi="Garamond"/>' +
+		// 	'</w:rPr>' +
+		// 	util.format('<w:t>%s</w:t>', rText) +
+		// 	'</w:r>' +
+		// 	'</w:p>'
 	},
 	getAttachment6: function (body) {
 		// 3.	Πρωτότυπο & φωτ/φο του με αριθμ. {a_in}/{a_id} Τιμολογίου Παροχής Υπηρεσιών της {c_conc}

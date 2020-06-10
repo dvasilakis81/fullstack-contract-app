@@ -933,7 +933,7 @@ class AccountInfo extends React.Component {
 										{this.getCCInfoTemplate(contractInfo, accountInfo)}
 										{this.getGeneralAccountInfo(contractInfo, accountInfo)}
 										{this.getReservationsTemplate(contractInfo, accountInfo)}
-										{this.getAAYTemplate(contractInfo, accountInfo)}
+										{/* {this.getAAYTemplate(contractInfo, accountInfo)} */}
 										{this.getInvoiceTemplate(contractInfo, accountInfo)}
 										{this.getLawArticleForDownpaymentTemplate(accountInfo)}
 										{this.getDecisionBoardTemplate(contractInfo, accountInfo)}
