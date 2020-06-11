@@ -1,5 +1,6 @@
 const helper = require('../../HelperMethods/helpermethods')
 const util = require('util');
+const common = require('./common')
 
 // import { getWord } from '../../../HelperMethods/helpermethods'
 const fontSize = 22
@@ -37,18 +38,8 @@ module.exports = {
 			'<w:spacing w:line="276" w:lineRule="auto"/>' +
 			'<w:ind w:left="-142" w:hanging="426" />' +
 			'<w:jc w:val="both"/>' +
-			'<w:rPr>' +
-			'<w:rFonts w:ascii="Garamond" w:hAnsi="Garamond"/>' +
-			'</w:rPr>' +
 			'</w:pPr>' +
-			'<w:r>' +
-			'<w:rPr>' +
-			'<w:rFonts w:ascii="Garamond" w:hAnsi="Garamond"/>' +
-			'<w:sz w:val="28" />' +
-			'<w:szCs w:val="28" />' +
-			'</w:rPr>' +
-			util.format('<w:t>%s</w:t>', rText) +
-			'</w:r>' +
+			common.getrElement(rText) +
 			'</w:p>'
 	},
 	getAttachment2: function (body) {
@@ -56,47 +47,26 @@ module.exports = {
 		if (body.DecisionBoard) {
 			for (let index = 0; index < body.DecisionBoard.length; index++) {
 				const element = body.DecisionBoard[index];
-				var text = '';
-				if (index === 0) {
-					text = util.format('Τη με αρ. %s/%s Απόφαση του Δημοτικού Συμβουλίου (Α.Δ.Σ.) Αθηναίων ', element.ProtocolNumber, element.ProtocolDate)
-					if (element.ADA)
-						text += util.format('(ΑΔΑ %s) ', element.ADA)
-					text += util.format(' με την οποία εγκρίθηκαν: η υπογραφή των όρων, το σχέδιο και τα ανά έτος ποσά της προαναφερθείσας Προγραμματικής Σύμβασης. ')
-				}
-				else {
-					text = util.format('Τη με αρ. %s/%s Απόφαση του Δημοτικού Συμβουλίου (Α.Δ.Σ.) Αθηναίων ', element.ProtocolNumber, element.ProtocolDate)
-					if (element.ADA)
-						text += util.format('(ΑΔΑ %s) ', element.ADA)
-					text += util.format(' με την οποία διορθώθηκε η ανωτέρω Α.Δ.Σ. “%s”. ', element.Content)
-				}
 
-				ret += '<w:p w:rsidR="0067614F" w:rsidRPr="0067614F" w:rsidRDefault="00262B9D" w:rsidP="0067614F">' +
-					'<w:pPr>' +
-					'<w:numPr>' +
-					'<w:ilvl w:val="0"/>' +
-					'<w:numId w:val="2"/>' +
-					'</w:numPr>' +
-					// '<w:tabs>' +
-					// '<w:tab w:val="left" w:pos="142"/>' +
-					// '<w:tab w:val="left" w:pos="284"/>' +
-					// '<w:tab w:val="left" w:pos="6195"/>' +
-					// '</w:tabs>' +
-					'<w:spacing w:line="276" w:lineRule="auto"/>' +
-					'<w:ind w:left="-142" w:hanging="426" />' +
-					'<w:jc w:val="both"/>' +
-					'<w:rPr>' +
-					'<w:rFonts w:ascii="Garamond" w:hAnsi="Garamond"/>' +
-					'</w:rPr>' +
-					'</w:pPr>' +
-					'<w:r w:rsidRPr="00F871E2">' +
-					'<w:rPr>' +
-					'<w:rFonts w:ascii="Garamond" w:hAnsi="Garamond"/>' +
-					'<w:sz w:val="28" />' +
-					'<w:szCs w:val="28" />' +
-					'</w:rPr>' +
-					util.format('<w:t>%s</w:t>', text) +
-					'</w:r>' +
-					'</w:p>'
+				if (element.ContentAccount) {
+					var rText = util.format('Τη με αρ. %s/%s Απόφαση του Δημοτικού Συμβουλίου (Α.Δ.Σ.) Αθηναίων ', element.ProtocolNumber, element.ProtocolDate)
+					var lText = util.format(' με την οποία διορθώθηκε η ανωτέρω Α.Δ.Σ. “%s”. ', element.ContentAccount)
+
+					ret += '<w:p>' +
+						'<w:pPr>' +
+						'<w:numPr>' +
+						'<w:ilvl w:val="0"/>' +
+						'<w:numId w:val="2"/>' +
+						'</w:numPr>' +
+						'<w:spacing w:line="276" w:lineRule="auto"/>' +
+						'<w:ind w:left="-142" w:hanging="426" />' +
+						'<w:jc w:val="both"/>' +
+						'</w:pPr>' +
+						common.getrElement(rText) +
+						common.getADAXml(element.ADA) +
+						common.getrElement(lText) +
+						'</w:p>'
+				}
 			}
 		}
 		return ret;
@@ -112,7 +82,7 @@ module.exports = {
 				if (body.DecisionBoard && body.DecisionBoard[index])
 					rText += util.format(' για τη νόμιμη λήψη της %s/%s Α.Δ.Σ. .', body.DecisionBoard[index].ProtocolNumber, body.DecisionBoard[index].ProtocolDate)
 
-				ret += '<w:p w:rsidR="00057639" w:rsidRPr="00840235" w:rsidRDefault="00262B9D" w:rsidP="0067614F">' +
+				ret += '<w:p>' +
 					'<w:pPr>' +
 					'<w:numPr>' +
 					'<w:ilvl w:val="0"/>' +

@@ -6,12 +6,13 @@ const contractMethods = require('./Contract')
 const insert = (req, res, next) => {
   var contractId = req.body.contractId;
   var orderNo = req.body.orderNo;  
-  var sqlQuery = 'INSERT INTO "Ordering"."DecisionBoard"("ContractId","ProtocolNumber","ProtocolDate","Content","ADA", "OrderNo") VALUES ';
-  sqlQuery += util.format('(%s, %s, %s, %s, %s, %s)', 
+  var sqlQuery = 'INSERT INTO "Ordering"."DecisionBoard"("ContractId","ProtocolNumber","ProtocolDate","ContentTransmission", "ContentAccount","ADA", "OrderNo") VALUES ';
+  sqlQuery += util.format('(%s, %s, %s, %s, %s, %s, %s)', 
   helper.addQuotes(contractId), 
   helper.addQuotes(req.body.ProtocolNumber), 
   helper.addQuotes(req.body.ProtocolDate), 
-  helper.addQuotes(req.body.Content), 
+  helper.addQuotes(req.body.ContentTransmission), 
+  helper.addQuotes(req.body.ContentAccount),
   helper.addQuotes(req.body.ADA ? req.body.ADA : ''), 
   helper.addQuotes(orderNo));
 
@@ -23,7 +24,7 @@ const insert = (req, res, next) => {
         next(error);
       else {
         helper.consoleLog("Insert Decision Board \n");
-        contractMethods.getContractById(req, res, next, contractId)        
+        contractMethods.getContractById(req, res, next, contractId)
       }
     }
   })
@@ -32,12 +33,13 @@ const insert = (req, res, next) => {
 const update = (req, res, next) => {
   var contractId = req.body.contractId;
   var sqlQuery = util.format('UPDATE "Ordering"."DecisionBoard" ' +
-    'SET "ProtocolNumber"=%s,"ProtocolDate"=%s,"Content"=%s,"ADA"=%s ' +
+    'SET "ProtocolNumber"=%s,"ProtocolDate"=%s,"ContentTransmission"=%s,"ContentAccount"=%s,"ADA"=%s ' +
     'WHERE "Id"=%s AND "ContractId"=%s' +
     'RETURNING * ', 
     helper.addQuotes(req.body.ProtocolNumber), 
     helper.addQuotes(req.body.ProtocolDate), 
-    helper.addQuotes(req.body.Content), 
+    helper.addQuotes(req.body.ContentTransmission), 
+    helper.addQuotes(req.body.ContentAccount),
     helper.addQuotes(req.body.ADA), 
     helper.addQuotes(req.body.Id),
     contractId)

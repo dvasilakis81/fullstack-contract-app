@@ -30,8 +30,8 @@ const StyledTextField = props => {
   //const { classes, ...rest } = props;
 
   var tooltipTemplate = props.tm ? props.tm : null;
-  var isRequired = props.isRequired ? props.isRequired : true;
-  var isDisabled = props.isDisabled ? props.isDisabled : false;
+  var isRequired = props.isRequired;
+  var isDisabled = props.isDisabled;
   var inputLabelProps = { shrink: true };
   var type = props.tp;
   var id = props.id;

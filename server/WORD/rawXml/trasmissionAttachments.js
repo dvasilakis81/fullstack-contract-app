@@ -1,5 +1,6 @@
 const helper = require('../../HelperMethods/helpermethods')
 const util = require('util');
+const common = require('./common')
 
 // import { getWord } from '../../../HelperMethods/helpermethods'
 const fontSize = 22
@@ -24,7 +25,7 @@ module.exports = {
 		else
 			rText = util.format('Δύο (2) φωτ/φα της με Α.Π. %s/%s %s', contractProtocolNumber, contractProtocolDate, contractTypeLabel)
 
-		return '<w:p w:rsidR="00057639" w:rsidRDefault="00262B9D" w:rsidP="00057639">' +
+		return '<w:p>' +
 			'<w:pPr>' +
 			'<w:numPr>' +
 			'<w:ilvl w:val="0"/>' +
@@ -37,16 +38,8 @@ module.exports = {
 			'</w:tabs>' +
 			'<w:spacing w:line="276" w:lineRule="auto"/>' +
 			'<w:jc w:val="both"/>' +
-			'<w:rPr>' +
-			'<w:rFonts w:ascii="Garamond" w:hAnsi="Garamond"/>' +
-			'</w:rPr>' +
 			'</w:pPr>' +
-			'<w:r>' +
-			'<w:rPr>' +
-			'<w:rFonts w:ascii="Garamond" w:hAnsi="Garamond"/>' +
-			'</w:rPr>' +
-			util.format('<w:t>%s</w:t>', rText) +
-			'</w:r>' +
+			common.getrElement(rText) +
 			'</w:p>'
 	},
 	getAttachment2: function (body) {
@@ -54,12 +47,10 @@ module.exports = {
 		if (body.DecisionBoard) {
 			for (let index = 0; index < body.DecisionBoard.length; index++) {
 				const element = body.DecisionBoard[index];
-				var rText = util.format('Δύο (2) φωτοαντίγραφα της με αρ. %s/%s Απόφασης του Δημοτικού Συμβουλίου (Α.Δ.Σ.) ', element.ProtocolNumber, element.ProtocolDate);
-				if (element.ADA)
-					rText += util.format('με Α.Δ.Α. ', element.ADA);
-				rText += ' .';
-
-				ret += '<w:p w:rsidR="0067614F" w:rsidRPr="0067614F" w:rsidRDefault="00262B9D" w:rsidP="0067614F">' +
+				var rText = util.format("Δύο (2) φωτοαντίγραφα της υπ' αριθ. %s/%s ", element.ProtocolNumber, element.ProtocolDate);
+				var lText = util.format(' Απόφασης του Δημοτικού Συμβουλίου %s' , element.ContentTransmission);
+				
+				ret += '<w:p>' +
 					'<w:pPr>' +
 					'<w:numPr>' +
 					'<w:ilvl w:val="0"/>' +
@@ -72,16 +63,10 @@ module.exports = {
 					'</w:tabs>' +
 					'<w:spacing w:line="276" w:lineRule="auto"/>' +
 					'<w:jc w:val="both"/>' +
-					'<w:rPr>' +
-					'<w:rFonts w:ascii="Garamond" w:hAnsi="Garamond"/>' +
-					'</w:rPr>' +
 					'</w:pPr>' +
-					'<w:r w:rsidRPr="00F871E2">' +
-					'<w:rPr>' +
-					'<w:rFonts w:ascii="Garamond" w:hAnsi="Garamond"/>' +
-					'</w:rPr>' +
-					util.format('<w:t xml:space="preserve">%s</w:t>', rText) +
-					'</w:r>' +
+					common.getrElement(rText) +
+					common.getADAXml(element.ADA) +
+					common.getrElement(lText) +
 					'</w:p>'
 			}
 		}
@@ -93,12 +78,10 @@ module.exports = {
 		if (body.DecisionCoordinatorDecentrilizedAdministration) {
 			for (let index = 0; index < body.DecisionCoordinatorDecentrilizedAdministration.length; index++) {
 				const element = body.DecisionCoordinatorDecentrilizedAdministration[index];
-				var rText = util.format('Δύο (2) φωτοαντίγραφα της με Α.Π. %s/%s Απόφασης του Συντονιστή της Αποκεντρωμένης Διοίκησης Αττικής', element.ProtocolNumber, element.ProtocolDate)
-				if (element.ADA)
-					rText += util.format('με Α.Δ.Α. ', element.ADA);
+				var rText = util.format('Δύο (2) φωτοαντίγραφα της με Α.Π. %s/%s Απόφασης του Συντονιστή της Αποκεντρωμένης Διοίκησης Αττικής ', element.ProtocolNumber, element.ProtocolDate)
 				rText += util.format('.');
 
-				ret += '<w:p w:rsidR="00057639" w:rsidRPr="00840235" w:rsidRDefault="00262B9D" w:rsidP="0067614F">' +
+				ret += '<w:p>' +
 					'<w:pPr>' +
 					'<w:numPr>' +
 					'<w:ilvl w:val="0"/>' +
@@ -111,16 +94,9 @@ module.exports = {
 					'</w:tabs>' +
 					'<w:spacing w:line="276" w:lineRule="auto"/>' +
 					'<w:jc w:val="both"/>' +
-					'<w:rPr>' +
-					'<w:rFonts w:ascii="Garamond" w:hAnsi="Garamond"/>' +
-					'</w:rPr>' +
 					'</w:pPr>' +
-					'<w:r w:rsidRPr="00840235">' +
-					'<w:rPr>' +
-					'<w:rFonts w:ascii="Garamond" w:hAnsi="Garamond"/>' +
-					'</w:rPr>' +
-					util.format('<w:t>%s</w:t>', rText) +
-					'</w:r>' +
+					common.getrElement(rText) +
+					common.getADAXml(element.ADA) +
 					'</w:p>'
 			}
 		}
@@ -138,7 +114,7 @@ module.exports = {
 					element.APDA_ProtocolNumber,
 					element.APDA_ProtocolDate)
 
-				ret += '<w:p w:rsidR="00212912" w:rsidRPr="00DB37DE" w:rsidRDefault="00262B9D" w:rsidP="00F871E2">' +
+				ret += '<w:p>' +
 					'<w:pPr>' +
 					'<w:numPr>' +
 					'<w:ilvl w:val="0"/>' +
@@ -151,16 +127,8 @@ module.exports = {
 					'</w:tabs>' +
 					'<w:spacing w:line="276" w:lineRule="auto"/>' +
 					'<w:jc w:val="both"/>' +
-					'<w:rPr>' +
-					'<w:rFonts w:ascii="Garamond" w:hAnsi="Garamond"/>' +
-					'</w:rPr>' +
 					'</w:pPr>' +
-					'<w:r w:rsidRPr="00DB37DE">' +
-					'<w:rPr>' +
-					'<w:rFonts w:ascii="Garamond" w:hAnsi="Garamond"/>' +
-					'</w:rPr>' +
-					util.format('<w:t xml:space="preserve">%s</w:t>', rText) +
-					'</w:r>' +
+					common.getrElement(rText) +
 					'</w:p>'
 			}
 		}
@@ -188,7 +156,7 @@ module.exports = {
 						// '<w:tab w:val="left" w:pos="284"/>' +
 						// '<w:tab w:val="left" w:pos="6195"/>' +
 						// '</w:tabs>' +
-						'<w:spacing w:line="276" w:lineRule="auto"/>' +						
+						'<w:spacing w:line="276" w:lineRule="auto"/>' +
 						'<w:jc w:val="both"/>' +
 						'<w:rPr>' +
 						util.format('<w:rFonts w:ascii="%s" w:hAnsi="%s"/>', fontFamily, fontFamily) +
@@ -234,7 +202,7 @@ module.exports = {
 						// '<w:tab w:val="left" w:pos="284"/>' +
 						// '<w:tab w:val="left" w:pos="6195"/>' +
 						// '</w:tabs>' +
-						'<w:spacing w:line="276" w:lineRule="auto"/>' +						
+						'<w:spacing w:line="276" w:lineRule="auto"/>' +
 						'<w:jc w:val="both"/>' +
 						'<w:rPr>' +
 						util.format('<w:rFonts w:ascii="%s" w:hAnsi="%s"/>', fontFamily, fontFamily) +
@@ -356,12 +324,12 @@ module.exports = {
 				'<w:spacing w:line="276" w:lineRule="auto"/>' +
 				'<w:jc w:val="both"/>' +
 				'<w:rPr>' +
-				'<w:rFonts w:ascii="Garamond" w:hAnsi="Garamond"/>' +
+				util.format('<w:rFonts w:ascii="%s" w:hAnsi="%s"/>', fontFamily) +
 				'</w:rPr>' +
 				'</w:pPr>' +
 				'<w:r>' +
 				'<w:rPr>' +
-				'<w:rFonts w:ascii="Garamond" w:hAnsi="Garamond"/>' +
+				util.format('<w:rFonts w:ascii="%s" w:hAnsi="%s"/>', fontFamily) +
 				'</w:rPr>' +
 				util.format('<w:t xml:space="preserve">%s</w:t>', text) +
 				'</w:r>' +
@@ -400,12 +368,12 @@ module.exports = {
 			'<w:spacing w:line="276" w:lineRule="auto"/>' +
 			'<w:jc w:val="both"/>' +
 			'<w:rPr>' +
-			'<w:rFonts w:ascii="Garamond" w:hAnsi="Garamond"/>' +
+			util.format('<w:rFonts w:ascii="%s" w:hAnsi="%s"/>', fontFamily) +
 			'</w:rPr>' +
 			'</w:pPr>' +
 			'<w:r>' +
 			'<w:rPr>' +
-			'<w:rFonts w:ascii="Garamond" w:hAnsi="Garamond"/>' +
+			util.format('<w:rFonts w:ascii="%s" w:hAnsi="%s"/>', fontFamily) +
 			'</w:rPr>' +
 			util.format('<w:t xml:space="preserve">%s</w:t>', rText) +
 			'</w:r>' +
@@ -432,12 +400,12 @@ module.exports = {
 			'<w:spacing w:line="276" w:lineRule="auto"/>' +
 			'<w:jc w:val="both"/>' +
 			'<w:rPr>' +
-			'<w:rFonts w:ascii="Garamond" w:hAnsi="Garamond"/>' +
+			util.format('<w:rFonts w:ascii="%s" w:hAnsi="%s"/>', fontFamily) +
 			'</w:rPr>' +
 			'</w:pPr>' +
 			'<w:r>' +
 			'<w:rPr>' +
-			'<w:rFonts w:ascii="Garamond" w:hAnsi="Garamond"/>' +
+			util.format('<w:rFonts w:ascii="%s" w:hAnsi="%s"/>', fontFamily) +
 			'</w:rPr>' +
 			util.format('<w:t xml:space="preserve">%s</w:t>', rText) +
 			'</w:r>' +
@@ -459,19 +427,19 @@ module.exports = {
 			'<w:spacing w:line="276" w:lineRule="auto"/>' +
 			'<w:jc w:val="both"/>' +
 			'<w:rPr>' +
-			'<w:rFonts w:ascii="Garamond" w:hAnsi="Garamond"/>' +
+			util.format('<w:rFonts w:ascii="%s" w:hAnsi="%s"/>', fontFamily) +
 			'</w:rPr>' +
 			'</w:pPr>' +
 			'<w:r w:rsidRPr="00F871E2">' +
 			'<w:rPr>' +
-			'<w:rFonts w:ascii="Garamond" w:hAnsi="Garamond"/>' +
+			util.format('<w:rFonts w:ascii="%s" w:hAnsi="%s"/>', fontFamily) +
 			'</w:rPr>' +
 			util.format('<w:t>%s</w:t>', rText) +
 			'</w:r>' +
 			'<w:r><w:rPr><w:vertAlign w:val="superscript"/><w:lang w:val="el-GR"/></w:rPr><w:t>ου</w:t></w:r>' +
 			'<w:r>' +
 			'<w:rPr>' +
-			'<w:rFonts w:ascii="Garamond" w:hAnsi="Garamond"/>' +
+			util.format('<w:rFonts w:ascii="%s" w:hAnsi="%s"/>', fontFamily) +
 			'</w:rPr>' +
 			'<w:t xml:space="preserve"> Λογαριασμού</w:t>' +
 			'</w:r>' +
@@ -494,12 +462,12 @@ module.exports = {
 				'<w:spacing w:line="276" w:lineRule="auto"/>' +
 				'<w:jc w:val="both"/>' +
 				'<w:rPr>' +
-				'<w:rFonts w:ascii="Garamond" w:hAnsi="Garamond"/>' +
+				util.format('<w:rFonts w:ascii="%s" w:hAnsi="%s"/>', fontFamily) +
 				'</w:rPr>' +
 				'</w:pPr>' +
 				'<w:r w:rsidRPr="00F871E2">' +
 				'<w:rPr>' +
-				'<w:rFonts w:ascii="Garamond" w:hAnsi="Garamond"/>' +
+				util.format('<w:rFonts w:ascii="%s" w:hAnsi="%s"/>', fontFamily) +
 				'</w:rPr>' +
 				util.format('<w:t>Ενημερωτικός Πίνακας της με Α.Π. %s/%s Προγραμματικής Σύμβασης.</w:t>', body.Contract[0].Protocol[0].Number, body.Contract[0].Protocol[0].Date) +
 				'</w:r>' +
@@ -533,12 +501,12 @@ module.exports = {
 				'<w:spacing w:line="276" w:lineRule="auto"/>' +
 				'<w:jc w:val="both"/>' +
 				'<w:rPr>' +
-				'<w:rFonts w:ascii="Garamond" w:hAnsi="Garamond"/>' +
+				util.format('<w:rFonts w:ascii="%s" w:hAnsi="%s"/>', fontFamily) +
 				'</w:rPr>' +
 				'</w:pPr>' +
 				'<w:r>' +
 				'<w:rPr>' +
-				'<w:rFonts w:ascii="Garamond" w:hAnsi="Garamond"/>' +
+				util.format('<w:rFonts w:ascii="%s" w:hAnsi="%s"/>', fontFamily) +
 				'</w:rPr>' +
 				util.format('<w:t>%s</w:t>', rText) +
 				'</w:r>' +
@@ -562,12 +530,12 @@ module.exports = {
 				'<w:spacing w:line="276" w:lineRule="auto"/>' +
 				'<w:jc w:val="both"/>' +
 				'<w:rPr>' +
-				'<w:rFonts w:ascii="Garamond" w:hAnsi="Garamond"/>' +
+				util.format('<w:rFonts w:ascii="%s" w:hAnsi="%s"/>', fontFamily) +
 				'</w:rPr>' +
 				'</w:pPr>' +
 				'<w:r>' +
 				'<w:rPr>' +
-				'<w:rFonts w:ascii="Garamond" w:hAnsi="Garamond"/>' +
+				util.format('<w:rFonts w:ascii="%s" w:hAnsi="%s"/>', fontFamily) +
 				'</w:rPr>' +
 				util.format('<w:t>%s</w:t>', rText) +
 				'</w:r>' +
@@ -595,12 +563,12 @@ module.exports = {
 				'<w:spacing w:line="276" w:lineRule="auto"/>' +
 				'<w:jc w:val="both"/>' +
 				'<w:rPr>' +
-				'<w:rFonts w:ascii="Garamond" w:hAnsi="Garamond"/>' +
+				util.format('<w:rFonts w:ascii="%s" w:hAnsi="%s"/>', fontFamily) +
 				'</w:rPr>' +
 				'</w:pPr>' +
 				'<w:r>' +
 				'<w:rPr>' +
-				'<w:rFonts w:ascii="Garamond" w:hAnsi="Garamond"/>' +
+				util.format('<w:rFonts w:ascii="%s" w:hAnsi="%s"/>', fontFamily) +
 				'</w:rPr>' +
 				util.format('<w:t>%s</w:t>', rText) +
 				'</w:r>' +
@@ -614,19 +582,19 @@ module.exports = {
 				'<w:spacing w:line="276" w:lineRule="auto"/>' +
 				'<w:jc w:val="both"/>' +
 				'<w:rPr>' +
-				'<w:rFonts w:ascii="Garamond" w:hAnsi="Garamond"/>' +
+				util.format('<w:rFonts w:ascii="%s" w:hAnsi="%s"/>', fontFamily) +
 				'</w:rPr>' +
 				'</w:pPr>' +
 				'<w:r>' +
 				'<w:rPr>' +
-				'<w:rFonts w:ascii="Garamond" w:hAnsi="Garamond"/>' +
+				util.format('<w:rFonts w:ascii="%s" w:hAnsi="%s"/>', fontFamily) +
 				'</w:rPr>' +
 				util.format('<w:t>%s</w:t>', s1_1) +
 				'</w:r>' +
 				'<w:r><w:rPr><w:vertAlign w:val="superscript"/><w:lang w:val="el-GR"/></w:rPr><w:t>ης</w:t></w:r>' +
 				'<w:r>' +
 				'<w:rPr>' +
-				'<w:rFonts w:ascii="Garamond" w:hAnsi="Garamond"/>' +
+				util.format('<w:rFonts w:ascii="%s" w:hAnsi="%s"/>', fontFamily) +
 				'</w:rPr>' +
 				util.format('<w:t xml:space="preserve">%s</w:t>', s1_2) +
 				'</w:r>' +
@@ -640,12 +608,12 @@ module.exports = {
 				'<w:spacing w:line="276" w:lineRule="auto"/>' +
 				'<w:jc w:val="both"/>' +
 				'<w:rPr>' +
-				'<w:rFonts w:ascii="Garamond" w:hAnsi="Garamond"/>' +
+				util.format('<w:rFonts w:ascii="%s" w:hAnsi="%s"/>', fontFamily) +
 				'</w:rPr>' +
 				'</w:pPr>' +
 				'<w:r w:rsidRPr="00F871E2">' +
 				'<w:rPr>' +
-				'<w:rFonts w:ascii="Garamond" w:hAnsi="Garamond"/>' +
+				util.format('<w:rFonts w:ascii="%s" w:hAnsi="%s"/>', fontFamily) +
 				'</w:rPr>' +
 				util.format('<w:t>%s</w:t>', s2) +
 				'</w:r>' +
@@ -677,7 +645,7 @@ module.exports = {
 			'<w:spacing w:before="240"/>' +
 			'<w:jc w:val="both"/>' +
 			'<w:rPr>' +
-			'<w:rFonts w:ascii="Garamond" w:hAnsi="Garamond"/>' +
+			util.format('<w:rFonts w:ascii="%s" w:hAnsi="%s"/>', fontFamily) +
 			'<w:b/>' +
 			'<w:color w:val="000000"/>' +
 			'<w:u w:val="single"/>' +
@@ -685,7 +653,7 @@ module.exports = {
 			'</w:pPr>' +
 			'<w:r w:rsidRPr="00812A45">' +
 			'<w:rPr>' +
-			'<w:rFonts w:ascii="Garamond" w:hAnsi="Garamond"/>' +
+			util.format('<w:rFonts w:ascii="%s" w:hAnsi="%s"/>', fontFamily) +
 			'<w:b/>' +
 			'<w:color w:val="000000"/>' +
 			'<w:u w:val="single"/>' +
@@ -699,7 +667,7 @@ module.exports = {
 			'<w:ind w:hanging="567"/>' +
 			'<w:jc w:val="both"/>' +
 			'<w:rPr>' +
-			'<w:rFonts w:ascii="Garamond" w:hAnsi="Garamond"/>' +
+			util.format('<w:rFonts w:ascii="%s" w:hAnsi="%s"/>', fontFamily) +
 			'<w:b/>' +
 			'<w:color w:val="000000"/>' +
 			'<w:u w:val="single"/>' +

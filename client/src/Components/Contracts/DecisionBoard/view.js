@@ -87,7 +87,8 @@ class DecisionBoardView extends Component {
       Id: decisionBoard.Id,
       ProtocolNumber: decisionBoard.ProtocolNumber,
       ProtocolDate: decisionBoard.ProtocolDate,
-      Content: decisionBoard.Content,
+      ContentTransmission: decisionBoard.ContentTransmission,
+      ContentAccount: decisionBoard.ContentAccount,
       ADA: decisionBoard.ADA,
       orderNo: index + 1,
       editItem: true
@@ -109,15 +110,15 @@ class DecisionBoardView extends Component {
       addNewItem: false, editItem: false, deleteItem: false,
       ProtocolNumber: '',
       ProtocolYear: '',
-      ScaleNumber: '',
-      APDANumber: '',
-      APDADate: '',
+      ContentTransmission: '',
+      ContentAccount: ' με την οποία εγκρίθηκαν: η υπογραφή των όρων, το σχέδιο και τα ανά έτος ποσά της προαναφερθείσας Προγραμματικής Σύμβασης. ',
+      ADA: '',
       orderNo: 0
     });
   }
   resetMsgInfo() {
     setTimeout(function () {
-      this.setState({ openMessage: false, message: '', msgPadding: '0px'});
+      this.setState({ openMessage: false, message: '', msgPadding: '0px' });
     }.bind(this), 5000);
   }
 
@@ -145,7 +146,7 @@ class DecisionBoardView extends Component {
         var msg = 'Αποτυχία δημιουργίας Α.Δ.Σ. !!\n' + error;
         this.setState({ message: <><div>{msg}</div><div>{getServerErrorResponseMessage(error)}</div></>, openMessage: true, variant: 'error', msgPadding: '10px', submitButtonDisabled: false });
       })
-    }    
+    }
   }
 
   requestDeleteDecisionBoard() {
@@ -174,11 +175,14 @@ class DecisionBoardView extends Component {
           </div>
           {
             this.state.orderNo > 1 ?
-              <div style={{ display: 'flex', flexFlow: 'row', height: 'auto', justifyContent: 'left', padding: '10px' }}>
-                <MyTextField tm={getDecisionBoardTooltip(this.state, 4)} tp='text' title='Περιεχόμενο' label='' id='Content' stateValue={this.state.Content} isRequired={false} isDisabled={false} onChange={this.onChange} width='100%' />
+              <div style={{ display: 'flex', flexFlow: 'column', height: 'auto', justifyContent: 'left', padding: '10px' }}>
+                <MyTextField tm={getDecisionBoardTooltip(this.state, 4)} tp='text' title='Περιεχόμενο (Αρχείο Διαβιβαστικού)' label='' id='ContentTransmission' stateValue={this.state.ContentTransmission} isRequired={false} isDisabled={false} onChange={this.onChange} width='95%' multiline={true}/>
+                <MyTextField tm={getDecisionBoardTooltip(this.state, 4)} tp='text' title='Περιεχόμενο (Αρχείο Λογαριασμού)' label='' id='ContentAccount' stateValue={this.state.ContentAccount} isRequired={false} isDisabled={false} onChange={this.onChange} width='95%' multiline={true} />
               </div>
               :
-              <></>
+              <div style={{ display: 'flex', flexFlow: 'column', height: 'auto', justifyContent: 'left', padding: '10px' }}>
+                <MyTextField tm={getDecisionBoardTooltip(this.state, 4)} tp='text' title='Περιεχόμενο (Αρχείο Λογαριασμού)' label='' id='ContentAccount' stateValue={this.state.ContentAccount} isRequired={false} isDisabled={false} onChange={this.onChange} width='95%' multiline={true} />
+              </div>
           }
           <div style={{ display: 'flex', flexFlow: 'row', height: 'auto', justifyContent: 'center', padding: '10px' }}>
             <LoadingOverlay
@@ -255,14 +259,52 @@ class DecisionBoardView extends Component {
       <DeleteIcon />
     </IconButton>
   }
-  renderItemOptions(index, item) {
+  getItemInfo() {
+    var info = "Διαβιβαστικό (ΣΥΝΗΜΜΕΝΑ ΔΙΚΑΙΟΛΟΓΗΤΙΚΑ)\n"
+    //info += "Δύο (2) φωτοαντίγραφα της υπ' αριθ. " {item.ProtocolNumber ? item.ProtocolNumber : ''}/{item.ProtocolDate ? getDateFormatForDocument(item.ProtocolDate) /'11-04-2019' 
+
+    return info
+  }
+
+  getTransmissionItemInfo(index, item) {
+
+    var rContent = <>
+      <span>Δύο (2) φωτοαντίγραφα της υπ' αριθ. </span>
+      <span>{item.ProtocolNumber}/{item.ProtocolDate ? getDateFormatForDocument(item.ProtocolDate) : item.ProtocolDate}</span>
+      <span> Απόφασης Δημοτικού Συμβουλίου</span>
+    </>;
+    var ada = <></>
+    if (item.ADA)
+      ada = <><span> (ΑΔΑ: </span><b>{item.ADA}</b><span>) </span></>
+
+    var lContent = <></>;
+    if (index + 1 > 1)
+      lContent = <span>{item.ContentTransmission}</span>
 
     return <>
-      {item.ADA ? <span> με <b>ΑΔΑ</b> {item.ADA}</span> : ''}
-      <span style={{ marginLeft: '10px' }}></span>
-      {item.Content ? <span style={{ fontStyle: 'italic' }}> και με <b>περιεχόμενο</b> {item.Content}</span> : ''}
+      <span style={{ fontWeight: "bold" }}>Διαβιβαστικό (ΣΥΝΗΜΜΕΝΑ ΔΙΚΑΙΟΛΟΓΗΤΙΚΑ)</span>
+      <br />
+      {rContent}
+      {ada}
+      {lContent}
     </>
   }
+  getAccountItemInfo(index, item) {
+
+    var rContent = <span>Τη με αρ. {item.ProtocolNumber}/{item.ProtocolDate} Απόφαση του Δημοτικού Συμβουλίου (Α.Δ.Σ.) Αθηναίων</span>;
+    var ada = <><span> (ΑΔΑ: </span><b>{item.ADA}</b><span>) </span></>;
+    var lContent = <span>{item.ContentAccount}</span>;
+
+    return <>
+      <br />
+      <span style={{ fontWeight: "bold" }}>Λογαριασμός (ΣΥΝΗΜΜΕΝΑ ΔΙΚΑΙΟΛΟΓΗΤΙΚΑ)</span>
+      <br />
+      {rContent}
+      {ada}
+      {lContent}
+    </>
+  }
+
   render() {
     var length = this.props.contractDetails.decisionboard ? this.props.contractDetails.decisionboard.length : 0
     return (
@@ -282,8 +324,9 @@ class DecisionBoardView extends Component {
                   <Typography>
                     <div style={{ display: 'flex', flexFlow: 'row', fontSize: '18px' }}>
                       <span style={{ flex: '1' }}>
-                        <b>{index + 1}η Απόφαση Δημοτικού Συμβουλίου με A.Π.</b> {item.ProtocolNumber ? item.ProtocolNumber : ''}/{item.ProtocolDate ? getDateFormatForDocument(item.ProtocolDate) : ''}
-                        {this.renderItemOptions(index, item)}
+                        <b>{index + 1}.</b>
+                        {this.getTransmissionItemInfo(index, item)}
+                        {this.getAccountItemInfo(index, item)}
                       </span>
                       {this.renderEditOption(index, item)}
                       {this.renderDeleteOption(index, item)}
@@ -299,7 +342,9 @@ class DecisionBoardView extends Component {
           <Button
             disabled={this.state.deleteItem === true || this.state.editItem === true}
             style={{ fontSize: '18px', textAlign: 'center' }}
-            onClick={() => { this.setState({ addNewItem: true, orderNo: length + 1 }) }}>
+            onClick={() => { this.setState({ addNewItem: true, 
+            orderNo: length + 1,
+            ContentAccount: length == 0 ? ' με την οποία εγκρίθηκαν: η υπογραφή των όρων, το σχέδιο και τα ανά έτος ποσά της προαναφερθείσας Προγραμματικής Σύμβασης. ' : ''}) }}>
             ΠΡΟΣΘΗΚΗ
           </Button>
         </div>

@@ -12,7 +12,15 @@ const styles = {
 
 const InputTitle = props => {
 
-  return <div style={styles.title}>{props.title}</div>
+  return <div style={styles.title}>{props.title}{getAsterisk(props.isRequired)}</div>
 }
 
+function getAsterisk(isRequired){
+  var ret = '';
+
+  if (isRequired === true)
+    ret = '*'
+    
+  return ret;
+}
 export default InputTitle
