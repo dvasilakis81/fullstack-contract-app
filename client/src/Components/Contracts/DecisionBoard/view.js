@@ -65,7 +65,8 @@ class DecisionBoardView extends Component {
       Id: this.props.Id ? this.props.Id : '',
       ProtocolNumber: '',
       ProtocolDate: '',
-      Content: '',
+      ContentTransmission: '',
+      ContentAccount: '',
       ADA: ''
     }
 
@@ -275,7 +276,7 @@ class DecisionBoardView extends Component {
     </>;
     var ada = <></>
     if (item.ADA)
-      ada = <><span> (ΑΔΑ: </span><b>{item.ADA}</b><span>) </span></>
+      ada = <><span> (ΑΔΑ: </span><b><u>{item.ADA}</u></b><span>) </span></>
 
     var lContent = <></>;
     if (index + 1 > 1)
@@ -292,7 +293,7 @@ class DecisionBoardView extends Component {
   getAccountItemInfo(index, item) {
 
     var rContent = <span>Τη με αρ. {item.ProtocolNumber}/{item.ProtocolDate} Απόφαση του Δημοτικού Συμβουλίου (Α.Δ.Σ.) Αθηναίων</span>;
-    var ada = <><span> (ΑΔΑ: </span><b>{item.ADA}</b><span>) </span></>;
+    var ada = <><span> (ΑΔΑ: </span><b><u>{item.ADA}</u></b><span>) </span></>;
     var lContent = <span>{item.ContentAccount}</span>;
 
     return <>

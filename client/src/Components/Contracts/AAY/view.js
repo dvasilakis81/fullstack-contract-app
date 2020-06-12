@@ -115,7 +115,7 @@ class AayView extends Component {
       addNewItem: false, editItem: false, deleteItem: false,
       AayValue: '',
       ProtocolNumber: '',
-      ProtocolYear: '',
+      ProtocolDate: '',
       EadNumber: '',
       ADA: '',
       Overthrow: '',
@@ -140,7 +140,7 @@ class AayView extends Component {
         this.resetMsgInfo();
       }).catch(error => {
         var msg = 'Αποτυχία δημιουργίας Α.A.Y. !!\n' + error;
-        this.setState({ openMessage: true, message: <><div>{msg}</div><div>{getServerErrorResponseMessage(error)}</div></>, variant: 'error', msgPadding: '10px', submitButtonDisabled: false });
+        this.setState({ openMessage: true, message: <><div>{msg}</div><div>{getServerErrorResponseMessage(error)}</div></>, variant: 'error', msgPadding: '10px' });
       })
     } else if (this.state.editItem === true) {
       this.props.processContractInfo(this.state, this.props.token.data.token, 'updateaay').then(res => {
@@ -173,7 +173,6 @@ class AayView extends Component {
     var ret;
 
     var aayTypes = [];
-
     aayTypes.push('Απόφαση Ανάληψης Υποχρέωσης');
     aayTypes.push('Απόφαση Ανάληψης Υποχρέωσης (διάφορα έξοδα ΠΟΕ)');
     aayTypes.push('Απόφαση Ανατροπής Ανάληψης Υποχρέωσης');
@@ -319,12 +318,70 @@ class AayView extends Component {
       <DeleteIcon />
     </IconButton>
   }
-  renderItemOptions(index, item) {
+
+  getTransmissionItemInfo(index, item) {
+
+    var rContent = <></>;
+    var lContent = <></>;
+    if (item.Type == 0 || item.Type == 1) {
+      rContent = <span>Πρωτότυπο και φωτοαντίγραφο της με αριθμ. {item.Value}/{item.ProtocolNumber}/{item.ProtocolDate ? getDateFormatForDocument(item.ProtocolDate) : item.ProtocolDate} ΕΑΔ {item.EadNumber} </span>
+      var ada = <></>
+      if (item.ADA)
+        ada = <><span>(ΑΔΑ: </span><b><u>{item.ADA}</u></b><span>) </span></>
+      if (item.Type == 0)
+        lContent = <span>Απόφασης Ανάληψης Υποχρέωσης.</span>
+      else
+        lContent = <span>Απόφασης Ανάληψης Υποχρέωσης. (διάφορα έξοδα ΠΟΕ)</span>
+    } else if (item.Type == 2) {
+      rContent = <span>Πρωτότυπο και φωτοαντίγραφο της υπ΄ αριθμ. {item.ProtocolNumber}/{item.ProtocolDate ? getDateFormatForDocument(item.ProtocolDate) : item.ProtocolDate} ΕΑΔ {item.EadNumber} </span>
+      var ada = <></>
+      if (item.ADA)
+        ada = <><span>(ΑΔΑ: </span><b><u>{item.ADA}</u></b><span>) </span></>
+
+      lContent = <span><b>ΑΠΟΦΑΣΗΣ ΑΝΑΤΡΟΠΗΣ ΑΝΑΛΗΨΗΣ ΥΠΟΧΡΕΩΣΗΣ</b> (παρ.2 άρθρο 4 ΠΔ 80/2016), της {item.Overthrow} Α.Α.Υ. </span>
+    }
 
     return <>
-      {item.ADA ? <span> με <b>ΑΔΑ</b> {item.ADA}</span> : ''}
+      <span style={{ fontWeight: "bold" }}>Διαβιβαστικό (ΣΥΝΗΜΜΕΝΑ ΔΙΚΑΙΟΛΟΓΗΤΙΚΑ)</span>
+      <br />
+      {rContent}
+      {ada}
+      {lContent}
     </>
   }
+
+  getAccountItemInfo(index, item) {
+
+    var rContent = <></>;
+    var lContent = <></>;
+    if (item.Type == 0 || item.Type == 1) {
+      var rContent = <span>Tη με αρ. {item.Value}/{item.ProtocolNumber}/{item.ProtocolDate} </span>;
+      var ada = <></>
+      if (item.ADA)
+        ada = <><span>(ΑΔΑ: </span><b><u>{item.ADA}</u></b><span>) </span></>
+      if (item.Type == 0)
+        lContent = <span>Απόφασης Ανάληψης Υποχρέωσης.</span>
+      else
+        lContent = <span>Απόφασης Ανάληψης Υποχρέωσης. (διάφορα έξοδα ΠΟΕ)</span>
+    } else if (item.Type == 2) {
+      rContent = <span>Την υπ΄ αριθμ. {item.ProtocolNumber}/{item.ProtocolDate ? getDateFormatForDocument(item.ProtocolDate) : item.ProtocolDate}</span>
+      var ada = <></>
+      if (item.ADA)
+        ada = <><span>(ΑΔΑ: </span><b><u>{item.ADA}</u></b><span>) </span></>
+
+      lContent = <span><b>ΑΠΟΦΑΣΗΣ ΑΝΑΤΡΟΠΗΣ ΑΝΑΛΗΨΗΣ ΥΠΟΧΡΕΩΣΗΣ</b> (παρ.2 άρθρο 4 ΠΔ 80/2016), της {item.Overthrow} Α.Α.Υ. </span>
+    }
+
+    return <>
+      <br />
+      <span style={{ fontWeight: "bold" }}>Λογαριασμός (ΣΥΝΗΜΜΕΝΑ ΔΙΚΑΙΟΛΟΓΗΤΙΚΑ)</span>
+      <br />
+      {rContent}
+      {ada}
+      {lContent}
+    </>
+  }
+
   render() {
     var length = this.props.contractDetails.aay ? this.props.contractDetails.aay.length : 0
     return (
@@ -344,8 +401,9 @@ class AayView extends Component {
                   <Typography>
                     <div style={{ display: 'flex', flexFlow: 'row', fontSize: '18px' }}>
                       <span style={{ flex: '1' }}>
-                        <b>{index + 1}. Απόφαση Ανάληψη Υποχρέωσης με A.Π.</b> {item.ProtocolNumber ? item.ProtocolNumber : ''}/{item.ProtocolDate ? getDateFormatForDocument(item.ProtocolDate) : ''}
-                        {this.renderItemOptions(index, item)}
+                        <b>{index + 1}.</b>
+                        {this.getTransmissionItemInfo(index, item)}
+                        {this.getAccountItemInfo(index, item)}
                       </span>
                       {this.renderEditOption(index, item)}
                       {this.renderDeleteOption(index, item)}

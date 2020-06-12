@@ -250,16 +250,7 @@ class AwardView extends Component {
         <ProtocolInput tm1={getAwardTooltip(this.state, 4)} tm2={getAwardTooltip(this.state, 5)} title='Α.Π.Δ.Α.' idn='APDANumber' idd='APDADate' protocolNumber={this.state.APDANumber} protocolDate={this.state.APDADate} onChange={this.onChange} tp1='text' tp2='date' />
       </div>
     )
-  }
-  renderItemOptions(index, item) {
-    if (index > 0) {
-      return <>
-        {item.ADA ? <span> με <b>ΑΔΑ</b> {item.ADA}</span> : ''}
-        <span style={{ marginLeft: '10px' }}></span>
-        {item.Content ? <span style={{ fontStyle: 'italic' }}> και με <b>περιεχόμενο</b> {item.Content}</span> : ''}
-      </>
-    }
-  }
+  }  
   renderServerResponse() {
 
     return <div style={{ display: 'flex', flexFlow: 'row', height: 'auto', background: this.state.msgColor, justifyContent: 'center', padding: this.msgPadding }}>

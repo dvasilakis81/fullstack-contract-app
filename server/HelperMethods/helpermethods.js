@@ -101,12 +101,22 @@ function getNumberLectical(number) {
   return ret;
 }
 
+function extractYearFromDate(dateValue) {
+  let ret = '';
+
+  if (dateValue)
+    ret = Intl.DateTimeFormat('el-GR', { year: 'numeric' }).format(new Date(dateValue))
+
+  return ret;
+}
+
 module.exports = {
   addQuotes,
   fixTextForRawXml,
   consoleLog,
   getWord,
-  getNumberLectical
+  getNumberLectical,
+  extractYearFromDate
 }
 
 

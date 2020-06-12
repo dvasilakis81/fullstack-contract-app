@@ -44,7 +44,21 @@ module.exports = {
         util.format('<w:szCs w:val="%s" />', fontSize) +
         '<w:u w:val="single" />' +
         '</w:rPr>' +
-        '<w:t xml:space="preserve">)</w:t>' +
+        '<w:t xml:space="preserve">) </w:t>' +
+        '</w:r>'
+
+    return ret;
+  },
+  getBoldText: function (text) {
+    var ret = '';
+    if (text)
+      ret += '<w:r>' +
+        '<w:rPr>' +
+        util.format('<w:rFonts w:ascii="%s" w:hAnsi="%s"/>', fontFamily, fontFamily) +
+        util.format('<w:sz w:val="%s" />', fontSize) +
+        util.format('<w:szCs w:val="%s" />', fontSize) +        
+        '</w:rPr>' +
+        util.format('<w:t xml:space="preserve">%s</w:t>', text) +
         '</w:r>'
 
     return ret;

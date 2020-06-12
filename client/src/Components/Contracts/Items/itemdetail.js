@@ -759,11 +759,11 @@ class ItemDetail extends React.Component {
 													</Typography>
 												</Paper>
 											</Grid>
-											{this.getCPVTemplate(contractInfo)}
-											{this.getAayInfoTemplate(contractInfo)}
+											{this.getCPVTemplate(contractInfo)}											
 											{this.getBoardDecisionsInfoTemplate(contractInfo)}
 											{this.getSADAInfoTemplate(contractInfo)}
 											{this.getCourtOfAuditorsInfoTemplate(contractInfo)}
+											{this.getAayInfoTemplate(contractInfo)}
 											<Grid item>
 												<Paper style={styles.paperMoreContractInfo} square={true}>
 													<Typography>

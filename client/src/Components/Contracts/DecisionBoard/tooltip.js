@@ -70,17 +70,22 @@ export function getDecisionBoardTooltip(state, ind) {
   //2.	Τη με αρ. 866/14-6-2018 Απόφαση του Δημοτικού Συμβουλίου (Α.Δ.Σ.) Αθηναίων με την οποία εγκρίθηκαν: η υπογραφή των όρων, το σχέδιο και τα ανά έτος ποσά της προαναφερθείσας Προγραμματικής Σύμβασης. 
 
   return (<>
+
     <div style={useStyles.tooltipTitle}>ΣΥΝΗΜΜΕΝΑ ΔΙΚΑΙΟΛΟΓΗΤΙΚΑ(Διαβιβαστικό)</div>
     <div>
       <span style={useStyles.tooltip}>2. Δύο (2) φωτοαντίγραφα της με αρ. </span>
       <span style={style1}>{state.ProtocolNumber ? state.ProtocolNumber : '___'}</span>
       <span style={useStyles.tooltip}>/</span>
       <span style={style2}>{state.ProtocolDate ? getDateFormatForDocument(state.ProtocolDate) : '__-__-____'}</span>
-      <span style={useStyles.tooltip}>{state.ADA ? ' (ΑΔΑ ' : ''}</span>
+      <span style={useStyles.tooltip}>{state.ADA ? ' (ΑΔΑ: ' : ''}</span>
       <span style={style3}>{state.ADA ? state.ADA : ''}</span>
       <span style={useStyles.tooltip}>) </span>
       <span style={useStyles.tooltip}> Απόφασης του Δημοτικού Συμβουλίου (Α.Δ.Σ.) </span>
-      <span style={style4}>{state.ContentTrasmission ? state.ContentTransmission : 'π.χ. περί έγκρισης ...'}</span>
+      {
+        state.orderNo > 1 ?
+          <span style={style4}>{state.ContentTransmission ? state.ContentTransmission : 'π.χ. περί έγκρισης ...'}</span> :
+          <></>
+      }
     </div>
     <div style={useStyles.tooltipTitle}>ΣΥΝΗΜΜΕΝΑ ΔΙΚΑΙΟΛΟΓΗΤΙΚΑ(Λογαριασμός)</div>
     <div>
@@ -88,13 +93,11 @@ export function getDecisionBoardTooltip(state, ind) {
       <span style={style1}>{state.ProtocolNumber ? state.ProtocolNumber : '___'}</span>
       <span style={useStyles.tooltip}>/</span>
       <span style={style2}>{state.ProtocolDate ? getDateFormatForDocument(state.ProtocolDate) : '__-__-____'}</span>
+      <span style={useStyles.tooltip}> Α.Δ.Σ. </span>
       {
-        ind === 1 ?
-          <span style={useStyles.tooltip}> Απόφαση του Δημοτικού Συμβουλίου (Α.Δ.Σ.) Αθηναίων με την οποία εγκρίθηκαν: η υπογραφή των όρων, το σχέδιο και τα ανά έτος ποσά της προαναφερθείσας Προγραμματικής Σύμβασης.</span> :
-          <>
-            <span style={useStyles.tooltip}> Α.Δ.Σ. με την οποία διορθώθηκε η ανωτέρω Α.Δ.Σ. </span>
-            <span style={style4}>{state.ContentAccount ? state.ContentAccount : 'π.χ. “ως προς τον Κ.Α. του προϋπολογισμού και ως προς το λεκτικό της δαπάνης”.'}</span>
-          </>
+        state.orderNo === 1 ?
+          <span style={style4}>{state.ContentAccount}</span> :
+          <span style={style4}>{state.ContentAccount ? state.ContentAccount : 'π.χ. με την οποία διορθώθηκε η ανωτέρω Α.Δ.Σ. “ως προς τον Κ.Α. του προϋπολογισμού και ως προς το λεκτικό της δαπάνης”.'}</span>
       }
     </div>
   </>)

@@ -65,6 +65,7 @@ class CourtOfAuditorsView extends Component {
       ProtocolNumber: '',
       ProtocolYear: '',
       ScaleNumber: '',
+      ContentAccount: '',
       APDANumber: '',
       APDADate: '',
       orderNo: 0
@@ -89,6 +90,7 @@ class CourtOfAuditorsView extends Component {
       ProtocolNumber: courtOfAuditors.ProtocolNumber,
       ProtocolYear: courtOfAuditors.ProtocolYear,
       ScaleNumber: courtOfAuditors.ScaleNumber,
+      ContentAccount: courtOfAuditors.ContentAccount,
       APDANumber: courtOfAuditors.APDA_ProtocolNumber,
       APDADate: courtOfAuditors.APDA_ProtocolDate,
       editItem: true,
@@ -109,6 +111,7 @@ class CourtOfAuditorsView extends Component {
       ProtocolNumber: '',
       ProtocolYear: '',
       ScaleNumber: '',
+      ContentAccount: '',
       APDANumber: '',
       APDADate: '',
       orderNo: 0
@@ -171,7 +174,7 @@ class CourtOfAuditorsView extends Component {
       return <div style={{ display: 'flex', flexFlow: 'column', height: 'auto', background: '#C0C0C0', color: 'black', justifyContent: 'center', padding: '20px' }}>
         <form style={{ padding: '10px', backgroundColor: '#fff' }} autoComplete="off" onSubmit={this.handleSubmit}>
           <div style={{ textAlign: 'center', fontSize: '22px', fontWeight: 800, paddingBottom: '10px' }}>{this.state.addNewItem === true ? 'Εισαγωγή' : 'Επεξεργασία'} στοιχείων {this.state.orderNo}ου Ελεγκτικού Συνεδρίου</div>
-          <div style={{ display: 'flex', flexFlow: 'row', height: 'auto', justifyContent: 'left', padding: '10px' }}>
+          <div style={{ display: 'flex', flexFlow: 'column', height: 'auto', justifyContent: 'left', padding: '10px' }}>
             {this.renderCourtOfAuditorsInput()}
           </div>
           <div style={{ display: 'flex', flexFlow: 'row', height: 'auto', justifyContent: 'center', padding: '10px' }}>
@@ -253,27 +256,50 @@ class CourtOfAuditorsView extends Component {
   renderCourtOfAuditorsInput() {
 
     return (
-      <div style={{ display: 'flex', flexDirection: 'row', margin: '5px', flexWrap: 'wrap', justifyContent: 'flex-start' }}>
-        <ProtocolInput tm1={getCourtOfAuditorsTooltip(this.state, 1)} tm2={getCourtOfAuditorsTooltip(this.state, 2)} title='Αρ. Πράξης' idn='ProtocolNumber' idd='ProtocolYear' protocolNumber={this.state.ProtocolNumber} protocolDate={this.state.ProtocolYear} onChange={this.onChange} tp1='text' tp2='text' />
-        <MyTextField tm={getCourtOfAuditorsTooltip(this.state, 3)} tp='text' title='Κλιμάκιο' label='' variant='outlined' id='ScaleNumber' stateValue={this.state.ScaleNumber} isRequired={true} isDisabled={false} onChange={this.onChange} />
-        <ProtocolInput tm1={getCourtOfAuditorsTooltip(this.state, 4)} tm2={getCourtOfAuditorsTooltip(this.state, 5)} title='Α.Π.Δ.Α.' idn='APDANumber' idd='APDADate' protocolNumber={this.state.APDANumber} protocolDate={this.state.APDADate} onChange={this.onChange} tp1='text' tp2='date' />
-      </div>
-    )
-  }
-  renderItemOptions(index, item) {
-    if (index > 0) {
-      return <>
-        {item.ADA ? <span> με <b>ΑΔΑ</b> {item.ADA}</span> : ''}
-        <span style={{ marginLeft: '10px' }}></span>
-        {item.Content ? <span style={{ fontStyle: 'italic' }}> και με <b>περιεχόμενο</b> {item.Content}</span> : ''}
+      <>
+        <div style={{ display: 'flex', flexDirection: 'row', margin: '5px', flexWrap: 'nowrap', justifyContent: 'flex-start' }}>
+          <ProtocolInput tm1={getCourtOfAuditorsTooltip(this.state, 1)} tm2={getCourtOfAuditorsTooltip(this.state, 2)} title='Αρ. Πράξης' idn='ProtocolNumber' idd='ProtocolYear' protocolNumber={this.state.ProtocolNumber} protocolDate={this.state.ProtocolYear} onChange={this.onChange} tp1='text' tp2='text' width='50%' />
+          <MyTextField tm={getCourtOfAuditorsTooltip(this.state, 3)} tp='text' title='Κλιμάκιο' label='' variant='outlined' id='ScaleNumber' stateValue={this.state.ScaleNumber} isRequired={true} isDisabled={false} onChange={this.onChange} width='50%' />
+        </div>
+        <div style={{ display: 'flex', flexDirection: 'row', margin: '5px', flexWrap: 'nowrap', justifyContent: 'flex-start' }}>          
+        <MyTextField tm={getCourtOfAuditorsTooltip(this.state, 4)} tp='text' title='Περιεχόμενο (Λογαριασμός)' label='' variant='outlined' id='ContentAccount' stateValue={this.state.ContentAccount} isRequired={false} isDisabled={false} onChange={this.onChange} multiline={true} width='50%' />
+          <ProtocolInput tm1={getCourtOfAuditorsTooltip(this.state, 5)} tm2={getCourtOfAuditorsTooltip(this.state, 6)} title='Α.Π.Δ.Α.' idn='APDANumber' idd='APDADate' protocolNumber={this.state.APDANumber} protocolDate={this.state.APDADate} onChange={this.onChange} tp1='text' tp2='date' width='50%' />
+        </div>
       </>
-    }
-  }
+    )
+  }  
   renderServerResponse() {
 
     return <div style={{ display: 'flex', flexFlow: 'row', height: 'auto', background: this.state.msgColor, justifyContent: 'center', padding: this.msgPadding }}>
       <span style={{ fontSize: '22px', textAlign: 'center', fontWeight: 'bold', padding: this.state.msgPadding }}>{this.state.message}</span>
     </div>
+  }
+
+  getTransmissionItemInfo(index, item) {
+    var rContent = <>
+      <span>Δύο (2) φωτοαντίγραφα της Κοινοποίησης της με αρ. </span>
+      <span>{item.ProtocolNumber}/{item.ProtocolDate ? getDateFormatForDocument(item.ProtocolDate) : item.ProtocolDate}</span>
+      <span> Πράξης του {item.ScaleNumber} Κλιμακίου του Ελεγκτικού Συνεδρίου </span>
+      <span> (Α.Π.Δ.Α. {item.APDA_ProtocolNumber}/{item.APDA_ProtocolDate})</span>
+    </>;
+
+
+    return <>
+      <span style={{ fontWeight: "bold" }}>Διαβιβαστικό (ΣΥΝΗΜΜΕΝΑ ΔΙΚΑΙΟΛΟΓΗΤΙΚΑ)</span>
+      <br />
+      {rContent}
+    </>
+  }
+
+  getAccountItemInfo(index, item) {
+    var rContent = <span>Τη με αρ. {item.ProtocolNumber}/{item.ProtocolDate} Πράξη του {item.ScaleNumber} Κλιμακίου του Ελεγκτικού Συνεδρίου {item.ContentAccount}.</span>;
+
+    return <>
+      <br />
+      <span style={{ fontWeight: "bold" }}>Λογαριασμός (ΣΥΝΗΜΜΕΝΑ ΔΙΚΑΙΟΛΟΓΗΤΙΚΑ)</span>
+      <br />
+      {rContent}
+    </>
   }
 
   render() {
@@ -295,7 +321,9 @@ class CourtOfAuditorsView extends Component {
                     <Typography>
                       <div style={{ display: 'flex', flexFlow: 'row', fontSize: '18px', flexWrap: 'nowrap' }}>
                         <span style={{ flex: '1' }}>
-                          <b>{index + 1}ο Ελεγκτικό Συνέδριο</b> με αρ. {item.ProtocolNumber}/{item.ProtocolYear} Πράξης του {item.ScaleNumber} Κλιμακίου του Ελεγκτικού Συνεδρίου (Α.Π.Δ.Α. {item.APDA_ProtocolNumber}/{getDateFormatForDocument(item.APDA_ProtocolDate)})
+                          <b>{index + 1}.</b>
+                          {this.getTransmissionItemInfo(index, item)}
+                          {this.getAccountItemInfo(index, item)}
                         </span>
                         {this.renderEditOption(index, item)}
                         {this.renderDeleteOption(index, item)}
@@ -329,7 +357,7 @@ function mapStateToProps(state) {
     insertContractInfoPendingRejected: state.contracts_reducer.insertContractInfoRejected,
     deleteContractInfoPending: state.contracts_reducer.deleteContractInfoPending,
     deleteContractInfoRejected: state.contracts_reducer.deleteContractInfoRejected,
-    isSearchMode: state.contracts_reducer.isSearchMode,    
+    isSearchMode: state.contracts_reducer.isSearchMode,
     contracts: state.contracts_reducer.contractsList,
     contractDetails: state.contracts_reducer.contractDetails,
     searchContractsList: state.contracts_reducer.searchContractsList,

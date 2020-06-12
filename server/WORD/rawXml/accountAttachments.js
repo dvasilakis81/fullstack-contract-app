@@ -50,7 +50,7 @@ module.exports = {
 
 				if (element.ContentAccount) {
 					var rText = util.format('Τη με αρ. %s/%s Απόφαση του Δημοτικού Συμβουλίου (Α.Δ.Σ.) Αθηναίων ', element.ProtocolNumber, element.ProtocolDate)
-					var lText = util.format(' με την οποία διορθώθηκε η ανωτέρω Α.Δ.Σ. “%s”. ', element.ContentAccount)
+					var lText = util.format('με την οποία διορθώθηκε η ανωτέρω Α.Δ.Σ. “%s”. ', element.ContentAccount)
 
 					ret += '<w:p>' +
 						'<w:pPr>' +
@@ -76,11 +76,8 @@ module.exports = {
 		if (body.DecisionCoordinatorDecentrilizedAdministration) {
 			for (let index = 0; index < body.DecisionCoordinatorDecentrilizedAdministration.length; index++) {
 				const element = body.DecisionCoordinatorDecentrilizedAdministration[index];
-				var rText = util.format('Τη με Α.Π. %s/%s Απόφαση του Συντονιστή της Αποκεντρωμένης Διοίκησης Αττικής', element.ProtocolNumber, element.ProtocolDate);
-				if (element.ADA)
-					rText = util.format('(ΑΔΑ %s)', element.ADA)
-				if (body.DecisionBoard && body.DecisionBoard[index])
-					rText += util.format(' για τη νόμιμη λήψη της %s/%s Α.Δ.Σ. .', body.DecisionBoard[index].ProtocolNumber, body.DecisionBoard[index].ProtocolDate)
+				var rText = util.format('Τη με Α.Π. %s/%s Απόφαση του Συντονιστή της Αποκεντρωμένης Διοίκησης Αττικής ', element.ProtocolNumber, element.ProtocolDate);
+				var lText = util.format('%s %s A.Δ.Σ.', element.ActionAccount, element.DecisionBoardProtocol);
 
 				ret += '<w:p>' +
 					'<w:pPr>' +
@@ -88,11 +85,6 @@ module.exports = {
 					'<w:ilvl w:val="0"/>' +
 					'<w:numId w:val="2"/>' +
 					'</w:numPr>' +
-					// '<w:tabs>' +
-					// '<w:tab w:val="left" w:pos="142"/>' +
-					// '<w:tab w:val="left" w:pos="284"/>' +
-					// '<w:tab w:val="left" w:pos="6195"/>' +
-					// '</w:tabs>' +
 					'<w:spacing w:line="276" w:lineRule="auto"/>' +
 					'<w:ind w:left="-142" w:hanging="426" />' +
 					'<w:jc w:val="both"/>' +
@@ -100,14 +92,9 @@ module.exports = {
 					'<w:rFonts w:ascii="Garamond" w:hAnsi="Garamond"/>' +
 					'</w:rPr>' +
 					'</w:pPr>' +
-					'<w:r w:rsidRPr="00840235">' +
-					'<w:rPr>' +
-					'<w:rFonts w:ascii="Garamond" w:hAnsi="Garamond"/>' +
-					'<w:sz w:val="28" />' +
-					'<w:szCs w:val="28" />' +
-					'</w:rPr>' +
-					util.format('<w:t>%s</w:t>', rText) +
-					'</w:r>' +
+					common.getrElement(rText) +
+					common.getADAXml(element.ADA) +
+					common.getrElement(lText) +
 					'</w:p>'
 			}
 		}
@@ -118,36 +105,23 @@ module.exports = {
 		if (body.CourtOfAuditors) {
 			for (let index = 0; index < body.CourtOfAuditors.length; index++) {
 				const element = body.CourtOfAuditors[index];
-				var text = util.format('Τη με αρ. %s/%s Πράξη του %s Κλιμακίου του Ελεγκτικού Συνεδρίου περί μη κωλύματος της υπογραφής του σχεδίου της εν θέματι Προγραμματικής Σύμβασης.',
+				var rText = util.format('Τη με αρ. %s/%s Πράξη του %s Κλιμακίου του Ελεγκτικού Συνεδρίου %s',
 					element.ProtocolNumber,
 					element.ProtocolYear,
-					element.ScaleNumber)
+					element.ScaleNumber,
+					element.ContentAccount)
 
-				ret += '<w:p w:rsidR="00212912" w:rsidRPr="00DB37DE" w:rsidRDefault="00262B9D" w:rsidP="00F871E2">' +
+				ret += '<w:p>' +
 					'<w:pPr>' +
 					'<w:numPr>' +
 					'<w:ilvl w:val="0"/>' +
 					'<w:numId w:val="2"/>' +
 					'</w:numPr>' +
-					// '<w:tabs>' +
-					// '<w:tab w:val="left" w:pos="142"/>' +
-					// '<w:tab w:val="left" w:pos="6195"/>' +
-					// '</w:tabs>' +
 					'<w:spacing w:line="276" w:lineRule="auto"/>' +
 					'<w:ind w:left="-142" w:hanging="426" />' +
 					'<w:jc w:val="both"/>' +
-					'<w:rPr>' +
-					'<w:rFonts w:ascii="Garamond" w:hAnsi="Garamond"/>' +
-					'</w:rPr>' +
 					'</w:pPr>' +
-					'<w:r w:rsidRPr="00DB37DE">' +
-					'<w:rPr>' +
-					'<w:rFonts w:ascii="Garamond" w:hAnsi="Garamond"/>' +
-					'<w:sz w:val="28" />' +
-					'<w:szCs w:val="28" />' +
-					'</w:rPr>' +
-					util.format('<w:t>%s</w:t>', text) +
-					'</w:r>' +
+					common.getrElement(rText) +
 					'</w:p>'
 			}
 		}
@@ -160,53 +134,25 @@ module.exports = {
 			for (let index = 0; index < body.AAY.length; index++) {
 				const element = body.AAY[index];
 				if (element.Type == 0 || element.Type == 1) {
-					//return '<w:p w:rsidR="00212912" w:rsidRPr="00F871E2" w:rsidRDefault="00262B9D" w:rsidP="00F871E2">' +
+					var rText = util.format('Tη με αρ. %s/%s/%s ΕΑΔ %s ', element.AayValue, element.ProtocolNumber, element.ProtocolDate, element.EadNumber);
+					var lText = 'Απόφαση Ανάληψης Υποχρέωσης.';
 					ret += '<w:p>' +
 						'<w:pPr>' +
 						'<w:numPr>' +
 						'<w:ilvl w:val="0"/>' +
 						'<w:numId w:val="2"/>' +
 						'</w:numPr>' +
-						// '<w:tabs>' +
-						// '<w:tab w:val="left" w:pos="142"/>' +
-						// '<w:tab w:val="left" w:pos="6195"/>' +
-						// '</w:tabs>' +
 						'<w:spacing w:line="276" w:lineRule="auto"/>' +
 						'<w:ind w:left="-142" w:hanging="426" />' +
 						'<w:jc w:val="both"/>' +
-						'<w:rPr>' +
-						util.format('<w:rFonts w:ascii="%s" w:hAnsi="%s"/>', fontFamily, fontFamily) +
-						'</w:rPr>' +
 						'</w:pPr>' +
-						'<w:r>' +
-						'<w:rPr>' +
-						util.format('<w:rFonts w:ascii="%s" w:hAnsi="%s"/>', fontFamily, fontFamily) +
-						util.format('<w:sz w:val="%s" />', fontSize) +
-						util.format('<w:szCs w:val="%s" />', fontSize) +
-						'</w:rPr>' +
-						util.format('<w:t xml:space="preserve">Τη με αρ. %s/%s/%s ΕΑΔ %s (ΑΔΑ </w:t>', element.Value, element.ProtocolNumber, element.ProtocolDate, element.EadNumber) +
-						'</w:r>' +
-						'<w:r>' +
-						'<w:rPr>' +
-						util.format('<w:rFonts w:ascii="%s" w:hAnsi="%s"/>', fontFamily, fontFamily) +
-						'<w:b />' +
-						'<w:bCs />' +
-						util.format('<w:sz w:val="%s" />', fontSize) +
-						util.format('<w:szCs w:val="%s" />', fontSize) +
-						'<w:u w:val="single" />' +
-						'</w:rPr>' +
-						util.format('<w:t xml:space="preserve">%s</w:t>', element.ADA) +
-						'</w:r>' +
-						'<w:r>' +
-						'<w:rPr>' +
-						util.format('<w:rFonts w:ascii="%s" w:hAnsi="%s"/>', fontFamily, fontFamily) +
-						util.format('<w:sz w:val="%s" />', fontSize) +
-						util.format('<w:szCs w:val="%s" />', fontSize) +
-						'</w:rPr>' +
-						'<w:t xml:space="preserve">) Απόφαση Ανάληψης Υποχρέωσης</w:t>' +
-						'</w:r>' +
+						common.getrElement(rText) +
+						common.getADAXml(element.ADA) +
+						common.getrElement(lText) +
 						'</w:p>'
 				} else if (element.Type == 2) {
+					var rText = util.format('Tη υπ΄ αριθμ. %s/%s ΕΑΔ %s ', element.ProtocolNumber, element.ProtocolDate);
+					var lText = util.format('(παρ.2 άρθρο 4 ΠΔ 80/2016), της %s/%s Α.Α.Υ. ', element.AayValue, helper.extractYearFromDate(element.ProtocolDate))
 					ret += '<w:p>' +
 						'<w:pPr>' +
 						'<w:numPr>' +
@@ -216,57 +162,12 @@ module.exports = {
 						'<w:spacing w:line="276" w:lineRule="auto"/>' +
 						'<w:ind w:left="-142" w:hanging="426" />' +
 						'<w:jc w:val="both"/>' +
-						'<w:rPr>' +
-						util.format('<w:rFonts w:ascii="%s" w:hAnsi="%s"/>', fontFamily, fontFamily) +
-						'</w:rPr>' +
 						'</w:pPr>' +
-						'<w:r>' +
-						'<w:rPr>' +
-						util.format('<w:rFonts w:ascii="%s" w:hAnsi="%s"/>', fontFamily, fontFamily) +
-						util.format('<w:sz w:val="%s" />', fontSize) +
-						util.format('<w:szCs w:val="%s" />', fontSize) +
-						'</w:rPr>' +
-						util.format('<w:t xml:space="preserve">Την υπ΄ αριθμ. %s/%s (ΑΔΑ </w:t>', element.Value, element.ProtocolNumber, element.ProtocolDate) +
-						'</w:r>' +
-						'<w:r>' +
-						'<w:rPr>' +
-						util.format('<w:rFonts w:ascii="%s" w:hAnsi="%s"/>', fontFamily, fontFamily) +
-						'<w:b />' +
-						'<w:bCs />' +
-						util.format('<w:sz w:val="%s" />', fontSize) +
-						util.format('<w:szCs w:val="%s" />', fontSize) +
-						'<w:u w:val="single" />' +
-						'</w:rPr>' +
-						util.format('<w:t xml:space="preserve">%s</w:t>', element.ADA) +
-						'</w:r>' +
-						'<w:r>' +
-						'<w:rPr>' +
-						util.format('<w:rFonts w:ascii="%s" w:hAnsi="%s"/>', fontFamily, fontFamily) +
-						util.format('<w:sz w:val="%s" />', fontSize) +
-						util.format('<w:szCs w:val="%s" />', fontSize) +
-						'<w:u w:val="single" />' +
-						'</w:rPr>' +
-						util.format('<w:t xml:space="preserve">)</w:t>') +
-						'</w:r>' +
-						'<w:r>' +
-						'<w:rPr>' +
-						util.format('<w:rFonts w:ascii="%s" w:hAnsi="%s"/>', fontFamily, fontFamily) +
-						'<w:b />' +
-						'<w:bCs />' +
-						util.format('<w:sz w:val="%s" />', fontSize) +
-						util.format('<w:szCs w:val="%s" />', fontSize) +
-						'<w:u w:val="single" />' +
-						'</w:rPr>' +
-						util.format('<w:t xml:space="preserve">ΑΠΟΦΑΣΗ ΑΝΑΤΡΟΠΗΣ ΑΝΑΛΗΨΗΣ ΥΠΟΧΡΕΩΣΗΣ</w:t>') +
-						'</w:r>' +
-						'<w:r>' +
-						'<w:rPr>' +
-						util.format('<w:rFonts w:ascii="%s" w:hAnsi="%s"/>', fontFamily, fontFamily) +
-						util.format('<w:sz w:val="%s" />', fontSize) +
-						util.format('<w:szCs w:val="%s" />', fontSize) +
-						'</w:rPr>' +
-						util.format('<w:t xml:space="preserve">(παρ.2 άρθρο 4 ΠΔ 80/2016), της %s</w:t>', element.Overthrow) +
-						'</w:r>' +
+						common.getrElement(rText) +
+						common.getADAXml(element.ADA) +
+						common.getBoldText('ΑΠΟΦΑΣΗ ΑΝΑΤΡΟΠΗΣ ΑΝΑΛΗΨΗΣ ΥΠΟΧΡΕΩΣΗΣ ') +
+						common.getrElement(lText) +
+						
 						'</w:p>'
 				}
 			}

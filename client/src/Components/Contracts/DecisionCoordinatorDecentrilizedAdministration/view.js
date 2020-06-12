@@ -62,6 +62,9 @@ class DecisionCoordinatorDecentrilizedAdministrationView extends Component {
       msgColor: '',
       msgPadding: '0px',
       Id: this.props.Id ? this.props.Id : '',
+      DecisionBoardProtocol: '',
+      ActionTransmission: '',
+      ActionAccount: '',
       ProtocolNumber: '',
       ProtocolDate: '',
       Content: '',
@@ -107,6 +110,7 @@ class DecisionCoordinatorDecentrilizedAdministrationView extends Component {
   resetState() {
     this.setState({
       addNewItem: false, editItem: false, deleteItem: false,
+      DecisionBoardId: '',
       ProtocolNumber: '',
       ProtocolDate: '',
       Content: '',
@@ -116,7 +120,7 @@ class DecisionCoordinatorDecentrilizedAdministrationView extends Component {
   }
   resetMsgInfo() {
     setTimeout(function () {
-      this.setState({ openMessage: false, message: '', msgPadding: '0px'});
+      this.setState({ openMessage: false, message: '', msgPadding: '0px' });
     }.bind(this), 5000);
   }
 
@@ -161,6 +165,41 @@ class DecisionCoordinatorDecentrilizedAdministrationView extends Component {
     })
   }
 
+  getDecisionBoardValues() {
+    let ret = '';
+
+    if (this.props.contractDetails.decisionboard) {
+      ret = this.props.contractDetails.decisionboard.map((data, index) => {
+        if (data) {
+          var stringValue = data.ProtocolNumber.toString() + '/' + data.ProtocolDate.toString();
+          return <option key={index} value={stringValue}>{stringValue}</option>
+        }
+      })
+    }
+
+    return ret;
+  }
+  getActions() {
+    let ret = '';
+
+    var values = [];
+    values.push(' περί έγκρισης της ');
+    values.push(' περί έγκρισης της τροποίησης της ');
+    values.push(' για τη νόμιμη λήψη της ');
+
+    ret = values.map((data, index) => {
+      return <option key={index} value={data}>{data}</option>
+    })
+
+    return ret;
+  }
+
+  getTitleValue() {
+    if (this.DecisionBoardProtocol)
+      return 'Αναφέρεται στην τροποποίηση της' + this.DecisionBoardProtocol + ";"
+    else
+      return "Επιλέξετε "
+  }
   decisionCoordinatorDecentrilizedAdministrationItemForm(length) {
 
     if (this.state.addNewItem === true || this.state.editItem === true) {
@@ -178,8 +217,29 @@ class DecisionCoordinatorDecentrilizedAdministrationView extends Component {
               protocolDate={this.state.ProtocolDate}
               onChange={this.onChange}
               tp1='text'
-              tp2='date' />
-            <MyTextField tm={getDecisionCoordinatorDecentrilizedAdministrationTooltip(this.state, 3)} tp='text' title='ΑΔΑ' label='' id='ADA' stateValue={this.state.ADA} isRequired={false} isDisabled={false} onChange={this.onChange} style={{ width: '100%' }} width='40%' />
+              tp2='date'
+              width='50%'
+            />
+            <MyTextField tm={getDecisionCoordinatorDecentrilizedAdministrationTooltip(this.state, 3)} tp='text' title='ΑΔΑ' label='' id='ADA' stateValue={this.state.ADA} isRequired={false} isDisabled={false} onChange={this.onChange} style={{ width: '100%' }} width='50%' />
+          </div>
+          <div style={{ display: 'flex', flexFlow: 'row', height: 'auto', backgroundColor: '#fff', justifyContent: 'left', padding: '10px' }}>
+            <MyTextField tm={getDecisionCoordinatorDecentrilizedAdministrationTooltip(this.state, 4)} title='Ενέργεια (Διαβιβαστικό)' id='ActionTransmission' stateValue={this.state.ActionTransmission} values={this.getActions()} isRequired={true} isDisabled={false} onChange={this.onChange} select={true} width='50%' />
+            <MyTextField tm={getDecisionCoordinatorDecentrilizedAdministrationTooltip(this.state, 5)} title='Ενέργεια (Λογαριασμός)' id='ActionAccount' stateValue={this.state.ActionAccount} values={this.getActions()} isRequired={true} isDisabled={false} onChange={this.onChange} select={true} width='50%' />
+          </div>
+          <div style={{ display: 'flex', flexFlow: 'row', height: 'auto', backgroundColor: '#fff', justifyContent: 'left', padding: '10px' }}>
+            <MyTextField tm={getDecisionCoordinatorDecentrilizedAdministrationTooltip(this.state, 6)} title='Σε ποιά A.Δ.Σ. αναφέρεται?' id='DecisionBoardProtocol' stateValue={this.state.DecisionBoardProtocol} values={this.getDecisionBoardValues()} isRequired={true} isDisabled={false} onChange={this.onChange} select={true} width='50%' />
+            <ProtocolInput
+              tm1={getDecisionCoordinatorDecentrilizedAdministrationTooltip(this.state, 7)}
+              tm2={getDecisionCoordinatorDecentrilizedAdministrationTooltip(this.state, 8)}
+              title='ΑΠΔΑ Α.Π.'
+              idn='APDA_ProtocolNumber'
+              idd='APDA_ProtocolDate'
+              protocolNumber={this.state.APDA_ProtocolNumber}
+              protocolDate={this.state.APDA_ProtocolDate}
+              onChange={this.onChange}
+              tp1='text'
+              tp2='date'
+              width='50%' />
           </div>
           <div style={{ display: 'flex', flexFlow: 'row', height: 'auto', justifyContent: 'center', padding: '10px' }}>
             <LoadingOverlay
@@ -257,20 +317,55 @@ class DecisionCoordinatorDecentrilizedAdministrationView extends Component {
       style={{ textAlign: 'top', padding: '10px', justifyContent: 'end' }}>
       <DeleteIcon />
     </IconButton>
-  }
-  renderItemOptions(index, item) {
-
-    return <>
-      {item.ADA ? <span> με <b>ΑΔΑ</b> {item.ADA}</span> : ''}
-      <span style={{ marginLeft: '10px' }}></span>
-      {item.Content ? <span style={{ fontStyle: 'italic' }}> και με <b>περιεχόμενο</b> {item.Content}</span> : ''}
-    </>
-  }
+  }  
   renderServerResponse() {
 
     return <div style={{ display: 'flex', flexFlow: 'row', height: 'auto', background: this.state.msgColor, justifyContent: 'center', padding: this.msgPadding }}>
       <span style={{ fontSize: '22px', textAlign: 'center', fontWeight: 'bold', padding: this.state.msgPadding }}>{this.state.message}</span>
     </div>
+  }
+
+  getTransmissionItemInfo(index, item) {
+
+    var rContent = <>
+      <span>Δύο (2) φωτοαντίγραφα της υπ' αριθ. </span>
+      <span>{item.ProtocolNumber}/{item.ProtocolDate ? getDateFormatForDocument(item.ProtocolDate) : item.ProtocolDate}</span>
+      <span> Απόφασης του Συντονιστή Αποκεντρωμένης  Διοίκησης Αττικής </span>
+    </>;
+    var ada = <></>
+    if (item.ADA)
+      ada = <><span>(ΑΔΑ: </span><b>{item.ADA}</b><span>) </span></>
+
+    var lContent = <>      
+      <span>{item.ActionTransmission} {item.DecisionBoardProtocol}</span>
+      {item.APDA_ProtocolNumber ? <span>(Α.Π.Δ.Α. {item.APDA_ProtocolNumber}/{item.APDA_ProtocolDate})</span> : <></>}
+    </>
+
+    return <>
+      <span style={{ fontWeight: "bold" }}>Διαβιβαστικό (ΣΥΝΗΜΜΕΝΑ ΔΙΚΑΙΟΛΟΓΗΤΙΚΑ)</span>
+      <br />
+      {rContent}
+      {ada}
+      {lContent}
+    </>
+  }
+
+  getAccountItemInfo(index, item) {
+
+    var rContent = <span>Τη με αρ. {item.ProtocolNumber}/{item.ProtocolDate} Απόφαση του Συντονιστή της Αποκεντρωμένης Διοίκησης Αττικής </span>;
+    var ada = <></>
+    if (item.ADA)
+      ada = <><span>(ΑΔΑ: </span><b><u>{item.ADA}</u></b><span>) </span></>
+    var lContent = <span>{item.ActionAccount} {item.DecisionBoardProtocol} Α.Δ.Σ.</span>;
+
+    return <>
+      <br />
+      <span style={{ fontWeight: "bold" }}>Λογαριασμός (ΣΥΝΗΜΜΕΝΑ ΔΙΚΑΙΟΛΟΓΗΤΙΚΑ)</span>
+      <br />
+      {rContent}
+      {ada}
+      {lContent}
+    </>
   }
 
   render() {
@@ -292,8 +387,9 @@ class DecisionCoordinatorDecentrilizedAdministrationView extends Component {
                     <Typography>
                       <div style={{ display: 'flex', flexFlow: 'row', fontSize: '18px', flexWrap: 'nowrap' }}>
                         <span style={{ flex: '1' }}>
-                          <b>{index + 1}η Απόφαση Ελέγχου της Αποκεντρωμένης Διοίκησης με A.Π.</b> {item.ProtocolNumber ? item.ProtocolNumber : ''}/{item.ProtocolDate ? getDateFormatForDocument(item.ProtocolDate) : ''}
-                          {this.renderItemOptions(index, item)}
+                          <b>{index + 1}.</b>
+                          {this.getTransmissionItemInfo(index, item)}
+                          {this.getAccountItemInfo(index, item)}                          
                         </span>
                         {this.renderEditOption(index, item)}
                         {this.renderDeleteOption(index, item)}

@@ -47,7 +47,7 @@ const StyledTextField = props => {
     if (tooltipTemplate) {
       return <StyledTooltip
         placement="top"
-        disableHoverListener={true}
+        disableHoverListener={false}
         title={
           <React.Fragment>
             <Typography
