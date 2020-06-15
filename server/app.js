@@ -26,6 +26,7 @@ var dbAay = require('./Postgre/Queries/AAY')
 var dbBoardDecision = require('./Postgre/Queries/BoardDecision')
 var dbDecisionCoordinatorDecentrilizedAdministration = require('./Postgre/Queries/DecisionCoordinatorDecentrilizedAdministration')
 var dbCourtOfAuditors = require('./Postgre/Queries/CourtOfAuditors')
+var dbAuthorDocumentedRequest = require('./Postgre/Queries/AuthorDocumentedRequest')
 
 var helper = require('./HelperMethods/helpermethods')
 
@@ -194,9 +195,6 @@ app.get('/getaccountsinfo', dbLogin.checkToken, dbAccount.getAccountsInfo);
 app.post('/insertaccount', dbLogin.checkToken, dbAccount.insertAccount);
 app.post('/updateaccount', dbLogin.checkToken, dbAccount.updateAccount);
 
-app.post('/insertaay', dbLogin.checkToken, dbAay.insert);
-app.post('/updateaay', dbLogin.checkToken, dbAay.update);
-app.post('/deleteaay', dbLogin.checkToken, dbAay.remove);
 app.post('/insertdecisionboard', dbLogin.checkToken, dbBoardDecision.insert);
 app.post('/updatedecisionboard', dbLogin.checkToken, dbBoardDecision.update);
 app.post('/deletedecisionboard', dbLogin.checkToken, dbBoardDecision.remove);
@@ -206,6 +204,9 @@ app.post('/deletedecisioncoordinatordecentrilizedadministration', dbLogin.checkT
 app.post('/insertcourtofauditors', dbLogin.checkToken, dbCourtOfAuditors.insert);
 app.post('/updatecourtofauditors', dbLogin.checkToken, dbCourtOfAuditors.update);
 app.post('/deletecourtofauditors', dbLogin.checkToken, dbCourtOfAuditors.remove);
+app.post('/insertauthordocumentedrequest', dbLogin.checkToken, dbAuthorDocumentedRequest.insert);
+app.post('/updateauthordocumentedrequest', dbLogin.checkToken, dbAuthorDocumentedRequest.update);
+app.post('/deleteauthordocumentedrequest', dbLogin.checkToken, dbAuthorDocumentedRequest.remove);
 
 
 // view engine setup

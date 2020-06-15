@@ -24,6 +24,7 @@ import AayView from '../AAY/view';
 import DecisionBoardView from '../DecisionBoard/view';
 import DecisionCoordinatorDecentrilizedAdministrationView from '../DecisionCoordinatorDecentrilizedAdministration/view';
 import CourtOfAuditorsView from '../CourtOfAuditors/view';
+import AuthorDocumentedRequestView from '../AuthorDocumentedRequest/view';
 
 import EditIcon from '@material-ui/icons/Edit';
 import DeleteIcon from '@material-ui/icons/Delete';
@@ -87,6 +88,7 @@ class ItemDetail extends React.Component {
 			openDecisionBoardView: null,
 			openDecisionCoordinatorDecentrilizedAdministrationView: null,
 			openCourtOfAuditorsView: null,
+			openAuthorDocumentedRequestView: null,
 			openView: null,
 			windowWidth: window.innerWidth,
 			windowHeight: window.innerHeight
@@ -104,6 +106,7 @@ class ItemDetail extends React.Component {
 		this.handleDecisionBoardClick = this.handleDecisionBoardClick.bind(this);
 		this.handleDecisionCoordinatorDecentrilizedAdministrationClick = this.handleDecisionCoordinatorDecentrilizedAdministrationClick.bind(this);
 		this.handleCourtOfAuditorsClick = this.handleCourtOfAuditorsClick.bind(this);
+		this.handleAuthorDocumentedRequesClick = this.handleAuthorDocumentedRequesClick.bind(this);
 	}
 
 	handlePopoverClick(event) {
@@ -126,8 +129,19 @@ class ItemDetail extends React.Component {
 		this.setState({ openCourtOfAuditorsView: event.currentTarget });
 	}
 
+	handleAuthorDocumentedRequesClick(event) {
+		this.setState({ openAuthorDocumentedRequestView: event.currentTarget });
+	}
+
 	handlePopoverClose() {
-		this.setState({ anchorEl: null, openAayView: null, openDecisionBoardView: null, openDecisionCoordinatorDecentrilizedAdministrationView: null, openCourtOfAuditorsView: null });
+		this.setState({
+			anchorEl: null,
+			openAayView: null,
+			openDecisionBoardView: null,
+			openDecisionCoordinatorDecentrilizedAdministrationView: null,
+			openCourtOfAuditorsView: null,
+			openAuthorDocumentedRequestView: null
+		});
 	}
 
 	editNewContract(e) {
@@ -651,6 +665,34 @@ class ItemDetail extends React.Component {
 		// })		
 	}
 
+	getAuthorDocumentedRequestTemplate(contractDetails) {
+
+		return <Grid>
+			<Paper style={styles.paperMoreContractInfo} square={true}>
+				<Typography>
+					<b>Τεκμηριωμένο Αίτημα του Διατάκτη</b>
+					<span style={{ marginLeft: '10px', fontWeight: '' }}>{contractDetails.authordocumentedrequest ? contractDetails.authordocumentedrequest.length : 'Δεν έχει'}</span>
+					<Button
+						variant='contained'
+						size='small'
+						style={{ margin: '5px', background: '#F3FCFF', color: '#000' }}
+						onClick={this.handleAuthorDocumentedRequesClick}>
+						Προβολή
+					</Button>
+
+					<Popover
+						open={this.state.openAuthorDocumentedRequestView ? true : false}
+						onClose={this.handlePopoverClose}
+						anchorReference="anchorPosition"
+						anchorPosition={{ top: this.getPopoverTop(this.state.windowHeight), left: this.getPopoverLeft(this.state.windowWidth) }}
+						style={{ transform: document.getElementById('root').style.transform }}>
+						<AuthorDocumentedRequestView contractId={contractDetails.Id} header='Τεκμηριωμένα Αίτηματα του Διατάκτη' />
+					</Popover>
+				</Typography>
+			</Paper>
+		</Grid>
+	}
+
 	getLawArticle(contractInfo) {
 		let ret = '';
 
@@ -759,11 +801,12 @@ class ItemDetail extends React.Component {
 													</Typography>
 												</Paper>
 											</Grid>
-											{this.getCPVTemplate(contractInfo)}											
+											{this.getCPVTemplate(contractInfo)}
 											{this.getBoardDecisionsInfoTemplate(contractInfo)}
 											{this.getSADAInfoTemplate(contractInfo)}
 											{this.getCourtOfAuditorsInfoTemplate(contractInfo)}
 											{this.getAayInfoTemplate(contractInfo)}
+											{this.getAuthorDocumentedRequestTemplate(contractInfo)}
 											<Grid item>
 												<Paper style={styles.paperMoreContractInfo} square={true}>
 													<Typography>

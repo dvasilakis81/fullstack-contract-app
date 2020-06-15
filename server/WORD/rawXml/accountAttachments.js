@@ -29,12 +29,7 @@ module.exports = {
 			'<w:numPr>' +
 			'<w:ilvl w:val="0"/>' +
 			'<w:numId w:val="2"/>' +
-			'</w:numPr>' +
-			// '<w:tabs>' +
-			// '<w:tab w:val="left" w:pos="142"/>' +
-			// '<w:tab w:val="left" w:pos="284"/>' +
-			// '<w:tab w:val="left" w:pos="6195"/>' +
-			// '</w:tabs>' +
+			'</w:numPr>' +			
 			'<w:spacing w:line="276" w:lineRule="auto"/>' +
 			'<w:ind w:left="-142" w:hanging="426" />' +
 			'<w:jc w:val="both"/>' +
@@ -178,7 +173,7 @@ module.exports = {
 	getAttachment6: function (body) {
 
 		if (body.Account[0].Invoice) {
-			var text = util.format('Το με Α.Π. %s/%s διαβιβαστικό έγγραφο, με το οποίο μας διαβιβάστηκε το υπ’ αριθ. %s/%s Τιμολόγιο της %s στης %s.',
+			var rText = util.format('Το με Α.Π. %s/%s διαβιβαστικό έγγραφο, με το οποίο μας διαβιβάστηκε το υπ’ αριθ. %s/%s Τιμολόγιο της %s στης %s.',
 				body.Account[0].Invoice[0].DeliveredDateProtocol[0].Number,
 				body.Account[0].Invoice[0].DeliveredDateProtocol[0].Date,
 				body.Account[0].Invoice[0].Number,
@@ -187,32 +182,17 @@ module.exports = {
 				body.Account[0].Invoice[0].DeliveredDate
 			)
 
-			return '<w:p w:rsidR="00F871E2" w:rsidRPr="00F871E2" w:rsidRDefault="00262B9D" w:rsidP="00F871E2">' +
+			return '<w:p>' +
 				'<w:pPr>' +
 				'<w:numPr>' +
 				'<w:ilvl w:val="0"/>' +
 				'<w:numId w:val="2"/>' +
-				'</w:numPr>' +
-				// '<w:tabs>' +
-				// '<w:tab w:val="left" w:pos="142"/>' +
-				// '<w:tab w:val="left" w:pos="284"/>' +
-				// '<w:tab w:val="left" w:pos="6195"/>' +
-				// '</w:tabs>' +
+				'</w:numPr>' +				
 				'<w:spacing w:line="276" w:lineRule="auto"/>' +
 				'<w:ind w:left="-142" w:hanging="426" />' +
-				'<w:jc w:val="both"/>' +
-				'<w:rPr>' +
-				'<w:rFonts w:ascii="Garamond" w:hAnsi="Garamond"/>' +
-				'</w:rPr>' +
+				'<w:jc w:val="both"/>' +				
 				'</w:pPr>' +
-				'<w:r>' +
-				'<w:rPr>' +
-				'<w:rFonts w:ascii="Garamond" w:hAnsi="Garamond"/>' +
-				'<w:sz w:val="28" />' +
-				'<w:szCs w:val="28" />' +
-				'</w:rPr>' +
-				util.format('<w:t>%s</w:t>', text) +
-				'</w:r>' +
+				common.getrElement(rText) +
 				'</w:p>';
 		}
 	},
@@ -229,32 +209,17 @@ module.exports = {
 			var rText = util.format('Την από %s Βεβαίωση Έργου του Τμήματος %s της Διεύθυνσης %s ', workConfirmationDate, departmentNameLower, directionNameLower)
 			rText += util.format('περί της ορθής υλοποίησης της εν λόγω Σύμβασης κατά το χρονικό διάστημα από %s έως και %s', start, end)
 
-			return '<w:p w:rsidR="00F871E2" w:rsidRPr="00F871E2" w:rsidRDefault="00395F84" w:rsidP="00F871E2">' +
+			return '<w:p>' +
 				'<w:pPr>' +
 				'<w:numPr>' +
 				'<w:ilvl w:val="0"/>' +
 				'<w:numId w:val="2"/>' +
 				'</w:numPr>' +
-				// '<w:tabs>' +
-				// '<w:tab w:val="left" w:pos="142"/>' +
-				// '<w:tab w:val="left" w:pos="284"/>' +
-				// '<w:tab w:val="left" w:pos="6195"/>' +
-				// '</w:tabs>' +
 				'<w:spacing w:line="276" w:lineRule="auto"/>' +
 				'<w:ind w:left="-142" w:hanging="426" />' +
 				'<w:jc w:val="both"/>' +
-				'<w:rPr>' +
-				'<w:rFonts w:ascii="Garamond" w:hAnsi="Garamond"/>' +
-				'</w:rPr>' +
 				'</w:pPr>' +
-				'<w:r w:rsidRPr="00395F84">' +
-				'<w:rPr>' +
-				'<w:rFonts w:ascii="Garamond" w:hAnsi="Garamond"/>' +
-				'<w:sz w:val="28" />' +
-				'<w:szCs w:val="28" />' +
-				'</w:rPr>' +
-				util.format('<w:t>%s</w:t>', rText) +
-				'</w:r>' +
+				common.getrElement(rText) +
 				'</w:p>'
 		}
 	},
@@ -265,32 +230,17 @@ module.exports = {
 		var rText = util.format('Δύο (2) πρωτότυπα του από %s Πρωτοκόλλου Οριστικής Παραλαβής Εργασιών (για το εν λόγω χρονικό διάστημα υλοποίησης της Σύμβασης) της τριμελούς Επιτροπής Παραλαβής.',
 			DeliveryGoodsDate)
 
-		return '<w:p w:rsidR="00F871E2" w:rsidRPr="00F871E2" w:rsidRDefault="00395F84" w:rsidP="00F871E2">' +
+		return '<w:p>' +
 			'<w:pPr>' +
 			'<w:numPr>' +
 			'<w:ilvl w:val="0"/>' +
 			'<w:numId w:val="2"/>' +
-			'</w:numPr>' +
-			// '<w:tabs>' +
-			// '<w:tab w:val="left" w:pos="142"/>' +
-			// '<w:tab w:val="left" w:pos="284"/>' +
-			// '<w:tab w:val="left" w:pos="6195"/>' +
-			// '</w:tabs>' +
+			'</w:numPr>' +			
 			'<w:spacing w:line="276" w:lineRule="auto"/>' +
 			'<w:ind w:left="-142" w:hanging="426" />' +
-			'<w:jc w:val="both"/>' +
-			'<w:rPr>' +
-			'<w:rFonts w:ascii="Garamond" w:hAnsi="Garamond"/>' +
-			'</w:rPr>' +
+			'<w:jc w:val="both"/>' +			
 			'</w:pPr>' +
-			'<w:r w:rsidRPr="00395F84">' +
-			'<w:rPr>' +
-			'<w:rFonts w:ascii="Garamond" w:hAnsi="Garamond"/>' +
-			'<w:sz w:val="28" />' +
-			'<w:szCs w:val="28" />' +
-			'</w:rPr>' +
-			util.format('<w:t>%s</w:t>', rText) +
-			'</w:r>' +
+			common.getrElement(rText) +
 			'</w:p>';
 	},
 	getAttachment9: function (body) {
@@ -298,64 +248,34 @@ module.exports = {
 		var prototypesPhrase = 'πρωτότυπα';
 		if (body.PrototypeNumber === '1')
 			prototypesPhrase = 'πρωτότυπο'
-
-		return '<w:p w:rsidR="00F871E2" w:rsidRPr="00F871E2" w:rsidRDefault="00395F84" w:rsidP="00F871E2">' +
+		var rText = 'Τέσσερα (4) πρωτότυπα του 1ου Λογαριασμού.';
+		return '<w:p>' +
 			'<w:pPr>' +
 			'<w:numPr>' +
 			'<w:ilvl w:val="0"/>' +
 			'<w:numId w:val="2"/>' +
-			'</w:numPr>' +
-			// '<w:tabs>' +
-			// '<w:tab w:val="left" w:pos="142"/>' +
-			// '<w:tab w:val="left" w:pos="284"/>' +
-			// '<w:tab w:val="left" w:pos="6195"/>' +
-			// '</w:tabs>' +
+			'</w:numPr>' +			
 			'<w:spacing w:line="276" w:lineRule="auto"/>' +
 			'<w:ind w:left="-142" w:hanging="426" />' +
-			'<w:jc w:val="both"/>' +
-			'<w:rPr>' +
-			'<w:rFonts w:ascii="Garamond" w:hAnsi="Garamond"/>' +
-			'</w:rPr>' +
+			'<w:jc w:val="both"/>' +			
 			'</w:pPr>' +
-			'<w:r w:rsidRPr="00395F84">' +
-			'<w:rPr>' +
-			'<w:rFonts w:ascii="Garamond" w:hAnsi="Garamond"/>' +
-			'<w:sz w:val="28" />' +
-			'<w:szCs w:val="28" />' +
-			'</w:rPr>' +
-			//util.format('<w:t>Τέσσερα (4) πρωτότυπα του 1ου Λογαριασμού.</w:t>', helper.getWord(body.PrototypeNumber), body.PrototypeNumber, prototypesPhrase) +
-			'<w:t>Τέσσερα (4) πρωτότυπα του 1ου Λογαριασμού.</w:t>' +
-			'</w:r>' +
+			common.getrElement(rText) +
 			'</w:p>';
 	},
 	getAttachment10: function (body) {
 		if (body.Contract && body.Contract[0].Protocol[0]) {
-			return '<w:p w:rsidR="00212912" w:rsidRPr="00F871E2" w:rsidRDefault="00262B9D" w:rsidP="00F871E2">' +
+			var rText = util.format('<w:t>Ενημερωτικός Πίνακας της με Α.Π. %s/%s Προγραμματικής Σύμβασης.</w:t>', body.Contract[0].Protocol[0].Number, body.Contract[0].Protocol[0].Date);
+			return '<w:p>' +
 				'<w:pPr>' +
 				'<w:numPr>' +
 				'<w:ilvl w:val="0"/>' +
 				'<w:numId w:val="2"/>' +
-				'</w:numPr>' +
-				// '<w:tabs>' +
-				// '<w:tab w:val="left" w:pos="142"/>' +
-				// '<w:tab w:val="left" w:pos="284"/>' +
-				// '<w:tab w:val="left" w:pos="6195"/>' +
-				// '</w:tabs>' +
+				'</w:numPr>' +				
 				'<w:spacing w:line="276" w:lineRule="auto"/>' +
 				'<w:ind w:left="-142" w:hanging="426" />' +
-				'<w:jc w:val="both"/>' +
-				'<w:rPr>' +
-				'<w:rFonts w:ascii="Garamond" w:hAnsi="Garamond"/>' +
-				'</w:rPr>' +
+				'<w:jc w:val="both"/>' +				
 				'</w:pPr>' +
-				'<w:r w:rsidRPr="00F871E2">' +
-				'<w:rPr>' +
-				'<w:rFonts w:ascii="Garamond" w:hAnsi="Garamond"/>' +
-				'<w:sz w:val="28" />' +
-				'<w:szCs w:val="28" />' +
-				'</w:rPr>' +
-				util.format('<w:t>Ενημερωτικός Πίνακας της με Α.Π. %s/%s Προγραμματικής Σύμβασης.</w:t>', body.Contract[0].Protocol[0].Number, body.Contract[0].Protocol[0].Date) +
-				'</w:r>' +
+				common.getrElement(rText) +
 				'</w:p>';
 		}
 	},
@@ -378,11 +298,7 @@ module.exports = {
 				'<w:ilvl w:val="0"/>' +
 				'<w:numId w:val="2"/>' +
 				'</w:numPr>' +
-				//'<w:tabs>' +
-				// '<w:tab w:val="left" w:pos="142"/>' +
-				// '<w:tab w:val="left" w:pos="284"/>' +
-				// '<w:tab w:val="left" w:pos="6195"/>' +
-				// '</w:tabs>' +
+				
 				'<w:spacing w:line="276" w:lineRule="auto"/>' +
 				'<w:ind w:left="-142" w:hanging="426" />' +
 				'<w:jc w:val="both"/>' +
@@ -390,14 +306,7 @@ module.exports = {
 				'<w:rFonts w:ascii="Garamond" w:hAnsi="Garamond"/>' +
 				'</w:rPr>' +
 				'</w:pPr>' +
-				'<w:r>' +
-				'<w:rPr>' +
-				'<w:rFonts w:ascii="Garamond" w:hAnsi="Garamond"/>' +
-				'<w:sz w:val="28" />' +
-				'<w:szCs w:val="28" />' +
-				'</w:rPr>' +
-				util.format('<w:t>%s</w:t>', rText) +
-				'</w:r>' +
+				common.getrElement(rText) +
 				'</w:p>'
 
 			// 7)	Το από  06.12.2019 πρακτικό της (2ης) δεύτερης συνεδρίασης Επιτροπής Παρακολούθησης της Προγραμματικής Σύμβασης
@@ -417,19 +326,9 @@ module.exports = {
 				'</w:tabs>' +
 				'<w:spacing w:line="276" w:lineRule="auto"/>' +
 				'<w:ind w:left="-142" w:hanging="426" />' +
-				'<w:jc w:val="both"/>' +
-				'<w:rPr>' +
-				'<w:rFonts w:ascii="Garamond" w:hAnsi="Garamond"/>' +
-				'</w:rPr>' +
+				'<w:jc w:val="both"/>' +				
 				'</w:pPr>' +
-				'<w:r>' +
-				'<w:rPr>' +
-				'<w:rFonts w:ascii="Garamond" w:hAnsi="Garamond"/>' +
-				'<w:sz w:val="28" />' +
-				'<w:szCs w:val="28" />' +
-				'</w:rPr>' +
-				util.format('<w:t>%s</w:t>', rText) +
-				'</w:r>' +
+				common.getrElement(rText) +
 				'</w:p>'
 
 			rText = util.format('Δύο (2) φωτοαντίγραφα του με Α.Π. %s/%s εγγράφου της %s του Δήμου Αθηναίων με το οποίο διαβιβάζονται:',
@@ -453,19 +352,9 @@ module.exports = {
 				'</w:tabs>' +
 				'<w:spacing w:line="276" w:lineRule="auto"/>' +
 				'<w:ind w:left="-142" w:hanging="426" />' +
-				'<w:jc w:val="both"/>' +
-				'<w:rPr>' +
-				'<w:rFonts w:ascii="Garamond" w:hAnsi="Garamond"/>' +
-				'</w:rPr>' +
+				'<w:jc w:val="both"/>' +				
 				'</w:pPr>' +
-				'<w:r>' +
-				'<w:rPr>' +
-				'<w:rFonts w:ascii="Garamond" w:hAnsi="Garamond"/>' +
-				'<w:sz w:val="28" />' +
-				'<w:szCs w:val="28" />' +
-				'</w:rPr>' +
-				util.format('<w:t>%s</w:t>', rText) +
-				'</w:r>' +
+				common.getrElement(rText) +
 				'</w:p>' +
 				'<w:p>' +
 				'<w:pPr>' +
@@ -475,28 +364,11 @@ module.exports = {
 				'</w:numPr>' +
 				'<w:spacing w:line="276" w:lineRule="auto"/>' +
 				//'<w:ind w:left="-142" w:hanging="426" />' +
-				'<w:jc w:val="both"/>' +
-				'<w:rPr>' +
-				'<w:rFonts w:ascii="Garamond" w:hAnsi="Garamond"/>' +
-				'</w:rPr>' +
+				'<w:jc w:val="both"/>' +				
 				'</w:pPr>' +
-				'<w:r>' +
-				'<w:rPr>' +
-				'<w:rFonts w:ascii="Garamond" w:hAnsi="Garamond"/>' +
-				'<w:sz w:val="28" />' +
-				'<w:szCs w:val="28" />' +
-				'</w:rPr>' +
-				util.format('<w:t>%s</w:t>', s1_1) +
-				'</w:r>' +
+				common.getrElement(s1_1) +				
 				'<w:r><w:rPr><w:vertAlign w:val="superscript"/><w:lang w:val="el-GR"/></w:rPr><w:t>ης</w:t></w:r>' +
-				'<w:r>' +
-				'<w:rPr>' +
-				'<w:rFonts w:ascii="Garamond" w:hAnsi="Garamond"/>' +
-				'<w:sz w:val="28" />' +
-				'<w:szCs w:val="28" />' +
-				'</w:rPr>' +
-				util.format('<w:t xml:space="preserve">%s</w:t>', s1_2) +
-				'</w:r>' +
+				common.getrElement(s1_2) +
 				'</w:p>' +
 				'<w:p>' +
 				'<w:pPr>' +
@@ -504,23 +376,10 @@ module.exports = {
 				'<w:ilvl w:val="1"/>' +
 				'<w:numId w:val="2"/>' +
 				'</w:numPr>' +
-				'<w:spacing w:line="276" w:lineRule="auto"/>' +
-				//'<w:ind w:left="100" w:hanging="426" />' +
-				'<w:jc w:val="both"/>' +
-				'<w:rPr>' +
-				'<w:rFonts w:ascii="Garamond" w:hAnsi="Garamond"/>' +
-				'<w:sz w:val="28" />' +
-				'<w:szCs w:val="28" />' +
-				'</w:rPr>' +
+				'<w:spacing w:line="276" w:lineRule="auto"/>' +				
+				'<w:jc w:val="both"/>' +				
 				'</w:pPr>' +
-				'<w:r w:rsidRPr="00F871E2">' +
-				'<w:rPr>' +
-				'<w:rFonts w:ascii="Garamond" w:hAnsi="Garamond"/>' +
-				'<w:sz w:val="28" />' +
-				'<w:szCs w:val="28" />' +
-				'</w:rPr>' +
-				util.format('<w:t>%s</w:t>', s2) +
-				'</w:r>' +
+				common.getrElement(s2) +
 				'</w:p>'
 
 			// 	'<w:p><w:pPr><w:pStyle w:val="ae"/>' +
@@ -592,3 +451,9 @@ module.exports = {
 	}
 
 }
+
+// '<w:tabs>' +
+			// '<w:tab w:val="left" w:pos="142"/>' +
+			// '<w:tab w:val="left" w:pos="284"/>' +
+			// '<w:tab w:val="left" w:pos="6195"/>' +
+			// '</w:tabs>' +

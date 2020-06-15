@@ -1,5 +1,5 @@
-Message: syntax error at or near "'3'"
-Stack: error: syntax error at or near "'3'"
+Message: invalid input syntax for integer: "sdf"
+Stack: error: invalid input syntax for integer: "sdf"
     at Parser.parseErrorMessage (c:\Github\Ordering FullStack\node_modules\pg-protocol\dist\parser.js:241:15)
     at Parser.handlePacket (c:\Github\Ordering FullStack\node_modules\pg-protocol\dist\parser.js:89:29)
     at Parser.parse (c:\Github\Ordering FullStack\node_modules\pg-protocol\dist\parser.js:41:38)

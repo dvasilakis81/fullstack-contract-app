@@ -224,8 +224,9 @@ module.exports = {
 	getAttachment6: function (body) {
 		// 3.	Πρωτότυπο & φωτ/φο του με αριθμ. {a_in}/{a_id} Τιμολογίου Παροχής Υπηρεσιών της {c_conc}
 		if (body.Account[0].Invoice) {
+			var rText = '';
 			if (body.Account[0].Invoice[0].DeliveredDateProtocol[0].Number)
-				var text = util.format('Το με Α.Π. %s/%s διαβιβαστικό έγγραφο, με το οποίο μας διαβιβάστηκε το υπ’ αριθ. %s/%s Τιμολόγιο της %s %s.',
+				rText = util.format('Το με Α.Π. %s/%s διαβιβαστικό έγγραφο, με το οποίο μας διαβιβάστηκε το υπ’ αριθ. %s/%s Τιμολόγιο της %s %s.',
 					body.Account[0].Invoice[0].DeliveredDateProtocol[0].Number,
 					body.Account[0].Invoice[0].DeliveredDateProtocol[0].Date,
 					body.Account[0].Invoice[0].Number,
@@ -233,10 +234,10 @@ module.exports = {
 					body.Contract[0].Concessionaire[0].Name,
 					util.format('στης %s', body.Account[0].Invoice[0].DeliveredDate))
 			else
-				var text = util.format('Το υπ΄ αρίθμ %s/%s τιμολόγιο του δικαιούχου %s και φωτοαντίγραφο του', body.Account[0].Invoice[0].Number,
+				rText = util.format('Το υπ΄ αρίθμ %s/%s τιμολόγιο του δικαιούχου %s και φωτοαντίγραφο του', body.Account[0].Invoice[0].Number,
 					body.Account[0].Invoice[0].Date, body.Contract[0].Concessionaire[0].Name)
 
-			return '<w:p w:rsidR="00F871E2" w:rsidRPr="00F871E2" w:rsidRDefault="00262B9D" w:rsidP="00F871E2">' +
+			return '<w:p>' +
 				'<w:pPr>' +
 				'<w:numPr>' +
 				'<w:ilvl w:val="0"/>' +
@@ -249,16 +250,8 @@ module.exports = {
 				'</w:tabs>' +
 				'<w:spacing w:line="276" w:lineRule="auto"/>' +
 				'<w:jc w:val="both"/>' +
-				'<w:rPr>' +
-				util.format('<w:rFonts w:ascii="%s" w:hAnsi="%s"/>', fontFamily) +
-				'</w:rPr>' +
 				'</w:pPr>' +
-				'<w:r>' +
-				'<w:rPr>' +
-				util.format('<w:rFonts w:ascii="%s" w:hAnsi="%s"/>', fontFamily) +
-				'</w:rPr>' +
-				util.format('<w:t xml:space="preserve">%s</w:t>', text) +
-				'</w:r>' +
+				common.getrElement(rText) +
 				'</w:p>'
 		};
 	},
@@ -280,7 +273,7 @@ module.exports = {
 			start,
 			end)
 
-		return '<w:p w:rsidR="00F871E2" w:rsidRPr="00F871E2" w:rsidRDefault="00262B9D" w:rsidP="00F871E2">' +
+		return '<w:p>' +
 			'<w:pPr>' +
 			'<w:numPr>' +
 			'<w:ilvl w:val="0"/>' +
@@ -293,16 +286,8 @@ module.exports = {
 			'</w:tabs>' +
 			'<w:spacing w:line="276" w:lineRule="auto"/>' +
 			'<w:jc w:val="both"/>' +
-			'<w:rPr>' +
-			util.format('<w:rFonts w:ascii="%s" w:hAnsi="%s"/>', fontFamily) +
-			'</w:rPr>' +
 			'</w:pPr>' +
-			'<w:r>' +
-			'<w:rPr>' +
-			util.format('<w:rFonts w:ascii="%s" w:hAnsi="%s"/>', fontFamily) +
-			'</w:rPr>' +
-			util.format('<w:t xml:space="preserve">%s</w:t>', rText) +
-			'</w:r>' +
+			common.getrElement(rText) +
 			'</w:p>'
 	},
 	getAttachment8: function (body) {
@@ -312,7 +297,7 @@ module.exports = {
 		var rText = util.format('Δύο (2) πρωτότυπα του από %s Πρωτοκόλλου Οριστικής Παραλαβής Εργασιών (για το εν λόγω χρονικό διάστημα υλοποίησης της Σύμβασης) της τριμελούς Επιτροπής Παραλαβής.',
 			DeliveryGoodsDate)
 
-		return '<w:p w:rsidR="00F871E2" w:rsidRPr="00F871E2" w:rsidRDefault="00262B9D" w:rsidP="00F871E2">' +
+		return '<w:p>' +
 			'<w:pPr>' +
 			'<w:numPr>' +
 			'<w:ilvl w:val="0"/>' +
@@ -325,21 +310,42 @@ module.exports = {
 			'</w:tabs>' +
 			'<w:spacing w:line="276" w:lineRule="auto"/>' +
 			'<w:jc w:val="both"/>' +
-			'<w:rPr>' +
-			util.format('<w:rFonts w:ascii="%s" w:hAnsi="%s"/>', fontFamily) +
-			'</w:rPr>' +
 			'</w:pPr>' +
-			'<w:r>' +
-			'<w:rPr>' +
-			util.format('<w:rFonts w:ascii="%s" w:hAnsi="%s"/>', fontFamily) +
-			'</w:rPr>' +
-			util.format('<w:t xml:space="preserve">%s</w:t>', rText) +
-			'</w:r>' +
+			common.getrElement(rText) +
 			'</w:p>'
+	},
+	getAuthorDocumentedRequest: function (body) {
+		//Πρωτότυπο και φωτοαντίγραφο του  υπ' αριθ. 245924/27-09-2019 Τεκμηριωμένου Αιτήματος του Διατάκτη		
+		var rText = util.format("Πρωτότυπο και φωτοαντίγραφο του  υπ' αριθ. %s/%s Τεκμηριωμένου Αιτήματος του Διατάκτη", body.ARD)
+
+		var ret = '';
+		if (body.ARD) {
+			for (let index = 0; index < body.ARD.length; index++) {
+				const element = body.ARD[index];
+				if (element.Type == 0 || element.Type == 1) {
+					var rText = util.format("Πρωτότυπο και φωτοαντίγραφο της με αριθμ. %s/%s", element.ProtocolNumber, element.ProtocolYear);
+					var lText = ' Τεκμηριωμένου Αιτήματος του Διατάκτη'
+					ret += '<w:p>' +
+						'<w:pPr>' +
+						'<w:numPr>' +
+						'<w:ilvl w:val="0"/>' +
+						'<w:numId w:val="2"/>' +
+						'</w:numPr>' +
+						'<w:spacing w:line="276" w:lineRule="auto"/>' +
+						'<w:jc w:val="both"/>' +
+						'</w:pPr>' +
+						common.getrElement(rText) +
+						common.getADAXml(element.ADA) +
+						common.getrElement(lText) +
+						'</w:p>'
+				}
+			}
+		}
+		return ret;
 	},
 	getAttachment9: function (body) {
 		var rText = util.format('Τέσσερα (4) πρωτότυπα του %s', body.Account[0].No)
-		return '<w:p w:rsidR="00212912" w:rsidRPr="00F871E2" w:rsidRDefault="00262B9D" w:rsidP="00F871E2">' +
+		return '<w:p>' +
 			'<w:pPr>' +
 			'<w:numPr>' +
 			'<w:ilvl w:val="0"/>' +
@@ -352,29 +358,17 @@ module.exports = {
 			'</w:tabs>' +
 			'<w:spacing w:line="276" w:lineRule="auto"/>' +
 			'<w:jc w:val="both"/>' +
-			'<w:rPr>' +
-			util.format('<w:rFonts w:ascii="%s" w:hAnsi="%s"/>', fontFamily) +
-			'</w:rPr>' +
 			'</w:pPr>' +
-			'<w:r w:rsidRPr="00F871E2">' +
-			'<w:rPr>' +
-			util.format('<w:rFonts w:ascii="%s" w:hAnsi="%s"/>', fontFamily) +
-			'</w:rPr>' +
-			util.format('<w:t>%s</w:t>', rText) +
-			'</w:r>' +
+			common.getrElement(rText) +
 			'<w:r><w:rPr><w:vertAlign w:val="superscript"/><w:lang w:val="el-GR"/></w:rPr><w:t>ου</w:t></w:r>' +
-			'<w:r>' +
-			'<w:rPr>' +
-			util.format('<w:rFonts w:ascii="%s" w:hAnsi="%s"/>', fontFamily) +
-			'</w:rPr>' +
-			'<w:t xml:space="preserve"> Λογαριασμού</w:t>' +
-			'</w:r>' +
+			common.getrElement(' Λογαριασμού') +
 			'</w:p>';
 
 	},
 	getAttachment10: function (body) {
 		if (body.Contract[0].HasDownpayment && body.Account[0].No) {
-			return '<w:p w:rsidR="00212912" w:rsidRPr="00F871E2" w:rsidRDefault="00262B9D" w:rsidP="00F871E2">' +
+			var rText = util.format('<w:t>Ενημερωτικός Πίνακας της με Α.Π. %s/%s Προγραμματικής Σύμβασης.</w:t>', body.Contract[0].Protocol[0].Number, body.Contract[0].Protocol[0].Date);
+			return '<w:p>' +
 				'<w:pPr>' +
 				'<w:numPr>' +
 				'<w:ilvl w:val="0"/>' +
@@ -387,16 +381,8 @@ module.exports = {
 				'</w:tabs>' +
 				'<w:spacing w:line="276" w:lineRule="auto"/>' +
 				'<w:jc w:val="both"/>' +
-				'<w:rPr>' +
-				util.format('<w:rFonts w:ascii="%s" w:hAnsi="%s"/>', fontFamily) +
-				'</w:rPr>' +
 				'</w:pPr>' +
-				'<w:r w:rsidRPr="00F871E2">' +
-				'<w:rPr>' +
-				util.format('<w:rFonts w:ascii="%s" w:hAnsi="%s"/>', fontFamily) +
-				'</w:rPr>' +
-				util.format('<w:t>Ενημερωτικός Πίνακας της με Α.Π. %s/%s Προγραμματικής Σύμβασης.</w:t>', body.Contract[0].Protocol[0].Number, body.Contract[0].Protocol[0].Date) +
-				'</w:r>' +
+				common.getrElement(rText) +
 				'</w:p>';
 		}
 	},
@@ -426,16 +412,8 @@ module.exports = {
 				'</w:tabs>' +
 				'<w:spacing w:line="276" w:lineRule="auto"/>' +
 				'<w:jc w:val="both"/>' +
-				'<w:rPr>' +
-				util.format('<w:rFonts w:ascii="%s" w:hAnsi="%s"/>', fontFamily) +
-				'</w:rPr>' +
 				'</w:pPr>' +
-				'<w:r>' +
-				'<w:rPr>' +
-				util.format('<w:rFonts w:ascii="%s" w:hAnsi="%s"/>', fontFamily) +
-				'</w:rPr>' +
-				util.format('<w:t>%s</w:t>', rText) +
-				'</w:r>' +
+				common.getrElement(rText) +
 				'</w:p>'
 
 			// 7)	Το από  06.12.2019 πρακτικό της (2ης) δεύτερης συνεδρίασης Επιτροπής Παρακολούθησης της Προγραμματικής Σύμβασης
@@ -455,16 +433,8 @@ module.exports = {
 				'</w:tabs>' +
 				'<w:spacing w:line="276" w:lineRule="auto"/>' +
 				'<w:jc w:val="both"/>' +
-				'<w:rPr>' +
-				util.format('<w:rFonts w:ascii="%s" w:hAnsi="%s"/>', fontFamily) +
-				'</w:rPr>' +
 				'</w:pPr>' +
-				'<w:r>' +
-				'<w:rPr>' +
-				util.format('<w:rFonts w:ascii="%s" w:hAnsi="%s"/>', fontFamily) +
-				'</w:rPr>' +
-				util.format('<w:t>%s</w:t>', rText) +
-				'</w:r>' +
+				common.getrElement(rText) +
 				'</w:p>'
 
 			rText = util.format('Δύο (2) φωτοαντίγραφα του με Α.Π. %s/%s εγγράφου της %s του Δήμου Αθηναίων με το οποίο διαβιβάζονται:',
@@ -488,16 +458,8 @@ module.exports = {
 				'</w:tabs>' +
 				'<w:spacing w:line="276" w:lineRule="auto"/>' +
 				'<w:jc w:val="both"/>' +
-				'<w:rPr>' +
-				util.format('<w:rFonts w:ascii="%s" w:hAnsi="%s"/>', fontFamily) +
-				'</w:rPr>' +
 				'</w:pPr>' +
-				'<w:r>' +
-				'<w:rPr>' +
-				util.format('<w:rFonts w:ascii="%s" w:hAnsi="%s"/>', fontFamily) +
-				'</w:rPr>' +
-				util.format('<w:t>%s</w:t>', rText) +
-				'</w:r>' +
+				common.getrElement(rText) +
 				'</w:p>' +
 				'<w:p>' +
 				'<w:pPr>' +
@@ -507,23 +469,10 @@ module.exports = {
 				'</w:numPr>' +
 				'<w:spacing w:line="276" w:lineRule="auto"/>' +
 				'<w:jc w:val="both"/>' +
-				'<w:rPr>' +
-				util.format('<w:rFonts w:ascii="%s" w:hAnsi="%s"/>', fontFamily) +
-				'</w:rPr>' +
 				'</w:pPr>' +
-				'<w:r>' +
-				'<w:rPr>' +
-				util.format('<w:rFonts w:ascii="%s" w:hAnsi="%s"/>', fontFamily) +
-				'</w:rPr>' +
-				util.format('<w:t>%s</w:t>', s1_1) +
-				'</w:r>' +
+				common.getrElement(s1_1) +
 				'<w:r><w:rPr><w:vertAlign w:val="superscript"/><w:lang w:val="el-GR"/></w:rPr><w:t>ης</w:t></w:r>' +
-				'<w:r>' +
-				'<w:rPr>' +
-				util.format('<w:rFonts w:ascii="%s" w:hAnsi="%s"/>', fontFamily) +
-				'</w:rPr>' +
-				util.format('<w:t xml:space="preserve">%s</w:t>', s1_2) +
-				'</w:r>' +
+				common.getrElement(s1_2) +
 				'</w:p>' +
 				'<w:p>' +
 				'<w:pPr>' +
@@ -533,16 +482,8 @@ module.exports = {
 				'</w:numPr>' +
 				'<w:spacing w:line="276" w:lineRule="auto"/>' +
 				'<w:jc w:val="both"/>' +
-				'<w:rPr>' +
-				util.format('<w:rFonts w:ascii="%s" w:hAnsi="%s"/>', fontFamily) +
-				'</w:rPr>' +
 				'</w:pPr>' +
-				'<w:r w:rsidRPr="00F871E2">' +
-				'<w:rPr>' +
-				util.format('<w:rFonts w:ascii="%s" w:hAnsi="%s"/>', fontFamily) +
-				'</w:rPr>' +
-				util.format('<w:t>%s</w:t>', s2) +
-				'</w:r>' +
+				common.getrElement(s2) +
 				'</w:p>'
 
 			// 	'<w:p><w:pPr><w:pStyle w:val="ae"/>' +
@@ -566,7 +507,7 @@ module.exports = {
 		return ret;
 	},
 	getAttachmentsXmlValue: function (body) {
-		var ret = '<w:p w:rsidR="00C24AC4" w:rsidRPr="00AF3FEB" w:rsidRDefault="006269FB" w:rsidP="00C24AC4">' +
+		var ret = '<w:p>' +
 			'<w:pPr>' +
 			'<w:spacing w:before="240"/>' +
 			'<w:jc w:val="both"/>' +
@@ -577,7 +518,7 @@ module.exports = {
 			'<w:u w:val="single"/>' +
 			'</w:rPr>' +
 			'</w:pPr>' +
-			'<w:r w:rsidRPr="00812A45">' +
+			'<w:r>' +
 			'<w:rPr>' +
 			util.format('<w:rFonts w:ascii="%s" w:hAnsi="%s"/>', fontFamily) +
 			'<w:b/>' +
@@ -587,7 +528,7 @@ module.exports = {
 			'<w:t>ΣΥΝΗΜΜΕΝΑ ΔΙΚΑΙΟΛΟΓΗΤΙΚΑ</w:t>' +
 			'</w:r>' +
 			'</w:p>' +
-			'<w:p w:rsidR="009344B1" w:rsidRDefault="009344B1" w:rsidP="009344B1">' +
+			'<w:p>' +
 			'<w:pPr>' +
 			'<w:spacing w:before="240"/>' +
 			'<w:ind w:hanging="567"/>' +

@@ -401,7 +401,7 @@ class AayView extends Component {
                   <Typography>
                     <div style={{ display: 'flex', flexFlow: 'row', fontSize: '18px' }}>
                       <span style={{ flex: '1' }}>
-                        <b>{index + 1}.</b>
+                        <span style={{ background: 'black', color: 'white', textAlign: 'center', marginRight: '10px' }}><b>{index + 1}</b></span>
                         {this.getTransmissionItemInfo(index, item)}
                         {this.getAccountItemInfo(index, item)}
                       </span>

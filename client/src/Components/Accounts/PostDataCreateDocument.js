@@ -172,11 +172,12 @@ export function createTransmissionDocument(contractInfo, accountInfo, paidAmount
       FirstAccountProtocol: firstAccountProtocol,
       IsFirstOfTheYear: accountInfo.IsFirstOfTheYear,
       CC: accountInfo.cc
-    }],
-    AAY: contractInfo.aay,
+    }],    
     DecisionBoard: contractInfo.decisionboard,
     DecisionCoordinatorDecentrilizedAdministration: contractInfo.decisioncoordinatordecentrilizedadministration,
     CourtOfAuditors: contractInfo.courtofauditors,
+    AAY: contractInfo.aay,
+    ADR: contractInfo.authordocumentedrequest,
     Signature: [{
       SignatoryTitle: accountInfo.documentsignatory[3].signatorytype[0].Name,
       Kaa: accountInfo.documentsignatory[3].Absense ? 'κ.κ.α' : '',
@@ -273,6 +274,7 @@ export function createAccountDocument(contractInfo, accountInfo, paidAmount, res
     DecisionCoordinatorDecentrilizedAdministration: contractInfo.decisioncoordinatordecentrilizedadministration,
     CourtOfAuditors: contractInfo.courtofauditors,
     AAY: contractInfo.aay,
+    ADR: contractInfo.authordocumentedrequest,
     Signature: [
       {
         Kaa: ForemanDirectionAbsense,

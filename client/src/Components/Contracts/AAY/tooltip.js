@@ -93,7 +93,7 @@ export function getAayOverthrowTooltipTemplate(state, ind) {
     <span style={useStyles.tooltip}>/</span>
     <span style={style2}>{state.ProtocolDate ? getDateFormatForDocument(state.ProtocolDate) : '__-__-____'}</span>
     <span style={useStyles.tooltip}> (ΑΔΑ </span>
-    <span style={style3}>{state.ADA ? state.ADA : '____'}</span>
+    <span style={useStyles.tooltip}> (ΑΔΑ {state.ADA ? state.ADA : '______'})</span>
     <span style={useStyles.tooltip}> ΑΠΟΦΑΣΗ ΑΝΑΤΡΟΠΗΣ ΑΝΑΛΗΨΗΣ ΥΠΟΧΡΕΩΣΗΣ (παρ.2 άρθρο 4 ΠΔ 80/2016), της </span>
     <span style={style4}>{state.Overthrow ? state.Overthrow : '____'}</span>
     <span style={useStyles.tooltip}> Α.Α.Υ.</span>

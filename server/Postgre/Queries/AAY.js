@@ -56,8 +56,9 @@ const update = (req, res, next, accountInfo) => {
 
 function remove(req, res, next) {
 
-  var id = req.body.Id;
-  var sqlQuery = util.format('DELETE FROM "Ordering"."AAY" WHERE "Id"=%s RETURNING * ', id);
+  var Id = req.body.Id;
+  var contractId = req.body.contractId;
+  var sqlQuery = util.format('DELETE FROM "Ordering"."AAY" WHERE "Id"=%s AND "ContractId"=%s', Id, contractId)
 
   pool.query(sqlQuery, (error, results) => {
     if (error)
