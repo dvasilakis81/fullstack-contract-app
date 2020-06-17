@@ -27,6 +27,7 @@ var dbBoardDecision = require('./Postgre/Queries/BoardDecision')
 var dbDecisionCoordinatorDecentrilizedAdministration = require('./Postgre/Queries/DecisionCoordinatorDecentrilizedAdministration')
 var dbCourtOfAuditors = require('./Postgre/Queries/CourtOfAuditors')
 var dbAuthorDocumentedRequest = require('./Postgre/Queries/AuthorDocumentedRequest')
+var dbSnippetPractical = require('./Postgre/Queries/SnippetPractical')
 
 var helper = require('./HelperMethods/helpermethods')
 
@@ -207,6 +208,9 @@ app.post('/deletecourtofauditors', dbLogin.checkToken, dbCourtOfAuditors.remove)
 app.post('/insertauthordocumentedrequest', dbLogin.checkToken, dbAuthorDocumentedRequest.insert);
 app.post('/updateauthordocumentedrequest', dbLogin.checkToken, dbAuthorDocumentedRequest.update);
 app.post('/deleteauthordocumentedrequest', dbLogin.checkToken, dbAuthorDocumentedRequest.remove);
+app.post('/insertsnippetpractical', dbLogin.checkToken, dbSnippetPractical.insert);
+app.post('/updatesnippetpractical', dbLogin.checkToken, dbSnippetPractical.update);
+app.post('/deletesnippetpractical', dbLogin.checkToken, dbSnippetPractical.remove);
 
 
 // view engine setup

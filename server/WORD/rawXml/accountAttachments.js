@@ -32,7 +32,7 @@ module.exports = {
 			'</w:numPr>' +			
 			'<w:spacing w:line="276" w:lineRule="auto"/>' +
 			'<w:ind w:left="-142" w:hanging="426" />' +
-			'<w:jc w:val="both"/>' +
+			'<w:jc w:val="left"/>' +
 			'</w:pPr>' +
 			common.getrElement(rText) +
 			'</w:p>'
@@ -55,7 +55,7 @@ module.exports = {
 						'</w:numPr>' +
 						'<w:spacing w:line="276" w:lineRule="auto"/>' +
 						'<w:ind w:left="-142" w:hanging="426" />' +
-						'<w:jc w:val="both"/>' +
+						'<w:jc w:val="left"/>' +
 						'</w:pPr>' +
 						common.getrElement(rText) +
 						common.getADAXml(element.ADA) +
@@ -82,7 +82,7 @@ module.exports = {
 					'</w:numPr>' +
 					'<w:spacing w:line="276" w:lineRule="auto"/>' +
 					'<w:ind w:left="-142" w:hanging="426" />' +
-					'<w:jc w:val="both"/>' +
+					'<w:jc w:val="left"/>' +
 					'<w:rPr>' +
 					'<w:rFonts w:ascii="Garamond" w:hAnsi="Garamond"/>' +
 					'</w:rPr>' +
@@ -114,7 +114,7 @@ module.exports = {
 					'</w:numPr>' +
 					'<w:spacing w:line="276" w:lineRule="auto"/>' +
 					'<w:ind w:left="-142" w:hanging="426" />' +
-					'<w:jc w:val="both"/>' +
+					'<w:jc w:val="left"/>' +
 					'</w:pPr>' +
 					common.getrElement(rText) +
 					'</w:p>'
@@ -139,7 +139,7 @@ module.exports = {
 						'</w:numPr>' +
 						'<w:spacing w:line="276" w:lineRule="auto"/>' +
 						'<w:ind w:left="-142" w:hanging="426" />' +
-						'<w:jc w:val="both"/>' +
+						'<w:jc w:val="left"/>' +
 						'</w:pPr>' +
 						common.getrElement(rText) +
 						common.getADAXml(element.ADA) +
@@ -156,7 +156,7 @@ module.exports = {
 						'</w:numPr>' +
 						'<w:spacing w:line="276" w:lineRule="auto"/>' +
 						'<w:ind w:left="-142" w:hanging="426" />' +
-						'<w:jc w:val="both"/>' +
+						'<w:jc w:val="left"/>' +
 						'</w:pPr>' +
 						common.getrElement(rText) +
 						common.getADAXml(element.ADA) +
@@ -190,7 +190,7 @@ module.exports = {
 				'</w:numPr>' +				
 				'<w:spacing w:line="276" w:lineRule="auto"/>' +
 				'<w:ind w:left="-142" w:hanging="426" />' +
-				'<w:jc w:val="both"/>' +				
+				'<w:jc w:val="left"/>' +
 				'</w:pPr>' +
 				common.getrElement(rText) +
 				'</w:p>';
@@ -217,7 +217,7 @@ module.exports = {
 				'</w:numPr>' +
 				'<w:spacing w:line="276" w:lineRule="auto"/>' +
 				'<w:ind w:left="-142" w:hanging="426" />' +
-				'<w:jc w:val="both"/>' +
+				'<w:jc w:val="left"/>' +
 				'</w:pPr>' +
 				common.getrElement(rText) +
 				'</w:p>'
@@ -238,7 +238,7 @@ module.exports = {
 			'</w:numPr>' +			
 			'<w:spacing w:line="276" w:lineRule="auto"/>' +
 			'<w:ind w:left="-142" w:hanging="426" />' +
-			'<w:jc w:val="both"/>' +			
+			'<w:jc w:val="left"/>' +
 			'</w:pPr>' +
 			common.getrElement(rText) +
 			'</w:p>';
@@ -257,7 +257,7 @@ module.exports = {
 			'</w:numPr>' +			
 			'<w:spacing w:line="276" w:lineRule="auto"/>' +
 			'<w:ind w:left="-142" w:hanging="426" />' +
-			'<w:jc w:val="both"/>' +			
+			'<w:jc w:val="left"/>' +
 			'</w:pPr>' +
 			common.getrElement(rText) +
 			'</w:p>';
@@ -273,7 +273,7 @@ module.exports = {
 				'</w:numPr>' +				
 				'<w:spacing w:line="276" w:lineRule="auto"/>' +
 				'<w:ind w:left="-142" w:hanging="426" />' +
-				'<w:jc w:val="both"/>' +				
+				'<w:jc w:val="left"/>' +
 				'</w:pPr>' +
 				common.getrElement(rText) +
 				'</w:p>';
@@ -301,7 +301,7 @@ module.exports = {
 				
 				'<w:spacing w:line="276" w:lineRule="auto"/>' +
 				'<w:ind w:left="-142" w:hanging="426" />' +
-				'<w:jc w:val="both"/>' +
+				'<w:jc w:val="left"/>' +
 				'<w:rPr>' +
 				'<w:rFonts w:ascii="Garamond" w:hAnsi="Garamond"/>' +
 				'</w:rPr>' +
@@ -326,7 +326,7 @@ module.exports = {
 				'</w:tabs>' +
 				'<w:spacing w:line="276" w:lineRule="auto"/>' +
 				'<w:ind w:left="-142" w:hanging="426" />' +
-				'<w:jc w:val="both"/>' +				
+				'<w:jc w:val="left"/>' +
 				'</w:pPr>' +
 				common.getrElement(rText) +
 				'</w:p>'
@@ -352,7 +352,7 @@ module.exports = {
 				'</w:tabs>' +
 				'<w:spacing w:line="276" w:lineRule="auto"/>' +
 				'<w:ind w:left="-142" w:hanging="426" />' +
-				'<w:jc w:val="both"/>' +				
+				'<w:jc w:val="left"/>' +
 				'</w:pPr>' +
 				common.getrElement(rText) +
 				'</w:p>' +
@@ -364,7 +364,7 @@ module.exports = {
 				'</w:numPr>' +
 				'<w:spacing w:line="276" w:lineRule="auto"/>' +
 				//'<w:ind w:left="-142" w:hanging="426" />' +
-				'<w:jc w:val="both"/>' +				
+				'<w:jc w:val="left"/>' +
 				'</w:pPr>' +
 				common.getrElement(s1_1) +				
 				'<w:r><w:rPr><w:vertAlign w:val="superscript"/><w:lang w:val="el-GR"/></w:rPr><w:t>ης</w:t></w:r>' +
@@ -377,7 +377,7 @@ module.exports = {
 				'<w:numId w:val="2"/>' +
 				'</w:numPr>' +
 				'<w:spacing w:line="276" w:lineRule="auto"/>' +				
-				'<w:jc w:val="both"/>' +				
+				'<w:jc w:val="left"/>' +
 				'</w:pPr>' +
 				common.getrElement(s2) +
 				'</w:p>'

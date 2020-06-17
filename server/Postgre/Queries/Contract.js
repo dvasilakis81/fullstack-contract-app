@@ -76,6 +76,7 @@ function getSelectFromClauses(loginUserId) {
     '(SELECT json_agg(CourtOfAuditors) FROM (SELECT * FROM "Ordering"."CourtOfAuditors" as dp WHERE dp."ContractId" = c."Id" ORDER BY dp."OrderNo") CourtOfAuditors) AS CourtOfAuditors, ' +
     '(SELECT json_agg(AAY) FROM (SELECT * FROM "Ordering"."AAY" as aay WHERE aay."ContractId" = c."Id" ORDER BY aay."OrderNo") AAY) AS AAY, ' +
     '(SELECT json_agg(AuthorDocumentedRequest) FROM (SELECT * FROM "Ordering"."AuthorDocumentedRequest" as adr WHERE adr."ContractId" = c."Id" ORDER BY adr."OrderNo") AuthorDocumentedRequest) AS AuthorDocumentedRequest, ' +
+    '(SELECT json_agg(SnippetPractical) FROM (SELECT * FROM "Ordering"."SnippetPractical" as sp WHERE sp."ContractId" = c."Id" ORDER BY sp."OrderNo") SnippetPractical) AS SnippetPractical, ' +
     '(SELECT json_agg(Owner) FROM (SELECT * FROM "Ordering"."User" as usr WHERE c."OwnerId" = usr."Id") Owner) AS Owner ' +
     'FROM "Ordering"."Contract" as c '
 }

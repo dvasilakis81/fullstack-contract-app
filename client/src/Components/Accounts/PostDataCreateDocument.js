@@ -178,6 +178,7 @@ export function createTransmissionDocument(contractInfo, accountInfo, paidAmount
     CourtOfAuditors: contractInfo.courtofauditors,
     AAY: contractInfo.aay,
     ADR: contractInfo.authordocumentedrequest,
+    SnippetPractical: contractInfo.snippetpractical,
     Signature: [{
       SignatoryTitle: accountInfo.documentsignatory[3].signatorytype[0].Name,
       Kaa: accountInfo.documentsignatory[3].Absense ? 'κ.κ.α' : '',

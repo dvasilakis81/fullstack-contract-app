@@ -25,6 +25,7 @@ import DecisionBoardView from '../DecisionBoard/view';
 import DecisionCoordinatorDecentrilizedAdministrationView from '../DecisionCoordinatorDecentrilizedAdministration/view';
 import CourtOfAuditorsView from '../CourtOfAuditors/view';
 import AuthorDocumentedRequestView from '../AuthorDocumentedRequest/view';
+import SnippetPracticalView from '../SnippetPractical/view';
 
 import EditIcon from '@material-ui/icons/Edit';
 import DeleteIcon from '@material-ui/icons/Delete';
@@ -36,7 +37,6 @@ import ExpansionPanelDetails from '@material-ui/core/ExpansionPanelDetails';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 
 import { deleteContract } from '../../../Redux/Actions';
-import axios from 'axios';
 
 //react table virtualzie
 // import "../VirtualizedTable/react-table.css";
@@ -89,6 +89,7 @@ class ItemDetail extends React.Component {
 			openDecisionCoordinatorDecentrilizedAdministrationView: null,
 			openCourtOfAuditorsView: null,
 			openAuthorDocumentedRequestView: null,
+			openSnippetPracticalView: null,
 			openView: null,
 			windowWidth: window.innerWidth,
 			windowHeight: window.innerHeight
@@ -107,6 +108,8 @@ class ItemDetail extends React.Component {
 		this.handleDecisionCoordinatorDecentrilizedAdministrationClick = this.handleDecisionCoordinatorDecentrilizedAdministrationClick.bind(this);
 		this.handleCourtOfAuditorsClick = this.handleCourtOfAuditorsClick.bind(this);
 		this.handleAuthorDocumentedRequesClick = this.handleAuthorDocumentedRequesClick.bind(this);
+		this.handleSnippetPracticalClick = this.handleSnippetPracticalClick.bind(this);
+		
 	}
 
 	handlePopoverClick(event) {
@@ -116,21 +119,20 @@ class ItemDetail extends React.Component {
 	handleAayClick(event) {
 		this.setState({ openAayView: event.currentTarget });
 	}
-
 	handleDecisionBoardClick(event) {
 		this.setState({ openDecisionBoardView: event.currentTarget });
 	}
-
 	handleDecisionCoordinatorDecentrilizedAdministrationClick(event) {
 		this.setState({ openDecisionCoordinatorDecentrilizedAdministrationView: event.currentTarget });
 	}
-
 	handleCourtOfAuditorsClick(event) {
 		this.setState({ openCourtOfAuditorsView: event.currentTarget });
 	}
-
 	handleAuthorDocumentedRequesClick(event) {
 		this.setState({ openAuthorDocumentedRequestView: event.currentTarget });
+	}
+	handleSnippetPracticalClick(event) {
+		this.setState({ openSnippetPracticalView: event.currentTarget });
 	}
 
 	handlePopoverClose() {
@@ -140,7 +142,8 @@ class ItemDetail extends React.Component {
 			openDecisionBoardView: null,
 			openDecisionCoordinatorDecentrilizedAdministrationView: null,
 			openCourtOfAuditorsView: null,
-			openAuthorDocumentedRequestView: null
+			openAuthorDocumentedRequestView: null,
+			openSnippetPracticalView: null
 		});
 	}
 
@@ -693,6 +696,34 @@ class ItemDetail extends React.Component {
 		</Grid>
 	}
 
+	getSnippetPracticalTemplate(contractDetails) {
+
+		return <Grid>
+			<Paper style={styles.paperMoreContractInfo} square={true}>
+				<Typography>
+					<b>Αποσπάσματα Πρακτικού</b>
+					<span style={{ marginLeft: '10px', fontWeight: '' }}>{contractDetails.snippetpractical ? contractDetails.snippetpractical.length : 'Δεν έχει'}</span>
+					<Button
+						variant='contained'
+						size='small'
+						style={{ margin: '5px', background: '#F3FCFF', color: '#000' }}
+						onClick={this.handleSnippetPracticalClick}>
+						Προβολή
+					</Button>
+
+					<Popover
+						open={this.state.openSnippetPracticalView ? true : false}
+						onClose={this.handlePopoverClose}
+						anchorReference="anchorPosition"
+						anchorPosition={{ top: this.getPopoverTop(this.state.windowHeight), left: this.getPopoverLeft(this.state.windowWidth) }}
+						style={{ transform: document.getElementById('root').style.transform }}>
+						<SnippetPracticalView contractId={contractDetails.Id} />
+					</Popover>
+				</Typography>
+			</Paper>
+		</Grid>
+	}
+
 	getLawArticle(contractInfo) {
 		let ret = '';
 
@@ -807,6 +838,7 @@ class ItemDetail extends React.Component {
 											{this.getCourtOfAuditorsInfoTemplate(contractInfo)}
 											{this.getAayInfoTemplate(contractInfo)}
 											{this.getAuthorDocumentedRequestTemplate(contractInfo)}
+											{this.getSnippetPracticalTemplate(contractInfo)}
 											<Grid item>
 												<Paper style={styles.paperMoreContractInfo} square={true}>
 													<Typography>

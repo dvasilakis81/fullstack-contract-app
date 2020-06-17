@@ -138,7 +138,7 @@ class CourtOfAuditorsView extends Component {
         this.resetState();
         this.resetMsgInfo();
       }).catch(error => {
-        var msg = 'Αποτυχία δημιουργίας!\n' + error;
+        var msg = 'Αποτυχία δημιουργίας!\n';
         this.setState({ openMessage: true, message: <><div>{msg}</div><div>{getServerErrorResponseMessage(error)}</div></>, variant: 'error', msgColor: 'red', msgPadding: '10px', submitButtonDisabled: false });
       })
     } else if (this.state.editItem === true) {

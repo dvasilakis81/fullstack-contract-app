@@ -139,8 +139,8 @@ class AayView extends Component {
         this.resetState();
         this.resetMsgInfo();
       }).catch(error => {
-        var msg = 'Αποτυχία δημιουργίας Α.A.Y. !!\n' + error;
-        this.setState({ openMessage: true, message: <><div>{msg}</div><div>{getServerErrorResponseMessage(error)}</div></>, variant: 'error', msgPadding: '10px' });
+        var msg = 'Αποτυχία δημιουργίας !!\n' + error;
+        this.setState({ openMessage: true, message: <><div>{msg}</div><div>{getServerErrorResponseMessage(error)}</div></>, variant: 'error', msgPadding: '10px', submitButtonDisabled: false });
       })
     } else if (this.state.editItem === true) {
       this.props.processContractInfo(this.state, this.props.token.data.token, 'updateaay').then(res => {

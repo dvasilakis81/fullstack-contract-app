@@ -37,11 +37,14 @@ module.exports = {
 			'<w:tab w:val="left" w:pos="284"/>' +
 			'<w:tab w:val="left" w:pos="6195"/>' +
 			'</w:tabs>' +
-			'<w:spacing w:line="276" w:lineRule="auto"/>' +
+			//'<w:spacing w:line="276" w:lineRule="auto"/>' +
+			'<w:spacing w:before="113" w:after="113" w:line="276" w:lineRule="auto" />' +
+			'<w:ind w:left="0" w:right="0" w:firstLine="0" />' +
 			'<w:jc w:val="both"/>' +
 			'</w:pPr>' +
 			common.getrElement(rText) +
-			'</w:p>'
+			common.enterLine() +
+			'</w:p>'			
 	},
 	getAttachment2: function (body) {
 		var ret = '';
@@ -62,13 +65,17 @@ module.exports = {
 					'<w:tab w:val="left" w:pos="284"/>' +
 					'<w:tab w:val="left" w:pos="6195"/>' +
 					'</w:tabs>' +
-					'<w:spacing w:line="276" w:lineRule="auto"/>' +
-					'<w:jc w:val="both"/>' +
+					//'<w:spacing w:line="276" w:lineRule="auto"/>' +
+					'<w:spacing w:before="113" w:after="113" w:line="276" w:lineRule="auto" />' +
+					'<w:ind w:left="0" w:right="0" w:firstLine="0" />' +
+					'<w:jc w:val="left"/>' +
 					'</w:pPr>' +
 					common.getrElement(rText) +
 					common.getADAXml(element.ADA) +
 					common.getrElement(lText) +
+					common.enterLine() +
 					'</w:p>'
+					
 			}
 		}
 
@@ -97,12 +104,15 @@ module.exports = {
 					'<w:tab w:val="left" w:pos="284"/>' +
 					'<w:tab w:val="left" w:pos="6195"/>' +
 					'</w:tabs>' +
-					'<w:spacing w:line="276" w:lineRule="auto"/>' +
-					'<w:jc w:val="both"/>' +
+					//'<w:spacing w:line="276" w:lineRule="auto"/>' +
+					'<w:spacing w:before="113" w:after="113" w:line="276" w:lineRule="auto" />' +
+					'<w:ind w:left="0" w:right="0" w:firstLine="0" />' +
+					'<w:jc w:val="left"/>' +
 					'</w:pPr>' +
 					common.getrElement(rText) +
 					common.getADAXml(element.ADA) +
 					common.getrElement(lText) +
+					common.enterLine() +
 					'</w:p>'
 			}
 		}
@@ -131,10 +141,13 @@ module.exports = {
 					'<w:tab w:val="left" w:pos="284"/>' +
 					'<w:tab w:val="left" w:pos="6195"/>' +
 					'</w:tabs>' +
-					'<w:spacing w:line="276" w:lineRule="auto"/>' +
-					'<w:jc w:val="both"/>' +
+					//'<w:spacing w:line="276" w:lineRule="auto"/>' +
+					'<w:spacing w:before="113" w:after="113" w:line="276" w:lineRule="auto" />' +
+					'<w:ind w:left="0" w:right="0" w:firstLine="0" />' +
+					'<w:jc w:val="left"/>' +
 					'</w:pPr>' +
 					common.getrElement(rText) +
+					common.enterLine() +
 					'</w:p>'
 			}
 		}
@@ -158,12 +171,15 @@ module.exports = {
 						'<w:ilvl w:val="0"/>' +
 						'<w:numId w:val="2"/>' +
 						'</w:numPr>' +
-						'<w:spacing w:line="276" w:lineRule="auto"/>' +
-						'<w:jc w:val="both"/>' +
+						//'<w:spacing w:line="276" w:lineRule="auto"/>' +
+						'<w:spacing w:before="113" w:after="113" w:line="276" w:lineRule="auto" />' +
+						'<w:ind w:left="0" w:right="0" w:firstLine="0" />' +
+						'<w:jc w:val="left"/>' +
 						'</w:pPr>' +
 						common.getrElement(rText) +
 						common.getADAXml(element.ADA) +
 						common.getrElement(lText) +
+						common.enterLine() +
 						'</w:p>'
 				} else if (element.Type == 2) {
 					var rText = util.format("Πρωτότυπο και φωτοαντίγραφο της υπ΄ αριθμ. %s/%s ", element.AayValue, element.ProtocolNumber, element.ProtocolDate);
@@ -174,13 +190,16 @@ module.exports = {
 						'<w:ilvl w:val="0"/>' +
 						'<w:numId w:val="2"/>' +
 						'</w:numPr>' +
-						'<w:spacing w:line="276" w:lineRule="auto"/>' +
-						'<w:jc w:val="both"/>' +
+						//'<w:spacing w:line="276" w:lineRule="auto"/>' +
+						'<w:spacing w:before="113" w:after="113" w:line="276" w:lineRule="auto" />' +
+						'<w:ind w:left="0" w:right="0" w:firstLine="0" />' +
+						'<w:jc w:val="left"/>' +
 						'</w:pPr>' +
 						common.getrElement(rText) +
 						common.getADAXml(element.ADA) +
 						common.getBoldText('ΑΠΟΦΑΣΗ ΑΝΑΤΡΟΠΗΣ ΑΝΑΛΗΨΗΣ ΥΠΟΧΡΕΩΣΗΣ ') +
 						common.getrElement(lText) +
+						common.enterLine() +
 						'</w:p>'
 				}
 			}
@@ -208,7 +227,7 @@ module.exports = {
 		// 	'<w:tab w:val="left" w:pos="6195"/>' +
 		// 	'</w:tabs>' +
 		// 	'<w:spacing w:line="276" w:lineRule="auto"/>' +
-		// 	'<w:jc w:val="both"/>' +
+		//  '<w:jc w:val="left"/>' +
 		// 	'<w:rPr>' +
 		// 	'<w:rFonts w:ascii="Garamond" w:hAnsi="Garamond"/>' +
 		// 	'</w:rPr>' +
@@ -248,10 +267,13 @@ module.exports = {
 				'<w:tab w:val="left" w:pos="284"/>' +
 				'<w:tab w:val="left" w:pos="6195"/>' +
 				'</w:tabs>' +
-				'<w:spacing w:line="276" w:lineRule="auto"/>' +
-				'<w:jc w:val="both"/>' +
+				// '<w:spacing w:line="276" w:lineRule="auto"/>' +
+				'<w:spacing w:before="113" w:after="113" w:line="276" w:lineRule="auto" />' +
+				'<w:ind w:left="0" w:right="0" w:firstLine="0" />' +
+				'<w:jc w:val="left"/>' +
 				'</w:pPr>' +
 				common.getrElement(rText) +
+				common.enterLine() +
 				'</w:p>'
 		};
 	},
@@ -284,10 +306,13 @@ module.exports = {
 			'<w:tab w:val="left" w:pos="284"/>' +
 			'<w:tab w:val="left" w:pos="6195"/>' +
 			'</w:tabs>' +
-			'<w:spacing w:line="276" w:lineRule="auto"/>' +
-			'<w:jc w:val="both"/>' +
+			// '<w:spacing w:line="276" w:lineRule="auto"/>' +
+			'<w:spacing w:before="113" w:after="113" w:line="276" w:lineRule="auto" />' +
+			'<w:ind w:left="0" w:right="0" w:firstLine="0" />' +
+			'<w:jc w:val="left"/>' +
 			'</w:pPr>' +
 			common.getrElement(rText) +
+			common.enterLine() +
 			'</w:p>'
 	},
 	getAttachment8: function (body) {
@@ -308,10 +333,13 @@ module.exports = {
 			'<w:tab w:val="left" w:pos="284"/>' +
 			'<w:tab w:val="left" w:pos="6195"/>' +
 			'</w:tabs>' +
-			'<w:spacing w:line="276" w:lineRule="auto"/>' +
-			'<w:jc w:val="both"/>' +
+			//'<w:spacing w:line="276" w:lineRule="auto"/>' +
+			'<w:spacing w:before="113" w:after="113" w:line="276" w:lineRule="auto" />' +
+			'<w:ind w:left="0" w:right="0" w:firstLine="0" />' +
+			'<w:jc w:val="left"/>' +
 			'</w:pPr>' +
 			common.getrElement(rText) +
+			common.enterLine() +
 			'</w:p>'
 	},
 	getAuthorDocumentedRequest: function (body) {
@@ -331,12 +359,15 @@ module.exports = {
 						'<w:ilvl w:val="0"/>' +
 						'<w:numId w:val="2"/>' +
 						'</w:numPr>' +
-						'<w:spacing w:line="276" w:lineRule="auto"/>' +
-						'<w:jc w:val="both"/>' +
+						//'<w:spacing w:line="276" w:lineRule="auto"/>' +
+						'<w:spacing w:before="113" w:after="113" w:line="276" w:lineRule="auto" />' +
+						'<w:ind w:left="0" w:right="0" w:firstLine="0" />' +
+						'<w:jc w:val="left"/>' +
 						'</w:pPr>' +
 						common.getrElement(rText) +
 						common.getADAXml(element.ADA) +
 						common.getrElement(lText) +
+						common.enterLine() +
 						'</w:p>'
 				}
 			}
@@ -356,14 +387,50 @@ module.exports = {
 			'<w:tab w:val="left" w:pos="284"/>' +
 			'<w:tab w:val="left" w:pos="6195"/>' +
 			'</w:tabs>' +
-			'<w:spacing w:line="276" w:lineRule="auto"/>' +
-			'<w:jc w:val="both"/>' +
+			// '<w:spacing w:line="276" w:lineRule="auto"/>' +
+			'<w:spacing w:before="113" w:after="113" w:line="276" w:lineRule="auto" />' +
+			'<w:ind w:left="0" w:right="0" w:firstLine="0" />' +
+			'<w:jc w:val="left"/>' +
 			'</w:pPr>' +
 			common.getrElement(rText) +
 			'<w:r><w:rPr><w:vertAlign w:val="superscript"/><w:lang w:val="el-GR"/></w:rPr><w:t>ου</w:t></w:r>' +
 			common.getrElement(' Λογαριασμού') +
+			common.enterLine() +
 			'</w:p>';
 
+	},
+	getSnippetPracticalAttachment: function (body) {
+		// Το από 11 Φεβρουαρίου 2019 Απόσπασμα Πρακτικού ΔΣ 3/11-02-2019 της ΔΑΕΜ Α.Ε. περί έγκρισης σύναψης Προγραμματικής Σύμβασης με το Δήμο Αθηναίων βάσει της 108/31-01-2019 ΑΔΣ
+		var ret = '';
+		if (body.SnippetPractical) {
+			for (let index = 0; index < body.SnippetPractical.length; index++) {
+				const element = body.SnippetPractical[index];
+
+				var rText = util.format("Το από %s Απόσπασμα Πρακτικού ΔΣ %s/%s της %s περί έγκρισης σύναψης Προγραμματικής Σύμβασης με το Δήμο Αθηναίων βάσει της %s",
+					helper.getDateString(element.ProtocolDate), element.ProtocolNumber, element.ProtocolDate, body.Contract[0].Concessionaire[0].Name, element.DecisionBoardProtocol);
+				var lText = '  '
+				ret += '<w:p>' +
+					'<w:pPr>' +
+					'<w:numPr>' +
+					'<w:ilvl w:val="0"/>' +
+					'<w:numId w:val="2"/>' +
+					'</w:numPr>' +
+					'<w:tabs>' +
+					'<w:tab w:val="left" w:pos="142"/>' +
+					'<w:tab w:val="left" w:pos="284"/>' +
+					'<w:tab w:val="left" w:pos="6195"/>' +
+					'</w:tabs>' +
+					// '<w:spacing w:line="276" w:lineRule="auto"/>' +
+					'<w:spacing w:before="113" w:after="113" w:line="276" w:lineRule="auto" />' +
+					'<w:ind w:left="0" w:right="0" w:firstLine="0" />' +
+					'<w:jc w:val="left"/>' +
+					'</w:pPr>' +
+					common.getrElement(rText) +
+					common.enterLine() +
+					'</w:p>'
+			}
+		}
+		return ret;
 	},
 	getAttachment10: function (body) {
 		if (body.Contract[0].HasDownpayment && body.Account[0].No) {
@@ -379,10 +446,13 @@ module.exports = {
 				'<w:tab w:val="left" w:pos="284"/>' +
 				'<w:tab w:val="left" w:pos="6195"/>' +
 				'</w:tabs>' +
-				'<w:spacing w:line="276" w:lineRule="auto"/>' +
-				'<w:jc w:val="both"/>' +
+				// '<w:spacing w:line="276" w:lineRule="auto"/>' +
+				'<w:spacing w:before="113" w:after="113" w:line="276" w:lineRule="auto" />' +
+				'<w:ind w:left="0" w:right="0" w:firstLine="0" />' +
+				'<w:jc w:val="left"/>' +
 				'</w:pPr>' +
 				common.getrElement(rText) +
+				common.enterLine() +
 				'</w:p>';
 		}
 	},
@@ -410,10 +480,13 @@ module.exports = {
 				'<w:tab w:val="left" w:pos="284"/>' +
 				'<w:tab w:val="left" w:pos="6195"/>' +
 				'</w:tabs>' +
-				'<w:spacing w:line="276" w:lineRule="auto"/>' +
-				'<w:jc w:val="both"/>' +
+				// '<w:spacing w:line="276" w:lineRule="auto"/>' +
+				'<w:spacing w:before="113" w:after="113" w:line="276" w:lineRule="auto" />' +
+				'<w:ind w:left="0" w:right="0" w:firstLine="0" />' +
+				'<w:jc w:val="left"/>' +
 				'</w:pPr>' +
 				common.getrElement(rText) +
+				common.enterLine() +
 				'</w:p>'
 
 			// 7)	Το από  06.12.2019 πρακτικό της (2ης) δεύτερης συνεδρίασης Επιτροπής Παρακολούθησης της Προγραμματικής Σύμβασης
@@ -431,10 +504,13 @@ module.exports = {
 				'<w:tab w:val="left" w:pos="284"/>' +
 				'<w:tab w:val="left" w:pos="6195"/>' +
 				'</w:tabs>' +
-				'<w:spacing w:line="276" w:lineRule="auto"/>' +
-				'<w:jc w:val="both"/>' +
+				// '<w:spacing w:line="276" w:lineRule="auto"/>' +
+				'<w:spacing w:before="113" w:after="113" w:line="276" w:lineRule="auto" />' +
+				'<w:ind w:left="0" w:right="0" w:firstLine="0" />' +
+				'<w:jc w:val="left"/>' +
 				'</w:pPr>' +
 				common.getrElement(rText) +
+				common.enterLine() +
 				'</w:p>'
 
 			rText = util.format('Δύο (2) φωτοαντίγραφα του με Α.Π. %s/%s εγγράφου της %s του Δήμου Αθηναίων με το οποίο διαβιβάζονται:',
@@ -457,7 +533,7 @@ module.exports = {
 				'<w:tab w:val="left" w:pos="6195"/>' +
 				'</w:tabs>' +
 				'<w:spacing w:line="276" w:lineRule="auto"/>' +
-				'<w:jc w:val="both"/>' +
+				'<w:jc w:val="left"/>' +
 				'</w:pPr>' +
 				common.getrElement(rText) +
 				'</w:p>' +
@@ -467,8 +543,10 @@ module.exports = {
 				'<w:ilvl w:val="1"/>' +
 				'<w:numId w:val="2"/>' +
 				'</w:numPr>' +
-				'<w:spacing w:line="276" w:lineRule="auto"/>' +
-				'<w:jc w:val="both"/>' +
+				//'<w:spacing w:line="276" w:lineRule="auto"/>' +
+				'<w:spacing w:before="113" w:after="113" w:line="276" w:lineRule="auto" />' +
+				'<w:ind w:left="0" w:right="0" w:firstLine="0" />' +
+				'<w:jc w:val="left"/>' +
 				'</w:pPr>' +
 				common.getrElement(s1_1) +
 				'<w:r><w:rPr><w:vertAlign w:val="superscript"/><w:lang w:val="el-GR"/></w:rPr><w:t>ης</w:t></w:r>' +
@@ -480,8 +558,10 @@ module.exports = {
 				'<w:ilvl w:val="1"/>' +
 				'<w:numId w:val="2"/>' +
 				'</w:numPr>' +
-				'<w:spacing w:line="276" w:lineRule="auto"/>' +
-				'<w:jc w:val="both"/>' +
+				//'<w:spacing w:line="276" w:lineRule="auto"/>' +
+				'<w:spacing w:before="113" w:after="113" w:line="276" w:lineRule="auto" />' +
+				'<w:ind w:left="0" w:right="0" w:firstLine="0" />' +
+				'<w:jc w:val="left"/>' +
 				'</w:pPr>' +
 				common.getrElement(s2) +
 				'</w:p>'
@@ -551,6 +631,7 @@ module.exports = {
 			this.getAttachment8(body) +
 			this.getAttachment9(body) +
 			this.getAttachment10(body) +
+			this.getSnippetPracticalAttachment(body) +
 			this.getAttachmentsForMonitoringCommittee(body)
 
 		return ret;

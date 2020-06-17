@@ -6,25 +6,20 @@ const contractMethods = require('./Contract')
 const insert = (req, res, next) => {
   var contractId = req.body.contractId;
 
-  var sqlQuery = util.format('INSERT INTO "Ordering"."AAY"("ContractId","Value","ProtocolNumber","ProtocolDate","EadNumber","ADA","OrderNo","Type","Overthrow") ' +
-    'VALUES(%s,%s,%s,%s,%s,%s,%s,%s,%s) ' +
+  var sqlQuery = util.format('INSERT INTO "Ordering"."SnippetPractical"("ContractId","ProtocolNumber","ProtocolDate","DecisionBoardProtocol","OrderNo") ' +
+    'VALUES(%s,%s,%s,%s,%s) ' +
     'RETURNING "Id" ',
     helper.addQuotes(contractId),
-    helper.addQuotes(req.body.AayValue),
     helper.addQuotes(req.body.ProtocolNumber),
-    helper.addQuotes(req.body.ProtocolDate),
-    helper.addQuotes(req.body.EadNumber),
-    helper.addQuotes(req.body.ADA),
-    helper.addQuotes(req.body.orderNo),
-    helper.addQuotes(req.body.Type),
-    helper.addQuotes(req.body.Overthrow),
-  )
+    helper.addQuotes(req.body.ProtocolDate),    
+    helper.addQuotes(req.body.DecisionBoardProtocol),
+    helper.addQuotes(req.body.OrderNo))  
 
   pool.query(sqlQuery, (error, results) => {
     if (error)
       next(error);
     else {
-      helper.consoleLog("ΑΑΥ info created \n");
+      helper.consoleLog("SnippetPractical info created \n");
       contractMethods.getContractById(req, res, next, contractId);
     }
   })
@@ -32,23 +27,21 @@ const insert = (req, res, next) => {
 
 const update = (req, res, next) => {
 
-  var sqlQuery = util.format('UPDATE "Ordering"."AAY" ' +
-    'SET "Value"=%s,"ProtocolNumber"=%s,"ProtocolDate"=%s,"EadNumber"=%s,"ADA"=%s,"Type"=%s,"Overthrow"=%s ' +
+  var sqlQuery = util.format('UPDATE "Ordering"."SnippetPractical" ' +
+    'SET "ProtocolNumber"=%s,"ProtocolDate"=%s,"DecisionBoardProtocol"=%s,"OrderNo"=%s' +
     'WHERE "ContractId"=%s',
     helper.addQuotes(req.body.AayValue),
     helper.addQuotes(req.body.ProtocolNumber),
-    helper.addQuotes(req.body.ProtocolDate),
-    helper.addQuotes(req.body.EadNumber),
-    helper.addQuotes(req.body.ADA),
-    helper.addQuotes(req.body.Type),
-    helper.addQuotes(req.body.Overthrow),
+    helper.addQuotes(req.body.ProtocolDate),    
+    helper.addQuotes(req.body.DecisionBoardProtocol),
+    helper.addQuotes(req.body.OrderNo),
     Number(req.body.ContractId));
 
   pool.query(sqlQuery, (error, results) => {
     if (error)
       next(error);
     else {
-      helper.consoleLog('UpdateAAY: Rows affected: ' + results.rowCount + ' Account Id: ' + req.body.ContractId);
+      helper.consoleLog('Update SnippetPractical: Rows affected: ' + results.rowCount + ' Account Id: ' + req.body.ContractId);
       contractMethods.getContractById(req, res, next, contractId);
     }
   })
@@ -58,12 +51,12 @@ function remove(req, res, next) {
 
   var Id = req.body.Id;
   var contractId = req.body.contractId;
-  var sqlQuery = util.format('DELETE FROM "Ordering"."AAY" WHERE "Id"=%s AND "ContractId"=%s', Id, contractId)
+  var sqlQuery = util.format('DELETE FROM "Ordering"."SnippetPractical" WHERE "Id"=%s AND "ContractId"=%s', Id, contractId)
 
   pool.query(sqlQuery, (error, results) => {
     if (error)
       next(error);
-    else      
+    else       
       contractMethods.getContractById(req, res, next, contractId)    
   })
 }
