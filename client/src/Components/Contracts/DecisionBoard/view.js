@@ -16,6 +16,7 @@ import { processContractInfo } from '../../../Redux/Actions';
 import { getDecisionBoardTooltip } from './tooltip';
 import ProtocolInput from '../../CustomControls/ProtocolInput';
 import MyTextField from '../../CustomControls/MyTextField';
+import store from '../../../Redux/Store/store'
 
 const styles = {
   paperContractMonetaryInfoFrame: {
@@ -134,7 +135,8 @@ class DecisionBoardView extends Component {
         this.resetState();
         this.resetMsgInfo();
       }).catch(error => {
-        var msg = 'Αποτυχία δημιουργίας Α.Δ.Σ. !!\n' + error;
+        store.dispatch({ type: 'SET_CONTRACTINFO_PENDING', payload: false });
+        var msg = 'Αποτυχία δημιουργίας Α.Δ.Σ. !!';
         this.setState({ openMessage: true, message: <><div>{msg}</div><div>{getServerErrorResponseMessage(error)}</div></>, variant: 'error', msgPadding: '10px', submitButtonDisabled: false });
       })
     } else if (this.state.editItem === true) {
@@ -144,7 +146,8 @@ class DecisionBoardView extends Component {
         this.resetState();
         this.resetMsgInfo();
       }).catch(error => {
-        var msg = 'Αποτυχία δημιουργίας Α.Δ.Σ. !!\n' + error;
+        store.dispatch({ type: 'SET_CONTRACTINFO_PENDING', payload: false });
+        var msg = 'Αποτυχία δημιουργίας Α.Δ.Σ. !!';
         this.setState({ message: <><div>{msg}</div><div>{getServerErrorResponseMessage(error)}</div></>, openMessage: true, variant: 'error', msgPadding: '10px', submitButtonDisabled: false });
       })
     }

@@ -33,9 +33,9 @@ const update = (req, res, next) => {
 
   var contractId = req.body.contractId;
   var sqlQuery = util.format('UPDATE "Ordering"."DecisionCoordinatorDecentrilizedAdministration" ' +
-    'SET "ProtocolNumber"=%s,"ProtocolDate"=%s,"ADA"=%s,"DecisionBoardProtocol"=%s, "APDA_ProtocolNumber"=%s, "APDA_ProtocolDate"=%s ' +
-    ' "ActionTransmission"=%s, "ActionAccount"=%s ' +
-    'WHERE "Id"=%s AND "ContractId"=%s' +
+    'SET "ProtocolNumber"=%s,"ProtocolDate"=%s,"ADA"=%s,"DecisionBoardProtocol"=%s,"APDA_ProtocolNumber"=%s,"APDA_ProtocolDate"=%s,' +
+    '"ActionTransmission"=%s,"ActionAccount"=%s ' +
+    'WHERE "Id"=%s AND "ContractId"=%s ' +
     'RETURNING * ',
     helper.addQuotes(req.body.ProtocolNumber),
     helper.addQuotes(req.body.ProtocolDate),

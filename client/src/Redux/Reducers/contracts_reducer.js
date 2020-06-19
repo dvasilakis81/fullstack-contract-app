@@ -509,6 +509,17 @@ export default function (state = {}, action, root) {
 			}
 
 			break;
+		case 'SET_CONTRACTINFO_PENDING':
+			state = {
+					...state,
+					deleteContractInfoPending: false,
+					deleteContractInfoRejected: false,
+					insertContractInfoPending: false,
+					insertContractInfoRejected: false,
+					updateDecicionBoardPending: false,
+					updateDecicionBoardRejected: false
+				};
+			break;
 		default:
 			break;
 	}

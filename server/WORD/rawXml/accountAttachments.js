@@ -129,7 +129,7 @@ module.exports = {
 			for (let index = 0; index < body.AAY.length; index++) {
 				const element = body.AAY[index];
 				if (element.Type == 0 || element.Type == 1) {
-					var rText = util.format('Tη με αρ. %s/%s/%s ΕΑΔ %s ', element.AayValue, element.ProtocolNumber, element.ProtocolDate, element.EadNumber);
+					var rText = util.format('Tη με αρ. %s/%s/%s ΕΑΔ %s ', element.Value, element.ProtocolNumber, element.ProtocolDate, element.EadNumber);
 					var lText = 'Απόφαση Ανάληψης Υποχρέωσης.';
 					ret += '<w:p>' +
 						'<w:pPr>' +
@@ -146,8 +146,8 @@ module.exports = {
 						common.getrElement(lText) +
 						'</w:p>'
 				} else if (element.Type == 2) {
-					var rText = util.format('Tη υπ΄ αριθμ. %s/%s ΕΑΔ %s ', element.ProtocolNumber, element.ProtocolDate);
-					var lText = util.format('(παρ.2 άρθρο 4 ΠΔ 80/2016), της %s/%s Α.Α.Υ. ', element.AayValue, helper.extractYearFromDate(element.ProtocolDate))
+					var rText = util.format('Tη υπ΄ αριθμ. %s/%s ΕΑΔ %s ', element.ProtocolNumber, element.ProtocolDate, element.EadNumber);
+					var lText = util.format('(παρ.2 άρθρο 4 ΠΔ 80/2016), της %s Α.Α.Υ. ', element.Overthrow)
 					ret += '<w:p>' +
 						'<w:pPr>' +
 						'<w:numPr>' +

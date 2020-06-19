@@ -113,29 +113,29 @@ app.post('/createTransmissionDocument', dbLogin.checkToken, function (req, res, 
   }
 });
 
-app.post('/createAccountDocument', function (req, res, next) {
-  var fs = require('fs');
+// app.post('/createAccountDocument', function (req, res, next) {
+//   var fs = require('fs');
 
-  let d = new Date();
-  var inputPath = path.join(__dirname, "WORD/templates/account.docx")
-  var outputPath = path.resolve(__dirname, 'WORD/templates/' + d.getHours() + d.getMinutes() + d.getSeconds() + '.docx');
-  var inputData = InputData.setDataForAccountDocument(req.body);
-  docxTemplatorMethods.generateDocx(inputPath, outputPath, inputData);
-  var pathUrl = req.path;
-  if (pathUrl !== '/') {
-    res.download(outputPath, function (err) {
-      if (err) {
-        helper.consoleLog('Handle error, but keep in mind the response may be partially-sent');
-      } else {
-        helper.consoleLog('decrement a download credit, etc.');
-      }
-      fs.unlinkSync(outputPath);
-    });
-  }
-  else {
-    next();
-  }
-});
+//   let d = new Date();
+//   var inputPath = path.join(__dirname, "WORD/templates/account.docx")
+//   var outputPath = path.resolve(__dirname, 'WORD/templates/' + d.getHours() + d.getMinutes() + d.getSeconds() + '.docx');
+//   var inputData = InputData.setDataForAccountDocument(req.body);
+//   docxTemplatorMethods.generateDocx(inputPath, outputPath, inputData);
+//   var pathUrl = req.path;
+//   if (pathUrl !== '/') {
+//     res.download(outputPath, function (err) {
+//       if (err) {
+//         helper.consoleLog('Handle error, but keep in mind the response may be partially-sent');
+//       } else {
+//         helper.consoleLog('decrement a download credit, etc.');
+//       }
+//       fs.unlinkSync(outputPath);
+//     });
+//   }
+//   else {
+//     next();
+//   }
+// });
 
 app.get('/login', dbLogin.login);
 app.post('/logClientError', function (req, res, next) {
@@ -205,6 +205,10 @@ app.post('/deletedecisioncoordinatordecentrilizedadministration', dbLogin.checkT
 app.post('/insertcourtofauditors', dbLogin.checkToken, dbCourtOfAuditors.insert);
 app.post('/updatecourtofauditors', dbLogin.checkToken, dbCourtOfAuditors.update);
 app.post('/deletecourtofauditors', dbLogin.checkToken, dbCourtOfAuditors.remove);
+app.post('/insertaay', dbLogin.checkToken, dbAay.insert);
+app.post('/updateaay', dbLogin.checkToken, dbAay.update);
+app.post('/deleteaay', dbLogin.checkToken, dbAay.remove);
+
 app.post('/insertauthordocumentedrequest', dbLogin.checkToken, dbAuthorDocumentedRequest.insert);
 app.post('/updateauthordocumentedrequest', dbLogin.checkToken, dbAuthorDocumentedRequest.update);
 app.post('/deleteauthordocumentedrequest', dbLogin.checkToken, dbAuthorDocumentedRequest.remove);

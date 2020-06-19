@@ -16,6 +16,7 @@ import { processContractInfo } from '../../../Redux/Actions';
 import { getTooltip } from './tooltip';
 import ProtocolInput from '../../CustomControls/ProtocolInput';
 import MyTextField from '../../CustomControls/MyTextField';
+import store from '../../../Redux/Store/store';
 
 const styles = {
   paperContractMonetaryInfoFrame: {
@@ -129,6 +130,7 @@ class AuthorDocumentedRequestView extends Component {
         this.resetState();
         this.resetMsgInfo();
       }).catch(error => {
+        store.dispatch({ type: 'SET_CONTRACTINFO_PENDING', payload: false });
         var msg = 'Αποτυχία δημιουργίας!\n' + error;
         this.setState({ openMessage: true, message: <><div>{msg}</div><div>{getServerErrorResponseMessage(error)}</div></>, variant: 'error', msgColor: 'red', msgPadding: '10px', submitButtonDisabled: false });
       })
@@ -139,6 +141,7 @@ class AuthorDocumentedRequestView extends Component {
         this.resetState();
         this.resetMsgInfo();
       }).catch(error => {
+        store.dispatch({ type: 'SET_CONTRACTINFO_PENDING', payload: false });
         var msg = 'Αποτυχία δημιουργίας !!\n' + error;
         this.setState({ message: <><div>{msg}</div><div>{getServerErrorResponseMessage(error)}</div></>, openMessage: true, msgColor: 'red', msgPadding: '10px', submitButtonDisabled: false });
       })

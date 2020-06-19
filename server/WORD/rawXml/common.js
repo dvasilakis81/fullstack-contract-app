@@ -5,12 +5,20 @@ const fontSize = 22
 const fontFamily = 'Arial'
 module.exports = {
 
-  getrElement: function (text) {
+  getSuperscriptTag: function (isSuperscript) {
+    var ret =''; 
+    if (isSuperscript === true)
+      ret = '<w:vertAlign w:val="superscript"/>';
+
+    return ret;
+  },
+  getrElement: function (text, isSuperScript) {
     return '<w:r>' +
       '<w:rPr>' +
       util.format('<w:rFonts w:ascii="%s" w:hAnsi="%s"/>', fontFamily, fontFamily) +
       util.format('<w:sz w:val="%s" />', fontSize) +
       util.format('<w:szCs w:val="%s" />', fontSize) +
+      this.getSuperscriptTag(isSuperScript)+
       '</w:rPr>' +
       util.format('<w:t>%s</w:t>', text) +
       '</w:r>'
@@ -57,6 +65,7 @@ module.exports = {
         util.format('<w:rFonts w:ascii="%s" w:hAnsi="%s"/>', fontFamily, fontFamily) +
         util.format('<w:sz w:val="%s" />', fontSize) +
         util.format('<w:szCs w:val="%s" />', fontSize) +
+        '<w:b />' +
         '</w:rPr>' +
         util.format('<w:t xml:space="preserve">%s</w:t>', text) +
         '</w:r>'

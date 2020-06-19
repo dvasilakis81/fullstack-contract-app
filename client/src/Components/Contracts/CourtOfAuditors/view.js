@@ -16,6 +16,7 @@ import { processContractInfo } from '../../../Redux/Actions';
 import { getCourtOfAuditorsTooltip } from './tooltip';
 import ProtocolInput from '../../CustomControls/ProtocolInput';
 import MyTextField from '../../CustomControls/MyTextField';
+import store from '../../../Redux/Store/store'
 
 const styles = {
   paperContractMonetaryInfoFrame: {
@@ -138,6 +139,7 @@ class CourtOfAuditorsView extends Component {
         this.resetState();
         this.resetMsgInfo();
       }).catch(error => {
+        store.dispatch({ type: 'SET_CONTRACTINFO_PENDING', payload: false });
         var msg = 'Αποτυχία δημιουργίας!\n';
         this.setState({ openMessage: true, message: <><div>{msg}</div><div>{getServerErrorResponseMessage(error)}</div></>, variant: 'error', msgColor: 'red', msgPadding: '10px', submitButtonDisabled: false });
       })
@@ -148,6 +150,7 @@ class CourtOfAuditorsView extends Component {
         this.resetState();
         this.resetMsgInfo();
       }).catch(error => {
+        store.dispatch({ type: 'SET_CONTRACTINFO_PENDING', payload: false });
         var msg = 'Αποτυχία δημιουργίας !!\n' + error;
         this.setState({ message: <><div>{msg}</div><div>{getServerErrorResponseMessage(error)}</div></>, openMessage: true, msgColor: 'red', msgPadding: '10px', submitButtonDisabled: false });
       })

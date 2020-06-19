@@ -16,6 +16,7 @@ import { processContractInfo } from '../../../Redux/Actions';
 import { getAayTooltipTemplate, getAayOverthrowTooltipTemplate } from './tooltip';
 import ProtocolInput from '../../CustomControls/ProtocolInput';
 import MyTextField from '../../CustomControls/MyTextField';
+import store from '../../../Redux/Store/store'
 
 const styles = {
   paperContractMonetaryInfoFrame: {
@@ -139,6 +140,7 @@ class AayView extends Component {
         this.resetState();
         this.resetMsgInfo();
       }).catch(error => {
+        store.dispatch({ type: 'SET_CONTRACTINFO_PENDING', payload: false });
         var msg = 'Αποτυχία δημιουργίας !!\n' + error;
         this.setState({ openMessage: true, message: <><div>{msg}</div><div>{getServerErrorResponseMessage(error)}</div></>, variant: 'error', msgPadding: '10px', submitButtonDisabled: false });
       })
@@ -149,13 +151,14 @@ class AayView extends Component {
         this.resetState();
         this.resetMsgInfo();
       }).catch(error => {
-        var msg = 'Αποτυχία δημιουργίας Α.A.Y. !!\n' + error;
+        store.dispatch({ type: 'SET_CONTRACTINFO_PENDING', payload: false });
+        var msg = 'Αποτυχία επεξεργασίας Α.A.Y. !!\n' + error;
         this.setState({ message: <><div>{msg}</div><div>{getServerErrorResponseMessage(error)}</div></>, openMessage: true, variant: 'error', msgPadding: '10px', submitButtonDisabled: false });
       })
     }
   }
 
-  requestDeleteΑΑΥ() {
+  requestDelete() {
     this.setState({ submitButtonDisabled: true });
 
     this.props.processContractInfo(this.state, this.props.token.data.token, 'deleteaay').then(res => {
@@ -246,8 +249,7 @@ class AayView extends Component {
           <div style={{ display: 'flex', flexFlow: 'row', height: 'auto', justifyContent: 'center', padding: '10px' }}>
             <LoadingOverlay
               active={this.props.insertContractInfoPending === true}
-              spinner
-              text='Αναμονή για δημιουργία Απόφαση Ανάληψης Υποχρέωσης ...'
+              spinner              
               styles={{
                 overlay: (base) => ({
                   ...base,
@@ -275,8 +277,7 @@ class AayView extends Component {
         <div style={{ display: 'flex', flexFlow: 'row', height: 'auto', backgroundColor: '#33C1FF', justifyContent: 'center', padding: '10px' }}>
           <LoadingOverlay
             active={this.props.deleteContractInfoPending === true}
-            spinner
-            text='Αναμονή για διαγραφή Απόφαση Ανάληψης Υποχρέσης ...'
+            spinner            
             styles={{
               overlay: (base) => ({
                 ...base,
@@ -284,7 +285,7 @@ class AayView extends Component {
                 textAlign: 'middle'
               })
             }}>
-            <Button disabled={this.state.submitButtonDisabled} variant='contained' color='primary' style={{ fontSize: '18px', textAlign: 'center', padding: '5px', margin: '5px' }} onClick={() => { this.requestDeleteAay() }}>
+            <Button disabled={this.state.submitButtonDisabled} variant='contained' color='primary' style={{ fontSize: '18px', textAlign: 'center', padding: '5px', margin: '5px' }} onClick={() => { this.requestDelete() }}>
               ΝΑΙ
             </Button>
             <Button disabled={this.state.submitButtonDisabled} variant='contained' color='secondary' style={{ fontSize: '18px', textAlign: 'center', padding: '5px', margin: '5px' }} onClick={() => { this.setState({ deleteItem: false }) }}>

@@ -16,6 +16,7 @@ import { processContractInfo } from '../../../Redux/Actions';
 import { getTooltipTemplate } from './tooltip';
 import ProtocolInput from '../../CustomControls/ProtocolInput';
 import MyTextField from '../../CustomControls/MyTextField';
+import store from '../../../Redux/Store/store'
 
 const styles = {
   paperContractMonetaryInfoFrame: {
@@ -129,6 +130,7 @@ class SnippetPracticalView extends Component {
         this.resetState();
         this.resetMsgInfo();
       }).catch(error => {
+        store.dispatch({ type: 'SET_CONTRACTINFO_PENDING', payload: false });
         var msg = 'Αποτυχία δημιουργίας!!';
         this.setState({ openMessage: true, message: <><div>{msg}</div><div>{getServerErrorResponseMessage(error)}</div></>, variant: 'error', msgPadding: '10px', submitButtonDisabled: false });
       })
@@ -139,7 +141,8 @@ class SnippetPracticalView extends Component {
         this.resetState();
         this.resetMsgInfo();
       }).catch(error => {
-        var msg = 'Αποτυχία δημιουργίας Απόσπασματος Πρακτικού !!';
+        store.dispatch({ type: 'SET_CONTRACTINFO_PENDING', payload: false });
+        var msg = 'Αποτυχία επεξεργασίας Απόσπασματος Πρακτικού !!';
         this.setState({ message: <><div>{msg}</div><div>{getServerErrorResponseMessage(error)}</div></>, openMessage: true, variant: 'error', msgPadding: '10px', submitButtonDisabled: false });
       })
     }

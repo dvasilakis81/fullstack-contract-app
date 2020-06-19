@@ -1,5 +1,6 @@
 var helperMethods = require('../../HelperMethods/helpermethods')
 var currencyFormatter = require('currency-formatter');
+const common = require('./common');
 
 module.exports = {
 
@@ -14,32 +15,301 @@ module.exports = {
   },
   getAccountInfoTableRow: function (accountNumber, amountPure, amountFpa, amountTotal, isDownpayment) {
     var firstRowLabel = isDownpayment ? 'Λογαριασμός - Προκαταβολή' : 'Λογαριασμός'
-    var firstRow = '<w:tr w:rsidR="00400E00" w:rsidRPr="006B6E0A" w:rsidTr="006B658F"><w:trPr><w:trHeight w:val="286"/></w:trPr><w:tc><w:tcPr><w:tcW w:w="3905" w:type="pct"/><w:tcBorders><w:top w:val="single" w:sz="4" w:space="0" w:color="auto"/><w:bottom w:val="single" w:sz="4" w:space="0" w:color="auto"/></w:tcBorders><w:vAlign w:val="center"/></w:tcPr><w:p w:rsidR="00400E00" w:rsidRPr="002843BB" w:rsidRDefault="00400E00" w:rsidP="00F334EF"><w:pPr><w:ind w:right="-1594"/><w:rPr><w:lang w:val="en-US"/></w:rPr></w:pPr><w:r w:rsidRPr="005B7549"><w:rPr><w:rFonts w:ascii="Garamond" w:eastAsia="Arial Unicode MS" w:hAnsi="Garamond"/><w:szCs w:val="24"/></w:rPr><w:t>' + accountNumber + '</w:t></w:r><w:r w:rsidRPr="005B7549"><w:rPr><w:rFonts w:ascii="Garamond" w:eastAsia="Arial Unicode MS" w:hAnsi="Garamond"/><w:szCs w:val="24"/><w:vertAlign w:val="superscript"/></w:rPr><w:t>ος</w:t></w:r><w:r w:rsidRPr="005B7549"><w:rPr><w:rFonts w:ascii="Garamond" w:eastAsia="Arial Unicode MS" w:hAnsi="Garamond"/><w:szCs w:val="24"/></w:rPr><w:t xml:space="preserve">' + firstRowLabel + '</w:t></w:r></w:p></w:tc><w:tc><w:tcPr><w:tcW w:w="601" w:type="pct"/><w:tcBorders><w:bottom w:val="single" w:sz="4" w:space="0" w:color="auto"/><w:right w:val="nil"/></w:tcBorders></w:tcPr><w:p w:rsidR="00400E00" w:rsidRPr="002843BB" w:rsidRDefault="00400E00" w:rsidP="00F334EF"><w:pPr><w:ind w:right="-45"/><w:jc w:val="right"/><w:rPr><w:rFonts w:ascii="Garamond" w:hAnsi="Garamond"/><w:szCs w:val="24"/></w:rPr></w:pPr><w:r w:rsidRPr="002843BB"><w:rPr><w:rFonts w:ascii="Garamond" w:eastAsia="Arial" w:hAnsi="Garamond"/><w:szCs w:val="24"/></w:rPr><w:t>' + amountPure + '</w:t></w:r></w:p></w:tc><w:tc><w:tcPr><w:tcW w:w="494" w:type="pct"/><w:tcBorders><w:left w:val="nil"/><w:bottom w:val="single" w:sz="4" w:space="0" w:color="auto"/></w:tcBorders></w:tcPr><w:p w:rsidR="00400E00" w:rsidRPr="002843BB" w:rsidRDefault="00400E00" w:rsidP="00F334EF"><w:pPr><w:ind w:right="-1594"/><w:rPr><w:rFonts w:ascii="Garamond" w:eastAsia="Arial" w:hAnsi="Garamond"/><w:szCs w:val="24"/></w:rPr></w:pPr></w:p></w:tc></w:tr>'
-    var secondRow = '<w:tr w:rsidR="00400E00" w:rsidRPr="006B6E0A" w:rsidTr="006B658F"><w:trPr><w:trHeight w:val="286"/></w:trPr><w:tc><w:tcPr><w:tcW w:w="3905" w:type="pct"/><w:tcBorders><w:top w:val="single" w:sz="4" w:space="0" w:color="auto"/><w:bottom w:val="single" w:sz="4" w:space="0" w:color="auto"/></w:tcBorders><w:vAlign w:val="center"/></w:tcPr><w:p w:rsidR="00400E00" w:rsidRPr="00400E00" w:rsidRDefault="00400E00" w:rsidP="00400E00"><w:pPr><w:ind w:right="-1594"/><w:rPr><w:lang w:val="en-US"/></w:rPr></w:pPr><w:r w:rsidRPr="005B7549"><w:rPr><w:rFonts w:ascii="Garamond" w:eastAsia="Arial Unicode MS" w:hAnsi="Garamond"/><w:szCs w:val="24"/></w:rPr><w:t>Φ.Π.Α. 24%</w:t></w:r><w:r><w:rPr><w:rFonts w:ascii="Garamond" w:eastAsia="Arial Unicode MS" w:hAnsi="Garamond"/><w:szCs w:val="24"/><w:lang w:val="en-US"/></w:rPr><w:t xml:space="preserve"></w:t></w:r></w:p></w:tc><w:tc><w:tcPr><w:tcW w:w="601" w:type="pct"/><w:tcBorders><w:bottom w:val="single" w:sz="4" w:space="0" w:color="auto"/><w:right w:val="nil"/></w:tcBorders></w:tcPr><w:p w:rsidR="00400E00" w:rsidRPr="002843BB" w:rsidRDefault="00400E00" w:rsidP="00F334EF"><w:pPr><w:ind w:right="-45"/><w:jc w:val="right"/><w:rPr><w:rFonts w:ascii="Garamond" w:hAnsi="Garamond"/><w:szCs w:val="24"/></w:rPr></w:pPr><w:r w:rsidRPr="002843BB"><w:rPr><w:rFonts w:ascii="Garamond" w:eastAsia="Arial" w:hAnsi="Garamond"/><w:szCs w:val="24"/></w:rPr><w:t>' + amountFpa + '</w:t></w:r></w:p></w:tc><w:tc><w:tcPr><w:tcW w:w="494" w:type="pct"/><w:tcBorders><w:left w:val="nil"/><w:bottom w:val="single" w:sz="4" w:space="0" w:color="auto"/></w:tcBorders></w:tcPr><w:p w:rsidR="00400E00" w:rsidRPr="002843BB" w:rsidRDefault="00400E00" w:rsidP="00F334EF"><w:pPr><w:ind w:right="-1594"/><w:rPr><w:rFonts w:ascii="Garamond" w:eastAsia="Arial" w:hAnsi="Garamond"/><w:szCs w:val="24"/></w:rPr></w:pPr></w:p></w:tc></w:tr>';
-    var thirdRow = '<w:tr w:rsidR="00400E00" w:rsidRPr="006B6E0A" w:rsidTr="006B658F"><w:trPr><w:trHeight w:val="286"/></w:trPr><w:tc><w:tcPr><w:tcW w:w="3905" w:type="pct"/><w:tcBorders><w:top w:val="single" w:sz="4" w:space="0" w:color="auto"/></w:tcBorders><w:vAlign w:val="center"/></w:tcPr><w:p w:rsidR="00400E00" w:rsidRPr="00400E00" w:rsidRDefault="00400E00" w:rsidP="00F334EF"><w:pPr><w:ind w:right="-1594"/><w:rPr><w:lang w:val="en-US"/></w:rPr></w:pPr><w:r w:rsidRPr="005B7549"><w:rPr><w:rFonts w:ascii="Garamond" w:eastAsia="Arial Unicode MS" w:hAnsi="Garamond"/><w:szCs w:val="24"/></w:rPr><w:t>ΣΥΝΟΛΟ ' + accountNumber + '</w:t></w:r><w:r w:rsidRPr="005B7549"><w:rPr><w:rFonts w:ascii="Garamond" w:eastAsia="Arial Unicode MS" w:hAnsi="Garamond"/><w:szCs w:val="24"/><w:vertAlign w:val="superscript"/></w:rPr><w:t>ου</w:t></w:r><w:r w:rsidRPr="005B7549"><w:rPr><w:rFonts w:ascii="Garamond" w:eastAsia="Arial Unicode MS" w:hAnsi="Garamond"/><w:szCs w:val="24"/></w:rPr><w:t xml:space="preserve"> ΛΟΓΑΡΙΑΣΜΟΥ</w:t></w:r></w:p></w:tc><w:tc><w:tcPr><w:tcW w:w="601" w:type="pct"/><w:tcBorders><w:bottom w:val="single" w:sz="4" w:space="0" w:color="auto"/><w:right w:val="nil"/></w:tcBorders></w:tcPr><w:p w:rsidR="00400E00" w:rsidRPr="002843BB" w:rsidRDefault="00400E00" w:rsidP="00F334EF"><w:pPr><w:ind w:right="-45"/><w:jc w:val="right"/><w:rPr><w:rFonts w:ascii="Garamond" w:hAnsi="Garamond"/><w:szCs w:val="24"/></w:rPr></w:pPr><w:r w:rsidRPr="002843BB"><w:rPr><w:rFonts w:ascii="Garamond" w:eastAsia="Arial" w:hAnsi="Garamond"/><w:szCs w:val="24"/></w:rPr><w:t>' + amountTotal + '</w:t></w:r></w:p></w:tc><w:tc><w:tcPr><w:tcW w:w="494" w:type="pct"/><w:tcBorders><w:left w:val="nil"/><w:bottom w:val="single" w:sz="4" w:space="0" w:color="auto"/></w:tcBorders></w:tcPr><w:p w:rsidR="00400E00" w:rsidRPr="002843BB" w:rsidRDefault="00400E00" w:rsidP="00F334EF"><w:pPr><w:ind w:right="-1594"/><w:rPr><w:rFonts w:ascii="Garamond" w:eastAsia="Arial" w:hAnsi="Garamond"/><w:szCs w:val="24"/></w:rPr></w:pPr></w:p></w:tc></w:tr>';
+    var firstRow = '<w:tr w:rsidR="00400E00" w:rsidRPr="006B6E0A" w:rsidTr="006B658F">' +
+      '<w:trPr>' +
+      '<w:trHeight w:val="286"/>' +
+      '</w:trPr>' +
+      '<w:tc>' +
+      '<w:tcPr>' +
+      '<w:tcW w:w="3905" w:type="pct"/>' +
+      '<w:tcBorders>' +
+      '<w:top w:val="single" w:sz="4" w:space="0" w:color="auto"/>' +
+      '<w:bottom w:val="single" w:sz="4" w:space="0" w:color="auto"/>' +
+      '</w:tcBorders>' +
+      '<w:vAlign w:val="center"/>' +
+      '</w:tcPr>' +
+      '<w:p>' +
+      '<w:pPr>' +
+      '<w:ind w:right="-1594"/>' +
+      '<w:rPr>' +
+      '<w:lang w:val="en-US"/>' +
+      '</w:rPr>' +
+      '</w:pPr>' +
+      common.getrElement(accountNumber) +
+      common.getrElement('ος', true) +
+      common.getrElement(firstRowLabel) +
+      '</w:p>' +
+      '</w:tc>' +
+      '<w:tc>' +
+      '<w:tcPr>' +
+      '<w:tcW w:w="601" w:type="pct"/>' +
+      '<w:tcBorders>' +
+      '<w:bottom w:val="single" w:sz="4" w:space="0" w:color="auto"/>' +
+      '<w:right w:val="nil"/>' +
+      '</w:tcBorders>' +
+      '</w:tcPr>' +
+      '<w:p>' +
+      '<w:pPr>' +
+      '<w:ind w:right="-45"/>' +
+      '<w:jc w:val="right"/>' +
+      '</w:pPr>' +
+      common.getrElement(amountPure) +
+      '</w:p>' +
+      '</w:tc>' +
+      '<w:tc>' +
+      '<w:tcPr>' +
+      '<w:tcW w:w="494" w:type="pct"/>' +
+      '<w:tcBorders>' +
+      '<w:left w:val="nil"/>' +
+      '<w:bottom w:val="single" w:sz="4" w:space="0" w:color="auto"/>' +
+      '</w:tcBorders>' +
+      '</w:tcPr>' +
+      '<w:p>' +
+      '<w:pPr>' +
+      '<w:ind w:right="-1594"/>' +
+      '</w:pPr>' +
+      '</w:p>' +
+      '</w:tc>' +
+      '</w:tr>'
+    var secondRow = '<w:tr w:rsidR="00400E00" w:rsidRPr="006B6E0A" w:rsidTr="006B658F">' +
+      '<w:trPr>' +
+      '<w:trHeight w:val="286"/>' +
+      '</w:trPr>' +
+      '<w:tc>' +
+      '<w:tcPr>' +
+      '<w:tcW w:w="3905" w:type="pct"/>' +
+      '<w:tcBorders>' +
+      '<w:top w:val="single" w:sz="4" w:space="0" w:color="auto"/>' +
+      '<w:bottom w:val="single" w:sz="4" w:space="0" w:color="auto"/>' +
+      '</w:tcBorders>' +
+      '<w:vAlign w:val="center"/>' +
+      '</w:tcPr>' +
+      '<w:p>' +
+      '<w:pPr>' +
+      '<w:ind w:right="-1594"/>' +
+      '<w:rPr>' +
+      '<w:lang w:val="en-US"/>' +
+      '</w:rPr>' +
+      '</w:pPr>' +
+      common.getrElement('Φ.Π.Α. 24%') +
+      common.getrElement('') +
+      '</w:p>' +
+      '</w:tc>' +
+      '<w:tc>' +
+      '<w:tcPr>' +
+      '<w:tcW w:w="601" w:type="pct"/>' +
+      '<w:tcBorders>' +
+      '<w:bottom w:val="single" w:sz="4" w:space="0" w:color="auto"/>' +
+      '<w:right w:val="nil"/>' +
+      '</w:tcBorders>' +
+      '</w:tcPr>' +
+      '<w:p>' +
+      '<w:pPr>' +
+      '<w:ind w:right="-45"/>' +
+      '<w:jc w:val="right"/>' +
+      '</w:pPr>' +
+      common.getrElement(amountFpa) +
+      '</w:p>' +
+      '</w:tc>' +
+      '<w:tc>' +
+      '<w:tcPr>' +
+      '<w:tcW w:w="494" w:type="pct"/>' +
+      '<w:tcBorders>' +
+      '<w:left w:val="nil"/>' +
+      '<w:bottom w:val="single" w:sz="4" w:space="0" w:color="auto"/>' +
+      '</w:tcBorders>' +
+      '</w:tcPr>' +
+      '<w:p>' +
+      '<w:pPr>' +
+      '<w:ind w:right="-1594"/>' +
+      '</w:pPr>' +
+      '</w:p>' +
+      '</w:tc>' +
+      '</w:tr>';
+    var thirdRow = '<w:tr w:rsidR="00400E00" w:rsidRPr="006B6E0A" w:rsidTr="006B658F">' +
+      '<w:trPr>' +
+      '<w:trHeight w:val="286"/>' +
+      '</w:trPr>' +
+      '<w:tc>' +
+      '<w:tcPr>' +
+      '<w:tcW w:w="3905" w:type="pct"/>' +
+      '<w:tcBorders>' +
+      '<w:top w:val="single" w:sz="4" w:space="0" w:color="auto"/>' +
+      '</w:tcBorders>' +
+      '<w:vAlign w:val="center"/>' +
+      '</w:tcPr>' +
+      '<w:p>' +
+      '<w:pPr>' +
+      '<w:ind w:right="-1594"/>' +
+      '<w:rPr>' +
+      '<w:lang w:val="en-US"/>' +
+      '</w:rPr>' +
+      '</w:pPr>' +
+      common.getrElement('ΣΥΝΟΛΟ ' + accountNumber) +
+      common.getrElement('ου', true) +
+      common.getrElement(' ΛΟΓΑΡΙΑΣΜΟΥ', true) +
+      '</w:p>' +
+      '</w:tc>' +
+      '<w:tc>' +
+      '<w:tcPr>' +
+      '<w:tcW w:w="601" w:type="pct"/>' +
+      '<w:tcBorders>' +
+      '<w:bottom w:val="single" w:sz="4" w:space="0" w:color="auto"/>' +
+      '<w:right w:val="nil"/>' +
+      '</w:tcBorders>' +
+      '</w:tcPr>' +
+      '<w:p>' +
+      '<w:pPr>' +
+      '<w:ind w:right="-45"/>' +
+      '<w:jc w:val="right"/>' +
+      '</w:pPr>' +
+      common.getrElement(amountTotal) +
+      '</w:p>' +
+      '</w:tc>' +
+      '<w:tc>' +
+      '<w:tcPr>' +
+      '<w:tcW w:w="494" w:type="pct"/>' +
+      '<w:tcBorders>' +
+      '<w:left w:val="nil"/>' +
+      '<w:bottom w:val="single" w:sz="4" w:space="0" w:color="auto"/>' +
+      '</w:tcBorders>' +
+      '</w:tcPr>' +
+      '<w:p>' +
+      '<w:pPr>' +
+      '<w:ind w:right="-1594"/>' +
+      '</w:pPr>' +
+      '</w:p>' +
+      '</w:tc>' +
+      '</w:tr>';
 
     return firstRow + secondRow + thirdRow;
   },
   getReservationTableRow: function (name, percentage, value) {
-    return '<w:tr w:rsidR="002843BB" w:rsidRPr="006B6E0A" w:rsidTr="002843BB">' +
-      '<w:trPr><w:trHeight w:val="286"/></w:trPr>' +
-      '<w:tc><w:tcPr><w:tcW w:w="1044" w:type="pct"/><w:tcBorders><w:bottom w:val="single" w:sz="4" w:space="0" w:color="auto"/><w:right w:val="nil"/></w:tcBorders><w:vAlign w:val="center"/></w:tcPr><w:p w:rsidR="00B2532F" w:rsidRPr="006B6E0A" w:rsidRDefault="00B2532F" w:rsidP="002843BB"><w:pPr><w:ind w:right="-1594"/></w:pPr><w:r w:rsidRPr="002843BB"><w:rPr><w:rFonts w:ascii="Garamond" w:hAnsi="Garamond"/><w:bCs/><w:szCs w:val="24"/></w:rPr><w:t xml:space="preserve">' + name + '</w:t></w:r></w:p></w:tc>' +
-      '<w:tc><w:tcPr><w:tcW w:w="522" w:type="pct"/><w:tcBorders><w:left w:val="nil"/><w:bottom w:val="single" w:sz="4" w:space="0" w:color="auto"/><w:right w:val="nil"/></w:tcBorders><w:vAlign w:val="center"/></w:tcPr><w:p w:rsidR="00B2532F" w:rsidRPr="006B6E0A" w:rsidRDefault="00B2532F" w:rsidP="002843BB"><w:pPr><w:ind w:right="-45"/><w:jc w:val="right"/></w:pPr><w:r w:rsidRPr="002843BB"><w:rPr><w:rFonts w:ascii="Garamond" w:hAnsi="Garamond"/><w:bCs/><w:szCs w:val="24"/></w:rPr><w:t>' + percentage + '</w:t></w:r><w:r w:rsidRPr="002843BB"><w:rPr><w:rFonts w:ascii="Garamond" w:hAnsi="Garamond"/><w:szCs w:val="24"/></w:rPr><w:t xml:space="preserve"></w:t></w:r></w:p></w:tc>' +
-      '<w:tc><w:tcPr><w:tcW w:w="2339" w:type="pct"/><w:tcBorders><w:left w:val="nil"/><w:bottom w:val="single" w:sz="4" w:space="0" w:color="auto"/></w:tcBorders><w:vAlign w:val="center"/></w:tcPr><w:p w:rsidR="00B2532F" w:rsidRPr="002843BB" w:rsidRDefault="00B2532F" w:rsidP="002843BB"><w:pPr><w:ind w:right="-1594"/><w:rPr><w:lang w:val="en-US"/></w:rPr></w:pPr></w:p></w:tc>' +
-      '<w:tc><w:tcPr><w:tcW w:w="601" w:type="pct"/><w:tcBorders><w:bottom w:val="single" w:sz="4" w:space="0" w:color="auto"/><w:right w:val="nil"/></w:tcBorders></w:tcPr><w:p w:rsidR="00B2532F" w:rsidRPr="002843BB" w:rsidRDefault="00B2532F" w:rsidP="002843BB"><w:pPr><w:ind w:right="-45"/><w:jc w:val="right"/><w:rPr><w:rFonts w:ascii="Garamond" w:hAnsi="Garamond"/><w:szCs w:val="24"/></w:rPr></w:pPr><w:r w:rsidRPr="002843BB"><w:rPr><w:rFonts w:ascii="Garamond" w:eastAsia="Arial" w:hAnsi="Garamond"/><w:szCs w:val="24"/></w:rPr><w:t>' + value + '</w:t></w:r></w:p></w:tc>' +
-      '<w:tc><w:tcPr><w:tcW w:w="494" w:type="pct"/><w:tcBorders><w:left w:val="nil"/><w:bottom w:val="single" w:sz="4" w:space="0" w:color="auto"/></w:tcBorders></w:tcPr><w:p w:rsidR="00B2532F" w:rsidRPr="002843BB" w:rsidRDefault="00B2532F" w:rsidP="002843BB"><w:pPr><w:ind w:right="-1594"/><w:rPr><w:rFonts w:ascii="Garamond" w:eastAsia="Arial" w:hAnsi="Garamond"/><w:szCs w:val="24"/></w:rPr></w:pPr></w:p></w:tc>' +
+    return '<w:tr>' +
+      '<w:trPr>' +
+      '<w:trHeight w:val="286"/>' +
+      '</w:trPr>' +
+      '<w:tc>' +
+      '<w:tcPr>' +
+      '<w:tcW w:w="1044" w:type="pct"/>' +
+      '<w:tcBorders>' +
+      '<w:bottom w:val="single" w:sz="4" w:space="0" w:color="auto"/>' +
+      '<w:right w:val="nil"/>' +
+      '</w:tcBorders>' +
+      '<w:vAlign w:val="center"/>' +
+      '</w:tcPr>' +
+      '<w:p>' +
+      '<w:pPr>' +
+      '<w:ind w:right="-1594"/>' +
+      '</w:pPr>' +
+      common.getrElement(name) + 
+      '</w:p>' +
+      '</w:tc>' +
+      '<w:tc>' +
+      '<w:tcPr>' +
+      '<w:tcW w:w="522" w:type="pct"/>' +
+      '<w:tcBorders>' +
+      '<w:left w:val="nil"/>' +
+      '<w:bottom w:val="single" w:sz="4" w:space="0" w:color="auto"/>' +
+      '<w:right w:val="nil"/>' +
+      '</w:tcBorders>' +
+      '<w:vAlign w:val="center"/>' +
+      '</w:tcPr>' +
+      '<w:p>' +
+      '<w:pPr>' +
+      '<w:ind w:right="-45"/>' +
+      '<w:jc w:val="right"/>' +
+      '</w:pPr>' +
+      common.getrElement(percentage) +
+      //common.getrElement('') +
+      '</w:p>' +
+      '</w:tc>' +
+      '<w:tc>' +
+      '<w:tcPr>' +
+      '<w:tcW w:w="2339" w:type="pct"/>' +
+      '<w:tcBorders>' +
+      '<w:left w:val="nil"/>' +
+      '<w:bottom w:val="single" w:sz="4" w:space="0" w:color="auto"/>' +
+      '</w:tcBorders>' +
+      '<w:vAlign w:val="center"/>' +
+      '</w:tcPr>' +
+      '<w:p>' +
+      '<w:pPr>' +
+      '<w:ind w:right="-1594"/>' +
+      '<w:rPr>' +
+      '<w:lang w:val="en-US"/>' +
+      '</w:rPr>' +
+      '</w:pPr>' +
+      '</w:p>' +
+      '</w:tc>' +
+      '<w:tc>' +
+      '<w:tcPr>' +
+      '<w:tcW w:w="601" w:type="pct"/>' +
+      '<w:tcBorders>' +
+      '<w:bottom w:val="single" w:sz="4" w:space="0" w:color="auto"/>' +
+      '<w:right w:val="nil"/>' +
+      '</w:tcBorders>' +
+      '</w:tcPr>' +
+      '<w:p>' +
+      '<w:pPr>' +
+      '<w:ind w:right="-45"/>' +
+      '<w:jc w:val="right"/>' +      
+      '</w:pPr>' +
+      common.getrElement(value) +
+      '</w:p>' +
+      '</w:tc>' +
+      '<w:tc>' +
+      '<w:tcPr>' +
+      '<w:tcW w:w="494" w:type="pct"/>' +
+      '<w:tcBorders>' +
+      '<w:left w:val="nil"/>' +
+      '<w:bottom w:val="single" w:sz="4" w:space="0" w:color="auto"/>' +
+      '</w:tcBorders>' +
+      '</w:tcPr>' +
+      '<w:p>' +
+      '<w:pPr>' +
+      '<w:ind w:right="-1594"/>' +      
+      '</w:pPr>' +
+      '</w:p>' +
+      '</w:tc>' +
       '</w:tr>'
   },
   createTableDistance: function () {
-    var ret = '<w:p w:rsidR="003E28E4" w:rsidRDefault="003E28E4" w:rsidP="00581DC6"><w:pPr><w:ind w:right="-1594"/></w:pPr></w:p>' +
-      '<w:p w:rsidR="006B6E0A" w:rsidRPr="006B6E0A" w:rsidRDefault="006B6E0A" w:rsidP="00581DC6"><w:pPr><w:ind w:right="-1594"/></w:pPr></w:p>';
+    var ret = '<w:p>' +
+      '<w:pPr>' +
+      '<w:ind w:right="-1594"/>' +
+      '</w:pPr>' +
+      '</w:p>' +
+      '<w:p>' +
+      '<w:pPr>' +
+      '<w:ind w:right="-1594"/>' +
+      '</w:pPr>' +
+      '</w:p>';
 
     return ret;
   },
   createTableReservations: function (body) {
-    var ret = '<w:tbl><w:tblPr><w:tblW w:w="5353" w:type="pct"/><w:tblInd w:w="-601" w:type="dxa"/><w:tblBorders><w:top w:val="single" w:sz="4" w:space="0" w:color="auto"/><w:left w:val="single" w:sz="4" w:space="0" w:color="auto"/><w:bottom w:val="single" w:sz="4" w:space="0" w:color="auto"/>' +
-      '<w:right w:val="single" w:sz="4" w:space="0" w:color="auto"/><w:insideH w:val="single" w:sz="4" w:space="0" w:color="auto"/><w:insideV w:val="single" w:sz="4" w:space="0" w:color="auto"/></w:tblBorders><w:tblLook w:val="04A0"/>' +
-      '</w:tblPr><w:tblGrid><w:gridCol w:w="1905"/><w:gridCol w:w="953"/><w:gridCol w:w="4086"/><w:gridCol w:w="996"/><w:gridCol w:w="1184"/></w:tblGrid>';
+    var ret = '<w:tbl>' +
+      '<w:tblPr>' +
+      '<w:tblW w:w="5353" w:type="pct"/>' +
+      '<w:tblInd w:w="-601" w:type="dxa"/>' +
+      '<w:tblBorders>' +
+      '<w:top w:val="single" w:sz="4" w:space="0" w:color="auto"/>' +
+      '<w:left w:val="single" w:sz="4" w:space="0" w:color="auto"/>' +
+      '<w:bottom w:val="single" w:sz="4" w:space="0" w:color="auto"/>' +
+      '<w:right w:val="single" w:sz="4" w:space="0" w:color="auto"/>' +
+      '<w:insideH w:val="single" w:sz="4" w:space="0" w:color="auto"/>' +
+      '<w:insideV w:val="single" w:sz="4" w:space="0" w:color="auto"/>' +
+      '</w:tblBorders>' +
+      '<w:tblLook w:val="04A0"/>' +
+      '</w:tblPr>' +
+      '<w:tblGrid>' +
+      '<w:gridCol w:w="1905"/>' +
+      '<w:gridCol w:w="953"/>' +
+      '<w:gridCol w:w="4086"/>' +
+      '<w:gridCol w:w="996"/>' +
+      '<w:gridCol w:w="1184"/>' +
+      '</w:tblGrid>';
 
     var AmountPure = body.Account[0].AmountPure;
     var AmountFpa = body.Account[0].AmountFpa;
@@ -54,7 +324,60 @@ module.exports = {
     var reservationStampOGAPer = '';
     var reservationsTotal = 0;
 
-    ret += '<w:tr w:rsidR="002843BB" w:rsidRPr="006B6E0A" w:rsidTr="002843BB"><w:trPr><w:trHeight w:val="273"/></w:trPr><w:tc><w:tcPr><w:tcW w:w="3805" w:type="pct"/><w:gridSpan w:val="3"/><w:tcBorders><w:right w:val="nil"/></w:tcBorders><w:vAlign w:val="center"/></w:tcPr><w:p w:rsidR="00B2532F" w:rsidRPr="006B6E0A" w:rsidRDefault="00B2532F" w:rsidP="002843BB"><w:pPr><w:ind w:right="-1594"/></w:pPr><w:r w:rsidRPr="002843BB"><w:rPr><w:rFonts w:ascii="Garamond" w:hAnsi="Garamond"/><w:b/><w:szCs w:val="24"/></w:rPr><w:lastRenderedPageBreak/><w:t>ΚΡΑΤΗΣΕΙΣ ΕΠΙ ΤΟΥ ΠΟΣΟΥ ΤΩΝ ' + AmountPure + '</w:t></w:r></w:p></w:tc><w:tc><w:tcPr><w:tcW w:w="546" w:type="pct"/><w:tcBorders><w:left w:val="nil"/><w:bottom w:val="single" w:sz="4" w:space="0" w:color="auto"/><w:right w:val="nil"/></w:tcBorders></w:tcPr><w:p w:rsidR="00B2532F" w:rsidRPr="002843BB" w:rsidRDefault="00B2532F" w:rsidP="002843BB"><w:pPr><w:ind w:right="-1594"/><w:rPr><w:rFonts w:ascii="Garamond" w:hAnsi="Garamond"/><w:b/><w:szCs w:val="24"/></w:rPr></w:pPr></w:p></w:tc><w:tc><w:tcPr><w:tcW w:w="649" w:type="pct"/><w:tcBorders><w:left w:val="nil"/><w:bottom w:val="single" w:sz="4" w:space="0" w:color="auto"/></w:tcBorders></w:tcPr><w:p w:rsidR="00B2532F" w:rsidRPr="002843BB" w:rsidRDefault="00B2532F" w:rsidP="002843BB"><w:pPr><w:ind w:right="-1594"/><w:rPr><w:rFonts w:ascii="Garamond" w:hAnsi="Garamond"/><w:b/><w:szCs w:val="24"/></w:rPr></w:pPr></w:p></w:tc></w:tr>'
+    ret += '<w:tr>' +
+      '<w:trPr>' +
+      '<w:trHeight w:val="273"/>' +
+      '</w:trPr>' +
+      '<w:tc>' +
+      '<w:tcPr>' +
+      '<w:tcW w:w="3805" w:type="pct"/>' +
+      '<w:gridSpan w:val="3"/>' +
+      '<w:tcBorders>' +
+      '<w:right w:val="nil"/>' +
+      '</w:tcBorders>' +
+      '<w:vAlign w:val="center"/>' +
+      '</w:tcPr>' +
+      '<w:p>' +
+      '<w:pPr>' +
+      '<w:ind w:right="-1594"/>' +
+      '</w:pPr>' +
+      common.getBoldText('ΚΡΑΤΗΣΕΙΣ ΕΠΙ ΤΟΥ ΠΟΣΟΥ ΤΩΝ ' + AmountPure) +
+      '</w:p>' +
+      '</w:tc>' +
+      '<w:tc>' +
+      '<w:tcPr>' +
+      '<w:tcW w:w="546" w:type="pct"/>' +
+      '<w:tcBorders>' +
+      '<w:left w:val="nil"/>' +
+      '<w:bottom w:val="single" w:sz="4" w:space="0" w:color="auto"/>' +
+      '<w:right w:val="nil"/>' +
+      '</w:tcBorders>' +
+      '</w:tcPr>' +
+      '<w:p>' +
+      '<w:pPr>' +
+      '<w:ind w:right="-1594"/>' +
+      '</w:pPr>' +
+      '</w:p>' +
+      '</w:tc>' +
+      '<w:tc>' +
+      '<w:tcPr>' +
+      '<w:tcW w:w="649" w:type="pct"/>' +
+      '<w:tcBorders>' +
+      '<w:left w:val="nil"/>' +
+      '<w:bottom w:val="single" w:sz="4" w:space="0" w:color="auto"/>' +
+      '</w:tcBorders>' +
+      '</w:tcPr>' +
+      '<w:p>' +
+      '<w:pPr>' +
+      '<w:ind w:right="-1594"/>' +
+      '<w:rPr>' +
+      '<w:b/>' +
+      '<w:szCs w:val="24"/>' +
+      '</w:rPr>' +
+      '</w:pPr>' +
+      '</w:p>' +
+      '</w:tc>' +
+      '</w:tr>'
     for (var i = 0; i < body.Account[0].Reservations.length; i++) {
       const reservation = body.Account[0].Reservations[i];
       reservationValue = reservation.value;
@@ -76,21 +399,256 @@ module.exports = {
     }
 
     reservationsTotal = currencyFormatter.format(reservationsTotal, { symbol: '€', decimal: ',', thousand: '.', precision: 2, format: '%v%s' });
-    ret += '<w:tr w:rsidR="002843BB" w:rsidRPr="006B6E0A" w:rsidTr="000D12C7"><w:trPr><w:trHeight w:val="509"/></w:trPr><w:tc><w:tcPr><w:tcW w:w="3805" w:type="pct"/><w:gridSpan w:val="3"/><w:vAlign w:val="center"/></w:tcPr><w:p w:rsidR="00B2532F" w:rsidRPr="006B6E0A" w:rsidRDefault="00CC00CD" w:rsidP="002843BB"><w:pPr><w:ind w:right="-1594"/></w:pPr><w:r w:rsidRPr="002843BB"><w:rPr><w:rFonts w:ascii="Garamond" w:hAnsi="Garamond"/><w:b/><w:szCs w:val="24"/></w:rPr><w:t>ΣΥΝΟΛΟ ΚΡΑΤΗΣΕΩΝ</w:t></w:r></w:p></w:tc><w:tc><w:tcPr><w:tcW w:w="546" w:type="pct"/><w:tcBorders><w:right w:val="nil"/></w:tcBorders><w:vAlign w:val="center"/></w:tcPr><w:p w:rsidR="00B2532F" w:rsidRPr="002843BB" w:rsidRDefault="00CC00CD" w:rsidP="003C4C76"><w:pPr><w:ind w:right="-45"/><w:jc w:val="right"/><w:rPr><w:rFonts w:ascii="Garamond" w:hAnsi="Garamond"/><w:szCs w:val="24"/></w:rPr></w:pPr><w:r w:rsidRPr="002843BB"><w:rPr><w:rFonts w:ascii="Garamond" w:hAnsi="Garamond"/><w:szCs w:val="24"/></w:rPr><w:t>' + reservationsTotal + '</w:t></w:r></w:p></w:tc><w:tc><w:tcPr><w:tcW w:w="649" w:type="pct"/><w:tcBorders><w:left w:val="nil"/></w:tcBorders><w:vAlign w:val="center"/></w:tcPr><w:p w:rsidR="00B2532F" w:rsidRPr="002843BB" w:rsidRDefault="00663470" w:rsidP="002843BB"><w:pPr><w:ind w:right="-1594"/><w:jc w:val="center"/><w:rPr><w:rFonts w:ascii="Garamond" w:hAnsi="Garamond"/><w:szCs w:val="24"/></w:rPr></w:pPr></w:p></w:tc></w:tr>';
-    ret += '</w:tbl>'
+    ret += '<w:tr>' +
+      '<w:trPr>' +
+      '<w:trHeight w:val="509"/>' +
+      '</w:trPr>' +
+      '<w:tc>' +
+      '<w:tcPr>' +
+      '<w:tcW w:w="3805" w:type="pct"/>' +
+      '<w:gridSpan w:val="3"/>' +
+      '<w:vAlign w:val="center"/>' +
+      '</w:tcPr>' +
+      '<w:p>' +
+      '<w:pPr>' +
+      '<w:ind w:right="-1594"/>' +
+      '</w:pPr>' +
+      common.getBoldText('ΣΥΝΟΛΟ ΚΡΑΤΗΣΕΩΝ') +
+      '</w:p>' +
+      '</w:tc>' +
+      '<w:tc>' +
+      '<w:tcPr>' +
+      '<w:tcW w:w="546" w:type="pct"/>' +
+      '<w:tcBorders>' +
+      '<w:right w:val="nil"/>' +
+      '</w:tcBorders>' +
+      '<w:vAlign w:val="center"/>' +
+      '</w:tcPr>' +
+      '<w:p>' +
+      '<w:pPr>' +
+      '<w:ind w:right="-45"/>' +
+      '<w:jc w:val="right"/>' +
+      '<w:rPr>' +
+      '<w:szCs w:val="24"/>' +
+      '</w:rPr>' +
+      '</w:pPr>' +
+      common.getrElement(reservationsTotal) +
+      '</w:p>' +
+      '</w:tc>' +
+      '<w:tc>' +
+      '<w:tcPr>' +
+      '<w:tcW w:w="649" w:type="pct"/>' +
+      '<w:tcBorders>' +
+      '<w:left w:val="nil"/>' +
+      '</w:tcBorders>' +
+      '<w:vAlign w:val="center"/>' +
+      '</w:tcPr>' +
+      '<w:p>' +
+      '<w:pPr>' +
+      '<w:ind w:right="-1594"/>' +
+      '<w:jc w:val="center"/>' +
+      '</w:pPr>' +
+      '</w:p>' +
+      '</w:tc>' +
+      '</w:tr>' +
+      '</w:tbl>'
 
     return ret;
   },
   createTableTotalPaidAmount: function (body) {
-    var ret = '<w:tbl><w:tblPr><w:tblW w:w="5353" w:type="pct"/><w:tblInd w:w="-601" w:type="dxa"/><w:tblBorders><w:top w:val="single" w:sz="4" w:space="0" w:color="auto"/><w:left w:val="single" w:sz="4" w:space="0" w:color="auto"/><w:bottom w:val="single" w:sz="4" w:space="0" w:color="auto"/><w:right w:val="single" w:sz="4" w:space="0" w:color="auto"/><w:insideH w:val="single" w:sz="4" w:space="0" w:color="auto"/><w:insideV w:val="single" w:sz="4" w:space="0" w:color="auto"/></w:tblBorders><w:tblLook w:val="04A0"/></w:tblPr><w:tblGrid><w:gridCol w:w="7126"/><w:gridCol w:w="1460"/><w:gridCol w:w="538"/></w:tblGrid>';
+    var ret = '<w:tbl>' + 
+    '<w:tblPr>' + 
+    '<w:tblW w:w="5353" w:type="pct"/>' + 
+    '<w:tblInd w:w="-601" w:type="dxa"/>' + 
+    '<w:tblBorders>' + 
+    '<w:top w:val="single" w:sz="4" w:space="0" w:color="auto"/>' + 
+    '<w:left w:val="single" w:sz="4" w:space="0" w:color="auto"/>' + 
+    '<w:bottom w:val="single" w:sz="4" w:space="0" w:color="auto"/>' + 
+    '<w:right w:val="single" w:sz="4" w:space="0" w:color="auto"/>' + 
+    '<w:insideH w:val="single" w:sz="4" w:space="0" w:color="auto"/>' + 
+    '<w:insideV w:val="single" w:sz="4" w:space="0" w:color="auto"/>' + 
+    '</w:tblBorders><w:tblLook w:val="04A0"/>' + 
+    '</w:tblPr>' + 
+    '<w:tblGrid>' + 
+    '<w:gridCol w:w="7126"/>' + 
+    '<w:gridCol w:w="1460"/>' + 
+    '<w:gridCol w:w="538"/>' + 
+    '</w:tblGrid>';
 
     var AmountPure = body.Account[0].AmountPure;
     var AmountFpa = body.Account[0].AmountFpa;
     var AmountTotal = body.Account[0].AmountTotal;
-    ret += '<w:tr w:rsidR="000770B3" w:rsidRPr="006B6E0A" w:rsidTr="000770B3"><w:trPr><w:trHeight w:val="286"/></w:trPr><w:tc><w:tcPr><w:tcW w:w="3905" w:type="pct"/><w:tcBorders><w:top w:val="single" w:sz="4" w:space="0" w:color="auto"/><w:bottom w:val="single" w:sz="4" w:space="0" w:color="auto"/></w:tcBorders><w:vAlign w:val="center"/></w:tcPr><w:p w:rsidR="000770B3" w:rsidRPr="002843BB" w:rsidRDefault="000770B3" w:rsidP="00854CA5"><w:pPr><w:ind w:right="-1594"/><w:rPr><w:lang w:val="en-US"/></w:rPr></w:pPr><w:r w:rsidRPr="002843BB"><w:rPr><w:rFonts w:ascii="Garamond" w:hAnsi="Garamond"/><w:szCs w:val="24"/></w:rPr><w:t>Πληρωτέο (Καθαρό ποσό)</w:t></w:r></w:p></w:tc><w:tc><w:tcPr><w:tcW w:w="601" w:type="pct"/><w:tcBorders><w:bottom w:val="single" w:sz="4" w:space="0" w:color="auto"/><w:right w:val="nil"/></w:tcBorders><w:vAlign w:val="center"/></w:tcPr><w:p w:rsidR="000770B3" w:rsidRPr="002843BB" w:rsidRDefault="000770B3" w:rsidP="000770B3"><w:pPr><w:ind w:right="-45"/><w:jc w:val="right"/><w:rPr><w:rFonts w:ascii="Garamond" w:hAnsi="Garamond"/><w:szCs w:val="24"/></w:rPr></w:pPr><w:r w:rsidRPr="002843BB"><w:rPr><w:rFonts w:ascii="Garamond" w:eastAsia="Arial" w:hAnsi="Garamond"/><w:szCs w:val="24"/></w:rPr><w:t>' + AmountPure + '</w:t></w:r></w:p></w:tc><w:tc><w:tcPr><w:tcW w:w="494" w:type="pct"/><w:tcBorders><w:left w:val="nil"/><w:bottom w:val="single" w:sz="4" w:space="0" w:color="auto"/></w:tcBorders></w:tcPr><w:p w:rsidR="000770B3" w:rsidRPr="002843BB" w:rsidRDefault="000770B3" w:rsidP="00854CA5"><w:pPr><w:ind w:right="-1594"/><w:rPr><w:rFonts w:ascii="Garamond" w:eastAsia="Arial" w:hAnsi="Garamond"/><w:szCs w:val="24"/></w:rPr></w:pPr></w:p></w:tc></w:tr>' +
-      '<w:tr w:rsidR="000770B3" w:rsidRPr="006B6E0A" w:rsidTr="000770B3"><w:trPr><w:trHeight w:val="286"/></w:trPr><w:tc><w:tcPr><w:tcW w:w="3905" w:type="pct"/><w:tcBorders><w:top w:val="single" w:sz="4" w:space="0" w:color="auto"/><w:bottom w:val="single" w:sz="4" w:space="0" w:color="auto"/></w:tcBorders><w:vAlign w:val="center"/></w:tcPr><w:p w:rsidR="000770B3" w:rsidRPr="00400E00" w:rsidRDefault="000770B3" w:rsidP="00854CA5"><w:pPr><w:ind w:right="-1594"/><w:rPr><w:lang w:val="en-US"/></w:rPr></w:pPr><w:r w:rsidRPr="005B7549"><w:rPr><w:rFonts w:ascii="Garamond" w:eastAsia="Arial Unicode MS" w:hAnsi="Garamond"/><w:szCs w:val="24"/></w:rPr><w:t>Φ.Π.Α. 24%</w:t></w:r></w:p></w:tc><w:tc><w:tcPr><w:tcW w:w="601" w:type="pct"/><w:tcBorders><w:bottom w:val="single" w:sz="4" w:space="0" w:color="auto"/><w:right w:val="nil"/></w:tcBorders><w:vAlign w:val="center"/></w:tcPr><w:p w:rsidR="000770B3" w:rsidRPr="002843BB" w:rsidRDefault="000770B3" w:rsidP="000770B3"><w:pPr><w:ind w:right="-45"/><w:jc w:val="right"/><w:rPr><w:rFonts w:ascii="Garamond" w:hAnsi="Garamond"/><w:szCs w:val="24"/></w:rPr></w:pPr><w:r w:rsidRPr="002843BB"><w:rPr><w:rFonts w:ascii="Garamond" w:eastAsia="Arial" w:hAnsi="Garamond"/><w:szCs w:val="24"/></w:rPr><w:t>' + AmountFpa + '</w:t></w:r></w:p></w:tc><w:tc><w:tcPr><w:tcW w:w="494" w:type="pct"/><w:tcBorders><w:left w:val="nil"/><w:bottom w:val="single" w:sz="4" w:space="0" w:color="auto"/></w:tcBorders></w:tcPr><w:p w:rsidR="000770B3" w:rsidRPr="002843BB" w:rsidRDefault="000770B3" w:rsidP="00854CA5"><w:pPr><w:ind w:right="-1594"/><w:rPr><w:rFonts w:ascii="Garamond" w:eastAsia="Arial" w:hAnsi="Garamond"/><w:szCs w:val="24"/></w:rPr></w:pPr></w:p></w:tc></w:tr>' +
-      ' <w:tr w:rsidR="000770B3" w:rsidRPr="006B6E0A" w:rsidTr="000770B3"><w:trPr><w:trHeight w:val="614"/></w:trPr><w:tc><w:tcPr><w:tcW w:w="3905" w:type="pct"/><w:tcBorders><w:top w:val="single" w:sz="4" w:space="0" w:color="auto"/></w:tcBorders><w:vAlign w:val="center"/></w:tcPr><w:p w:rsidR="000770B3" w:rsidRPr="000770B3" w:rsidRDefault="000770B3" w:rsidP="00854CA5"><w:pPr><w:ind w:right="-1594"/></w:pPr><w:r w:rsidRPr="002843BB"><w:rPr><w:rFonts w:ascii="Garamond" w:hAnsi="Garamond"/><w:b/><w:szCs w:val="24"/></w:rPr><w:t>ΣΥΝΟΛΙΚΟ ΠΛΗΡΩΤΕΟ (χωρίς αφαίρεση κρατήσεων)</w:t></w:r></w:p></w:tc><w:tc><w:tcPr><w:tcW w:w="601" w:type="pct"/><w:tcBorders><w:bottom w:val="single" w:sz="4" w:space="0" w:color="auto"/><w:right w:val="nil"/></w:tcBorders><w:vAlign w:val="center"/></w:tcPr><w:p w:rsidR="000770B3" w:rsidRPr="002843BB" w:rsidRDefault="000770B3" w:rsidP="000770B3"><w:pPr><w:ind w:right="-45"/><w:jc w:val="right"/><w:rPr><w:rFonts w:ascii="Garamond" w:hAnsi="Garamond"/><w:szCs w:val="24"/></w:rPr></w:pPr><w:r w:rsidRPr="002843BB"><w:rPr><w:rFonts w:ascii="Garamond" w:eastAsia="Arial" w:hAnsi="Garamond"/><w:szCs w:val="24"/></w:rPr><w:t>' + AmountTotal + '</w:t></w:r></w:p></w:tc><w:tc><w:tcPr><w:tcW w:w="494" w:type="pct"/><w:tcBorders><w:left w:val="nil"/><w:bottom w:val="single" w:sz="4" w:space="0" w:color="auto"/></w:tcBorders></w:tcPr><w:p w:rsidR="000770B3" w:rsidRPr="002843BB" w:rsidRDefault="000770B3" w:rsidP="00854CA5"><w:pPr><w:ind w:right="-1594"/><w:rPr><w:rFonts w:ascii="Garamond" w:eastAsia="Arial" w:hAnsi="Garamond"/><w:szCs w:val="24"/></w:rPr></w:pPr></w:p></w:tc></w:tr>'
-    ret += '</w:tbl>'
+    ret += '<w:tr>' +
+    '<w:trPr>' + 
+    '<w:trHeight w:val="286"/>' + 
+    '</w:trPr>' +
+    '<w:tc>' + 
+    '<w:tcPr>' + 
+    '<w:tcW w:w="3905" w:type="pct"/>' + 
+    '<w:tcBorders>' + 
+    '<w:top w:val="single" w:sz="4" w:space="0" w:color="auto"/>' + 
+    '<w:bottom w:val="single" w:sz="4" w:space="0" w:color="auto"/>' + 
+    '</w:tcBorders>' + 
+    '<w:vAlign w:val="center"/>' + 
+    '</w:tcPr>' + 
+    '<w:p>' +
+    '<w:pPr>' + 
+    '<w:ind w:right="-1594"/>' + 
+    '<w:rPr>' + 
+    '<w:lang w:val="en-US"/>' + 
+    '</w:rPr>' + 
+    '</w:pPr>' + 
+    common.getrElement('Πληρωτέο (Καθαρό ποσό)') +
+    '</w:p>' + 
+    '</w:tc>' + 
+    '<w:tc>' + 
+    '<w:tcPr>' + 
+    '<w:tcW w:w="601" w:type="pct"/>' + 
+    '<w:tcBorders>' + 
+    '<w:bottom w:val="single" w:sz="4" w:space="0" w:color="auto"/>' + 
+    '<w:right w:val="nil"/>' + 
+    '</w:tcBorders>' + 
+    '<w:vAlign w:val="center"/>' + 
+    '</w:tcPr>' + 
+    '<w:p>' + 
+    '<w:pPr>' + 
+    '<w:ind w:right="-45"/>' + 
+    '<w:jc w:val="right"/>' +     
+    '</w:pPr>' + 
+    common.getrElement(AmountPure) +    
+    '</w:p>' + 
+    '</w:tc>' + 
+    '<w:tc>' + 
+    '<w:tcPr>' + 
+    '<w:tcW w:w="494" w:type="pct"/>' + 
+    '<w:tcBorders>' + 
+    '<w:left w:val="nil"/>' + 
+    '<w:bottom w:val="single" w:sz="4" w:space="0" w:color="auto"/>' + 
+    '</w:tcBorders>' + 
+    '</w:tcPr>' + 
+    '<w:p>' + 
+    '<w:pPr>' + 
+    '<w:ind w:right="-1594"/>' +     
+    '</w:pPr>' + 
+    '</w:p>' + 
+    '</w:tc>' + 
+    '</w:tr>' +
+    '<w:tr>' + 
+    '<w:trPr>' + 
+    '<w:trHeight w:val="286"/>' + 
+    '</w:trPr>' + 
+    '<w:tc>' + 
+    '<w:tcPr>' + 
+    '<w:tcW w:w="3905" w:type="pct"/>' + 
+    '<w:tcBorders>' + 
+    '<w:top w:val="single" w:sz="4" w:space="0" w:color="auto"/>' + 
+    '<w:bottom w:val="single" w:sz="4" w:space="0" w:color="auto"/>' + 
+    '</w:tcBorders>' + 
+    '<w:vAlign w:val="center"/>' + 
+    '</w:tcPr>' + 
+    '<w:p>' +
+    '<w:pPr>' + 
+    '<w:ind w:right="-1594"/>' + 
+    '<w:rPr>' + 
+    '<w:lang w:val="en-US"/>' + 
+    '</w:rPr>' + 
+    '</w:pPr>' + 
+    common.getrElement('Φ.Π.Α. 24%') + 
+    '</w:p>' + 
+    '</w:tc>' + 
+    '<w:tc>' + 
+    '<w:tcPr>' + 
+    '<w:tcW w:w="601" w:type="pct"/>' + 
+    '<w:tcBorders>' + 
+    '<w:bottom w:val="single" w:sz="4" w:space="0" w:color="auto"/>' + 
+    '<w:right w:val="nil"/>' + 
+    '</w:tcBorders>' + 
+    '<w:vAlign w:val="center"/>' + 
+    '</w:tcPr>' + 
+    '<w:p>' + 
+    '<w:pPr>' + 
+    '<w:ind w:right="-45"/>' + 
+    '<w:jc w:val="right"/>' + 
+    '<w:rPr>' +     
+    '<w:szCs w:val="24"/>' + 
+    '</w:rPr>' + 
+    '</w:pPr>' +
+    common.getrElement(AmountFpa) +  
+    '</w:p>' + 
+    '</w:tc>' + 
+    '<w:tc>' + 
+    '<w:tcPr>' + 
+    '<w:tcW w:w="494" w:type="pct"/>' + 
+    '<w:tcBorders>' + 
+    '<w:left w:val="nil"/>' + 
+    '<w:bottom w:val="single" w:sz="4" w:space="0" w:color="auto"/>' + 
+    '</w:tcBorders>' + 
+    '</w:tcPr>' + 
+    '<w:p>' + 
+    '<w:pPr>' + 
+    '<w:ind w:right="-1594"/>' + 
+    '<w:rPr>' +     
+    '<w:szCs w:val="24"/>' + 
+    '</w:rPr>' + 
+    '</w:pPr>' + 
+    '</w:p>' + 
+    '</w:tc>' + 
+    '</w:tr>' +
+    '<w:tr>' + 
+    '<w:trPr>' + 
+    '<w:trHeight w:val="614"/>' + 
+    '</w:trPr>' + 
+    '<w:tc>' + 
+    '<w:tcPr>' + 
+    '<w:tcW w:w="3905" w:type="pct"/>' + 
+    '<w:tcBorders>' + 
+    '<w:top w:val="single" w:sz="4" w:space="0" w:color="auto"/>' + 
+    '</w:tcBorders>' + 
+    '<w:vAlign w:val="center"/>' + 
+    '</w:tcPr>' + 
+    '<w:p>' + 
+    '<w:pPr>' + 
+    '<w:ind w:right="-1594"/>' + 
+    '</w:pPr>' + 
+    common.getBoldText('ΣΥΝΟΛΙΚΟ ΠΛΗΡΩΤΕΟ (χωρίς αφαίρεση κρατήσεων)');
+    '</w:p>' + 
+    '</w:tc>' + 
+    '<w:tc>' + 
+    '<w:tcPr>' + 
+    '<w:tcW w:w="601" w:type="pct"/>' + 
+    '<w:tcBorders>' + 
+    '<w:bottom w:val="single" w:sz="4" w:space="0" w:color="auto"/>' + 
+    '<w:right w:val="nil"/>' + 
+    '</w:tcBorders>' + 
+    '<w:vAlign w:val="center"/>' + 
+    '</w:tcPr>' + 
+    '<w:p>' + 
+    '<w:pPr>' + 
+    '<w:ind w:right="-45"/>' + 
+    '<w:jc w:val="right"/>' + 
+    '<w:rPr>' +     
+    '<w:szCs w:val="24"/>' + 
+    '</w:rPr>' + 
+    '</w:pPr>' + 
+    common.getrElement(AmountTotal)    
+    '</w:p>' + 
+    '</w:tc>' + 
+    '<w:tc>' + 
+    '<w:tcPr>' + 
+    '<w:tcW w:w="494" w:type="pct"/>' + 
+    '<w:tcBorders>' + 
+    '<w:left w:val="nil"/>' + 
+    '<w:bottom w:val="single" w:sz="4" w:space="0" w:color="auto"/>' + 
+    '</w:tcBorders>' + 
+    '</w:tcPr>' + 
+    '<w:p>' + 
+    '<w:pPr>' + 
+    '<w:ind w:right="-1594"/>' + 
+    '</w:pPr>' + 
+    '</w:p>' + 
+    '</w:tc>' + 
+    '</w:tr>' +
+    '</w:tbl>'
 
     return ret;
   },
@@ -128,9 +686,105 @@ module.exports = {
     var AmountPure = body.Account[0].AmountPure;
     var AmountFpa = body.Account[0].AmountFpa;
     var AmountTotal = body.Account[0].AmountTotal;
-    ret = '<w:tbl><w:tblPr><w:tblW w:w="5353" w:type="pct"/><w:tblInd w:w="-601" w:type="dxa"/><w:tblBorders><w:top w:val="single" w:sz="4" w:space="0" w:color="auto"/><w:left w:val="single" w:sz="4" w:space="0" w:color="auto"/><w:bottom w:val="single" w:sz="4" w:space="0" w:color="auto"/><w:right w:val="single" w:sz="4" w:space="0" w:color="auto"/><w:insideH w:val="single" w:sz="4" w:space="0" w:color="auto"/><w:insideV w:val="single" w:sz="4" w:space="0" w:color="auto"/></w:tblBorders><w:tblLook w:val="04A0"/></w:tblPr><w:tblGrid><w:gridCol w:w="7126"/><w:gridCol w:w="1460"/><w:gridCol w:w="538"/></w:tblGrid>' +
-      '<w:tr w:rsidR="00400E00" w:rsidRPr="006B6E0A" w:rsidTr="00400E00"><w:trPr><w:trHeight w:val="273"/></w:trPr><w:tc><w:tcPr><w:tcW w:w="3905" w:type="pct"/><w:tcBorders><w:bottom w:val="single" w:sz="4" w:space="0" w:color="auto"/></w:tcBorders><w:vAlign w:val="center"/></w:tcPr><w:p w:rsidR="00400E00" w:rsidRPr="006B6E0A" w:rsidRDefault="00400E00" w:rsidP="00F334EF"><w:pPr><w:ind w:right="-1594"/></w:pPr><w:r w:rsidRPr="002843BB"><w:rPr><w:rFonts w:ascii="Garamond" w:hAnsi="Garamond"/><w:b/><w:szCs w:val="24"/></w:rPr><w:t>ΕΝΔΕΙΞΕΙΣ ΤΩΝ ΕΡΓΑΣΙΩΝ</w:t></w:r></w:p></w:tc><w:tc><w:tcPr><w:tcW w:w="1095" w:type="pct"/><w:gridSpan w:val="2"/></w:tcPr><w:p w:rsidR="00400E00" w:rsidRPr="002843BB" w:rsidRDefault="00400E00" w:rsidP="00400E00"><w:pPr><w:ind w:right="-57"/><w:rPr><w:rFonts w:ascii="Garamond" w:hAnsi="Garamond"/><w:b/><w:szCs w:val="24"/></w:rPr></w:pPr><w:r w:rsidRPr="005B7549"><w:rPr><w:rFonts w:ascii="Garamond" w:hAnsi="Garamond"/><w:b/><w:szCs w:val="24"/></w:rPr><w:t>ΔΑΠΑΝΗ ΜΕΡΙΚΗ</w:t></w:r></w:p></w:tc></w:tr>' +
-      '<w:tr w:rsidR="00400E00" w:rsidRPr="006B6E0A" w:rsidTr="006B658F"><w:trPr><w:trHeight w:val="286"/></w:trPr><w:tc><w:tcPr><w:tcW w:w="3905" w:type="pct"/><w:tcBorders><w:bottom w:val="single" w:sz="4" w:space="0" w:color="auto"/></w:tcBorders><w:vAlign w:val="center"/></w:tcPr><w:p w:rsidR="00400E00" w:rsidRPr="00400E00" w:rsidRDefault="00400E00" w:rsidP="00400E00"><w:pPr><w:snapToGrid w:val="0"/><w:rPr><w:rFonts w:ascii="Garamond" w:eastAsia="Arial Unicode MS" w:hAnsi="Garamond"/><w:szCs w:val="24"/></w:rPr></w:pPr><w:r w:rsidRPr="005B7549"><w:rPr><w:rFonts w:ascii="Garamond" w:eastAsia="Arial Unicode MS" w:hAnsi="Garamond"/><w:szCs w:val="24"/></w:rPr><w:t>' + secondRowValue + '</w:t></w:r><w:proofErr w:type="spellStart"/></w:p><w:p w:rsidR="00400E00" w:rsidRPr="00400E00" w:rsidRDefault="00400E00" w:rsidP="00F334EF"><w:pPr><w:ind w:right="-1594"/></w:pPr></w:p></w:tc><w:tc><w:tcPr><w:tcW w:w="1095" w:type="pct"/><w:gridSpan w:val="2"/><w:tcBorders><w:bottom w:val="single" w:sz="4" w:space="0" w:color="auto"/></w:tcBorders></w:tcPr><w:p w:rsidR="00400E00" w:rsidRPr="002843BB" w:rsidRDefault="00400E00" w:rsidP="00F334EF"><w:pPr><w:ind w:right="-1594"/><w:rPr><w:rFonts w:ascii="Garamond" w:eastAsia="Arial" w:hAnsi="Garamond"/><w:szCs w:val="24"/></w:rPr></w:pPr></w:p></w:tc></w:tr>' +
+    ret = '<w:tbl>' +
+      '<w:tblPr>' +
+      '<w:tblW w:w="5353" w:type="pct"/>' +
+      '<w:tblInd w:w="-601" w:type="dxa"/>' +
+      '<w:tblBorders>' +
+      '<w:top w:val="single" w:sz="4" w:space="0" w:color="auto"/>' +
+      '<w:left w:val="single" w:sz="4" w:space="0" w:color="auto"/>' +
+      '<w:bottom w:val="single" w:sz="4" w:space="0" w:color="auto"/>' +
+      '<w:right w:val="single" w:sz="4" w:space="0" w:color="auto"/>' +
+      '<w:insideH w:val="single" w:sz="4" w:space="0" w:color="auto"/>' +
+      '<w:insideV w:val="single" w:sz="4" w:space="0" w:color="auto"/>' +
+      '</w:tblBorders>' +
+      '<w:tblLook w:val="04A0"/>' +
+      '</w:tblPr>' +
+      '<w:tblGrid>' +
+      '<w:gridCol w:w="7126"/>' +
+      '<w:gridCol w:w="1460"/>' +
+      '<w:gridCol w:w="538"/>' +
+      '</w:tblGrid>' +
+      '<w:tr>' +
+      '<w:trPr>' +
+      '<w:trHeight w:val="273"/>' +
+      '</w:trPr>' +
+      '<w:tc>' +
+      '<w:tcPr>' +
+      '<w:tcW w:w="3905" w:type="pct"/>' +
+      '<w:tcBorders>' +
+      '<w:bottom w:val="single" w:sz="4" w:space="0" w:color="auto"/>' +
+      '</w:tcBorders>' +
+      '<w:vAlign w:val="center"/>' +
+      '</w:tcPr>' +
+      '<w:p>' +
+      '<w:pPr>' +
+      '<w:ind w:right="-1594"/>' +
+      '</w:pPr>' +
+      common.getBoldText('ΕΝΔΕΙΞΕΙΣ ΤΩΝ ΕΡΓΑΣΙΩΝ') +
+      '</w:p>' +
+      '</w:tc>' +
+      '<w:tc>' +
+      '<w:tcPr>' +
+      '<w:tcW w:w="1095" w:type="pct"/>' +
+      '<w:gridSpan w:val="2"/>' +
+      '</w:tcPr>' +
+      '<w:p>' +
+      '<w:pPr>' +
+      '<w:ind w:right="-57"/>' +
+      '<w:rPr>' +
+      '<w:b/>' +
+      '</w:rPr>' +
+      '</w:pPr>' +
+      common.getrElement('ΔΑΠΑΝΗ ΜΕΡΙΚΗ') +
+      '</w:p>' +
+      '</w:tc>' +
+      '</w:tr>' +
+      '<w:tr>' +
+      '<w:trPr>' +
+      '<w:trHeight w:val="286"/>' +
+      '</w:trPr>' +
+      '<w:tc>' +
+      '<w:tcPr>' +
+      '<w:tcW w:w="3905" w:type="pct"/>' +
+      '<w:tcBorders>' +
+      '<w:bottom w:val="single" w:sz="4" w:space="0" w:color="auto"/>' +
+      '</w:tcBorders>' +
+      '<w:vAlign w:val="center"/>' +
+      '</w:tcPr>' +
+      '<w:p>' +
+      '<w:pPr>' +
+      '<w:snapToGrid w:val="0"/>' +
+      '<w:rPr>' +
+      '<w:szCs w:val="24"/>' +
+      '</w:rPr>' +
+      '</w:pPr>' +
+      common.getrElement(secondRowValue) +
+      '</w:p>' +
+      '<w:p>' +
+      '<w:pPr>' +
+      '<w:ind w:right="-1594"/>' +
+      '</w:pPr>' +
+      '</w:p>' +
+      '</w:tc>' +
+      '<w:tc>' +
+      '<w:tcPr>' +
+      '<w:tcW w:w="1095" w:type="pct"/>' +
+      '<w:gridSpan w:val="2"/>' +
+      '<w:tcBorders>' +
+      '<w:bottom w:val="single" w:sz="4" w:space="0" w:color="auto"/>' +
+      '</w:tcBorders>' +
+      '</w:tcPr>' +
+      '<w:p>' +
+      '<w:pPr>' +
+      '<w:ind w:right="-1594"/>' +
+      '<w:rPr>' +
+      '<w:szCs w:val="24"/>' +
+      '</w:rPr>' +
+      '</w:pPr>' +
+      '</w:p>' +
+      '</w:tc>' +
+      '</w:tr>' +
       accountsInfoTable +
       '</w:tbl>'
 
@@ -140,8 +794,12 @@ module.exports = {
 
     return (this.createTableAccountsInfo(body, isDownpayment) +
       this.createTableDistance() +
-      this.createTableReservations(body) +
-      this.createTableDistance() +
-      this.createTableTotalPaidAmount(body))
+      this.createTableReservations(body))
+
+    //  return (this.createTableAccountsInfo(body, isDownpayment) +
+    //  this.createTableDistance() +
+    //  this.createTableReservations(body) +
+    //  this.createTableDistance() +
+    //  this.createTableTotalPaidAmount(body))
   }
 };

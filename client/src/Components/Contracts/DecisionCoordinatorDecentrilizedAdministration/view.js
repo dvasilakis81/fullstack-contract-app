@@ -16,6 +16,7 @@ import { processContractInfo } from '../../../Redux/Actions';
 import { getDecisionCoordinatorDecentrilizedAdministrationTooltip } from './tooltip';
 import ProtocolInput from '../../CustomControls/ProtocolInput';
 import MyTextField from '../../CustomControls/MyTextField';
+import store from '../../../Redux/Store/store'
 
 const styles = {
   paperContractMonetaryInfoFrame: {
@@ -63,11 +64,12 @@ class DecisionCoordinatorDecentrilizedAdministrationView extends Component {
       msgPadding: '0px',
       Id: this.props.Id ? this.props.Id : '',
       DecisionBoardProtocol: '',
-      ActionTransmission: '',
-      ActionAccount: '',
       ProtocolNumber: '',
-      ProtocolDate: '',
-      Content: '',
+      ProtocolDate: '',      
+      ActionTransmission: '',
+      ActionAccount: '',      
+      APDA_ProtocolNumber: '',
+      APDA_ProtocolDate: '',
       ADA: '',
       orderNo: 0
     }
@@ -85,23 +87,27 @@ class DecisionCoordinatorDecentrilizedAdministrationView extends Component {
     this.setState({ [event.target.id]: event.target.value });
   }
 
-  openEditDecisionCoordinatorDecentrilizedAdministration(index, decisionCoordinatorDecentrilizedAdministration) {
+  openEditDecisionCoordinatorDecentrilizedAdministration(index, item) {
     this.setState({
-      Id: decisionCoordinatorDecentrilizedAdministration.Id,
-      ProtocolNumber: decisionCoordinatorDecentrilizedAdministration.ProtocolNumber,
-      ProtocolDate: decisionCoordinatorDecentrilizedAdministration.ProtocolDate,
-      Content: decisionCoordinatorDecentrilizedAdministration.Content,
-      ADA: decisionCoordinatorDecentrilizedAdministration.ADA,
+      Id: item.Id,
+      ProtocolNumber: item.ProtocolNumber,
+      ProtocolDate: item.ProtocolDate,      
+      ActionTransmission: item.ActionTransmission,
+      ActionAccount: item.ActionAccount,
+      APDA_ProtocolNumber: item.APDA_ProtocolNumber,
+      APDA_ProtocolDate: item.APDA_ProtocolDate,
+      DecisionBoardProtocol: item.DecisionBoardProtocol,
+      ADA: item.ADA,
       orderNo: index + 1,
       editItem: true
     })
   }
 
-  openDeleteDecisionCoordinatorDecentrilizedAdministration(index, decisionCoordinatorDecentrilizedAdministration) {
+  openDeleteDecisionCoordinatorDecentrilizedAdministration(index, item) {
     this.setState({
-      Id: decisionCoordinatorDecentrilizedAdministration.Id,
-      ProtocolNumber: decisionCoordinatorDecentrilizedAdministration.ProtocolNumber,
-      ProtocolDate: decisionCoordinatorDecentrilizedAdministration.ProtocolDate,
+      Id: item.Id,
+      ProtocolNumber: item.ProtocolNumber,
+      ProtocolDate: item.ProtocolDate,
       orderNo: index + 1,
       deleteItem: true
     })
@@ -130,22 +136,25 @@ class DecisionCoordinatorDecentrilizedAdministrationView extends Component {
 
     if (this.state.addNewItem === true) {
       this.props.processContractInfo(this.state, this.props.token.data.token, 'insertdecisioncoordinatordecentrilizedadministration').then(res => {
-        var msg = 'Η Σ.Α.Δ.Α με πρωτόκολλο "' + this.state.ProtocolNumber + '/' + getDateFormatForDocument(this.state.ProtocolDate) + '" δημιουργήθηκε επιτυχώς!!!'
+        var msg = 'Η Απόφαση Αποκεντρωμένης με πρωτόκολλο "' + this.state.ProtocolNumber + '/' + getDateFormatForDocument(this.state.ProtocolDate) + '" δημιουργήθηκε επιτυχώς!!!'
         this.setState({ openMessage: true, message: msg, msgColor: 'lightGreen', msgPadding: '10px', submitButtonDisabled: false });
         this.resetState();
         this.resetMsgInfo();
       }).catch(error => {
-        var msg = 'Αποτυχία δημιουργίας!\n' + error;
+        store.dispatch({ type: 'SET_CONTRACTINFO_PENDING', payload: false });
+        var msg = 'Αποτυχία δημιουργίας!';
         this.setState({ openMessage: true, message: <><div>{msg}</div><div>{getServerErrorResponseMessage(error)}</div></>, variant: 'error', msgColor: 'red', msgPadding: '10px', submitButtonDisabled: false });
       })
     } else if (this.state.editItem === true) {
       this.props.processContractInfo(this.state, this.props.token.data.token, 'updatedecisioncoordinatordecentrilizedadministration').then(res => {
-        var msg = 'Η Σ.Α.Δ.Α. με πρωτόκολλο "' + this.state.ProtocolNumber + '/' + getDateFormatForDocument(this.state.ProtocolDate) + '" επεξεργάστηκε επιτυχώς!!!'
+        var msg = 'Η Απόφαση Αποκεντρωμένης με πρωτόκολλο "' + this.state.ProtocolNumber + '/' + getDateFormatForDocument(this.state.ProtocolDate) + '" επεξεργάστηκε επιτυχώς!!!'
+        store.dispatch({ type: 'SET_CONTRACTINFO_PENDING', payload: false });
         this.setState({ message: msg, openMessage: true, msgColor: 'lightGreen', msgPadding: '10px', submitButtonDisabled: false });
         this.resetState();
         this.resetMsgInfo();
       }).catch(error => {
-        var msg = 'Αποτυχία δημιουργίας !!\n' + error;
+        store.dispatch({ type: 'SET_CONTRACTINFO_PENDING', payload: false });
+        var msg = 'Αποτυχία δημιουργίας !!';
         this.setState({ message: <><div>{msg}</div><div>{getServerErrorResponseMessage(error)}</div></>, openMessage: true, msgColor: 'red', msgPadding: '10px', submitButtonDisabled: false });
       })
     }
@@ -165,21 +174,21 @@ class DecisionCoordinatorDecentrilizedAdministrationView extends Component {
     })
   }
 
-  getDecisionBoardValues() {
+  getDecisionBoardValues(stateValue) {
     let ret = '';
 
     if (this.props.contractDetails.decisionboard) {
       ret = this.props.contractDetails.decisionboard.map((data, index) => {
         if (data) {
           var stringValue = data.ProtocolNumber.toString() + '/' + data.ProtocolDate.toString();
-          return <option key={index} value={stringValue}>{stringValue}</option>
+          return <option key={index} value={stringValue}  selected={stateValue == stringValue ? true : false}>{stringValue}</option>
         }
       })
     }
 
     return ret;
   }
-  getActions() {
+  getActions(stateValue) {
     let ret = '';
 
     var values = [];
@@ -188,7 +197,7 @@ class DecisionCoordinatorDecentrilizedAdministrationView extends Component {
     values.push(' για τη νόμιμη λήψη της ');
 
     ret = values.map((data, index) => {
-      return <option key={index} value={data}>{data}</option>
+      return <option key={index} value={data} selected={stateValue == data ? true : false}>{data}</option>
     })
 
     return ret;
@@ -223,11 +232,11 @@ class DecisionCoordinatorDecentrilizedAdministrationView extends Component {
             <MyTextField tm={getDecisionCoordinatorDecentrilizedAdministrationTooltip(this.state, 3)} tp='text' title='ΑΔΑ' label='' id='ADA' stateValue={this.state.ADA} isRequired={false} isDisabled={false} onChange={this.onChange} style={{ width: '100%' }} width='50%' />
           </div>
           <div style={{ display: 'flex', flexFlow: 'row', height: 'auto', backgroundColor: '#fff', justifyContent: 'left', padding: '10px' }}>
-            <MyTextField tm={getDecisionCoordinatorDecentrilizedAdministrationTooltip(this.state, 4)} title='Ενέργεια (Διαβιβαστικό)' id='ActionTransmission' stateValue={this.state.ActionTransmission} values={this.getActions()} isRequired={true} isDisabled={false} onChange={this.onChange} select={true} width='50%' />
-            <MyTextField tm={getDecisionCoordinatorDecentrilizedAdministrationTooltip(this.state, 5)} title='Ενέργεια (Λογαριασμός)' id='ActionAccount' stateValue={this.state.ActionAccount} values={this.getActions()} isRequired={true} isDisabled={false} onChange={this.onChange} select={true} width='50%' />
+            <MyTextField tm={getDecisionCoordinatorDecentrilizedAdministrationTooltip(this.state, 4)} title='Ενέργεια (Διαβιβαστικό)' id='ActionTransmission' stateValue={this.state.ActionTransmission} values={this.getActions(this.state.ActionTransmission)} isRequired={true} isDisabled={false} onChange={this.onChange} select={true} width='50%' />
+            <MyTextField tm={getDecisionCoordinatorDecentrilizedAdministrationTooltip(this.state, 5)} title='Ενέργεια (Λογαριασμός)' id='ActionAccount' stateValue={this.state.ActionAccount} values={this.getActions(this.state.ActionAccount)} isRequired={true} isDisabled={false} onChange={this.onChange} select={true} width='50%' />
           </div>
           <div style={{ display: 'flex', flexFlow: 'row', height: 'auto', backgroundColor: '#fff', justifyContent: 'left', padding: '10px' }}>
-            <MyTextField tm={getDecisionCoordinatorDecentrilizedAdministrationTooltip(this.state, 6)} title='Σε ποιά A.Δ.Σ. αναφέρεται?' id='DecisionBoardProtocol' stateValue={this.state.DecisionBoardProtocol} values={this.getDecisionBoardValues()} isRequired={true} isDisabled={false} onChange={this.onChange} select={true} width='50%' />
+            <MyTextField tm={getDecisionCoordinatorDecentrilizedAdministrationTooltip(this.state, 6)} title='Σε ποιά A.Δ.Σ. αναφέρεται?' id='DecisionBoardProtocol' stateValue={this.state.DecisionBoardProtocol} values={this.getDecisionBoardValues(this.state.DecisionBoardProtocol)} isRequired={true} isDisabled={false} onChange={this.onChange} select={true} width='50%' />
             <ProtocolInput
               tm1={getDecisionCoordinatorDecentrilizedAdministrationTooltip(this.state, 7)}
               tm2={getDecisionCoordinatorDecentrilizedAdministrationTooltip(this.state, 8)}
@@ -244,8 +253,7 @@ class DecisionCoordinatorDecentrilizedAdministrationView extends Component {
           <div style={{ display: 'flex', flexFlow: 'row', height: 'auto', justifyContent: 'center', padding: '10px' }}>
             <LoadingOverlay
               active={this.props.insertContractInfoPending === true}
-              spinner
-              text='Αναμονή για δημιουργία Σ.Α.Δ.Α. ...'
+              spinner              
               styles={{
                 overlay: (base) => ({
                   ...base,
@@ -275,8 +283,7 @@ class DecisionCoordinatorDecentrilizedAdministrationView extends Component {
         <div style={{ display: 'flex', flexFlow: 'row', height: 'auto', backgroundColor: '#33C1FF', justifyContent: 'center', padding: '10px' }}>
           <LoadingOverlay
             active={this.props.deleteContractInfoPending === true}
-            spinner
-            text='Αναμονή για διαγραφή Σ.Α.Δ.Α. ...'
+            spinner            
             styles={{
               overlay: (base) => ({
                 ...base,

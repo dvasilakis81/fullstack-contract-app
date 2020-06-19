@@ -455,8 +455,8 @@ class NewAccountForm extends Component {
 			{this.addProtocolInfo(this.state.AccountId, this.state.AccountNumber)}
 			{this.addFirstAccountProtocolInfo()}
 			<div style={useStyles.divRowFlex}>
-				<MyTextField tm={getAccountStartDateTooltipTemplate(this.state)} tp='date' title='Έναρξη Λογαριασμού' id='Start' stateValue={this.state.Start} isRequired={true} isDisabled={false} onChange={this.onChange} />
-				<MyTextField tm={getAccountStartDateTooltipTemplate(this.state)} tp='date' title='Λήξη Λογαριασμού' id='End' stateValue={this.state.End} isRequired={true} isDisabled={false} onChange={this.onChange} />
+				<MyTextField tm={getAccountStartDateTooltipTemplate(this.state)} tp='date' title='Έναρξη Λογαριασμού' id='Start' stateValue={this.state.Start} isRequired={false} isDisabled={false} onChange={this.onChange} />
+				<MyTextField tm={getAccountStartDateTooltipTemplate(this.state)} tp='date' title='Λήξη Λογαριασμού' id='End' stateValue={this.state.End} isRequired={false} isDisabled={false} onChange={this.onChange} />
 				{getCheckboxField('IsFirstOfTheYear', '1ος τους έτους', this.state.IsFirstOfTheYear, useStyles.accountInfoItem, this.setCheckboxValue)}
 			</div>
 			<div style={useStyles.divRowFlex}>
