@@ -14,7 +14,7 @@ function addQuotes(value) {
   var ret = null;
 
   if (value)
-    ret = '\''.concat(value.toString().replace(/'/g,"''")).concat('\'');
+    ret = '\''.concat(value.toString().replace(/'/g, "''")).concat('\'');
 
   return ret;
 }
@@ -53,7 +53,7 @@ function getWord(number) {
     ret = 'Δέκα'
   else if (number === '11')
     ret = 'Έντεκα'
-    else if (number === '12')
+  else if (number === '12')
     ret = 'Δώδεκα'
   else if (number === '13')
     ret = 'Δεκατρία'
@@ -111,41 +111,42 @@ function extractYearFromDate(dateValue) {
 }
 
 function getDateString(protocolDate) {
-    var ret;
-    var day, month, year;
-    if (protocolDate) {
-      day = Intl.DateTimeFormat('el-GR', { day: 'numeric' }).format(new Date(protocolDate));
-      month = Intl.DateTimeFormat('el-GR', { month: 'numeric' }).format(new Date(protocolDate));
-      year = Intl.DateTimeFormat('el-GR', { year: 'numeric' }).format(new Date(protocolDate));
-    }
-
-    if (month == '1')
-      ret = day + ' Ιανουαρίου ' + year
-    else if (month == '2')
-      ret = day + ' Φεβρουαρίου ' + year
-    else if (month == '3')
-      ret = day + ' Μαρτίου ' + year
-    else if (month == '4')
-      ret = day + ' Απριλίου ' + year
-    else if (month == '5')
-      ret = day + ' Μαΐου ' + year
-    else if (month == '6')
-      ret = day + ' Ιουνίου ' + year
-    else if (month == '7')
-      ret = day + ' Ιουλίου ' + year
-    else if (month == '8')
-      ret = day + ' Αυγούστου ' + year
-    else if (month == '9')
-      ret = day + ' Σεπτεμβρίου ' + year
-    else if (month == '10')
-      ret = day + ' Οκτωβρίου ' + year
-    else if (month == '11')
-      ret = day + ' Νοέμβριου ' + year
-    else if (month == '12')
-      ret = day + ' Δεκεμβρίου ' + year
-
-    return ret;
+  var ret;
+  var day, month, year;
+  if (protocolDate) {
+    day = Intl.DateTimeFormat('el-GR', { day: 'numeric' }).format(new Date(protocolDate));
+    month = Intl.DateTimeFormat('el-GR', { month: 'numeric' }).format(new Date(protocolDate));
+    year = Intl.DateTimeFormat('el-GR', { year: 'numeric' }).format(new Date(protocolDate));
   }
+
+  if (month == '1')
+    ret = day + ' Ιανουαρίου ' + year
+  else if (month == '2')
+    ret = day + ' Φεβρουαρίου ' + year
+  else if (month == '3')
+    ret = day + ' Μαρτίου ' + year
+  else if (month == '4')
+    ret = day + ' Απριλίου ' + year
+  else if (month == '5')
+    ret = day + ' Μαΐου ' + year
+  else if (month == '6')
+    ret = day + ' Ιουνίου ' + year
+  else if (month == '7')
+    ret = day + ' Ιουλίου ' + year
+  else if (month == '8')
+    ret = day + ' Αυγούστου ' + year
+  else if (month == '9')
+    ret = day + ' Σεπτεμβρίου ' + year
+  else if (month == '10')
+    ret = day + ' Οκτωβρίου ' + year
+  else if (month == '11')
+    ret = day + ' Νοέμβριου ' + year
+  else if (month == '12')
+    ret = day + ' Δεκεμβρίου ' + year
+
+  return ret;
+}
+
 module.exports = {
   addQuotes,
   fixTextForRawXml,

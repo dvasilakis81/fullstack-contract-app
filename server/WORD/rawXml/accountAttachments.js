@@ -29,7 +29,7 @@ module.exports = {
 			'<w:numPr>' +
 			'<w:ilvl w:val="0"/>' +
 			'<w:numId w:val="2"/>' +
-			'</w:numPr>' +			
+			'</w:numPr>' +
 			'<w:spacing w:line="276" w:lineRule="auto"/>' +
 			'<w:ind w:left="-142" w:hanging="426" />' +
 			'<w:jc w:val="left"/>' +
@@ -45,7 +45,7 @@ module.exports = {
 
 				if (element.ContentAccount) {
 					var rText = util.format('Τη με αρ. %s/%s Απόφαση του Δημοτικού Συμβουλίου (Α.Δ.Σ.) Αθηναίων ', element.ProtocolNumber, element.ProtocolDate)
-					var lText = util.format('με την οποία διορθώθηκε η ανωτέρω Α.Δ.Σ. “%s”. ', element.ContentAccount)
+					var lText = util.format('%s', element.ContentAccount)
 
 					ret += '<w:p>' +
 						'<w:pPr>' +
@@ -83,9 +83,6 @@ module.exports = {
 					'<w:spacing w:line="276" w:lineRule="auto"/>' +
 					'<w:ind w:left="-142" w:hanging="426" />' +
 					'<w:jc w:val="left"/>' +
-					'<w:rPr>' +
-					'<w:rFonts w:ascii="Garamond" w:hAnsi="Garamond"/>' +
-					'</w:rPr>' +
 					'</w:pPr>' +
 					common.getrElement(rText) +
 					common.getADAXml(element.ADA) +
@@ -100,11 +97,11 @@ module.exports = {
 		if (body.CourtOfAuditors) {
 			for (let index = 0; index < body.CourtOfAuditors.length; index++) {
 				const element = body.CourtOfAuditors[index];
-				var rText = util.format('Τη με αρ. %s/%s Πράξη του %s Κλιμακίου του Ελεγκτικού Συνεδρίου %s',
+				var rText = util.format('Τη με αρ. %s/%s Πράξη του %s Κλιμακίου του Ελεγκτικού Συνεδρίου %s.',
 					element.ProtocolNumber,
 					element.ProtocolYear,
 					element.ScaleNumber,
-					element.ContentAccount)
+					element.ContentAccount ? element.ContentAccount : '')
 
 				ret += '<w:p>' +
 					'<w:pPr>' +
@@ -130,7 +127,12 @@ module.exports = {
 				const element = body.AAY[index];
 				if (element.Type == 0 || element.Type == 1) {
 					var rText = util.format('Tη με αρ. %s/%s/%s ΕΑΔ %s ', element.Value, element.ProtocolNumber, element.ProtocolDate, element.EadNumber);
-					var lText = 'Απόφαση Ανάληψης Υποχρέωσης.';
+					var lText = '';
+					if (element.Type == 1)
+						lText = 'Απόφασης Ανάληψης Υποχρέωσης.'
+					else if (element.Type == 2)
+						lText = 'Απόφασης Ανάληψης Υποχρέωσης (διάφορα έξοδα ΠΟΕ).'
+
 					ret += '<w:p>' +
 						'<w:pPr>' +
 						'<w:numPr>' +
@@ -146,7 +148,7 @@ module.exports = {
 						common.getrElement(lText) +
 						'</w:p>'
 				} else if (element.Type == 2) {
-					var rText = util.format('Tη υπ΄ αριθμ. %s/%s ΕΑΔ %s ', element.ProtocolNumber, element.ProtocolDate, element.EadNumber);
+					var rText = util.format('Tη υπ΄ αριθμ. %s/%s ', element.ProtocolNumber, element.ProtocolDate);
 					var lText = util.format('(παρ.2 άρθρο 4 ΠΔ 80/2016), της %s Α.Α.Υ. ', element.Overthrow)
 					ret += '<w:p>' +
 						'<w:pPr>' +
@@ -162,7 +164,7 @@ module.exports = {
 						common.getADAXml(element.ADA) +
 						common.getBoldText('ΑΠΟΦΑΣΗ ΑΝΑΤΡΟΠΗΣ ΑΝΑΛΗΨΗΣ ΥΠΟΧΡΕΩΣΗΣ ') +
 						common.getrElement(lText) +
-						
+
 						'</w:p>'
 				}
 			}
@@ -172,22 +174,34 @@ module.exports = {
 	},
 	getAttachment6: function (body) {
 
+		//12.	Το με Α.Π. 071886/1-04-2020 διαβιβαστικό έγγραφο, με το οποίο μας διαβιβάστηκε το υπ’ αριθ. Σειρά Γ 28/31-03-2020 
+		//Τιμολόγιο της Δ.Α.Ε.Μ. Α.Ε.,
 		if (body.Account[0].Invoice) {
-			var rText = util.format('Το με Α.Π. %s/%s διαβιβαστικό έγγραφο, με το οποίο μας διαβιβάστηκε το υπ’ αριθ. %s/%s Τιμολόγιο της %s στης %s.',
-				body.Account[0].Invoice[0].DeliveredDateProtocol[0].Number,
-				body.Account[0].Invoice[0].DeliveredDateProtocol[0].Date,
-				body.Account[0].Invoice[0].Number,
-				body.Account[0].Invoice[0].Date,
-				body.Contract[0].Concessionaire[0].Name,
-				body.Account[0].Invoice[0].DeliveredDate
-			)
+			var rText = '';
+			if (body.Account[0].Invoice[0].DeliveredDate) {
+				rText = util.format('Το με Α.Π. %s/%s διαβιβαστικό έγγραφο, με το οποίο μας διαβιβάστηκε το υπ’ αριθ. %s/%s Τιμολόγιο της %s στης %s.',
+					body.Account[0].Invoice[0].DeliveredDateProtocol[0].Number,
+					body.Account[0].Invoice[0].DeliveredDateProtocol[0].Date,
+					body.Account[0].Invoice[0].Number,
+					body.Account[0].Invoice[0].Date,
+					body.Contract[0].Concessionaire[0].Name,
+					body.Account[0].Invoice[0].DeliveredDate)
+			} else {
+				rText = util.format('Το με Α.Π. %s/%s διαβιβαστικό έγγραφο, με το οποίο μας διαβιβάστηκε το υπ’ αριθ. %s/%s Τιμολόγιο της %s',
+					body.Account[0].Invoice[0].DeliveredDateProtocol[0].Number,
+					body.Account[0].Invoice[0].DeliveredDateProtocol[0].Date,
+					body.Account[0].Invoice[0].Number,
+					body.Account[0].Invoice[0].Date,
+					body.Contract[0].Concessionaire[0].Name)
+			}
+
 
 			return '<w:p>' +
 				'<w:pPr>' +
 				'<w:numPr>' +
 				'<w:ilvl w:val="0"/>' +
 				'<w:numId w:val="2"/>' +
-				'</w:numPr>' +				
+				'</w:numPr>' +
 				'<w:spacing w:line="276" w:lineRule="auto"/>' +
 				'<w:ind w:left="-142" w:hanging="426" />' +
 				'<w:jc w:val="left"/>' +
@@ -235,7 +249,7 @@ module.exports = {
 			'<w:numPr>' +
 			'<w:ilvl w:val="0"/>' +
 			'<w:numId w:val="2"/>' +
-			'</w:numPr>' +			
+			'</w:numPr>' +
 			'<w:spacing w:line="276" w:lineRule="auto"/>' +
 			'<w:ind w:left="-142" w:hanging="426" />' +
 			'<w:jc w:val="left"/>' +
@@ -254,7 +268,7 @@ module.exports = {
 			'<w:numPr>' +
 			'<w:ilvl w:val="0"/>' +
 			'<w:numId w:val="2"/>' +
-			'</w:numPr>' +			
+			'</w:numPr>' +
 			'<w:spacing w:line="276" w:lineRule="auto"/>' +
 			'<w:ind w:left="-142" w:hanging="426" />' +
 			'<w:jc w:val="left"/>' +
@@ -270,7 +284,7 @@ module.exports = {
 				'<w:numPr>' +
 				'<w:ilvl w:val="0"/>' +
 				'<w:numId w:val="2"/>' +
-				'</w:numPr>' +				
+				'</w:numPr>' +
 				'<w:spacing w:line="276" w:lineRule="auto"/>' +
 				'<w:ind w:left="-142" w:hanging="426" />' +
 				'<w:jc w:val="left"/>' +
@@ -298,13 +312,10 @@ module.exports = {
 				'<w:ilvl w:val="0"/>' +
 				'<w:numId w:val="2"/>' +
 				'</w:numPr>' +
-				
+
 				'<w:spacing w:line="276" w:lineRule="auto"/>' +
 				'<w:ind w:left="-142" w:hanging="426" />' +
 				'<w:jc w:val="left"/>' +
-				'<w:rPr>' +
-				'<w:rFonts w:ascii="Garamond" w:hAnsi="Garamond"/>' +
-				'</w:rPr>' +
 				'</w:pPr>' +
 				common.getrElement(rText) +
 				'</w:p>'
@@ -366,7 +377,7 @@ module.exports = {
 				//'<w:ind w:left="-142" w:hanging="426" />' +
 				'<w:jc w:val="left"/>' +
 				'</w:pPr>' +
-				common.getrElement(s1_1) +				
+				common.getrElement(s1_1) +
 				'<w:r><w:rPr><w:vertAlign w:val="superscript"/><w:lang w:val="el-GR"/></w:rPr><w:t>ης</w:t></w:r>' +
 				common.getrElement(s1_2) +
 				'</w:p>' +
@@ -376,7 +387,7 @@ module.exports = {
 				'<w:ilvl w:val="1"/>' +
 				'<w:numId w:val="2"/>' +
 				'</w:numPr>' +
-				'<w:spacing w:line="276" w:lineRule="auto"/>' +				
+				'<w:spacing w:line="276" w:lineRule="auto"/>' +
 				'<w:jc w:val="left"/>' +
 				'</w:pPr>' +
 				common.getrElement(s2) +

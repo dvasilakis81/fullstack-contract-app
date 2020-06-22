@@ -15,21 +15,24 @@ const insertCC = (req, res, next, accountInfo) => {
       if (results.rows.length > 0)
         res.status(200).json(results.rows[0].Id);
       else {
-        var sqlQuery = 'INSERT INTO "Ordering"."CC"("AccountId","CC","Order") VALUES ';
-        for (var i = 0; i < ccValues.length; i++) {
-          sqlQuery += util.format('(%s,%s,%s)', accountId, helper.addQuotes(ccValues[i].CC), i);
-          if (i < ccValues.length - 1)
-            sqlQuery += ',';
-        }
-
-        pool.query(sqlQuery, (error, results) => {
-          if (error)
-            next(error);
-          else {
-            helper.consoleLog("Insert CC Info\n");
-            Signatures.insertDocumentSignatures(req, res, next, accountInfo);
+        if (ccValues && ccValues.length > 0) {
+          var sqlQuery = 'INSERT INTO "Ordering"."CC"("AccountId","CC","Order") VALUES ';
+          for (var i = 0; i < ccValues.length; i++) {
+            sqlQuery += util.format('(%s,%s,%s)', accountId, helper.addQuotes(ccValues[i].CC), i);
+            if (i < ccValues.length - 1)
+              sqlQuery += ',';
           }
-        })
+
+          pool.query(sqlQuery, (error, results) => {
+            if (error)
+              next(error);
+            else {
+              helper.consoleLog("Insert CC Info\n");
+              Signatures.insertDocumentSignatures(req, res, next, accountInfo);
+            }
+          })
+        } else
+          Signatures.insertDocumentSignatures(req, res, next, accountInfo);
       }
     }
   })

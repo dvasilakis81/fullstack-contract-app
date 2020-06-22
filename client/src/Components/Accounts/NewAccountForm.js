@@ -318,7 +318,7 @@ class NewAccountForm extends Component {
 		if (accountId) {
 			return (
 				<div style={useStyles.divRowFlex}>
-					<ProtocolInput tm1={getAccountProtocolTooltip(this.state.ProtocolNumber, this.state.ProtocolDate, 1)} tm2={getAccountProtocolTooltip(this.state.ProtocolNumber, this.state.ProtocolDate, 2)} title='Α.Π. Λογαριασμού' idn='ProtocolNumber' idd='ProtocolDate' protocolNumber={this.state.ProtocolNumber} protocolDate={this.state.ProtocolDate} onChange={this.onChange} tp1='text' tp2='date' />
+					<ProtocolInput tm1={getAccountProtocolTooltip(this.state.ProtocolNumber, this.state.ProtocolDate, 1)} tm2={getAccountProtocolTooltip(this.state.ProtocolNumber, this.state.ProtocolDate, 2)} title='Α.Π. Λογαριασμού' isRequired={false} idn='ProtocolNumber' idd='ProtocolDate' protocolNumber={this.state.ProtocolNumber} protocolDate={this.state.ProtocolDate} onChange={this.onChange} tp1='text' tp2='date' isRequired={false} />
 				</div>)
 		}
 	}

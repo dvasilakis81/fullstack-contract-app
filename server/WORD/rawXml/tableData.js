@@ -15,7 +15,8 @@ module.exports = {
   },
   getAccountInfoTableRow: function (accountNumber, amountPure, amountFpa, amountTotal, isDownpayment) {
     var firstRowLabel = isDownpayment ? 'Λογαριασμός - Προκαταβολή' : 'Λογαριασμός'
-    var firstRow = '<w:tr w:rsidR="00400E00" w:rsidRPr="006B6E0A" w:rsidTr="006B658F">' +
+    
+    var firstRow = '<w:tr>' +
       '<w:trPr>' +
       '<w:trHeight w:val="286"/>' +
       '</w:trPr>' +
@@ -71,7 +72,8 @@ module.exports = {
       '</w:p>' +
       '</w:tc>' +
       '</w:tr>'
-    var secondRow = '<w:tr w:rsidR="00400E00" w:rsidRPr="006B6E0A" w:rsidTr="006B658F">' +
+    
+    var secondRow = '<w:tr>' +
       '<w:trPr>' +
       '<w:trHeight w:val="286"/>' +
       '</w:trPr>' +
@@ -126,7 +128,8 @@ module.exports = {
       '</w:p>' +
       '</w:tc>' +
       '</w:tr>';
-    var thirdRow = '<w:tr w:rsidR="00400E00" w:rsidRPr="006B6E0A" w:rsidTr="006B658F">' +
+    
+    var thirdRow = '<w:tr>' +
       '<w:trPr>' +
       '<w:trHeight w:val="286"/>' +
       '</w:trPr>' +
@@ -147,7 +150,7 @@ module.exports = {
       '</w:pPr>' +
       common.getrElement('ΣΥΝΟΛΟ ' + accountNumber) +
       common.getrElement('ου', true) +
-      common.getrElement(' ΛΟΓΑΡΙΑΣΜΟΥ', true) +
+      common.getrElement(' ΛΟΓΑΡΙΑΣΜΟΥ') +
       '</w:p>' +
       '</w:tc>' +
       '<w:tc>' +
@@ -202,7 +205,7 @@ module.exports = {
       '<w:pPr>' +
       '<w:ind w:right="-1594"/>' +
       '</w:pPr>' +
-      common.getrElement(name) + 
+      common.getrElement(name) +
       '</w:p>' +
       '</w:tc>' +
       '<w:tc>' +
@@ -220,8 +223,7 @@ module.exports = {
       '<w:ind w:right="-45"/>' +
       '<w:jc w:val="right"/>' +
       '</w:pPr>' +
-      common.getrElement(percentage) +
-      //common.getrElement('') +
+      common.getrElement(percentage) +      
       '</w:p>' +
       '</w:tc>' +
       '<w:tc>' +
@@ -253,7 +255,7 @@ module.exports = {
       '<w:p>' +
       '<w:pPr>' +
       '<w:ind w:right="-45"/>' +
-      '<w:jc w:val="right"/>' +      
+      '<w:jc w:val="right"/>' +
       '</w:pPr>' +
       common.getrElement(value) +
       '</w:p>' +
@@ -268,7 +270,7 @@ module.exports = {
       '</w:tcPr>' +
       '<w:p>' +
       '<w:pPr>' +
-      '<w:ind w:right="-1594"/>' +      
+      '<w:ind w:right="-1594"/>' +
       '</w:pPr>' +
       '</w:p>' +
       '</w:tc>' +
@@ -456,199 +458,199 @@ module.exports = {
     return ret;
   },
   createTableTotalPaidAmount: function (body) {
-    var ret = '<w:tbl>' + 
-    '<w:tblPr>' + 
-    '<w:tblW w:w="5353" w:type="pct"/>' + 
-    '<w:tblInd w:w="-601" w:type="dxa"/>' + 
-    '<w:tblBorders>' + 
-    '<w:top w:val="single" w:sz="4" w:space="0" w:color="auto"/>' + 
-    '<w:left w:val="single" w:sz="4" w:space="0" w:color="auto"/>' + 
-    '<w:bottom w:val="single" w:sz="4" w:space="0" w:color="auto"/>' + 
-    '<w:right w:val="single" w:sz="4" w:space="0" w:color="auto"/>' + 
-    '<w:insideH w:val="single" w:sz="4" w:space="0" w:color="auto"/>' + 
-    '<w:insideV w:val="single" w:sz="4" w:space="0" w:color="auto"/>' + 
-    '</w:tblBorders><w:tblLook w:val="04A0"/>' + 
-    '</w:tblPr>' + 
-    '<w:tblGrid>' + 
-    '<w:gridCol w:w="7126"/>' + 
-    '<w:gridCol w:w="1460"/>' + 
-    '<w:gridCol w:w="538"/>' + 
-    '</w:tblGrid>';
+    var ret = '<w:tbl>' +
+      '<w:tblPr>' +
+      '<w:tblW w:w="5353" w:type="pct"/>' +
+      '<w:tblInd w:w="-601" w:type="dxa"/>' +
+      '<w:tblBorders>' +
+      '<w:top w:val="single" w:sz="4" w:space="0" w:color="auto"/>' +
+      '<w:left w:val="single" w:sz="4" w:space="0" w:color="auto"/>' +
+      '<w:bottom w:val="single" w:sz="4" w:space="0" w:color="auto"/>' +
+      '<w:right w:val="single" w:sz="4" w:space="0" w:color="auto"/>' +
+      '<w:insideH w:val="single" w:sz="4" w:space="0" w:color="auto"/>' +
+      '<w:insideV w:val="single" w:sz="4" w:space="0" w:color="auto"/>' +
+      '</w:tblBorders><w:tblLook w:val="04A0"/>' +
+      '</w:tblPr>' +
+      '<w:tblGrid>' +
+      '<w:gridCol w:w="7126"/>' +
+      '<w:gridCol w:w="1460"/>' +
+      '<w:gridCol w:w="538"/>' +
+      '</w:tblGrid>';
 
     var AmountPure = body.Account[0].AmountPure;
     var AmountFpa = body.Account[0].AmountFpa;
     var AmountTotal = body.Account[0].AmountTotal;
     ret += '<w:tr>' +
-    '<w:trPr>' + 
-    '<w:trHeight w:val="286"/>' + 
-    '</w:trPr>' +
-    '<w:tc>' + 
-    '<w:tcPr>' + 
-    '<w:tcW w:w="3905" w:type="pct"/>' + 
-    '<w:tcBorders>' + 
-    '<w:top w:val="single" w:sz="4" w:space="0" w:color="auto"/>' + 
-    '<w:bottom w:val="single" w:sz="4" w:space="0" w:color="auto"/>' + 
-    '</w:tcBorders>' + 
-    '<w:vAlign w:val="center"/>' + 
-    '</w:tcPr>' + 
-    '<w:p>' +
-    '<w:pPr>' + 
-    '<w:ind w:right="-1594"/>' + 
-    '<w:rPr>' + 
-    '<w:lang w:val="en-US"/>' + 
-    '</w:rPr>' + 
-    '</w:pPr>' + 
-    common.getrElement('Πληρωτέο (Καθαρό ποσό)') +
-    '</w:p>' + 
-    '</w:tc>' + 
-    '<w:tc>' + 
-    '<w:tcPr>' + 
-    '<w:tcW w:w="601" w:type="pct"/>' + 
-    '<w:tcBorders>' + 
-    '<w:bottom w:val="single" w:sz="4" w:space="0" w:color="auto"/>' + 
-    '<w:right w:val="nil"/>' + 
-    '</w:tcBorders>' + 
-    '<w:vAlign w:val="center"/>' + 
-    '</w:tcPr>' + 
-    '<w:p>' + 
-    '<w:pPr>' + 
-    '<w:ind w:right="-45"/>' + 
-    '<w:jc w:val="right"/>' +     
-    '</w:pPr>' + 
-    common.getrElement(AmountPure) +    
-    '</w:p>' + 
-    '</w:tc>' + 
-    '<w:tc>' + 
-    '<w:tcPr>' + 
-    '<w:tcW w:w="494" w:type="pct"/>' + 
-    '<w:tcBorders>' + 
-    '<w:left w:val="nil"/>' + 
-    '<w:bottom w:val="single" w:sz="4" w:space="0" w:color="auto"/>' + 
-    '</w:tcBorders>' + 
-    '</w:tcPr>' + 
-    '<w:p>' + 
-    '<w:pPr>' + 
-    '<w:ind w:right="-1594"/>' +     
-    '</w:pPr>' + 
-    '</w:p>' + 
-    '</w:tc>' + 
-    '</w:tr>' +
-    '<w:tr>' + 
-    '<w:trPr>' + 
-    '<w:trHeight w:val="286"/>' + 
-    '</w:trPr>' + 
-    '<w:tc>' + 
-    '<w:tcPr>' + 
-    '<w:tcW w:w="3905" w:type="pct"/>' + 
-    '<w:tcBorders>' + 
-    '<w:top w:val="single" w:sz="4" w:space="0" w:color="auto"/>' + 
-    '<w:bottom w:val="single" w:sz="4" w:space="0" w:color="auto"/>' + 
-    '</w:tcBorders>' + 
-    '<w:vAlign w:val="center"/>' + 
-    '</w:tcPr>' + 
-    '<w:p>' +
-    '<w:pPr>' + 
-    '<w:ind w:right="-1594"/>' + 
-    '<w:rPr>' + 
-    '<w:lang w:val="en-US"/>' + 
-    '</w:rPr>' + 
-    '</w:pPr>' + 
-    common.getrElement('Φ.Π.Α. 24%') + 
-    '</w:p>' + 
-    '</w:tc>' + 
-    '<w:tc>' + 
-    '<w:tcPr>' + 
-    '<w:tcW w:w="601" w:type="pct"/>' + 
-    '<w:tcBorders>' + 
-    '<w:bottom w:val="single" w:sz="4" w:space="0" w:color="auto"/>' + 
-    '<w:right w:val="nil"/>' + 
-    '</w:tcBorders>' + 
-    '<w:vAlign w:val="center"/>' + 
-    '</w:tcPr>' + 
-    '<w:p>' + 
-    '<w:pPr>' + 
-    '<w:ind w:right="-45"/>' + 
-    '<w:jc w:val="right"/>' + 
-    '<w:rPr>' +     
-    '<w:szCs w:val="24"/>' + 
-    '</w:rPr>' + 
-    '</w:pPr>' +
-    common.getrElement(AmountFpa) +  
-    '</w:p>' + 
-    '</w:tc>' + 
-    '<w:tc>' + 
-    '<w:tcPr>' + 
-    '<w:tcW w:w="494" w:type="pct"/>' + 
-    '<w:tcBorders>' + 
-    '<w:left w:val="nil"/>' + 
-    '<w:bottom w:val="single" w:sz="4" w:space="0" w:color="auto"/>' + 
-    '</w:tcBorders>' + 
-    '</w:tcPr>' + 
-    '<w:p>' + 
-    '<w:pPr>' + 
-    '<w:ind w:right="-1594"/>' + 
-    '<w:rPr>' +     
-    '<w:szCs w:val="24"/>' + 
-    '</w:rPr>' + 
-    '</w:pPr>' + 
-    '</w:p>' + 
-    '</w:tc>' + 
-    '</w:tr>' +
-    '<w:tr>' + 
-    '<w:trPr>' + 
-    '<w:trHeight w:val="614"/>' + 
-    '</w:trPr>' + 
-    '<w:tc>' + 
-    '<w:tcPr>' + 
-    '<w:tcW w:w="3905" w:type="pct"/>' + 
-    '<w:tcBorders>' + 
-    '<w:top w:val="single" w:sz="4" w:space="0" w:color="auto"/>' + 
-    '</w:tcBorders>' + 
-    '<w:vAlign w:val="center"/>' + 
-    '</w:tcPr>' + 
-    '<w:p>' + 
-    '<w:pPr>' + 
-    '<w:ind w:right="-1594"/>' + 
-    '</w:pPr>' + 
-    common.getBoldText('ΣΥΝΟΛΙΚΟ ΠΛΗΡΩΤΕΟ (χωρίς αφαίρεση κρατήσεων)');
-    '</w:p>' + 
-    '</w:tc>' + 
-    '<w:tc>' + 
-    '<w:tcPr>' + 
-    '<w:tcW w:w="601" w:type="pct"/>' + 
-    '<w:tcBorders>' + 
-    '<w:bottom w:val="single" w:sz="4" w:space="0" w:color="auto"/>' + 
-    '<w:right w:val="nil"/>' + 
-    '</w:tcBorders>' + 
-    '<w:vAlign w:val="center"/>' + 
-    '</w:tcPr>' + 
-    '<w:p>' + 
-    '<w:pPr>' + 
-    '<w:ind w:right="-45"/>' + 
-    '<w:jc w:val="right"/>' + 
-    '<w:rPr>' +     
-    '<w:szCs w:val="24"/>' + 
-    '</w:rPr>' + 
-    '</w:pPr>' + 
-    common.getrElement(AmountTotal)    
-    '</w:p>' + 
-    '</w:tc>' + 
-    '<w:tc>' + 
-    '<w:tcPr>' + 
-    '<w:tcW w:w="494" w:type="pct"/>' + 
-    '<w:tcBorders>' + 
-    '<w:left w:val="nil"/>' + 
-    '<w:bottom w:val="single" w:sz="4" w:space="0" w:color="auto"/>' + 
-    '</w:tcBorders>' + 
-    '</w:tcPr>' + 
-    '<w:p>' + 
-    '<w:pPr>' + 
-    '<w:ind w:right="-1594"/>' + 
-    '</w:pPr>' + 
-    '</w:p>' + 
-    '</w:tc>' + 
-    '</w:tr>' +
-    '</w:tbl>'
+      '<w:trPr>' +
+      '<w:trHeight w:val="286"/>' +
+      '</w:trPr>' +
+      '<w:tc>' +
+      '<w:tcPr>' +
+      '<w:tcW w:w="3905" w:type="pct"/>' +
+      '<w:tcBorders>' +
+      '<w:top w:val="single" w:sz="4" w:space="0" w:color="auto"/>' +
+      '<w:bottom w:val="single" w:sz="4" w:space="0" w:color="auto"/>' +
+      '</w:tcBorders>' +
+      '<w:vAlign w:val="center"/>' +
+      '</w:tcPr>' +
+      '<w:p>' +
+      '<w:pPr>' +
+      '<w:ind w:right="-1594"/>' +
+      '<w:rPr>' +
+      '<w:lang w:val="en-US"/>' +
+      '</w:rPr>' +
+      '</w:pPr>' +
+      common.getrElement('Πληρωτέο (Καθαρό ποσό)') +
+      '</w:p>' +
+      '</w:tc>' +
+      '<w:tc>' +
+      '<w:tcPr>' +
+      '<w:tcW w:w="601" w:type="pct"/>' +
+      '<w:tcBorders>' +
+      '<w:bottom w:val="single" w:sz="4" w:space="0" w:color="auto"/>' +
+      '<w:right w:val="nil"/>' +
+      '</w:tcBorders>' +
+      '<w:vAlign w:val="center"/>' +
+      '</w:tcPr>' +
+      '<w:p>' +
+      '<w:pPr>' +
+      '<w:ind w:right="-45"/>' +
+      '<w:jc w:val="right"/>' +
+      '</w:pPr>' +
+      common.getrElement(AmountPure) +
+      '</w:p>' +
+      '</w:tc>' +
+      '<w:tc>' +
+      '<w:tcPr>' +
+      '<w:tcW w:w="494" w:type="pct"/>' +
+      '<w:tcBorders>' +
+      '<w:left w:val="nil"/>' +
+      '<w:bottom w:val="single" w:sz="4" w:space="0" w:color="auto"/>' +
+      '</w:tcBorders>' +
+      '</w:tcPr>' +
+      '<w:p>' +
+      '<w:pPr>' +
+      '<w:ind w:right="-1594"/>' +
+      '</w:pPr>' +
+      '</w:p>' +
+      '</w:tc>' +
+      '</w:tr>' +
+      '<w:tr>' +
+      '<w:trPr>' +
+      '<w:trHeight w:val="286"/>' +
+      '</w:trPr>' +
+      '<w:tc>' +
+      '<w:tcPr>' +
+      '<w:tcW w:w="3905" w:type="pct"/>' +
+      '<w:tcBorders>' +
+      '<w:top w:val="single" w:sz="4" w:space="0" w:color="auto"/>' +
+      '<w:bottom w:val="single" w:sz="4" w:space="0" w:color="auto"/>' +
+      '</w:tcBorders>' +
+      '<w:vAlign w:val="center"/>' +
+      '</w:tcPr>' +
+      '<w:p>' +
+      '<w:pPr>' +
+      '<w:ind w:right="-1594"/>' +
+      '<w:rPr>' +
+      '<w:lang w:val="en-US"/>' +
+      '</w:rPr>' +
+      '</w:pPr>' +
+      common.getrElement('Φ.Π.Α. 24%') +
+      '</w:p>' +
+      '</w:tc>' +
+      '<w:tc>' +
+      '<w:tcPr>' +
+      '<w:tcW w:w="601" w:type="pct"/>' +
+      '<w:tcBorders>' +
+      '<w:bottom w:val="single" w:sz="4" w:space="0" w:color="auto"/>' +
+      '<w:right w:val="nil"/>' +
+      '</w:tcBorders>' +
+      '<w:vAlign w:val="center"/>' +
+      '</w:tcPr>' +
+      '<w:p>' +
+      '<w:pPr>' +
+      '<w:ind w:right="-45"/>' +
+      '<w:jc w:val="right"/>' +
+      '<w:rPr>' +
+      '<w:szCs w:val="24"/>' +
+      '</w:rPr>' +
+      '</w:pPr>' +
+      common.getrElement(AmountFpa) +
+      '</w:p>' +
+      '</w:tc>' +
+      '<w:tc>' +
+      '<w:tcPr>' +
+      '<w:tcW w:w="494" w:type="pct"/>' +
+      '<w:tcBorders>' +
+      '<w:left w:val="nil"/>' +
+      '<w:bottom w:val="single" w:sz="4" w:space="0" w:color="auto"/>' +
+      '</w:tcBorders>' +
+      '</w:tcPr>' +
+      '<w:p>' +
+      '<w:pPr>' +
+      '<w:ind w:right="-1594"/>' +
+      '<w:rPr>' +
+      '<w:szCs w:val="24"/>' +
+      '</w:rPr>' +
+      '</w:pPr>' +
+      '</w:p>' +
+      '</w:tc>' +
+      '</w:tr>' +
+      '<w:tr>' +
+      '<w:trPr>' +
+      '<w:trHeight w:val="614"/>' +
+      '</w:trPr>' +
+      '<w:tc>' +
+      '<w:tcPr>' +
+      '<w:tcW w:w="3905" w:type="pct"/>' +
+      '<w:tcBorders>' +
+      '<w:top w:val="single" w:sz="4" w:space="0" w:color="auto"/>' +
+      '</w:tcBorders>' +
+      '<w:vAlign w:val="center"/>' +
+      '</w:tcPr>' +
+      '<w:p>' +
+      '<w:pPr>' +
+      '<w:ind w:right="-1594"/>' +
+      '</w:pPr>' +
+      common.getBoldText('ΣΥΝΟΛΙΚΟ ΠΛΗΡΩΤΕΟ (χωρίς αφαίρεση κρατήσεων)') +
+      '</w:p>' +
+      '</w:tc>' +
+      '<w:tc>' +
+      '<w:tcPr>' +
+      '<w:tcW w:w="601" w:type="pct"/>' +
+      '<w:tcBorders>' +
+      '<w:bottom w:val="single" w:sz="4" w:space="0" w:color="auto"/>' +
+      '<w:right w:val="nil"/>' +
+      '</w:tcBorders>' +
+      '<w:vAlign w:val="center"/>' +
+      '</w:tcPr>' +
+      '<w:p>' +
+      '<w:pPr>' +
+      '<w:ind w:right="-45"/>' +
+      '<w:jc w:val="right"/>' +
+      '<w:rPr>' +
+      '<w:szCs w:val="24"/>' +
+      '</w:rPr>' +
+      '</w:pPr>' +
+      common.getrElement(AmountTotal) +
+      '</w:p>' +
+      '</w:tc>' +
+      '<w:tc>' +
+      '<w:tcPr>' +
+      '<w:tcW w:w="494" w:type="pct"/>' +
+      '<w:tcBorders>' +
+      '<w:left w:val="nil"/>' +
+      '<w:bottom w:val="single" w:sz="4" w:space="0" w:color="auto"/>' +
+      '</w:tcBorders>' +
+      '</w:tcPr>' +
+      '<w:p>' +
+      '<w:pPr>' +
+      '<w:ind w:right="-1594"/>' +
+      '</w:pPr>' +
+      '</w:p>' +
+      '</w:tc>' +
+      '</w:tr>' +
+      '</w:tbl>'
 
     return ret;
   },
@@ -736,7 +738,7 @@ module.exports = {
       '<w:b/>' +
       '</w:rPr>' +
       '</w:pPr>' +
-      common.getrElement('ΔΑΠΑΝΗ ΜΕΡΙΚΗ') +
+      common.getBoldText('ΔΑΠΑΝΗ ΜΕΡΙΚΗ') +
       '</w:p>' +
       '</w:tc>' +
       '</w:tr>' +
@@ -792,14 +794,12 @@ module.exports = {
   },
   getRawXmlTableValue: function (body, isDownpayment) {
 
-    return (this.createTableAccountsInfo(body, isDownpayment) +
+    return (
+      this.createTableAccountsInfo(body, isDownpayment) +
       this.createTableDistance() +
-      this.createTableReservations(body))
-
-    //  return (this.createTableAccountsInfo(body, isDownpayment) +
-    //  this.createTableDistance() +
-    //  this.createTableReservations(body) +
-    //  this.createTableDistance() +
-    //  this.createTableTotalPaidAmount(body))
+      this.createTableReservations(body) +
+      //this.createTableDistance() +
+      this.createTableTotalPaidAmount(body)
+    )
   }
 };

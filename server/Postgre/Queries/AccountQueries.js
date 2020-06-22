@@ -6,7 +6,6 @@ const getAccountById =  (req, res, next, accountId) => {
 
   var sqlQuery = util.format('SELECT *, ' +
     '(SELECT json_agg(Account) FROM (SELECT acc."ProtocolNumber" as firstAccountProtocolNumber, acc."ProtocolDate" as firstAccountProtocolDate FROM "Ordering"."Account" as acc WHERE acc."Id"=%s) Account) AS FirstProtocolInfo, '   +
-    '(SELECT json_agg(AAY) FROM (SELECT * FROM "Ordering"."AAY" as b WHERE b."AccountId" = a."Id") AAY) AS AAY, ' +
     '(SELECT json_agg(Invoice) FROM (SELECT * FROM "Ordering"."Invoice" as i WHERE i."AccountId" = a."Id") Invoice) AS Invoice, ' +
     '(SELECT json_agg(CC) FROM (SELECT * FROM "Ordering"."CC" as cc WHERE cc."AccountId" = a."Id") CC) AS CC, ' +
     '(SELECT json_agg(MonitoringCommittee) FROM (SELECT * FROM "Ordering"."MonitoringCommittee" as mm WHERE mm."AccountId" = a."Id") MonitoringCommittee) AS MonitoringCommittee, ' +

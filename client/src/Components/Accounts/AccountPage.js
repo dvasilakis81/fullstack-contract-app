@@ -10,7 +10,7 @@ class Account extends Component {
   }
 
   getTitle(title, accountNumber) {
-    return <div>{title} <br /><span>Στοιχεία {accountNumber}ου λογαριασμού</span></div>
+    return <div>{title.substring(0, 150)} ... <span style={{color: 'gold'}}>Στοιχεία {accountNumber}ου λογαριασμού</span></div>
   }
 
   render() {

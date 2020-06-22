@@ -405,7 +405,7 @@ class ItemDetail extends React.Component {
 									<td>
 										<b style={styles.paperContractMonetaryInfoLabel}>{getFpaLabel(contractDetails.FpaValue)}</b>
 									</td>
-									<td style={{ textAlign: "end", color: monetaryColor, fontWeight: 'bold' }}>
+									<td style={{ textAlign: "end", color: monetaryColor, fontWeight: 'bold' }}>										
 										<NumberFormat value={toApprovalAmountFpa} displayType={'text'} thousandSeparator={'.'} decimalScale={2} fixedDecimalScale={true} decimalSeparator=',' suffix={'€'} isNumericString={true} />
 									</td>
 									<td>

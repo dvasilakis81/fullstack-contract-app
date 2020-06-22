@@ -191,16 +191,18 @@ class AayView extends Component {
     var ret;
     var options = [];
 
-    this.props.contractDetails.aay.map((data, index) => {
-      if (data && data.Type == 0)
-        return options.push(data);
-    })
+    if (this.props.contractDetails.aay) {
+      this.props.contractDetails.aay.map((data, index) => {
+        if (data && data.Type == 0)
+          return options.push(data);
+      })
 
-    ret = options.map((data, index) => {
-      var stringValue = data.Value.toString() + '/' + extractYearFromDate(data.ProtocolDate).toString();
-      return <option key={index} value={stringValue}>{stringValue}</option>
-    })
-
+      ret = options.map((data, index) => {
+        var stringValue = data.Value.toString() + '/' + extractYearFromDate(data.ProtocolDate).toString();
+        return <option key={index} value={stringValue}>{stringValue}</option>
+      })
+    }
+    
     return ret;
   }
 
@@ -249,7 +251,7 @@ class AayView extends Component {
           <div style={{ display: 'flex', flexFlow: 'row', height: 'auto', justifyContent: 'center', padding: '10px' }}>
             <LoadingOverlay
               active={this.props.insertContractInfoPending === true}
-              spinner              
+              spinner
               styles={{
                 overlay: (base) => ({
                   ...base,
@@ -277,7 +279,7 @@ class AayView extends Component {
         <div style={{ display: 'flex', flexFlow: 'row', height: 'auto', backgroundColor: '#33C1FF', justifyContent: 'center', padding: '10px' }}>
           <LoadingOverlay
             active={this.props.deleteContractInfoPending === true}
-            spinner            
+            spinner
             styles={{
               overlay: (base) => ({
                 ...base,

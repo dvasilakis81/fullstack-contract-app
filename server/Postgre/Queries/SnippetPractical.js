@@ -26,22 +26,22 @@ const insert = (req, res, next) => {
 }
 
 const update = (req, res, next) => {
+  var contractId = req.body.contractId;
 
   var sqlQuery = util.format('UPDATE "Ordering"."SnippetPractical" ' +
     'SET "ProtocolNumber"=%s,"ProtocolDate"=%s,"DecisionBoardProtocol"=%s,"OrderNo"=%s' +
-    'WHERE "ContractId"=%s',
-    helper.addQuotes(req.body.AayValue),
+    'WHERE "ContractId"=%s',    
     helper.addQuotes(req.body.ProtocolNumber),
     helper.addQuotes(req.body.ProtocolDate),    
     helper.addQuotes(req.body.DecisionBoardProtocol),
     helper.addQuotes(req.body.OrderNo),
-    Number(req.body.ContractId));
+    Number(contractId));
 
   pool.query(sqlQuery, (error, results) => {
     if (error)
       next(error);
     else {
-      helper.consoleLog('Update SnippetPractical: Rows affected: ' + results.rowCount + ' Account Id: ' + req.body.ContractId);
+      helper.consoleLog('Update SnippetPractical: Rows affected: ' + results.rowCount + ' Contract Id: ' + contractId);
       contractMethods.getContractById(req, res, next, contractId);
     }
   })

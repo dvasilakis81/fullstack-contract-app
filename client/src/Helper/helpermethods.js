@@ -29,8 +29,8 @@ export function tokenExpiresAt(tokenjwt) {
   if (tokenjwt && tokenjwt.data) {
     var dtTokeExpiresAt = new Date(tokenjwt.data.expiresAt);
     var dtDiffs = (dtTokeExpiresAt - dtNow)
-    if (Math.abs(dtDiffs) <= 0)
-      this.setState({ redirectToLogin: true });
+    if (dtDiffs <= 0)
+      return 'Η συνεδρία έληξε!';
     else {
       var diffMins = Math.round(dtDiffs / 60000);
       return format('H συνεδρία θα λήξει σε {} {}! {}', diffMins, diffMins > 1 ? 'λεπτά' : 'λεπτό', diffMins < 5 ? 'Θα ήταν προτιμότερο να γίνει έξοδος!' : '');

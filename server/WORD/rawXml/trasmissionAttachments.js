@@ -219,7 +219,7 @@ module.exports = {
 					body.Account[0].Invoice[0].Number,
 					body.Account[0].Invoice[0].Date,
 					body.Contract[0].Concessionaire[0].Name,
-					util.format('στης %s', body.Account[0].Invoice[0].DeliveredDate))
+					body.Account[0].Invoice[0].DeliveredDate ? util.format('στης %s', body.Account[0].Invoice[0].DeliveredDate) : '')
 			else
 				rText = util.format('Το υπ΄ αρίθμ %s/%s τιμολόγιο του δικαιούχου %s και φωτοαντίγραφο του', body.Account[0].Invoice[0].Number,
 					body.Account[0].Invoice[0].Date, body.Contract[0].Concessionaire[0].Name)

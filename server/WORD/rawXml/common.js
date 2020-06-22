@@ -6,7 +6,7 @@ const fontFamily = 'Arial'
 module.exports = {
 
   getSuperscriptTag: function (isSuperscript) {
-    var ret =''; 
+    var ret = '';
     if (isSuperscript === true)
       ret = '<w:vertAlign w:val="superscript"/>';
 
@@ -18,9 +18,9 @@ module.exports = {
       util.format('<w:rFonts w:ascii="%s" w:hAnsi="%s"/>', fontFamily, fontFamily) +
       util.format('<w:sz w:val="%s" />', fontSize) +
       util.format('<w:szCs w:val="%s" />', fontSize) +
-      this.getSuperscriptTag(isSuperScript)+
+      this.getSuperscriptTag(isSuperScript) +
       '</w:rPr>' +
-      util.format('<w:t>%s</w:t>', text) +
+      util.format('<w:t xml:space="preserve">%s</w:t>', text) +
       '</w:r>'
   },
   getADAXml: function (ADA) {
@@ -72,7 +72,7 @@ module.exports = {
 
     return ret;
   },
-  enterLine: function () {    
-      return '<w:r><w:br /></w:r>';
+  enterLine: function () {
+    return '<w:r><w:br /></w:r>';
   }
 }

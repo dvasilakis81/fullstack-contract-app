@@ -102,13 +102,13 @@ class Header extends React.Component {
   }
 
   getHeaderAction(title, showAdministrationOption, showNewContractOption) {
-
+    
     return (
       <div style={{ width: '100%' }}>
         <AppBar style={this.props.hstyle && this.props.hstyle === '2' ? styles.stickyHeader2 : styles.stickyHeader}>
           <Toolbar>
             {this.getArrowBackIcon()}
-            <Typography variant="h5" color="inherit" style={styles.title}>
+            <Typography variant="h5" color="inherit" style={styles.title}>              
               {title}
             </Typography>
             {this.getAdministrationAction(showAdministrationOption)}
