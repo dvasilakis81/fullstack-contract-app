@@ -10,7 +10,16 @@ class Account extends Component {
   }
 
   getTitle(title, accountNumber) {
-    return <div>{title.substring(0, 150)} ... <span style={{color: 'gold'}}>Στοιχεία {accountNumber}ου λογαριασμού</span></div>
+    if (title && title.length <= 150)
+      return <div>
+        <div>
+          {title}
+        </div>
+        <div style={{ color: 'gold' }}>
+          Στοιχεία {accountNumber}ου λογαριασμού
+        </div>
+      </div>
+    return <div>{title.substring(0, 150)} ... <span style={{ color: 'gold' }}>Στοιχεία {accountNumber}ου λογαριασμού</span></div>
   }
 
   render() {
