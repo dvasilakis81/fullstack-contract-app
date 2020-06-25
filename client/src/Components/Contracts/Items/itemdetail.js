@@ -82,15 +82,7 @@ class ItemDetail extends React.Component {
 			navigateToEditContact: false,
 			variant: '',
 			openDeleteDialog: false,
-			openDialog: false,
-			anchorEl: null,
-			openAayView: null,
-			openDecisionBoardView: null,
-			openDecisionCoordinatorDecentrilizedAdministrationView: null,
-			openCourtOfAuditorsView: null,
-			openAuthorDocumentedRequestView: null,
-			openSnippetPracticalView: null,
-			openView: null,
+			openPopover: 0,
 			windowWidth: window.innerWidth,
 			windowHeight: window.innerHeight
 		}
@@ -98,59 +90,20 @@ class ItemDetail extends React.Component {
 		this.editNewContract = this.editNewContract.bind(this);
 		this.handleDeleteContract = this.handleDeleteContract.bind(this);
 		this.handleClickOpen = this.handleClickOpen.bind(this);
-		this.handleClickOpenDialog = this.handleClickOpenDialog.bind(this);
 		this.handleClose = this.handleClose.bind(this);
-		this.handlePopoverClick = this.handlePopoverClick.bind(this);
 		this.handlePopoverClose = this.handlePopoverClose.bind(this);
-
-		this.handleAayClick = this.handleAayClick.bind(this);
-		this.handleDecisionBoardClick = this.handleDecisionBoardClick.bind(this);
-		this.handleDecisionCoordinatorDecentrilizedAdministrationClick = this.handleDecisionCoordinatorDecentrilizedAdministrationClick.bind(this);
-		this.handleCourtOfAuditorsClick = this.handleCourtOfAuditorsClick.bind(this);
-		this.handleAuthorDocumentedRequesClick = this.handleAuthorDocumentedRequesClick.bind(this);
-		this.handleSnippetPracticalClick = this.handleSnippetPracticalClick.bind(this);
-		
 	}
 
-	handlePopoverClick(event) {
-		this.setState({ anchorEl: event.currentTarget });
+	handlePopoverClick(value, event) {
+		this.setState({ openPopover: value });
 	}
-
-	handleAayClick(event) {
-		this.setState({ openAayView: event.currentTarget });
-	}
-	handleDecisionBoardClick(event) {
-		this.setState({ openDecisionBoardView: event.currentTarget });
-	}
-	handleDecisionCoordinatorDecentrilizedAdministrationClick(event) {
-		this.setState({ openDecisionCoordinatorDecentrilizedAdministrationView: event.currentTarget });
-	}
-	handleCourtOfAuditorsClick(event) {
-		this.setState({ openCourtOfAuditorsView: event.currentTarget });
-	}
-	handleAuthorDocumentedRequesClick(event) {
-		this.setState({ openAuthorDocumentedRequestView: event.currentTarget });
-	}
-	handleSnippetPracticalClick(event) {
-		this.setState({ openSnippetPracticalView: event.currentTarget });
-	}
-
 	handlePopoverClose() {
-		this.setState({
-			anchorEl: null,
-			openAayView: null,
-			openDecisionBoardView: null,
-			openDecisionCoordinatorDecentrilizedAdministrationView: null,
-			openCourtOfAuditorsView: null,
-			openAuthorDocumentedRequestView: null,
-			openSnippetPracticalView: null
-		});
+		this.setState({ openPopover: 0 });
 	}
 
 	editNewContract(e) {
 		this.setState({ navigateToEditContact: true });
 	}
-
 	handleDeleteContract(e) {
 
 		//axios.post(getHostUrl() + '/deletecontract', this.props.contractDetails, { headers: { Authorization: 'Bearer ' + this.props.token.data.token } }).then(res => {
@@ -174,10 +127,6 @@ class ItemDetail extends React.Component {
 	handleClickOpen() {
 		this.setState({ openDeleteDialog: true });
 	}
-	handleClickOpenDialog() {
-		this.setState({ openDialog: true });
-	}
-
 	handleClose() {
 		store.dispatch({ type: 'CLOSE_SNACKBAR', payload: false })
 		this.setState({ openDeleteDialog: false });
@@ -262,15 +211,6 @@ class ItemDetail extends React.Component {
 			</Button>)
 		else
 			return <></>
-	}
-
-	getOpenDialogAction() {
-
-		return (<Button variant="contained"
-			style={{ margin: '5px', background: '#FF7F7F' }}
-			onClick={this.handlePopoverClick}>
-			Άνοιγμα διάλογου
-		</Button>)
 	}
 
 	getActionsTemplate(detailItem) {
@@ -381,11 +321,11 @@ class ItemDetail extends React.Component {
 											variant='contained'
 											size='small'
 											style={{ margin: '5px', background: 'gold', color: '#000' }}
-											onClick={this.handlePopoverClick}>
+											onClick={this.handlePopoverClick.bind(this, 11)}>
 											Αναλυτικά
 										</Button>
 										<Popover
-											open={this.state.anchorEl ? true : false}
+											open={this.state.openPopover === 11 ? true : false}
 											onClose={this.handlePopoverClose}
 											anchorReference="anchorPosition"
 											anchorPosition={{ top: this.getPopoverTop(this.state.windowHeight), left: this.getPopoverLeft(this.state.windowWidth) }}
@@ -405,7 +345,7 @@ class ItemDetail extends React.Component {
 									<td>
 										<b style={styles.paperContractMonetaryInfoLabel}>{getFpaLabel(contractDetails.FpaValue)}</b>
 									</td>
-									<td style={{ textAlign: "end", color: monetaryColor, fontWeight: 'bold' }}>										
+									<td style={{ textAlign: "end", color: monetaryColor, fontWeight: 'bold' }}>
 										<NumberFormat value={toApprovalAmountFpa} displayType={'text'} thousandSeparator={'.'} decimalScale={2} fixedDecimalScale={true} decimalSeparator=',' suffix={'€'} isNumericString={true} />
 									</td>
 									<td>
@@ -539,191 +479,61 @@ class ItemDetail extends React.Component {
 			return <></>
 	}
 
-	getAayInfoTemplate(contractDetails) {
+	getAttachmentTitle(type) {
+		if (type === 1)
+			return <b>Αποφάσεις Δημοτικού Συμβουλίου</b>
+		else if (type === 2)
+			return <b>Αποφάσεις Ελέγχου Νομιμότητας της Αποκεντρωμένης</b>
+		else if (type === 3)
+			return <b>Ελεγκτικό Συνέδριο</b>
+		if (type === 4)
+			return <b>Τεκμηριωμένο Αίτημα του Διατάκτη</b>
+		else if (type === 5)
+			return <b>Απόσπασμα Πρακτικού</b>
+		else if (type === 6)
+			return <b>Πρόταση/Αποφάση/Ανατροπή Ανάληψης Υποχρέωσης</b>
+	}
+	getAttachmentView(contractDetails, type) {
+		if (type === 1)
+			return <DecisionBoardView contractId={contractDetails.Id} DecisionBoard={contractDetails.decisionboard} header='Αποφάσεις Δημοτικού Συμβουλίου' />
+		else if (type === 2)
+			return <DecisionCoordinatorDecentrilizedAdministrationView contractId={contractDetails.Id} header='Αποφάσεις Ελέγχους της Αποκεντρωμένης Διοίκησης' />
+		else if (type === 3)
+			return <CourtOfAuditorsView contractId={contractDetails.Id} header='Ελεγκτικά Συνέδρια' />
+		if (type === 4)
+			return <AuthorDocumentedRequestView contractId={contractDetails.Id} header='Τεκμηριωμένα Αίτηματα του Διατάκτη' />
+		else if (type === 5)
+			return <SnippetPracticalView contractId={contractDetails.Id} />
+		else if (type === 6)
+			return <AayView contractId={contractDetails.Id} />
+	}
+	getAttachmentTemplate(contractInfo, values, type) {
 
-		var quantity = contractDetails.aay && contractDetails.aay.length > 0 ? contractDetails.aay.length : 'Δεν έχει';
 		return <Grid>
 			<Paper style={styles.paperMoreContractInfo} square={true}>
 				<Typography>
-					<b>Αποφάση Ανάληψης Υποχρέωσης</b>
-					<span style={{ marginLeft: '10px', fontWeight: '' }}>{quantity}</span>
+					{this.getAttachmentTitle(type)}
+					<span style={{ marginLeft: '10px', fontWeight: '' }}>{values ? values.length : 'Δεν έχει'}</span>
 					<Button
 						variant='contained'
 						size='small'
 						style={{ margin: '5px', background: '#F3FCFF', color: '#000' }}
-						onClick={this.handleAayClick}>
+						onClick={this.handlePopoverClick.bind(this, type)}>
 						Προβολή
 					</Button>
+
 					<Popover
-						open={this.state.openAayView ? true : false}
+						open={this.state.openPopover === type ? true : false}
 						onClose={this.handlePopoverClose}
 						anchorReference="anchorPosition"
 						anchorPosition={{ top: this.getPopoverTop(this.state.windowHeight), left: this.getPopoverLeft(this.state.windowWidth) }}
 						style={{ transform: document.getElementById('root').style.transform }}>
-						<AayView contractId={contractDetails.Id} Aay={contractDetails.aay} header='Αποφάσεις Ανάληψεις Υποχρέωσης' />
+						{this.getAttachmentView(contractInfo, type)}
 					</Popover>
 				</Typography>
 			</Paper>
 		</Grid>
 	}
-
-
-	getBoardDecisionsInfoTemplate(contractDetails) {
-
-		var quantity = contractDetails.decisionboard && contractDetails.decisionboard.length > 0 ? contractDetails.decisionboard.length : 'Δεν έχει';
-		return <Grid>
-			<Paper style={styles.paperMoreContractInfo} square={true}>
-				<Typography>
-					<b>Αποφάσεις Δημοτικού Συμβουλίου</b>
-					<span style={{ marginLeft: '10px', fontWeight: '' }}>{quantity}</span>
-					<Button
-						variant='contained'
-						size='small'
-						style={{ margin: '5px', background: '#F3FCFF', color: '#000' }}
-						onClick={this.handleDecisionBoardClick}>
-						Προβολή
-					</Button>
-					<Popover
-						open={this.state.openDecisionBoardView ? true : false}
-						onClose={this.handlePopoverClose}
-						anchorReference="anchorPosition"
-						anchorPosition={{ top: this.getPopoverTop(this.state.windowHeight), left: this.getPopoverLeft(this.state.windowWidth) }}
-						style={{ transform: document.getElementById('root').style.transform }}>
-						<DecisionBoardView contractId={contractDetails.Id} DecisionBoard={contractDetails.decisionboard} header='Αποφάσεις Δημοτικού Συμβουλίου' />
-					</Popover>
-				</Typography>
-			</Paper>
-		</Grid>
-	}
-
-	getSADAInfoTemplate(contractDetails) {
-
-		return <Grid>
-			<Paper style={styles.paperMoreContractInfo} square={true}>
-				<Typography>
-					<b>Αποφάσεις Ελέγχου Νομιμότητας της Αποκεντρωμένης</b>
-					<span style={{ marginLeft: '10px', fontWeight: '' }}>{contractDetails.decisioncoordinatordecentrilizedadministration ? contractDetails.decisioncoordinatordecentrilizedadministration.length : 'Δεν έχει'}</span>
-					<Button
-						variant='contained'
-						size='small'
-						style={{ margin: '5px', background: '#F3FCFF', color: '#000' }}
-						onClick={this.handleDecisionCoordinatorDecentrilizedAdministrationClick}>
-						Προβολή
-					</Button>
-					<Popover
-						open={this.state.openDecisionCoordinatorDecentrilizedAdministrationView ? true : false}
-						onClose={this.handlePopoverClose}
-						anchorReference="anchorPosition"
-						anchorPosition={{ top: this.getPopoverTop(this.state.windowHeight), left: this.getPopoverLeft(this.state.windowWidth) }}
-						style={{ transform: document.getElementById('root').style.transform }}>
-						<DecisionCoordinatorDecentrilizedAdministrationView contractId={contractDetails.Id} header='Αποφάσεις Ελέγχους της Αποκεντρωμένης Διοίκησης' />
-					</Popover>
-				</Typography>
-			</Paper>
-		</Grid>
-	}
-
-	getCourtOfAuditorsInfoTemplate(contractDetails) {
-
-		return <Grid>
-			<Paper style={styles.paperMoreContractInfo} square={true}>
-				<Typography>
-					<b>Ελεγκτικό Συνέδριο</b>
-					<span style={{ marginLeft: '10px', fontWeight: '' }}>{contractDetails.courtofauditors ? contractDetails.courtofauditors.length : 'Δεν έχει'}</span>
-					<Button
-						variant='contained'
-						size='small'
-						style={{ margin: '5px', background: '#F3FCFF', color: '#000' }}
-						onClick={this.handleCourtOfAuditorsClick}>
-						Προβολή
-					</Button>
-
-					<Popover
-						open={this.state.openCourtOfAuditorsView ? true : false}
-						onClose={this.handlePopoverClose}
-						anchorReference="anchorPosition"
-						anchorPosition={{ top: this.getPopoverTop(this.state.windowHeight), left: this.getPopoverLeft(this.state.windowWidth) }}
-						style={{ transform: document.getElementById('root').style.transform }}>
-						<CourtOfAuditorsView contractId={contractDetails.Id} header='Ελεγκτικά Συνέδρια' />
-					</Popover>
-				</Typography>
-			</Paper>
-		</Grid>
-
-		// return contractDetails.decisioncoordinatordecentrilizedadministration.map((item, index) => {
-		// 	return (<Fragment>
-		// 		{
-		// 			<Grid item key={index}>
-		// 				<Paper style={styles.paperMoreContractInfo} square={true}>
-		// 					<Typography>
-		// 						<b>{index + 1}η Απόφαση Ελέγχου Νομιμότητας της Αποκεντρωμένης A.Π.</b> {item.ProtocolNumber ? item.ProtocolNumber : ''}/{item.ProtocolDate ? item.ProtocolDate : ''}
-		// 						{item.ADA ? <span >με ΑΔΑ {item.ADA}</span> : ''}
-		// 						<span style={{ marginLeft: '10px' }}></span>
-		// 						{item.Content ? <span style={{ fontStyle: 'italic' }}>{item.Content}</span> : ''}
-		// 					</Typography>
-		// 				</Paper>
-		// 			</Grid>
-		// 		}
-		// 	</Fragment>)
-		// })		
-	}
-
-	getAuthorDocumentedRequestTemplate(contractDetails) {
-
-		return <Grid>
-			<Paper style={styles.paperMoreContractInfo} square={true}>
-				<Typography>
-					<b>Τεκμηριωμένο Αίτημα του Διατάκτη</b>
-					<span style={{ marginLeft: '10px', fontWeight: '' }}>{contractDetails.authordocumentedrequest ? contractDetails.authordocumentedrequest.length : 'Δεν έχει'}</span>
-					<Button
-						variant='contained'
-						size='small'
-						style={{ margin: '5px', background: '#F3FCFF', color: '#000' }}
-						onClick={this.handleAuthorDocumentedRequesClick}>
-						Προβολή
-					</Button>
-
-					<Popover
-						open={this.state.openAuthorDocumentedRequestView ? true : false}
-						onClose={this.handlePopoverClose}
-						anchorReference="anchorPosition"
-						anchorPosition={{ top: this.getPopoverTop(this.state.windowHeight), left: this.getPopoverLeft(this.state.windowWidth) }}
-						style={{ transform: document.getElementById('root').style.transform }}>
-						<AuthorDocumentedRequestView contractId={contractDetails.Id} header='Τεκμηριωμένα Αίτηματα του Διατάκτη' />
-					</Popover>
-				</Typography>
-			</Paper>
-		</Grid>
-	}
-
-	getSnippetPracticalTemplate(contractDetails) {
-
-		return <Grid>
-			<Paper style={styles.paperMoreContractInfo} square={true}>
-				<Typography>
-					<b>Αποσπάσματα Πρακτικού</b>
-					<span style={{ marginLeft: '10px', fontWeight: '' }}>{contractDetails.snippetpractical ? contractDetails.snippetpractical.length : 'Δεν έχει'}</span>
-					<Button
-						variant='contained'
-						size='small'
-						style={{ margin: '5px', background: '#F3FCFF', color: '#000' }}
-						onClick={this.handleSnippetPracticalClick}>
-						Προβολή
-					</Button>
-
-					<Popover
-						open={this.state.openSnippetPracticalView ? true : false}
-						onClose={this.handlePopoverClose}
-						anchorReference="anchorPosition"
-						anchorPosition={{ top: this.getPopoverTop(this.state.windowHeight), left: this.getPopoverLeft(this.state.windowWidth) }}
-						style={{ transform: document.getElementById('root').style.transform }}>
-						<SnippetPracticalView contractId={contractDetails.Id} />
-					</Popover>
-				</Typography>
-			</Paper>
-		</Grid>
-	}
-
 	getLawArticle(contractInfo) {
 		let ret = '';
 
@@ -832,13 +642,14 @@ class ItemDetail extends React.Component {
 													</Typography>
 												</Paper>
 											</Grid>
-											{this.getCPVTemplate(contractInfo)}
-											{this.getBoardDecisionsInfoTemplate(contractInfo)}
-											{this.getSADAInfoTemplate(contractInfo)}
-											{this.getCourtOfAuditorsInfoTemplate(contractInfo)}
-											{this.getAayInfoTemplate(contractInfo)}
-											{this.getAuthorDocumentedRequestTemplate(contractInfo)}
-											{this.getSnippetPracticalTemplate(contractInfo)}
+											{this.getCPVTemplate(contractInfo)}											
+											{this.getAttachmentTemplate(contractInfo, contractInfo.decisionboard, 1)}
+											{this.getAttachmentTemplate(contractInfo, contractInfo.decisioncoordinatordecentrilizedadministration, 2)}
+											{this.getAttachmentTemplate(contractInfo, contractInfo.courtofauditors, 3)}
+											{this.getAttachmentTemplate(contractInfo, contractInfo.authordocumentedrequest, 4)}
+											{this.getAttachmentTemplate(contractInfo, contractInfo.snippetpractical, 5)}											
+											{this.getAttachmentTemplate(contractInfo, contractInfo.aay, 6)}
+
 											<Grid item>
 												<Paper style={styles.paperMoreContractInfo} square={true}>
 													<Typography>

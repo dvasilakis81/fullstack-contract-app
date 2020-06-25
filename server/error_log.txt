@@ -1,11 +1,12 @@
-Message: column "nan" does not exist
-Stack: error: column "nan" does not exist
-    at Parser.parseErrorMessage (c:\Github\Ordering FullStack\node_modules\pg-protocol\dist\parser.js:241:15)
-    at Parser.handlePacket (c:\Github\Ordering FullStack\node_modules\pg-protocol\dist\parser.js:89:29)
-    at Parser.parse (c:\Github\Ordering FullStack\node_modules\pg-protocol\dist\parser.js:41:38)
-    at Socket.<anonymous> (c:\Github\Ordering FullStack\node_modules\pg-protocol\dist\index.js:8:42)
-    at Socket.emit (events.js:210:5)
-    at addChunk (_stream_readable.js:309:12)
-    at readableAddChunk (_stream_readable.js:290:11)
-    at Socket.Readable.push (_stream_readable.js:224:10)
-    at TCP.onStreamRead (internal/stream_base_commons.js:182:23)
+Message: Cannot read property '0' of undefined
+Stack: TypeError: Cannot read property '0' of undefined
+    at Object.setDataForTransmissionDocument (c:\Github\Ordering FullStack\server\InputData\InputData.js:61:22)
+    at c:\Github\Ordering FullStack\server\app.js:98:29
+    at Layer.handle [as handle_request] (c:\Github\Ordering FullStack\node_modules\express\lib\router\layer.js:95:5)
+    at next (c:\Github\Ordering FullStack\node_modules\express\lib\router\route.js:137:13)
+    at c:\Github\Ordering FullStack\server\Postgre\Queries\Login.js:220:9
+    at c:\Github\Ordering FullStack\node_modules\jsonwebtoken\verify.js:223:12
+    at getSecret (c:\Github\Ordering FullStack\node_modules\jsonwebtoken\verify.js:90:14)
+    at Object.module.exports [as verify] (c:\Github\Ordering FullStack\node_modules\jsonwebtoken\verify.js:94:10)
+    at checkToken (c:\Github\Ordering FullStack\server\Postgre\Queries\Login.js:209:9)
+    at Layer.handle [as handle_request] (c:\Github\Ordering FullStack\node_modules\express\lib\router\layer.js:95:5)

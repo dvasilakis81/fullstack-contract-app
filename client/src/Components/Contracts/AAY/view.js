@@ -13,7 +13,7 @@ import { getSubmitButton } from '../../MaterialObjects/materialobjects';
 import { bindActionCreators } from 'redux';
 import { processContractInfo } from '../../../Redux/Actions';
 
-import { getAayTooltipTemplate, getAayOverthrowTooltipTemplate } from './tooltip';
+import { getSuggestAYTooltipTemplate, getAayTooltipTemplate, getAayOverthrowTooltipTemplate } from './tooltip';
 import ProtocolInput from '../../CustomControls/ProtocolInput';
 import MyTextField from '../../CustomControls/MyTextField';
 import store from '../../../Redux/Store/store'
@@ -86,7 +86,7 @@ class AayView extends Component {
     this.setState({ [event.target.id]: event.target.value });
   }
 
-  openEditAay(index, Aay) {
+  openEdit(index, Aay) {
     this.setState({
       Id: Aay.Id,
       Type: Aay.Type,
@@ -101,7 +101,7 @@ class AayView extends Component {
     })
   }
 
-  openDeleteAay(index, aay) {
+  openDelete(index, aay) {
     this.setState({
       Id: aay.Id,
       ProtocolNumber: aay.ProtocolNumber,
@@ -175,13 +175,14 @@ class AayView extends Component {
   getAayTypes() {
     var ret;
 
-    var aayTypes = [];
+    var aayTypes = [];  
+    aayTypes.push('Πρόταση Ανάληψης Υποχρέωσης');
     aayTypes.push('Απόφαση Ανάληψης Υποχρέωσης');
     aayTypes.push('Απόφαση Ανάληψης Υποχρέωσης (διάφορα έξοδα ΠΟΕ)');
     aayTypes.push('Απόφαση Ανατροπής Ανάληψης Υποχρέωσης');
 
-    ret = aayTypes.map((data, index) => {
-      return <option key={index} value={index}>{data}</option>
+    ret = aayTypes.map((data, index) => {      
+      return <option key={index} value={index} selected={index == 0}>{data}</option>
     })
 
     return ret;
@@ -193,7 +194,7 @@ class AayView extends Component {
 
     if (this.props.contractDetails.aay) {
       this.props.contractDetails.aay.map((data, index) => {
-        if (data && data.Type == 0)
+        if (data && data.Type == 1)
           return options.push(data);
       })
 
@@ -202,14 +203,18 @@ class AayView extends Component {
         return <option key={index} value={stringValue}>{stringValue}</option>
       })
     }
-    
+
     return ret;
   }
 
 
   getEditTemplate() {
+    if (this.state.Type == 0) {
+      return <div style={{ display: 'flex', flexFlow: 'row', height: 'auto', justifyContent: 'center', padding: '10px', flexWrap: 'nowrap', width: '90%' }}>
+        <ProtocolInput tm1={getSuggestAYTooltipTemplate(this.state, 1)} tm2={getSuggestAYTooltipTemplate(this.state, 2)} title='Α.Π. Π.Α.Υ.' idn='ProtocolNumber' idd='ProtocolDate' protocolNumber={this.state.ProtocolNumber} protocolDate={this.state.ProtocolDate} onChange={this.onChange} tp1='text' tp2='date' width='50%' />
+      </div>
+    } else if (this.state.Type == 1 || this.state.Type == 2) {
 
-    if (this.state.Type == 0 || this.state.Type == 1) {
       return <>
         <div style={{ display: 'flex', flexFlow: 'row', height: 'auto', justifyContent: 'center', padding: '10px', flexWrap: 'nowrap', width: '90%' }}>
           <MyTextField tm={getAayTooltipTemplate(this.state, 1)} tp='text' title='Α.Α.Υ' id='AayValue' stateValue={this.state.AayValue} isRequired={true} isDisabled={false} onChange={this.onChange} inputProps={{ style: { textAlign: 'center' }, maxLength: 20 }} width='50%' />
@@ -220,7 +225,7 @@ class AayView extends Component {
           <MyTextField tm={getAayTooltipTemplate(this.state, 5)} tp='text' title='ΑΔΑ' id='ADA' stateValue={this.state.ADA} isRequired={true} isDisabled={false} onChange={this.onChange} inputProps={{ style: { textAlign: 'center' }, maxLength: 20 }} width='50%' />
         </div>
       </>
-    } else if (this.state.Type == 2) {
+    } else if (this.state.Type == 3) {
       return <>
         <div style={{ display: 'flex', flexFlow: 'column', height: 'auto', justifyContent: 'center', paddingLeft: '0px', flexWrap: 'nowrap', width: '90%' }}>
           <div style={{ display: 'flex', flexFlow: 'row', height: 'auto', justifyContent: 'left', margin: '10px', flexWrap: 'nowrap', width: '100%' }}>
@@ -305,7 +310,7 @@ class AayView extends Component {
       disabled={this.state.addNewItem === true || this.state.deleteItem === true}
       size='medium'
       color='inherit'
-      onClick={() => { this.openEditAay(index, item) }} style={{ textAlign: 'center', padding: '0px', justifyContent: 'end' }}>
+      onClick={() => { this.openEdit(index, item) }} style={{ textAlign: 'center', padding: '0px', justifyContent: 'end' }}>
       <SettingsIcon />
     </IconButton>
   }
@@ -315,7 +320,7 @@ class AayView extends Component {
       size="medium" color={index < this.props.contractDetails.aay.length - 1 ? "disabled" : "inherit"}
       onClick={() => {
         if (index.toString() === (this.props.contractDetails.aay.length - 1).toString())
-          this.openDeleteAay(index, item)
+          this.openDelete(index, item)
       }}
       style={{ textAlign: 'top', padding: '10px', justifyContent: 'end' }}>
       <DeleteIcon />
@@ -326,16 +331,18 @@ class AayView extends Component {
 
     var rContent = <></>;
     var lContent = <></>;
-    if (item.Type == 0 || item.Type == 1) {
+    if (item.Type == 0) {
+         rContent = <span>Πρωτότυπο και φωτοαντίγραφο της με αριθμ. {item.ProtocolNumber}/{item.ProtocolDate ? getDateFormatForDocument(item.ProtocolDate) : item.ProtocolDate} Πρότασης Ανάληψης Υποχρέωσης.</span>
+    } else if (item.Type == 1 || item.Type == 2) {
       rContent = <span>Πρωτότυπο και φωτοαντίγραφο της με αριθμ. {item.Value}/{item.ProtocolNumber}/{item.ProtocolDate ? getDateFormatForDocument(item.ProtocolDate) : item.ProtocolDate} ΕΑΔ {item.EadNumber} </span>
       var ada = <></>
       if (item.ADA)
         ada = <><span>(ΑΔΑ: </span><b><u>{item.ADA}</u></b><span>) </span></>
-      if (item.Type == 0)
+      if (item.Type == 1)
         lContent = <span>Απόφασης Ανάληψης Υποχρέωσης.</span>
       else
         lContent = <span>Απόφασης Ανάληψης Υποχρέωσης. (διάφορα έξοδα ΠΟΕ)</span>
-    } else if (item.Type == 2) {
+    } else if (item.Type == 3) {
       rContent = <span>Πρωτότυπο και φωτοαντίγραφο της υπ΄ αριθμ. {item.ProtocolNumber}/{item.ProtocolDate ? getDateFormatForDocument(item.ProtocolDate) : item.ProtocolDate} ΕΑΔ {item.EadNumber} </span>
       var ada = <></>
       if (item.ADA)
@@ -357,16 +364,18 @@ class AayView extends Component {
 
     var rContent = <></>;
     var lContent = <></>;
-    if (item.Type == 0 || item.Type == 1) {
+    if (item.Type == 0) {
+         rContent = <span>Τη με Α.Π. {item.ProtocolNumber}/{item.ProtocolDate ? getDateFormatForDocument(item.ProtocolDate) : item.ProtocolDate} Πρότασης Ανάληψης Υποχρέωσης.</span>
+    } else if (item.Type == 1 || item.Type == 2) {
       var rContent = <span>Tη με αρ. {item.Value}/{item.ProtocolNumber}/{item.ProtocolDate} </span>;
       var ada = <></>
       if (item.ADA)
         ada = <><span>(ΑΔΑ: </span><b><u>{item.ADA}</u></b><span>) </span></>
-      if (item.Type == 0)
+      if (item.Type == 1)
         lContent = <span>Απόφασης Ανάληψης Υποχρέωσης.</span>
       else
         lContent = <span>Απόφασης Ανάληψης Υποχρέωσης. (διάφορα έξοδα ΠΟΕ)</span>
-    } else if (item.Type == 2) {
+    } else if (item.Type == 3) {
       rContent = <span>Την υπ΄ αριθμ. {item.ProtocolNumber}/{item.ProtocolDate ? getDateFormatForDocument(item.ProtocolDate) : item.ProtocolDate}</span>
       var ada = <></>
       if (item.ADA)

@@ -63,7 +63,7 @@ function remove(req, res, next) {
   pool.query(sqlQuery, (error, results) => {
     if (error)
       next(error);
-    else      
+    else
       contractMethods.getContractById(req, res, next, contractId)    
   })
 }

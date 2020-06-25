@@ -1,6 +1,6 @@
 import {
-  getAmountInWords, getDateFormatForDocument, 
-  getDateFormatWithDash, extractYearFromDate 
+  getAmountInWords, getDateFormatForDocument,
+  getDateFormatWithDash, extractYearFromDate
 } from '../../Helper/helpermethods';
 
 const format = require('string-format')
@@ -107,6 +107,22 @@ function getReservationsToPost(reservations, Amount) {
   return ret;
 }
 
+function getTitleStartExpense(contractInfo) {
+  //Προγραμματική Σύμβαση με τη ΔΑΕΜ  για την 
+  var ret = '';
+
+  if (contractInfo.ContractTypeId == 1)
+    ret = 'Δημόσια Ανάθεση '
+  else if (contractInfo.ContractTypeId == 2)
+    ret += 'Προγραμματική ';
+
+  ret += 'Σύμβαση με την '
+  ret += contractInfo.ConcessionaireName;
+  ret += 'για την ';
+
+  return ret;
+}
+
 export function createTransmissionDocument(contractInfo, accountInfo, paidAmount) {
 
   var firstAccountProtocol = ''
@@ -142,7 +158,7 @@ export function createTransmissionDocument(contractInfo, accountInfo, paidAmount
         City: dirCity,
         Supervisor: [{ Name: depSupervisor, Tel: depTelephone, Email: depEmail }]
       }]
-    }],    
+    }],
     Contract: [{
       ContractTypeId: contractInfo.ContractTypeId,
       ContractType: contractTypeName,
@@ -157,7 +173,8 @@ export function createTransmissionDocument(contractInfo, accountInfo, paidAmount
       Award: [{ Number: contractInfo.AwardNumber, Date: getDateFormatForDocument(contractInfo.AwardDate), Ada: contractInfo.AwardAda }],
       CPV: [{ Code: contractInfo.CpvCode, Title: contractInfo.CpvTitle }],
       Balance: currencyFormatter.format(Number(contractInfo.AmountTotal) - (Number(paidAmount.TotalUntilToday) + Number(accountInfo.AmountTotal)), { symbol: '€', decimal: ',', thousand: '.', precision: 2, format: '%v%s' }),
-      HasDownpayment: contractInfo.HasDownPayment
+      HasDownpayment: contractInfo.HasDownPayment,
+      TitleStartExpense: getTitleStartExpense(contractInfo)
     }],
     Account: [{
       No: accountInfo.Number,
@@ -172,7 +189,7 @@ export function createTransmissionDocument(contractInfo, accountInfo, paidAmount
       FirstAccountProtocol: firstAccountProtocol,
       IsFirstOfTheYear: accountInfo.IsFirstOfTheYear,
       CC: accountInfo.cc
-    }],    
+    }],
     DecisionBoard: contractInfo.decisionboard,
     DecisionCoordinatorDecentrilizedAdministration: contractInfo.decisioncoordinatordecentrilizedadministration,
     CourtOfAuditors: contractInfo.courtofauditors,
@@ -237,7 +254,7 @@ export function createAccountDocument(contractInfo, accountInfo, paidAmount, res
     }],
     Contract: [{
       ContractTypeValue1: contractTypeValue1,
-      ContractTypeValue2: contractTypeValue2,      
+      ContractTypeValue2: contractTypeValue2,
       LawArticle: contractInfo.LawArticle,
       Title: [{ Article: 'τη', Value: contractInfo.Title }],
       Protocol: [{ Number: contractInfo.ProtocolNumber, Date: getDateFormatForDocument(contractInfo.ProtocolDate) }],
@@ -252,7 +269,8 @@ export function createAccountDocument(contractInfo, accountInfo, paidAmount, res
       PaidAmountFpaUntilToday: currencyFormatter.format(paidAmount.FpaUntilToday, { symbol: '€', decimal: ',', thousand: '.', precision: 2, format: '%v%s' }),
       PaidAmountTotalUntilToday: currencyFormatter.format(paidAmount.TotalUntilToday, { symbol: '€', decimal: ',', thousand: '.', precision: 2, format: '%v%s' }),
       FpaValue: format('{}%', contractInfo.FpaValue),
-      HasDownpayment: contractInfo.HasDownpayment
+      HasDownpayment: contractInfo.HasDownpayment,
+      TitleStartExpense: getTitleStartExpense(contractInfo)
     }],
     Account: [{
       No: accountInfo.Number,

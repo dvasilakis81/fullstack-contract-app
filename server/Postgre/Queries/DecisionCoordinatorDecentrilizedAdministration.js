@@ -16,7 +16,7 @@ const insert = (req, res, next) => {
     helper.addQuotes(req.body.DecisionBoardProtocol),
     helper.addQuotes(req.body.APDA_ProtocolNumber),
     helper.addQuotes(req.body.APDA_ProtocolDate),
-    helper.addQuotes(req.body.AccountTransmission),
+    helper.addQuotes(req.body.ActionTransmission),
     helper.addQuotes(req.body.ActionAccount));
 
   pool.query(sqlQuery, (error, results) => {

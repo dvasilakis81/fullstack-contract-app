@@ -12,7 +12,14 @@ module.exports = {
     var subjectRawData = transmissionSubject.getSubjectXmlValue(body);
     var attachmentsRawData = transmissionAttachments.getAttachmentsXmlValue(body);
     var ccValuesRawData = transmissionCC.getCCValues(body);
-    
+    var AAY = null;
+    if (body.AAY) {
+      for (let i = 0; i < body.AAY.length; i++) {
+        if (body.AAY[i].Type == 1)
+          AAY = body.AAY[i]
+      }
+    }
+
     if (body) {
       ret = {
         subject: subjectRawData,
@@ -28,7 +35,7 @@ module.exports = {
         dir_ct: body.Direction[0].Department[0].City,
         dir_sv: body.Direction[0].Department[0].Supervisor[0].Name,
         dir_sv_tn: body.Direction[0].Department[0].Supervisor[0].Tel,
-        dir_sv_em: body.Direction[0].Department[0].Supervisor[0].Email,        
+        dir_sv_em: body.Direction[0].Department[0].Supervisor[0].Email,
         c_type: body.Contract[0].ContractType,
         c_conc_a: body.Contract[0].Concessionaire[0].Article,
         c_conc: body.Contract[0].Concessionaire[0].Name,
@@ -47,29 +54,29 @@ module.exports = {
         c_dir: body.Contract[0].CodeDirection,
         c_cpv_code: body.Contract[0].CPV[0].Code,
         c_cpv_title: body.Contract[0].CPV[0].Title,
-        c_bal: body.Contract[0].Balance,        
+        c_bal: body.Contract[0].Balance,
         a_n: body.Account[0].Number,
-        a_n_w: body.Account[0].NumberWord,        
+        a_n_w: body.Account[0].NumberWord,
         a_sd: body.Account[0].Start,
         a_ed: body.Account[0].End,
         a_ta: body.Account[0].Amount,
         a_in: body.Account[0].Invoice[0].Number,
-        a_id: body.Account[0].Invoice[0].Date,        
+        a_id: body.Account[0].Invoice[0].Date,
         a_idd: body.Account[0].Invoice[0].DeliveredDate,
         a_iddpn: body.Account[0].Invoice[0].DeliveredDateProtocol[0].Number,
         a_iddpd: body.Account[0].Invoice[0].DeliveredDateProtocol[0].Date,
-        aay: body.Account[0].AYY[0].Value,
-        aay_year: body.Account[0].AYY[0].Year,
-        aay_pn: body.Account[0].AYY[0].ProtocolNumber,
-        aay_pdt: body.Account[0].AYY[0].ProtocolDate,
-        aay_ead_n: body.Account[0].AYY[0].EADNumber,
+        aay: AAY ? AAY.Value : '',
+        aay_year: AAY ? AAY.Year : '',
+        aay_pn: AAY ? AAY.ProtocolNumber : '',
+        aay_pdt: AAY ? AAY.ProtocolDate : '',
+        aay_ead_n: AAY ? AAY.EadNumber : '',
+        aay_ada: AAY ? AAY.ADA : '',
         sign_title: body.Signature[0].SignatoryTitle,
         kaa: (body.Signature[0].Kaa || ''),
         sign_name: body.Signature[0].SignatoryName.toLowerCase().includes("κακριδ") ? '' : body.Signature[0].SignatoryName,
         sign_sv: body.Signature[0].SignatoryName.toLowerCase().includes("κακριδ") ? body.Signature[0].SignatoryName : '',
-        ft_pn: body.Account[0].FirstAccountProtocol || '',
-        att_ada: body.Account[0].AYY[0].ADA || '',
-        aay_pr_year: body.Account[0].AYY[0].PreviousYearValue || ''
+        ft_pn: body.Account[0].FirstAccountProtocol || '',        
+        t_e_s: body.Contract[0].TitleStartExpense
       }
     }
 
@@ -77,7 +84,7 @@ module.exports = {
   },
   setDataForAccountDocument: function (body) {
     var ret = '';
-    
+
     var attachmentsRawData = accountAttachments.getAttachmentsXmlValue(body);
     var affirmationRawData = accountAffirmation.getText(body);
     var rawTableDataValue = rawtabledata.getRawXmlTableValue(body, true);
@@ -85,7 +92,7 @@ module.exports = {
     if (body) {
 
       ret = {
-        rawTableData: rawTableDataValue,        
+        rawTableData: rawTableDataValue,
         attachments: attachmentsRawData,
         affirmation: affirmationRawData,
         year: body.BudgetExpenditureYear,
@@ -114,7 +121,7 @@ module.exports = {
         c_la: body.Contract[0].LawArticle,
         kae: body.Contract[0].Kae,
         ac: body.Contract[0].Actor,
-        cd: body.Contract[0].CodeDirection,        
+        cd: body.Contract[0].CodeDirection,
         fpa_v: body.Contract[0].FpaValue,
         a_n: body.Account[0].No,
         a_n_w: body.Account[0].numberWord,
@@ -127,10 +134,12 @@ module.exports = {
         a_ed: body.Account[0].End,
         a_in: body.Account[0].Invoice[0].Number,
         a_id: body.Account[0].Invoice[0].Date,
-        aay: body.Account[0].AAY[0].Value,
-        aay_pn: body.Account[0].AAY[0].ProtocolNumber,
-        aay_pdt: body.Account[0].AAY[0].ProtocolDate,
-        aay_ead_n: body.Account[0].AAY[0].EADNumber,
+        aay: body.AAY ? body.AAY[0].Value : '',
+        aay_year: body.AAY ? body.AAY[0].Year : '',
+        aay_pn: body.AAY ? body.AAY[0].ProtocolNumber : '',
+        aay_pdt: body.AAY ? body.AAY[0].ProtocolDate : '',
+        aay_ead_n: body.AAY ? body.AAY[0].EADNumber : '',
+        aay_ada: body.AAY ? body.AAY[0].ADA : '',
         a_mra: body.Account[0].MixedRemainApproval,
         kaa: body.Signature[0].Kaa,
         writer_title: body.Signature[0].WriterTitle,

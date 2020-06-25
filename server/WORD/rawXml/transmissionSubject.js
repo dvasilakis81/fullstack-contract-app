@@ -1,8 +1,8 @@
 const util = require('util');
 const common = require('./common');
-
+const align = 'both'
 module.exports = {
-
+  
   getSubjectXmlValue: function (body) {
     var ret = '';
     var contractProtocol = util.format('%s/%s', body.Contract[0].Protocol[0].Number, body.Contract[0].Protocol[0].Date)
@@ -12,6 +12,7 @@ module.exports = {
         '<w:pPr>' +
         '<w:spacing w:line="276" w:lineRule="auto"/>' +
         '<w:contextualSpacing/>' +
+        util.format('<w:jc w:val="%s"/>', align) +
         '</w:pPr>' +
         common.getrElement(util.format("Αποστολή δικαιολογητικών για έκδοση 1ου χρηματικού εντάλματος (προκαταβολή της υπ’ αριθμ. πρωτ. %s Προγραμματικής Σύμβασης)", contractProtocol)) +
         '</w:p>'
@@ -22,6 +23,7 @@ module.exports = {
         '<w:pPr>' +
         '<w:spacing w:line="276" w:lineRule="auto"/>' +
         '<w:contextualSpacing/>' +
+        util.format('<w:jc w:val="%s"/>', align) +
         '</w:pPr>' +
         common.getrElement(util.format("Διαβίβαση Τιμολογίου για τον %s", body.Account[0].No)) +
         common.getrElement('ο', true) + 

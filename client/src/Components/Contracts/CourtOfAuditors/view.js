@@ -264,13 +264,13 @@ class CourtOfAuditorsView extends Component {
           <ProtocolInput tm1={getCourtOfAuditorsTooltip(this.state, 1)} tm2={getCourtOfAuditorsTooltip(this.state, 2)} title='Αρ. Πράξης' idn='ProtocolNumber' idd='ProtocolYear' protocolNumber={this.state.ProtocolNumber} protocolDate={this.state.ProtocolYear} onChange={this.onChange} tp1='text' tp2='text' width='50%' />
           <MyTextField tm={getCourtOfAuditorsTooltip(this.state, 3)} tp='text' title='Κλιμάκιο' label='' variant='outlined' id='ScaleNumber' stateValue={this.state.ScaleNumber} isRequired={true} isDisabled={false} onChange={this.onChange} width='50%' />
         </div>
-        <div style={{ display: 'flex', flexDirection: 'row', margin: '5px', flexWrap: 'nowrap', justifyContent: 'flex-start' }}>          
-        <MyTextField tm={getCourtOfAuditorsTooltip(this.state, 4)} tp='text' title='Περιεχόμενο (Λογαριασμός)' label='' variant='outlined' id='ContentAccount' stateValue={this.state.ContentAccount} isRequired={false} isDisabled={false} onChange={this.onChange} multiline={true} width='50%' />
+        <div style={{ display: 'flex', flexDirection: 'row', margin: '5px', flexWrap: 'nowrap', justifyContent: 'flex-start' }}>
+          <MyTextField tm={getCourtOfAuditorsTooltip(this.state, 4)} tp='text' title='Περιεχόμενο (Λογαριασμός)' label='' variant='outlined' id='ContentAccount' stateValue={this.state.ContentAccount} isRequired={false} isDisabled={false} onChange={this.onChange} multiline={true} width='50%' />
           <ProtocolInput tm1={getCourtOfAuditorsTooltip(this.state, 5)} tm2={getCourtOfAuditorsTooltip(this.state, 6)} title='Α.Π.Δ.Α.' idn='APDANumber' idd='APDADate' protocolNumber={this.state.APDANumber} protocolDate={this.state.APDADate} onChange={this.onChange} tp1='text' tp2='date' width='50%' />
         </div>
       </>
     )
-  }  
+  }
   renderServerResponse() {
 
     return <div style={{ display: 'flex', flexFlow: 'row', height: 'auto', background: this.state.msgColor, justifyContent: 'center', padding: this.msgPadding }}>
@@ -281,9 +281,14 @@ class CourtOfAuditorsView extends Component {
   getTransmissionItemInfo(index, item) {
     var rContent = <>
       <span>Δύο (2) φωτοαντίγραφα της Κοινοποίησης της με αρ. </span>
-      <span>{item.ProtocolNumber}/{item.ProtocolDate ? getDateFormatForDocument(item.ProtocolDate) : item.ProtocolDate}</span>
+      <span>{item.ProtocolNumber}/{item.ProtocolDate ? getDateFormatForDocument(item.ProtocolYear) : item.ProtocolYear}</span>
       <span> Πράξης του {item.ScaleNumber} Κλιμακίου του Ελεγκτικού Συνεδρίου </span>
-      <span> (Α.Π.Δ.Α. {item.APDA_ProtocolNumber}/{item.APDA_ProtocolDate})</span>
+      {
+        item.APDA_ProtocolNumber ?
+          <span> (Α.Π.Δ.Α. {item.APDA_ProtocolNumber}/{item.APDA_ProtocolDate})</span>
+          :
+          <></>
+      }
     </>;
 
 
@@ -295,7 +300,7 @@ class CourtOfAuditorsView extends Component {
   }
 
   getAccountItemInfo(index, item) {
-    var rContent = <span>Τη με αρ. {item.ProtocolNumber}/{item.ProtocolDate} Πράξη του {item.ScaleNumber} Κλιμακίου του Ελεγκτικού Συνεδρίου {item.ContentAccount}.</span>;
+    var rContent = <span>Τη με αρ. {item.ProtocolNumber}/{item.ProtocolYear} Πράξη του {item.ScaleNumber} Κλιμακίου του Ελεγκτικού Συνεδρίου {item.ContentAccount}.</span>;
 
     return <>
       <br />

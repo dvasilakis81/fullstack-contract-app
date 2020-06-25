@@ -3,8 +3,8 @@ const util = require('util');
 const common = require('./common')
 
 // import { getWord } from '../../../HelperMethods/helpermethods'
-const fontSize = 22
-const fontFamily = 'Arial'
+//const align = 'left'
+const align = 'both'
 module.exports = {
 
 	//Τεχνοπολις 2)  1)	Την με ΑΠ 162990/11.06.2019 Προγραμματική Σύμβαση και ειδικότερα το άρθρο 9 Πόροι - Εκταμίευση, αυτής
@@ -32,7 +32,7 @@ module.exports = {
 			'</w:numPr>' +
 			'<w:spacing w:line="276" w:lineRule="auto"/>' +
 			'<w:ind w:left="-142" w:hanging="426" />' +
-			'<w:jc w:val="left"/>' +
+			util.format('<w:jc w:val="%s"/>', align) +
 			'</w:pPr>' +
 			common.getrElement(rText) +
 			'</w:p>'
@@ -55,7 +55,7 @@ module.exports = {
 						'</w:numPr>' +
 						'<w:spacing w:line="276" w:lineRule="auto"/>' +
 						'<w:ind w:left="-142" w:hanging="426" />' +
-						'<w:jc w:val="left"/>' +
+						util.format('<w:jc w:val="%s"/>', align) +
 						'</w:pPr>' +
 						common.getrElement(rText) +
 						common.getADAXml(element.ADA) +
@@ -82,7 +82,7 @@ module.exports = {
 					'</w:numPr>' +
 					'<w:spacing w:line="276" w:lineRule="auto"/>' +
 					'<w:ind w:left="-142" w:hanging="426" />' +
-					'<w:jc w:val="left"/>' +
+					util.format('<w:jc w:val="%s"/>', align) +
 					'</w:pPr>' +
 					common.getrElement(rText) +
 					common.getADAXml(element.ADA) +
@@ -111,7 +111,7 @@ module.exports = {
 					'</w:numPr>' +
 					'<w:spacing w:line="276" w:lineRule="auto"/>' +
 					'<w:ind w:left="-142" w:hanging="426" />' +
-					'<w:jc w:val="left"/>' +
+					util.format('<w:jc w:val="%s"/>', align) +
 					'</w:pPr>' +
 					common.getrElement(rText) +
 					'</w:p>'
@@ -125,13 +125,26 @@ module.exports = {
 		if (body.AAY) {
 			for (let index = 0; index < body.AAY.length; index++) {
 				const element = body.AAY[index];
-				if (element.Type == 0 || element.Type == 1) {
+				if (element.Type == 0) {
+					var rText = util.format('Tη με αρ. %s/%s Πρόταση Ανάληψης Υποχρέωσης.', element.ProtocolNumber, element.ProtocolDate);
+					ret += '<w:p>' +
+						'<w:pPr>' +
+						'<w:numPr>' +
+						'<w:ilvl w:val="0"/>' +
+						'<w:numId w:val="2"/>' +
+						'</w:numPr>' +
+						'<w:spacing w:line="276" w:lineRule="auto"/>' +
+						'<w:ind w:left="-142" w:hanging="426" />' +
+						util.format('<w:jc w:val="%s"/>', align) +
+						'</w:pPr>' +
+						common.getrElement(rText) +
+						'</w:p>'
+				} else if (element.Type == 1 || element.Type == 2) {
 					var rText = util.format('Tη με αρ. %s/%s/%s ΕΑΔ %s ', element.Value, element.ProtocolNumber, element.ProtocolDate, element.EadNumber);
-					var lText = '';
-					if (element.Type == 1)
-						lText = 'Απόφασης Ανάληψης Υποχρέωσης.'
-					else if (element.Type == 2)
-						lText = 'Απόφασης Ανάληψης Υποχρέωσης (διάφορα έξοδα ΠΟΕ).'
+					var lText = 'Απόφασης Ανάληψης Υποχρέωσης';
+					if (element.Type == 2)
+						lText += ' (διάφορα έξοδα ΠΟΕ)';
+					lText += '.';
 
 					ret += '<w:p>' +
 						'<w:pPr>' +
@@ -141,13 +154,13 @@ module.exports = {
 						'</w:numPr>' +
 						'<w:spacing w:line="276" w:lineRule="auto"/>' +
 						'<w:ind w:left="-142" w:hanging="426" />' +
-						'<w:jc w:val="left"/>' +
+						util.format('<w:jc w:val="%s"/>', align) +
 						'</w:pPr>' +
 						common.getrElement(rText) +
 						common.getADAXml(element.ADA) +
 						common.getrElement(lText) +
 						'</w:p>'
-				} else if (element.Type == 2) {
+				} else if (element.Type == 3) {
 					var rText = util.format('Tη υπ΄ αριθμ. %s/%s ', element.ProtocolNumber, element.ProtocolDate);
 					var lText = util.format('(παρ.2 άρθρο 4 ΠΔ 80/2016), της %s Α.Α.Υ. ', element.Overthrow)
 					ret += '<w:p>' +
@@ -158,13 +171,12 @@ module.exports = {
 						'</w:numPr>' +
 						'<w:spacing w:line="276" w:lineRule="auto"/>' +
 						'<w:ind w:left="-142" w:hanging="426" />' +
-						'<w:jc w:val="left"/>' +
+						util.format('<w:jc w:val="%s"/>', align) +
 						'</w:pPr>' +
 						common.getrElement(rText) +
 						common.getADAXml(element.ADA) +
 						common.getBoldText('ΑΠΟΦΑΣΗ ΑΝΑΤΡΟΠΗΣ ΑΝΑΛΗΨΗΣ ΥΠΟΧΡΕΩΣΗΣ ') +
 						common.getrElement(lText) +
-
 						'</w:p>'
 				}
 			}
@@ -204,7 +216,7 @@ module.exports = {
 				'</w:numPr>' +
 				'<w:spacing w:line="276" w:lineRule="auto"/>' +
 				'<w:ind w:left="-142" w:hanging="426" />' +
-				'<w:jc w:val="left"/>' +
+				util.format('<w:jc w:val="%s"/>', align) +
 				'</w:pPr>' +
 				common.getrElement(rText) +
 				'</w:p>';
@@ -231,7 +243,7 @@ module.exports = {
 				'</w:numPr>' +
 				'<w:spacing w:line="276" w:lineRule="auto"/>' +
 				'<w:ind w:left="-142" w:hanging="426" />' +
-				'<w:jc w:val="left"/>' +
+				util.format('<w:jc w:val="%s"/>', align) +
 				'</w:pPr>' +
 				common.getrElement(rText) +
 				'</w:p>'
@@ -241,21 +253,23 @@ module.exports = {
 		// Το από 29-3-2019 Πρωτόκολλο Οριστικής Παραλαβής Εργασιών (για το εν λόγω χρονικό διάστημα υλοποίησης της Σύμβασης) της τριμελούς Επιτροπής Παραλαβής
 
 		var DeliveryGoodsDate = body.DeliveryGoodsDate;
-		var rText = util.format('Δύο (2) πρωτότυπα του από %s Πρωτοκόλλου Οριστικής Παραλαβής Εργασιών (για το εν λόγω χρονικό διάστημα υλοποίησης της Σύμβασης) της τριμελούς Επιτροπής Παραλαβής.',
-			DeliveryGoodsDate)
+		if (DeliveryGoodsDate) {
+			var rText = util.format('Δύο (2) πρωτότυπα του από %s Πρωτοκόλλου Οριστικής Παραλαβής Εργασιών (για το εν λόγω χρονικό διάστημα υλοποίησης της Σύμβασης) της τριμελούς Επιτροπής Παραλαβής.',
+				DeliveryGoodsDate)
 
-		return '<w:p>' +
-			'<w:pPr>' +
-			'<w:numPr>' +
-			'<w:ilvl w:val="0"/>' +
-			'<w:numId w:val="2"/>' +
-			'</w:numPr>' +
-			'<w:spacing w:line="276" w:lineRule="auto"/>' +
-			'<w:ind w:left="-142" w:hanging="426" />' +
-			'<w:jc w:val="left"/>' +
-			'</w:pPr>' +
-			common.getrElement(rText) +
-			'</w:p>';
+			return '<w:p>' +
+				'<w:pPr>' +
+				'<w:numPr>' +
+				'<w:ilvl w:val="0"/>' +
+				'<w:numId w:val="2"/>' +
+				'</w:numPr>' +
+				'<w:spacing w:line="276" w:lineRule="auto"/>' +
+				'<w:ind w:left="-142" w:hanging="426" />' +
+				util.format('<w:jc w:val="%s"/>', align) +
+				'</w:pPr>' +
+				common.getrElement(rText) +
+				'</w:p>';
+		}
 	},
 	getAttachment9: function (body) {
 
@@ -271,7 +285,7 @@ module.exports = {
 			'</w:numPr>' +
 			'<w:spacing w:line="276" w:lineRule="auto"/>' +
 			'<w:ind w:left="-142" w:hanging="426" />' +
-			'<w:jc w:val="left"/>' +
+			util.format('<w:jc w:val="%s"/>', align) +
 			'</w:pPr>' +
 			common.getrElement(rText) +
 			'</w:p>';
@@ -287,7 +301,7 @@ module.exports = {
 				'</w:numPr>' +
 				'<w:spacing w:line="276" w:lineRule="auto"/>' +
 				'<w:ind w:left="-142" w:hanging="426" />' +
-				'<w:jc w:val="left"/>' +
+				util.format('<w:jc w:val="%s"/>', align) +
 				'</w:pPr>' +
 				common.getrElement(rText) +
 				'</w:p>';
@@ -312,10 +326,9 @@ module.exports = {
 				'<w:ilvl w:val="0"/>' +
 				'<w:numId w:val="2"/>' +
 				'</w:numPr>' +
-
 				'<w:spacing w:line="276" w:lineRule="auto"/>' +
 				'<w:ind w:left="-142" w:hanging="426" />' +
-				'<w:jc w:val="left"/>' +
+				util.format('<w:jc w:val="%s"/>', align) +
 				'</w:pPr>' +
 				common.getrElement(rText) +
 				'</w:p>'
@@ -337,7 +350,7 @@ module.exports = {
 				'</w:tabs>' +
 				'<w:spacing w:line="276" w:lineRule="auto"/>' +
 				'<w:ind w:left="-142" w:hanging="426" />' +
-				'<w:jc w:val="left"/>' +
+				util.format('<w:jc w:val="%s"/>', align) +
 				'</w:pPr>' +
 				common.getrElement(rText) +
 				'</w:p>'
@@ -363,7 +376,7 @@ module.exports = {
 				'</w:tabs>' +
 				'<w:spacing w:line="276" w:lineRule="auto"/>' +
 				'<w:ind w:left="-142" w:hanging="426" />' +
-				'<w:jc w:val="left"/>' +
+				util.format('<w:jc w:val="%s"/>', align) +
 				'</w:pPr>' +
 				common.getrElement(rText) +
 				'</w:p>' +
@@ -375,7 +388,7 @@ module.exports = {
 				'</w:numPr>' +
 				'<w:spacing w:line="276" w:lineRule="auto"/>' +
 				//'<w:ind w:left="-142" w:hanging="426" />' +
-				'<w:jc w:val="left"/>' +
+				util.format('<w:jc w:val="%s"/>', align) +
 				'</w:pPr>' +
 				common.getrElement(s1_1) +
 				'<w:r><w:rPr><w:vertAlign w:val="superscript"/><w:lang w:val="el-GR"/></w:rPr><w:t>ης</w:t></w:r>' +
@@ -388,7 +401,7 @@ module.exports = {
 				'<w:numId w:val="2"/>' +
 				'</w:numPr>' +
 				'<w:spacing w:line="276" w:lineRule="auto"/>' +
-				'<w:jc w:val="left"/>' +
+				util.format('<w:jc w:val="%s"/>', align) +
 				'</w:pPr>' +
 				common.getrElement(s2) +
 				'</w:p>'

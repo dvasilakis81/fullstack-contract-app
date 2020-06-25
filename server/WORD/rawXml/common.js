@@ -73,6 +73,6 @@ module.exports = {
     return ret;
   },
   enterLine: function () {
-    return '<w:r><w:br /></w:r>';
+    return '<w:r><w:tab /></w:r><w:r><w:br /></w:r>';
   }
 }

@@ -225,8 +225,8 @@ const insertContractUsers = (req, res, next, contractId, usersToGiveAccessToCont
     getContractById(req, res, next, req.body.ContractId);
   else {
     for (var i = 0; i < contractUsers.length; i++) {
-      console.log('insertContractUsers: UserId:' + contractUsers[i].UserId)
-      sqlQuery += util.format('(%s,%s)', contractId, contractUsers[i].UserId)
+      console.log('insertContractUsers: UserId:' + contractUsers[i].UserId ? contractUsers[i].UserId : contractUsers[i].Id)
+      sqlQuery += util.format('(%s,%s)', contractId, contractUsers[i].UserId ? contractUsers[i].UserId : contractUsers[i].Id)
       if (i < contractUsers.length - 1)
         sqlQuery += ','
     }

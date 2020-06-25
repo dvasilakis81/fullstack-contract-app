@@ -3,9 +3,7 @@ const util = require('util');
 const common = require('./common');
 const { getrElement } = require('./common');
 
-const fontSize = 22
-const fontFamily = 'Arial'
-
+const align = 'both'
 module.exports = {
 	getAttachment1: function (body) {
 		//
@@ -30,9 +28,9 @@ module.exports = {
 			'<w:numPr>' +
 			'<w:ilvl w:val="0"/>' +
 			'<w:numId w:val="2"/>' +
-			'</w:numPr>' +			
-			'<w:spacing w:before="113" w:after="113" w:line="276" w:lineRule="auto" />' +			
-			'<w:jc w:val="left"/>' +
+			'</w:numPr>' +
+			'<w:spacing w:before="113" w:after="113" w:line="276" w:lineRule="auto" />' +
+			util.format('<w:jc w:val="%s"/>', align) +
 			'</w:pPr>' +
 			common.getrElement(rText) +
 			common.enterLine() +
@@ -44,7 +42,7 @@ module.exports = {
 			for (let index = 0; index < body.DecisionBoard.length; index++) {
 				const element = body.DecisionBoard[index];
 				var rText = util.format("Δύο (2) φωτοαντίγραφα της υπ' αριθ. %s/%s ", element.ProtocolNumber, element.ProtocolDate);
-				var lText = util.format(' Απόφασης του Δημοτικού Συμβουλίου %s', (element.ContentTransmission ? element.ContentTransmission : ''));
+				var lText = util.format('Απόφασης του Δημοτικού Συμβουλίου %s', (element.ContentTransmission ? element.ContentTransmission : ''));
 
 				ret += '<w:p>' +
 					'<w:pPr>' +
@@ -52,15 +50,14 @@ module.exports = {
 					'<w:ilvl w:val="0"/>' +
 					'<w:numId w:val="2"/>' +
 					'</w:numPr>' +
-					'<w:spacing w:before="113" w:after="113" w:line="276" w:lineRule="auto" />' +					
-					'<w:jc w:val="left"/>' +
+					'<w:spacing w:before="113" w:after="113" w:line="276" w:lineRule="auto" />' +
+					util.format('<w:jc w:val="%s"/>', align) +
 					'</w:pPr>' +
 					common.getrElement(rText) +
 					common.getADAXml(element.ADA) +
 					common.getrElement(lText) +
 					common.enterLine() +
 					'</w:p>'
-
 			}
 		}
 
@@ -73,7 +70,7 @@ module.exports = {
 				const element = body.DecisionCoordinatorDecentrilizedAdministration[index];
 
 				var rText = util.format('Δύο (2) φωτοαντίγραφα της με Α.Π. %s/%s Απόφασης του Συντονιστή της Αποκεντρωμένης Διοίκησης Αττικής ', element.ProtocolNumber, element.ProtocolDate)
-				var lText = util.format(' %s %s Α.Δ.Σ.', element.ActionTransmission, element.DecisionBoardProtocol);
+				var lText = util.format('%s %s Α.Δ.Σ.', element.ActionTransmission, element.DecisionBoardProtocol);
 				if (element.APDA_ProtocolNumber)
 					lText += util.format('(Α.Π.Δ.Α. %s/%s)', element.APDA_ProtocolNumber, element.APDA_ProtocolDate);
 
@@ -82,9 +79,9 @@ module.exports = {
 					'<w:numPr>' +
 					'<w:ilvl w:val="0"/>' +
 					'<w:numId w:val="2"/>' +
-					'</w:numPr>' +					
-					'<w:spacing w:before="113" w:after="113" w:line="276" w:lineRule="auto" />' +					
-					'<w:jc w:val="left"/>' +
+					'</w:numPr>' +
+					'<w:spacing w:before="113" w:after="113" w:line="276" w:lineRule="auto" />' +
+					util.format('<w:jc w:val="%s"/>', align) +
 					'</w:pPr>' +
 					common.getrElement(rText) +
 					common.getADAXml(element.ADA) +
@@ -100,21 +97,22 @@ module.exports = {
 		if (body.CourtOfAuditors) {
 			for (let index = 0; index < body.CourtOfAuditors.length; index++) {
 				const element = body.CourtOfAuditors[index];
-				var rText = util.format('Δύο (2) φωτοαντίγραφα της Κοινοποίησης της με αρ. %s/%s Πράξης του %s Κλιμακίου του Ελεγκτικού Συνεδρίου (Α.Π.Δ.Α. %s/%s).',
+				var rText = util.format('Δύο (2) φωτοαντίγραφα της Κοινοποίησης της με αρ. %s/%s Πράξης του %s Κλιμακίου του Ελεγκτικού Συνεδρίου',
 					element.ProtocolNumber,
 					element.ProtocolYear,
-					element.ScaleNumber,
-					element.APDA_ProtocolNumber,
-					element.APDA_ProtocolDate)
+					element.ScaleNumber)
+
+				if (element.APDA_ProtocolNumber)
+					rText += util.format('(Α.Π.Δ.Α. %s/%s)', element.APDA_ProtocolNumber, element.APDA_ProtocolDate);
 
 				ret += '<w:p>' +
 					'<w:pPr>' +
 					'<w:numPr>' +
 					'<w:ilvl w:val="0"/>' +
 					'<w:numId w:val="2"/>' +
-					'</w:numPr>' +					
-					'<w:spacing w:before="113" w:after="113" w:line="276" w:lineRule="auto" />' +					
-					'<w:jc w:val="left"/>' +
+					'</w:numPr>' +
+					'<w:spacing w:before="113" w:after="113" w:line="276" w:lineRule="auto" />' +
+					util.format('<w:jc w:val="%s"/>', align) +
 					'</w:pPr>' +
 					common.getrElement(rText) +
 					common.enterLine() +
@@ -133,7 +131,20 @@ module.exports = {
 
 			for (let index = 0; index < body.AAY.length; index++) {
 				const element = body.AAY[index];
-				if (element.Type == 0 || element.Type == 1) {
+				if (element.Type == 0) {
+					var rText = util.format("Πρωτότυπο και φωτοαντίγραφο με %s/%s Πρότασης Ανάληψης Υποχρεώσης", element.ProtocolNumber, element.ProtocolDate);
+					ret += '<w:p>' +
+						'<w:pPr>' +
+						'<w:numPr>' +
+						'<w:ilvl w:val="0"/>' +
+						'<w:numId w:val="2"/>' +
+						'</w:numPr>' +
+						'<w:spacing w:before="113" w:after="113" w:line="276" w:lineRule="auto" />' +
+						util.format('<w:jc w:val="%s"/>', align) +
+						'</w:pPr>' +
+						common.getrElement(rText) +
+						'</w:p>'
+				} else if (element.Type == 1 || element.Type == 2) {
 					var rText = util.format("Πρωτότυπο και φωτοαντίγραφο της με αριθμ. %s/%s/%s ΕΑΔ %s ", element.Value, element.ProtocolNumber, element.ProtocolDate, element.EadNumber);
 					var lText = 'Απόφασης Ανάληψης Υποχρέωσης.'
 					ret += '<w:p>' +
@@ -141,16 +152,16 @@ module.exports = {
 						'<w:numPr>' +
 						'<w:ilvl w:val="0"/>' +
 						'<w:numId w:val="2"/>' +
-						'</w:numPr>' +						
-						'<w:spacing w:before="113" w:after="113" w:line="276" w:lineRule="auto" />' +						
-						'<w:jc w:val="left"/>' +
+						'</w:numPr>' +
+						'<w:spacing w:before="113" w:after="113" w:line="276" w:lineRule="auto" />' +
+						util.format('<w:jc w:val="%s"/>', align) +
 						'</w:pPr>' +
 						common.getrElement(rText) +
 						common.getADAXml(element.ADA) +
 						common.getrElement(lText) +
 						common.enterLine() +
 						'</w:p>'
-				} else if (element.Type == 2) {
+				} else if (element.Type == 3) {
 					var rText = util.format("Πρωτότυπο και φωτοαντίγραφο της υπ΄ αριθμ. %s/%s ", element.Value, element.ProtocolNumber, element.ProtocolDate);
 					var lText = util.format('(παρ.2 άρθρο 4 ΠΔ 80/2016), της %s Α.Α.Υ. ', element.Overthrow)
 					ret += '<w:p>' +
@@ -158,9 +169,9 @@ module.exports = {
 						'<w:numPr>' +
 						'<w:ilvl w:val="0"/>' +
 						'<w:numId w:val="2"/>' +
-						'</w:numPr>' +						
-						'<w:spacing w:before="113" w:after="113" w:line="276" w:lineRule="auto" />' +						
-						'<w:jc w:val="left"/>' +
+						'</w:numPr>' +
+						'<w:spacing w:before="113" w:after="113" w:line="276" w:lineRule="auto" />' +
+						util.format('<w:jc w:val="%s"/>', align) +
 						'</w:pPr>' +
 						common.getrElement(rText) +
 						common.getADAXml(element.ADA) +
@@ -209,7 +220,7 @@ module.exports = {
 	},
 	getAttachment6: function (body) {
 		// 3.	Πρωτότυπο & φωτ/φο του με αριθμ. {a_in}/{a_id} Τιμολογίου Παροχής Υπηρεσιών της {c_conc}
-		var ret =''
+		var ret = ''
 		if (body.Account[0].Invoice) {
 			var rText = '';
 			if (body.Account[0].Invoice[0].DeliveredDateProtocol[0].Number)
@@ -225,13 +236,13 @@ module.exports = {
 					body.Account[0].Invoice[0].Date, body.Contract[0].Concessionaire[0].Name)
 
 			ret += '<w:p>' +
-				'<w:pPr>' +				
+				'<w:pPr>' +
 				'<w:numPr>' +
 				'<w:ilvl w:val="0"/>' +
 				'<w:numId w:val="2"/>' +
-				'</w:numPr>' +				
-				'<w:spacing w:before="1" w:after="1" w:line="276" w:lineRule="auto" />' +				
-				'<w:jc w:val="left"/>' +
+				'</w:numPr>' +
+				'<w:spacing w:before="1" w:after="1" w:line="276" w:lineRule="auto" />' +
+				util.format('<w:jc w:val="%s"/>', align) +
 				'</w:pPr>' +
 				common.getrElement(rText) +
 				common.enterLine() +
@@ -242,7 +253,7 @@ module.exports = {
 	},
 	getAttachment7: function (body) {
 		//4.	Δύο (2) πρωτότυπα της από {dcd} Βεβαίωσης Έργου του Τμήματος {dep_name_lower} της Διεύθυνσης {dir_name_lower} αναφορικά με την υλοποίηση της Σύμβασης από την {c_conc} κατά το χρονικό διάστημα από {a_sd} έως και {a_ed}.
-
+		var ret = '';
 		var workConfirmationDate = body.WorkConfirmationDate;
 		var directionNameLower = body.Direction[0].NameInLower;
 		var departmentNameLower = body.Direction[0].Department[0].NameInLower;
@@ -250,52 +261,60 @@ module.exports = {
 		var start = body.Account[0].Start;
 		var end = body.Account[0].End;
 
-		var rText = util.format('Δύο (2) πρωτότυπα της από %s Βεβαίωσης Έργου του Τμήματος %s της Διεύθυνσης %s αναφορικά με την υλοποίηση της Σύμβασης από την %s κατά το χρονικό διάστημα από %s έως και %s.',
-			workConfirmationDate,
-			departmentNameLower,
-			directionNameLower,
-			concessionaireName,
-			start,
-			end)
+		if (workConfirmationDate) {
+			var rText = util.format('Δύο (2) πρωτότυπα της από %s Βεβαίωσης Έργου του Τμήματος %s της Διεύθυνσης %s αναφορικά με την υλοποίηση της Σύμβασης από την %s κατά το χρονικό διάστημα από %s έως και %s.',
+				workConfirmationDate,
+				departmentNameLower,
+				directionNameLower,
+				concessionaireName,
+				start,
+				end)
 
-		return '<w:p>' +
-			'<w:pPr>' +
-			'<w:numPr>' +
-			'<w:ilvl w:val="0"/>' +
-			'<w:numId w:val="2"/>' +
-			'</w:numPr>' +			
-			'<w:spacing w:before="113" w:after="113" w:line="276" w:lineRule="auto" />' +			
-			'<w:jc w:val="left"/>' +
-			'</w:pPr>' +
-			common.getrElement(rText) +
-			common.enterLine() +
-			'</w:p>'
+			ret += '<w:p>' +
+				'<w:pPr>' +
+				'<w:numPr>' +
+				'<w:ilvl w:val="0"/>' +
+				'<w:numId w:val="2"/>' +
+				'</w:numPr>' +
+				'<w:spacing w:before="113" w:after="113" w:line="276" w:lineRule="auto" />' +
+				util.format('<w:jc w:val="%s"/>', align) +
+				'</w:pPr>' +
+				common.getrElement(rText) +
+				common.enterLine() +
+				'</w:p>'
+		}
+		return ret;
 	},
 	getAttachment8: function (body) {
 		//Δύο (2) πρωτότυπα του από {ddg} Πρωτοκόλλου Οριστικής Παραλαβής Εργασιών (για το εν λόγω χρονικό διάστημα υλοποίησης της Σύμβασης) της τριμελούς Επιτροπής Παραλαβής.
+		var ret = '';
 
 		var DeliveryGoodsDate = body.DeliveryGoodsDate;
-		var rText = util.format('Δύο (2) πρωτότυπα του από %s Πρωτοκόλλου Οριστικής Παραλαβής Εργασιών (για το εν λόγω χρονικό διάστημα υλοποίησης της Σύμβασης) της τριμελούς Επιτροπής Παραλαβής.',
-			DeliveryGoodsDate)
+		if (DeliveryGoodsDate) {
+			var rText = util.format('Δύο (2) πρωτότυπα του από %s Πρωτοκόλλου Οριστικής Παραλαβής Εργασιών (για το εν λόγω χρονικό διάστημα υλοποίησης της Σύμβασης) της τριμελούς Επιτροπής Παραλαβής.',
+				DeliveryGoodsDate)
 
-		return '<w:p>' +
-			'<w:pPr>' +
-			'<w:numPr>' +
-			'<w:ilvl w:val="0"/>' +
-			'<w:numId w:val="2"/>' +
-			'</w:numPr>' +			
-			'<w:spacing w:before="113" w:after="113" w:line="276" w:lineRule="auto" />' +			
-			'<w:jc w:val="left"/>' +
-			'</w:pPr>' +
-			common.getrElement(rText) +
-			common.enterLine() +
-			'</w:p>'
+			ret += '<w:p>' +
+				'<w:pPr>' +
+				'<w:numPr>' +
+				'<w:ilvl w:val="0"/>' +
+				'<w:numId w:val="2"/>' +
+				'</w:numPr>' +
+				'<w:spacing w:before="113" w:after="113" w:line="276" w:lineRule="auto" />' +
+				util.format('<w:jc w:val="%s"/>', align) +
+				'</w:pPr>' +
+				common.getrElement(rText) +
+				common.enterLine() +
+				'</w:p>'
+		}
+
+		return ret
 	},
 	getAuthorDocumentedRequest: function (body) {
 		//Πρωτότυπο και φωτοαντίγραφο του  υπ' αριθ. 245924/27-09-2019 Τεκμηριωμένου Αιτήματος του Διατάκτη		
 		var rText = util.format("Πρωτότυπο και φωτοαντίγραφο του  υπ' αριθ. %s/%s Τεκμηριωμένου Αιτήματος του Διατάκτη", body.ARD)
-
 		var ret = '';
+
 		if (body.ARD) {
 			for (let index = 0; index < body.ARD.length; index++) {
 				const element = body.ARD[index];
@@ -309,8 +328,8 @@ module.exports = {
 						'<w:numId w:val="2"/>' +
 						'</w:numPr>' +
 						//'<w:spacing w:line="276" w:lineRule="auto"/>' +
-						'<w:spacing w:before="113" w:after="113" w:line="276" w:lineRule="auto" />' +						
-						'<w:jc w:val="left"/>' +
+						'<w:spacing w:before="113" w:after="113" w:line="276" w:lineRule="auto" />' +
+						util.format('<w:jc w:val="%s"/>', align) +
 						'</w:pPr>' +
 						common.getrElement(rText) +
 						common.getADAXml(element.ADA) +
@@ -320,6 +339,7 @@ module.exports = {
 				}
 			}
 		}
+
 		return ret;
 	},
 	getAttachment9: function (body) {
@@ -329,9 +349,9 @@ module.exports = {
 			'<w:numPr>' +
 			'<w:ilvl w:val="0"/>' +
 			'<w:numId w:val="2"/>' +
-			'</w:numPr>' +			
-			'<w:spacing w:before="113" w:after="113" w:line="276" w:lineRule="auto" />' +			
-			'<w:jc w:val="left"/>' +
+			'</w:numPr>' +
+			'<w:spacing w:before="113" w:after="113" w:line="276" w:lineRule="auto" />' +
+			util.format('<w:jc w:val="%s"/>', align) +
 			'</w:pPr>' +
 			common.getrElement(rText) +
 			'<w:r><w:rPr><w:vertAlign w:val="superscript"/><w:lang w:val="el-GR"/></w:rPr><w:t>ου</w:t></w:r>' +
@@ -355,9 +375,9 @@ module.exports = {
 					'<w:numPr>' +
 					'<w:ilvl w:val="0"/>' +
 					'<w:numId w:val="2"/>' +
-					'</w:numPr>' +					
-					'<w:spacing w:before="113" w:after="113" w:line="276" w:lineRule="auto" />' +				
-					'<w:jc w:val="left"/>' +
+					'</w:numPr>' +
+					'<w:spacing w:before="113" w:after="113" w:line="276" w:lineRule="auto" />' +
+					util.format('<w:jc w:val="%s"/>', align) +
 					'</w:pPr>' +
 					common.getrElement(rText) +
 					common.enterLine() +
@@ -374,9 +394,9 @@ module.exports = {
 				'<w:numPr>' +
 				'<w:ilvl w:val="0"/>' +
 				'<w:numId w:val="2"/>' +
-				'</w:numPr>' +				
-				'<w:spacing w:before="113" w:after="113" w:line="276" w:lineRule="auto" />' +				
-				'<w:jc w:val="left"/>' +
+				'</w:numPr>' +
+				'<w:spacing w:before="113" w:after="113" w:line="276" w:lineRule="auto" />' +
+				util.format('<w:jc w:val="%s"/>', align) +
 				'</w:pPr>' +
 				common.getrElement(rText) +
 				common.enterLine() +
@@ -406,9 +426,9 @@ module.exports = {
 				'<w:tab w:val="left" w:pos="142"/>' +
 				'<w:tab w:val="left" w:pos="284"/>' +
 				'<w:tab w:val="left" w:pos="6195"/>' +
-				'</w:tabs>' +				
-				'<w:spacing w:before="113" w:after="113" w:line="276" w:lineRule="auto" />' +				
-				'<w:jc w:val="left"/>' +
+				'</w:tabs>' +
+				'<w:spacing w:before="113" w:after="113" w:line="276" w:lineRule="auto" />' +
+				util.format('<w:jc w:val="%s"/>', align) +
 				'</w:pPr>' +
 				common.getrElement(rText) +
 				common.enterLine() +
@@ -423,9 +443,9 @@ module.exports = {
 				'<w:numPr>' +
 				'<w:ilvl w:val="0"/>' +
 				'<w:numId w:val="2"/>' +
-				'</w:numPr>' +				
-				'<w:spacing w:before="113" w:after="113" w:line="276" w:lineRule="auto" />' +				
-				'<w:jc w:val="left"/>' +
+				'</w:numPr>' +
+				'<w:spacing w:before="113" w:after="113" w:line="276" w:lineRule="auto" />' +
+				util.format('<w:jc w:val="%s"/>', align) +
 				'</w:pPr>' +
 				common.getrElement(rText) +
 				common.enterLine() +
@@ -444,9 +464,9 @@ module.exports = {
 				'<w:numPr>' +
 				'<w:ilvl w:val="0"/>' +
 				'<w:numId w:val="2"/>' +
-				'</w:numPr>' +				
+				'</w:numPr>' +
 				'<w:spacing w:line="276" w:lineRule="auto"/>' +
-				'<w:jc w:val="left"/>' +
+				util.format('<w:jc w:val="%s"/>', align) +
 				'</w:pPr>' +
 				common.getrElement(rText) +
 				'</w:p>' +
@@ -455,9 +475,9 @@ module.exports = {
 				'<w:numPr>' +
 				'<w:ilvl w:val="1"/>' +
 				'<w:numId w:val="2"/>' +
-				'</w:numPr>' +				
-				'<w:spacing w:before="113" w:after="113" w:line="276" w:lineRule="auto" />' +				
-				'<w:jc w:val="left"/>' +
+				'</w:numPr>' +
+				'<w:spacing w:before="113" w:after="113" w:line="276" w:lineRule="auto" />' +
+				util.format('<w:jc w:val="%s"/>', align) +
 				'</w:pPr>' +
 				common.getrElement(s1_1) +
 				'<w:r><w:rPr><w:vertAlign w:val="superscript"/><w:lang w:val="el-GR"/></w:rPr><w:t>ης</w:t></w:r>' +
@@ -468,12 +488,12 @@ module.exports = {
 				'<w:numPr>' +
 				'<w:ilvl w:val="1"/>' +
 				'<w:numId w:val="2"/>' +
-				'</w:numPr>' +				
-				'<w:spacing w:before="113" w:after="113" w:line="276" w:lineRule="auto" />' +				
-				'<w:jc w:val="left"/>' +
+				'</w:numPr>' +
+				'<w:spacing w:before="113" w:after="113" w:line="276" w:lineRule="auto" />' +
+				util.format('<w:jc w:val="%s"/>', align) +
 				'</w:pPr>' +
 				common.getrElement(s2) +
-				'</w:p>'			
+				'</w:p>'
 		}
 		return ret;
 	},
@@ -483,7 +503,6 @@ module.exports = {
 			'<w:spacing w:before="240"/>' +
 			'<w:jc w:val="both"/>' +
 			'<w:rPr>' +
-			util.format('<w:rFonts w:ascii="%s" w:hAnsi="%s"/>', fontFamily) +
 			'<w:b/>' +
 			'<w:color w:val="000000"/>' +
 			'<w:u w:val="single"/>' +
@@ -491,7 +510,6 @@ module.exports = {
 			'</w:pPr>' +
 			'<w:r>' +
 			'<w:rPr>' +
-			util.format('<w:rFonts w:ascii="%s" w:hAnsi="%s"/>', fontFamily) +
 			'<w:b/>' +
 			'<w:color w:val="000000"/>' +
 			'<w:u w:val="single"/>' +
@@ -505,7 +523,6 @@ module.exports = {
 			'<w:ind w:hanging="567"/>' +
 			'<w:jc w:val="both"/>' +
 			'<w:rPr>' +
-			util.format('<w:rFonts w:ascii="%s" w:hAnsi="%s"/>', fontFamily) +
 			'<w:b/>' +
 			'<w:color w:val="000000"/>' +
 			'<w:u w:val="single"/>' +

@@ -30,6 +30,19 @@ const useStyles = {
 };
 
 //#region AAY
+export function getSuggestAYTooltipTemplate(state, ind) {
+  var style1 = (ind === 1 ? useStyles.tooltipIndicate : useStyles.tooltip)
+  var style2 = (ind === 2 ? useStyles.tooltipIndicate : useStyles.tooltip)
+
+  return (<>
+    <div style={useStyles.tooltipTitle}>ΣΥΝΗΜΜΕΝΑ ΔΙΚΑΙΟΛΟΓΗΤΙΚΑ(Λογαριασμός)</div>
+    <span style={useStyles.tooltip}>Τη με Α.Π. </span>
+    <span style={style1}>{state.ProtocolNumber ? state.ProtocolNumber : '____'}</span>
+    <span style={useStyles.tooltip}>/</span>
+    <span style={style2}>{state.ProtocolDate ? getDateFormatForDocument(state.ProtocolDate) : '__-__-____'}</span>
+    <span style={useStyles.tooltip}> Πρόταση Aνάληψης Yποχρέωσης</span>
+  </>)
+}
 export function getAayTooltipTemplate(state, ind) {
   var style1 = (ind === 1 ? useStyles.tooltipIndicate : useStyles.tooltip)
   var style2 = (ind === 2 ? useStyles.tooltipIndicate : useStyles.tooltip)
