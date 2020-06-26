@@ -131,6 +131,15 @@ export function deleteCourtOfAuditors(data, token) {
   }
 }
 
+export function getCCFromPreviousAccount(data, token) {
+
+  const request = axios.post(`${URL}/getccfrompreviousaccount`, data, { headers: { Authorization: 'Bearer ' + token } })
+  return {
+    type: 'GET_CC_PREVIOUS_ACCOUNT',
+    payload: request
+  }
+}
+
 
 
 

@@ -175,6 +175,22 @@ class NewAccountForm extends Component {
 		this.getCC = this.getCC.bind(this);
 	}
 
+	componentDidMount() {
+		if (this.state.AccountId) {
+
+		}
+		else {
+			axios.post(getHostUrl()  + '/getccfrompreviousaccount', this.state, { headers: { Authorization: 'Bearer ' + this.props.token.data.token } }).then(res => {
+				//var msg = 'Η σύμβαση με πρωτόκολλο "' + this.state.ProtocolNumber + '/' + getDateFormatForDocument(this.state.ProtocolDate) + '" επεξεργάστηκε επιτυχώς!!!'
+				this.setState({ cc: res });
+			}).catch(error => {
+				var msg = 'Getccfrompreviousaccount: !!\n' + error;
+				console.log(msg);
+			});
+		}
+
+	}
+
 	handleSubmit(e) {
 		e.preventDefault();
 
@@ -429,7 +445,7 @@ class NewAccountForm extends Component {
 	getDeliveryGoodsDate() {
 		if (this.state.IsDownpayment === false)
 			return <MyTextField tp='date' title='Ημ. οριστικής παραλαβής αγαθών/υπηρεσιων' id='DeliveryGoodsDate' stateValue={this.state.DeliveryGoodsDate} isRequired={true} isDisabled={false} onChange={this.onChange} inputProps={{ style: { textAlign: 'center' } }} width='20%' isRequired={false} />
-	}	
+	}
 
 	getDocumentsInfo() {
 		return <>
@@ -559,7 +575,7 @@ class NewAccountForm extends Component {
 									<Icon style={{ marginLeft: '10px', padding: '10px' }}>save</Icon>,
 									this.state.submitButtonDisabled)}
 								{this.getDocumentsInfo()}
-								{this.getBasicAccountInfo()}								
+								{this.getBasicAccountInfo()}
 								{this.getInvoiceInfo()}
 								{this.getMonitoringCommiteeInfo()}
 								{/* {this.getDownpaymentInfo()} */}

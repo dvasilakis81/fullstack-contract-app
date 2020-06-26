@@ -31,6 +31,7 @@ const insert = (req, res, next) => {
 }
 
 const update = (req, res, next) => {
+  var contractId = req.body.contractId;
 
   var sqlQuery = util.format('UPDATE "Ordering"."AAY" ' +
     'SET "Value"=%s,"ProtocolNumber"=%s,"ProtocolDate"=%s,"EadNumber"=%s,"ADA"=%s,"Type"=%s,"Overthrow"=%s ' +
@@ -42,13 +43,13 @@ const update = (req, res, next) => {
     helper.addQuotes(req.body.ADA),
     helper.addQuotes(req.body.Type),
     helper.addQuotes(req.body.Overthrow),
-    Number(req.body.ContractId));
+    Number(contractId));
 
   pool.query(sqlQuery, (error, results) => {
     if (error)
       next(error);
     else {
-      helper.consoleLog('UpdateAAY: Rows affected: ' + results.rowCount + ' Account Id: ' + req.body.ContractId);
+      helper.consoleLog('UpdateAAY: Rows affected: ' + results.rowCount + ' Contract Id: ' + contractId);
       contractMethods.getContractById(req, res, next, contractId);
     }
   })
@@ -64,7 +65,7 @@ function remove(req, res, next) {
     if (error)
       next(error);
     else
-      contractMethods.getContractById(req, res, next, contractId)    
+      contractMethods.getContractById(req, res, next, contractId)
   })
 }
 

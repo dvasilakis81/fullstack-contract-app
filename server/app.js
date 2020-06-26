@@ -28,11 +28,10 @@ var dbDecisionCoordinatorDecentrilizedAdministration = require('./Postgre/Querie
 var dbCourtOfAuditors = require('./Postgre/Queries/CourtOfAuditors')
 var dbAuthorDocumentedRequest = require('./Postgre/Queries/AuthorDocumentedRequest')
 var dbSnippetPractical = require('./Postgre/Queries/SnippetPractical')
+var dbCC = require('./Postgre/Queries/CC')
 
 var helper = require('./HelperMethods/helpermethods')
-
 const ENV = process.env.NODE_ENV;
-
 app.use(helmet())
 app.use(cors());
 app.use(express.static(path.join(__dirname, "./WORD/templates")));
@@ -208,14 +207,13 @@ app.post('/deletecourtofauditors', dbLogin.checkToken, dbCourtOfAuditors.remove)
 app.post('/insertaay', dbLogin.checkToken, dbAay.insert);
 app.post('/updateaay', dbLogin.checkToken, dbAay.update);
 app.post('/deleteaay', dbLogin.checkToken, dbAay.remove);
-
 app.post('/insertauthordocumentedrequest', dbLogin.checkToken, dbAuthorDocumentedRequest.insert);
 app.post('/updateauthordocumentedrequest', dbLogin.checkToken, dbAuthorDocumentedRequest.update);
 app.post('/deleteauthordocumentedrequest', dbLogin.checkToken, dbAuthorDocumentedRequest.remove);
 app.post('/insertsnippetpractical', dbLogin.checkToken, dbSnippetPractical.insert);
 app.post('/updatesnippetpractical', dbLogin.checkToken, dbSnippetPractical.update);
 app.post('/deletesnippetpractical', dbLogin.checkToken, dbSnippetPractical.remove);
-
+app.post('/getccfrompreviousaccount', dbLogin.checkToken, dbCC.getccfrompreviousaccount);
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));

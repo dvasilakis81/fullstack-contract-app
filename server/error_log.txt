@@ -1,12 +1,12 @@
-Message: Cannot read property '0' of undefined
-Stack: TypeError: Cannot read property '0' of undefined
-    at Object.setDataForTransmissionDocument (c:\Github\Ordering FullStack\server\InputData\InputData.js:61:22)
-    at c:\Github\Ordering FullStack\server\app.js:98:29
+Message: Not Found
+Stack: NotFoundError: Not Found
+    at c:\Github\Ordering FullStack\server\app.js:250:8
     at Layer.handle [as handle_request] (c:\Github\Ordering FullStack\node_modules\express\lib\router\layer.js:95:5)
-    at next (c:\Github\Ordering FullStack\node_modules\express\lib\router\route.js:137:13)
-    at c:\Github\Ordering FullStack\server\Postgre\Queries\Login.js:220:9
-    at c:\Github\Ordering FullStack\node_modules\jsonwebtoken\verify.js:223:12
-    at getSecret (c:\Github\Ordering FullStack\node_modules\jsonwebtoken\verify.js:90:14)
-    at Object.module.exports [as verify] (c:\Github\Ordering FullStack\node_modules\jsonwebtoken\verify.js:94:10)
-    at checkToken (c:\Github\Ordering FullStack\server\Postgre\Queries\Login.js:209:9)
+    at trim_prefix (c:\Github\Ordering FullStack\node_modules\express\lib\router\index.js:317:13)
+    at c:\Github\Ordering FullStack\node_modules\express\lib\router\index.js:284:7
+    at Function.process_params (c:\Github\Ordering FullStack\node_modules\express\lib\router\index.js:335:12)
+    at next (c:\Github\Ordering FullStack\node_modules\express\lib\router\index.js:275:10)
+    at serveStatic (c:\Github\Ordering FullStack\node_modules\serve-static\index.js:75:16)
     at Layer.handle [as handle_request] (c:\Github\Ordering FullStack\node_modules\express\lib\router\layer.js:95:5)
+    at trim_prefix (c:\Github\Ordering FullStack\node_modules\express\lib\router\index.js:317:13)
+    at c:\Github\Ordering FullStack\node_modules\express\lib\router\index.js:284:7

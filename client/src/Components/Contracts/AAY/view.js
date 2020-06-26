@@ -221,8 +221,8 @@ class AayView extends Component {
           <ProtocolInput tm1={getAayTooltipTemplate(this.state, 2)} tm2={getAayTooltipTemplate(this.state, 3)} title='Α.Π. Α.Α.Υ.' idn='ProtocolNumber' idd='ProtocolDate' protocolNumber={this.state.ProtocolNumber} protocolDate={this.state.ProtocolDate} onChange={this.onChange} tp1='text' tp2='date' width='50%' />
         </div>
         <div style={{ display: 'flex', flexFlow: 'row', height: 'auto', justifyContent: 'center', padding: '10px', flexWrap: 'nowrap', width: '90%' }}>
-          <MyTextField tm={getAayTooltipTemplate(this.state, 4)} tp='number' title='ΕΑΔ αριθμός' id='EadNumber' stateValue={this.state.EadNumber} isRequired={true} isDisabled={false} onChange={this.onChange} inputProps={{ style: { textAlign: 'center' } }} width='50%' />
-          <MyTextField tm={getAayTooltipTemplate(this.state, 5)} tp='text' title='ΑΔΑ' id='ADA' stateValue={this.state.ADA} isRequired={true} isDisabled={false} onChange={this.onChange} inputProps={{ style: { textAlign: 'center' }, maxLength: 20 }} width='50%' />
+          <MyTextField tm={getAayTooltipTemplate(this.state, 4)} tp='number' title='ΕΑΔ αριθμός' id='EadNumber' stateValue={this.state.EadNumber} isRequired={false} isDisabled={false} onChange={this.onChange} inputProps={{ style: { textAlign: 'center' } }} width='50%' />
+          <MyTextField tm={getAayTooltipTemplate(this.state, 5)} tp='text' title='ΑΔΑ' id='ADA' stateValue={this.state.ADA} isRequired={false} isDisabled={false} onChange={this.onChange} inputProps={{ style: { textAlign: 'center' }, maxLength: 20 }} width='50%' />
         </div>
       </>
     } else if (this.state.Type == 3) {
