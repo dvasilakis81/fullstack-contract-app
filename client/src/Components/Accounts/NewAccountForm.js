@@ -180,9 +180,9 @@ class NewAccountForm extends Component {
 
 		}
 		else {
-			axios.post(getHostUrl()  + '/getccfrompreviousaccount', this.state, { headers: { Authorization: 'Bearer ' + this.props.token.data.token } }).then(res => {
+			axios.post(getHostUrl() + '/getccfrompreviousaccount', this.state, { headers: { Authorization: 'Bearer ' + this.props.token.data.token } }).then(res => {
 				//var msg = 'Η σύμβαση με πρωτόκολλο "' + this.state.ProtocolNumber + '/' + getDateFormatForDocument(this.state.ProtocolDate) + '" επεξεργάστηκε επιτυχώς!!!'
-				this.setState({ cc: res });
+				this.setState({ cc: res.data });
 			}).catch(error => {
 				var msg = 'Getccfrompreviousaccount: !!\n' + error;
 				console.log(msg);
@@ -374,7 +374,7 @@ class NewAccountForm extends Component {
 		let ccValues = this.props.ccValues
 		return <div>
 			{
-				this.state.cc.map((value, index) => {
+				this.state.cc ? this.state.cc.map((value, index) => {
 					var ccValue = (value.CC ? value.CC : '')
 					return (
 						<Box display='div' style={{ width: '100%', margin: '5px' }}>
@@ -410,7 +410,7 @@ class NewAccountForm extends Component {
 							</Box>
 						</Box>
 					)
-				})
+				}) : <></>
 			}
 			{this.state.cc && this.state.cc.length < 7 ? getButton('contained', 'small', null, useStyles.btnAuto, this.addCC, 'Προσθήκη Κοινοποίησης', null, false) : <></>}
 		</div>

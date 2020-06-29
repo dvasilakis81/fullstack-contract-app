@@ -15,7 +15,7 @@ class ItemList extends React.Component {
   getTitle(title) {
     var ret = title;
     if (title && title.length > 100)
-      ret = title.substring(0, 100) + '...';
+      ret = title.substring(0, 200) + '...';
     return ret;
   }
 
