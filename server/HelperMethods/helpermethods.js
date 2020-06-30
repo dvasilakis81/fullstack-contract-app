@@ -147,6 +147,18 @@ function getDateString(protocolDate) {
   return ret;
 }
 
+function getExpiresAt(token, jwt, secretKey){
+  var expiresAt = new Date(0);
+
+  if (token) {
+    jwt.verify(token, secretKey, (err, decoded) => {
+      expiresAt.setUTCSeconds(decoded.exp);
+    });
+  }
+
+  return expiresAt;
+}
+
 module.exports = {
   addQuotes,
   fixTextForRawXml,
@@ -154,7 +166,8 @@ module.exports = {
   getWord,
   getNumberLectical,
   extractYearFromDate,
-  getDateString
+  getDateString,
+  getExpiresAt
 }
 
 

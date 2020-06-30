@@ -11,7 +11,7 @@ const Account = lazy(() => import('./Components/Accounts/AccountPage')); //impor
 const Home = lazy(() => import('./Components/Home/home'));
 const Login = lazy(() => import('./Components/Login/login'));
 const Administration = lazy(() => import('./Components/Administration/administration'));
-
+const Reservations = lazy(() => import('./Components/Reservations/reservations'));
 
 class Routes extends React.Component {
   
@@ -27,6 +27,7 @@ class Routes extends React.Component {
               <Route path="/newcontract" exact component={NewContract} />
               <Route path="/contracts" exact component={Contracts} />
               <Route path="/administration" exact component={Administration} />
+              <Route path="/reservations" exact component={Reservations} />
               <Route path="/login" exact component={Login} />
               <Route path="/" exact component={Home} />
             </Switch>

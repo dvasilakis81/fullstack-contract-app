@@ -57,10 +57,12 @@ class Header extends React.Component {
       accountAnchorEl: false,
       navigateToLogin: false,
       navigateToCreateNewContact: false,
-      navigateToAdministration: false
+      navigateToAdministration: false,
+      navigateToReservations: false
     }
 
     this.gotoAdministration = this.gotoAdministration.bind(this);
+    this.gotoReservations  = this.gotoReservations .bind(this);    
     this.createNewContract = this.createNewContract.bind(this);
     this.logout = this.logout.bind(this);
     this.handleAccountMenuOpen = this.handleAccountMenuOpen.bind(this);
@@ -80,9 +82,9 @@ class Header extends React.Component {
       keepMounted
       open={Boolean(this.state.accountAnchorEl)}
       onClose={this.handleMenuClose}>
+      <MenuItem onClick={this.gotoReservations} style={{ transform: document.getElementById('root').style.transform }}>Κρατήσεις</MenuItem>
       <MenuItem onClick={this.logout} style={{ transform: document.getElementById('root').style.transform }}>Έξοδος</MenuItem>
-    </Menu>
-  };
+    </Menu>  };
 
   handleMenuClose() {
     this.setState({ accountAnchorEl: null })
@@ -102,13 +104,13 @@ class Header extends React.Component {
   }
 
   getHeaderAction(title, showAdministrationOption, showNewContractOption) {
-    
+
     return (
       <div style={{ width: '100%' }}>
         <AppBar style={this.props.hstyle && this.props.hstyle === '2' ? styles.stickyHeader2 : styles.stickyHeader}>
           <Toolbar>
             {this.getArrowBackIcon()}
-            <Typography variant="h5" color="inherit" style={styles.title}>              
+            <Typography variant="h5" color="inherit" style={styles.title}>
               {title}
             </Typography>
             {this.getAdministrationAction(showAdministrationOption)}
@@ -135,23 +137,25 @@ class Header extends React.Component {
   }
 
   gotoAdministration() {
-    this.setState({ navigateToLogin: false, navigateToCreateNewContact: false, navigateToAdministration: true });
+    this.setState({ navigateToLogin: false, navigateToCreateNewContact: false, navigateToAdministration: true, navigateToReservations: false });
   }
-
+  gotoReservations() {
+    this.setState({ navigateToLogin: false, navigateToCreateNewContact: false, navigateToAdministration: false, navigateToReservations:true });
+  }
   createNewContract() {
-    this.setState({ navigateToLogin: false, navigateToCreateNewContact: true, navigateToAdministration: false });
+    this.setState({ navigateToLogin: false, navigateToCreateNewContact: true, navigateToAdministration: false, navigateToReservations: false });
   }
 
   logout() {
     resetData(store)
-    this.setState({ navigateToLogin: true, navigateToCreateNewContact: false, navigateToAdministration: false });
+    this.setState({ navigateToLogin: true, navigateToCreateNewContact: false, navigateToAdministration: false, navigateToReservations: false });
   }
 
   getAdministrationAction(showAdministrationOption) {
-    var accessToAdmin = false
+    var accessToAdmin = false;
     if (this.props.token && this.props.token.data) {
       if (this.props.token.data.role === 1 && showAdministrationOption === true)
-        accessToAdmin = true
+        accessToAdmin = true;
     }
 
     //if (showAdministrationOption) {
@@ -207,6 +211,8 @@ class Header extends React.Component {
       return <Redirect push to='/administration' />
     else if (this.state.navigateToCreateNewContact)
       return <Redirect push to='/newcontract' />
+    else if (this.state.navigateToReservations)
+      return <Redirect push to='/reservations' />
     else {
       return (
         <div style={{ width: '100%', display: 'flex', flexDirection: 'row', flex: 1 }}>

@@ -156,7 +156,8 @@ class NewAccountForm extends Component {
 			TransmissionDocumentProtocolDate: this.props.location.state.MonitoringCommittee ? this.props.location.state.MonitoringCommittee[0].TransmissionDocumentProtocolDate : '',
 			PracticalDate: this.props.location.state.MonitoringCommittee ? this.props.location.state.MonitoringCommittee[0].PracticalDate : '',
 			GivenPhysicalObjectContentTime: this.props.location.state.MonitoringCommittee ? this.props.location.state.MonitoringCommittee[0].GivenPhysicalObjectContentTime : '',
-			cc: this.props.location.state.cc ? this.props.location.state.cc : []
+			cc: this.props.location.state.cc ? this.props.location.state.cc : [],
+			accountReservations: this.props.location.accountReservations ? this.props.location.accountReservations : []
 		}
 
 		this.setCheckboxValue = this.setCheckboxValue.bind(this);
@@ -188,7 +189,6 @@ class NewAccountForm extends Component {
 				console.log(msg);
 			});
 		}
-
 	}
 
 	handleSubmit(e) {
@@ -490,12 +490,11 @@ class NewAccountForm extends Component {
 				{this.getDeliveryGoodsDate()}
 			</div>
 		</>
-	}
-
+	}	
 	getInvoiceInfo() {
-		var contractDetails = this.props.isSearchMode ? this.props.contractDetailsSearchMode : this.props.contractDetails
-		return <>
-			<header style={useStyles.category}>Στοιχεία Τιμολογίου</header>
+					var contractDetails = this.props.isSearchMode ? this.props.contractDetailsSearchMode : this.props.contractDetails
+		return<>
+			< header style = { useStyles.category } > Στοιχεία Τιμολογίου</header>
 			<div style={useStyles.divRowFlex}>
 				<MyTextField tm={getInvoiceTooltipTemplate(this.state, contractDetails.ConcessionaireName, 5)} tp='date' title='Ημ/νία Παραλαβής Τιμολογίου' id='InvoiceDeliveredDate' stateValue={this.state.InvoiceDeliveredDate} isRequired={false} isDisabled={false} onChange={this.onChange} inputProps={{ style: { textAlign: 'center' } }} isRequired={false} />
 				<ProtocolInput tm1={getInvoiceTooltipTemplate(this.state, contractDetails.ConcessionaireName, 3)} tm2={getInvoiceTooltipTemplate(this.state, contractDetails.ConcessionaireName, 4)} title='Α.Π. Ημ/νίας Παραλαβής Τιμολογίου' idn='InvoiceDeliveredDateProtocolNumber' idd='InvoiceDeliveredDateProtocolDate' protocolNumber={this.state.InvoiceDeliveredDateProtocolNumber} protocolDate={this.state.InvoiceDeliveredDateProtocolDate} onChange={this.onChange} tp1='text' tp2='date' isRequired={false} />
@@ -503,7 +502,6 @@ class NewAccountForm extends Component {
 			</div>
 		</>
 	}
-
 	getSignaturesForAccount() {
 		return <>
 			<header style={useStyles.category}>Υπογραφές για αρχείο '{this.state.AccountNumber}ος Λογαριασμός' </header>
@@ -575,7 +573,7 @@ class NewAccountForm extends Component {
 									<Icon style={{ marginLeft: '10px', padding: '10px' }}>save</Icon>,
 									this.state.submitButtonDisabled)}
 								{this.getDocumentsInfo()}
-								{this.getBasicAccountInfo()}
+								{this.getBasicAccountInfo()}								
 								{this.getInvoiceInfo()}
 								{this.getMonitoringCommiteeInfo()}
 								{/* {this.getDownpaymentInfo()} */}

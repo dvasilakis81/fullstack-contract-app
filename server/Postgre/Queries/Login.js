@@ -5,6 +5,7 @@ const bcryptNodejs = require('bcrypt-nodejs');
 const jwt = require('jsonwebtoken');
 const util = require('util')
 var helper = require('../../HelperMethods/helpermethods')
+var dbUserReservations = require('./UserReservations')
 const secretKey = process.env.API_SECRET || 'athens_2019';
 // const dbConfig = require('../dbConfig')
 // const Pool = require('pg').Pool
@@ -157,14 +158,14 @@ const deleteUser = (req, res, next) => {
 }
 
 const login = (request, response, next) => {
-  var ret = ''
-  const username = request.query.u
-  const password = request.query.p
+  var ret = '';
+  const username = request.query.u;
+  const password = request.query.p;
 
-  var sqlQuery = 'SELECT * ' +
+  var sqlQuery = 'SELECT *, ' +
+    '(SELECT json_agg(UserReservations) FROM (SELECT * FROM "Ordering"."UserReservations" as ur WHERE ur."UserId" = u."Id") UserReservations) AS UserReservations ' +
     'FROM "Ordering"."User" as u ' +
-    'WHERE u."Username"=' + helper.addQuotes(username)
-
+    'WHERE u."Username"=' + helper.addQuotes(username);
   pool.query(sqlQuery, (error, results) => {
     if (error) {
       next(error);
@@ -172,22 +173,38 @@ const login = (request, response, next) => {
     else {
       if (results.rows.length === 1) {
         bcryptNodejs.compare(password, results.rows[0].Password, function (err, res) {
-          if (!res) {
-            response.status(200).json({ success: false, message: 'Λάθος κωδικός!' });
-          } else if (err) {
+          if (res === false)
             response.status(200).json({ success: false, message: 'Έγινε κάποιο σφάλμα κατά την επιβεβαίωση των στοιχείων' });
-          }
+          else if (err)
+            response.status(200).json({ success: false, message: 'Λάθος κωδικός!' });
           else {
             //let token = jwt.sign({ username: username }, secretKey, { expiresIn: (process.env.TOKEN_EXPIRES_IN || '2h') });            
             let token = jwt.sign({ username: username }, secretKey, { expiresIn: ('2h') });
-            response.status(200).json({
-              success: true,
-              id: results.rows[0].Id,
-              username: results.rows[0].Username,
-              role: results.rows[0].Role,
-              token: token,
-              expiresAt: getExpiresAt(token)
-            });
+            var userReservations = null;
+            var userLoginInfo = results.rows[0];
+            if (results.rows[0].userreservations) {
+              userReservations = results.rows[0].userreservations;
+              response.status(200).json({
+                success: true,
+                id: userId,
+                username: userLoginInfo.Username,
+                role: userLoginInfo.Role,
+                token: token,
+                expiresAt: helper.getExpiresAt(token, jwt, secretKey),
+                reservations: userReservations
+              });
+            } else {
+              pool.query('SELECT * FROM "Ordering"."Reservations" as r ORDER BY r."Order" ASC', (error, results) => {
+                if (error)
+                  next(error);
+                else {
+                  userReservations = results.rows;
+                  dbUserReservations.createUserReservationForLoginUser(response, token, userLoginInfo, userReservations, jwt, secretKey);
+
+                }
+              })
+
+            }
           }
         });
       }
@@ -205,9 +222,9 @@ const checkToken = (req, res, next) => {
   if (token) {
     if (token.startsWith('Bearer '))
       token = token.slice(7, token.length);
-      
+
     jwt.verify(token, secretKey, (err, decoded) => {
-      if (err) {        
+      if (err) {
         return res.status(200).json({
           tokenIsValid: false,
           message: 'Token is not valid',
@@ -221,24 +238,12 @@ const checkToken = (req, res, next) => {
       }
     });
   } else {
-    console.log("CHECKTOKEN\nprotocol:" + req.protocol + "\nhostname: " + req.hostname + "\npath: " + req.path + "\noriginalUrl: " + req.originalUrl);    
+    console.log("CHECKTOKEN\nprotocol:" + req.protocol + "\nhostname: " + req.hostname + "\npath: " + req.path + "\noriginalUrl: " + req.originalUrl);
     return res.status(200).json({
       tokenIsValid: false,
       message: 'Auth token is not supplied'
-    });    
-  }
-};
-
-const getExpiresAt = (token) => {
-  var expiresAt = new Date(0);
-
-  if (token) {
-    jwt.verify(token, secretKey, (err, decoded) => {
-      expiresAt.setUTCSeconds(decoded.exp);
     });
   }
-  
-  return expiresAt;
 };
 
 module.exports = {

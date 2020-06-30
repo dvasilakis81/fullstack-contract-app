@@ -22,6 +22,7 @@ var dbAccount = require('./Postgre/Queries/Account')
 var dbError = require('./Postgre/Queries/Error')
 var dbLogin = require('./Postgre/Queries/Login')
 var dbParametric = require('./Postgre/Queries/Parametric')
+var dbUserReservations = require('./Postgre/Queries/UserReservations')
 var dbAay = require('./Postgre/Queries/AAY')
 var dbBoardDecision = require('./Postgre/Queries/BoardDecision')
 var dbDecisionCoordinatorDecentrilizedAdministration = require('./Postgre/Queries/DecisionCoordinatorDecentrilizedAdministration')
@@ -170,6 +171,10 @@ app.post('/createsignatorytype', dbLogin.checkToken, dbParametric.createSignator
 app.post('/updatesignatorytype', dbLogin.checkToken, dbParametric.updateSignatoryType);
 app.post('/deletesignatorytype', dbLogin.checkToken, dbParametric.deleteSignatoryType);
 app.post('/deleteerrormessage', dbLogin.checkToken, dbParametric.deleteErrorMessage);
+
+app.post('/createuserreservation', dbLogin.checkToken, dbUserReservations.createUserReservation);
+app.post('/updateuserreservation', dbLogin.checkToken, dbUserReservations.updateUserReservation);
+app.post('/deleteuserreservation', dbLogin.checkToken, dbUserReservations.deleteUserReservation);
 
 app.get('/directions', dbLogin.checkToken, dbParametric.getDirections);
 app.get('/contracttypes', dbLogin.checkToken, dbParametric.getContractTypes);

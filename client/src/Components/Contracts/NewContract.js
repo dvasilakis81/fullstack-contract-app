@@ -159,7 +159,11 @@ class NewContract extends Component {
 
 		if (this.state.ContractId) {
 			axios.post(getHostUrl() + '/updatecontract', this.state, { headers: { Authorization: 'Bearer ' + this.props.token.data.token } }).then(res => {
-				var msg = 'Η σύμβαση με πρωτόκολλο "' + this.state.ProtocolNumber + '/' + getDateFormatForDocument(this.state.ProtocolDate) + '" επεξεργάστηκε επιτυχώς!!!'
+				var msg = ''
+				if (this.state.ProtocolNumber)
+					msg = 'Η σύμβαση με πρωτόκολλο "' + this.state.ProtocolNumber + '/' + getDateFormatForDocument(this.state.ProtocolDate) + '" επεξεργάστηκε επιτυχώς!!!'
+				else
+					msg = 'Η σύμβαση επεξεργάστηκε επιτυχώς!!!'
 				this.setState({ message: msg, openMessage: true, variant: 'success', submitButtonDisabled: false });
 				store.dispatch({ type: 'UPDATE_CONTRACT', payload: res.data })
 
@@ -174,8 +178,13 @@ class NewContract extends Component {
 			axios.post(getHostUrl() + '/contractexists', this.state, { headers: { Authorization: 'Bearer ' + this.props.token.data.token } }).then(res => {
 				var contractExists = res.data;
 				if (contractExists === true) {
-					var msg = 'Η σύμβαση με αριθμό πρωτοκόλλου ' + this.state.ProtocolNumber + ' ήδη υπάρχει';
-					this.setState({ message: msg, openMessage: true, variant: 'info', submitButtonDisabled: false });
+					var msg = ''
+					if (this.state.ProtocolNumber)
+						msg = 'Η σύμβαση με αριθμό πρωτοκόλλου ' + this.state.ProtocolNumber + ' ήδη υπάρχει';
+					else
+						msg = 'Η σύμβαση ήδη υπάρχει!!!'
+					var msg =
+						this.setState({ message: msg, openMessage: true, variant: 'info', submitButtonDisabled: false });
 				}
 				else {
 					axios.post(getHostUrl() + '/insertcontract', this.state, { headers: { Authorization: 'Bearer ' + this.props.token.data.token } }).then(res => {
@@ -187,8 +196,8 @@ class NewContract extends Component {
 						snackbarInfo.openMessage = true;
 						snackbarInfo.message = msg;
 						snackbarInfo.variant = 'success';
+						
 						store.dispatch({ type: 'SHOW_SNACKBAR', payload: snackbarInfo });
-
 						this.props.history.goBack();
 					}).catch(error => {
 						var msg = 'Αποτυχία δημιουργίας σύμβασης !!\n' + error;

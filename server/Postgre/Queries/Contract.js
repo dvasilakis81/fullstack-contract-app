@@ -82,7 +82,7 @@ function getSelectFromClauses(loginUserId) {
 }
 
 function gerOrderBy() {
-  return 'ORDER BY c."DateCreated" DESC '
+  return 'ORDER BY c."Start" DESC '
 }
 
 const getContracts = (request, response, next) => {
