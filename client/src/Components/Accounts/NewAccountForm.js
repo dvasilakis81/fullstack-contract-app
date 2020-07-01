@@ -575,8 +575,7 @@ class NewAccountForm extends Component {
 								{this.getDocumentsInfo()}
 								{this.getBasicAccountInfo()}								
 								{this.getInvoiceInfo()}
-								{this.getMonitoringCommiteeInfo()}
-								{/* {this.getDownpaymentInfo()} */}
+								{this.getMonitoringCommiteeInfo()}								
 								{this.getSignaturesForAccount()}
 								{this.getSignaturesForTransmission()}
 							</form >

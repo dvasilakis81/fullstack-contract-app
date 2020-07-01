@@ -35,8 +35,7 @@ export function deleteContract(data, token) {
 
 
 export function getAccount(token, contractId, accountNumber) {
-  const request = axios.get(`${URL}/account?ci=` + contractId + '&an=' + accountNumber, { headers: { Authorization: 'Bearer ' + token } }).then(response => response.data)
-
+  const request = axios.get(`${URL}/getaccount?ci=` + contractId + '&an=' + accountNumber, { headers: { Authorization: 'Bearer ' + token } }).then(response => response.data)
   return {
     type: 'GET_ACCOUNT',
     payload: request
@@ -73,6 +72,15 @@ export function createAccount(data, token) {
 export function updateAccount(data, token) {
 
   const request = axios.post(`${URL}/updateaccount`, data, { headers: { Authorization: 'Bearer ' + token } })
+  return {
+    type: 'UPDATE_ACCOUNT',
+    payload: request
+  }
+}
+
+export function syncAccountReservations(data, config) {
+
+  const request = axios.post(`${URL}/syncaccountreservations`, data, config)
   return {
     type: 'UPDATE_ACCOUNT',
     payload: request

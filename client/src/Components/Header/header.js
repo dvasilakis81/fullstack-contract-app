@@ -82,7 +82,7 @@ class Header extends React.Component {
       keepMounted
       open={Boolean(this.state.accountAnchorEl)}
       onClose={this.handleMenuClose}>
-      <MenuItem onClick={this.gotoReservations} style={{ transform: document.getElementById('root').style.transform }}>Κρατήσεις</MenuItem>
+      <MenuItem onClick={this.gotoReservations} style={{ transform: document.getElementById('root').style.transform }}>Φ.Π.Α. - Κρατήσεις</MenuItem>
       <MenuItem onClick={this.logout} style={{ transform: document.getElementById('root').style.transform }}>Έξοδος</MenuItem>
     </Menu>  };
 

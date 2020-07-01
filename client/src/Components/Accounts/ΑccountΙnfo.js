@@ -1,12 +1,16 @@
 /* eslint-disable eqeqeq */
 import React from 'react';
 import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
 import { Redirect } from "react-router-dom";
 import { Grid, Paper, Typography, Button } from '@material-ui/core';
 import { withStyles } from "@material-ui/core/styles";
 import axios from 'axios';
 import NumberFormat from 'react-number-format';
 import LoadingOverlay from 'react-loading-overlay'
+import { Scrollbars } from 'react-custom-scrollbars';
+import SaveAltIcon from '@material-ui/icons/SaveAlt';
+import EditIcon from '@material-ui/icons/Edit';
 
 import {
 	getAmountInWords, getHostUrl, getDateFormat, getDateFormatForDocument,
@@ -14,13 +18,10 @@ import {
 	getServerErrorResponseMessage
 } from '../../Helper/helpermethods';
 import store from '../../Redux/Store/store'
+import { syncAccountReservations } from '../../Redux/Actions';
 import MySnackbar from '../Common/MySnackbar';
 import { getFooterTemplate, showGenericMessage } from '../Common/templates'
 import Body from '../../HOC/Body/body';
-import { Scrollbars } from 'react-custom-scrollbars';
-import SaveAltIcon from '@material-ui/icons/SaveAlt';
-import EditIcon from '@material-ui/icons/Edit';
-
 import { createTransmissionDocument, createAccountDocument } from './PostDataCreateDocument'
 
 var downloadjs = require('downloadjs');
@@ -53,17 +54,22 @@ class AccountInfo extends React.Component {
 			message: '',
 			variant: '',
 			submitButtonDisabled: false,
+			submitAccountReservationsDisabled: false,
 			navigateToEditAccount: false,
 		}
 
 		this.editAccount = this.editAccount.bind(this);
 		this.createDocument1 = this.createDocument1.bind(this);
 		this.createDocument2 = this.createDocument2.bind(this);
+		this.syncReservations = this.syncReservations.bind(this);
 	}
 
 	// componentDidMount() {
 	// 	this.props.getAccount(this.props.token.data.token, this.props.contractId, this.props.accountNumber)
 	// }
+	componentDidMount(){
+		store.dispatch({ type: "RESET_UPDATE_ACCOUNT", payload: null });
+	}
 	handleClose = (event, reason) => {
 		this.setState({ openMessage: false });
 	}
@@ -147,6 +153,13 @@ class AccountInfo extends React.Component {
 						<SaveAltIcon />
 						Δημιουργία αρχείου '{accountDetails.Number}ος Λογαριασμός.docx'
           </Button>
+					<Button variant="contained"
+						style={{ margin: '5px', background: '#17d3cd', textTransform: 'none', fontSize: '16px' }}
+						disabled={this.state.submitAccountReservationsDisabled}
+						onClick={this.syncReservations}>
+						{/* <SaveAltIcon /> */}
+						Συγχρονισμός Κρατήσεων
+          </Button>
 				</Paper>
 			</Grid>
 			<Grid item>
@@ -220,6 +233,30 @@ class AccountInfo extends React.Component {
 
 	}
 
+	syncReservations(e) {
+		e.preventDefault();
+
+		this.setState({ submitAccountReservationsDisabled: true });
+
+		var dataToPost = {
+			userId: this.props.token.data.id,
+			accountInfo: this.props.account,
+			userreservations: this.props.token.data.reservations
+		};
+
+		var config = {
+			headers: { 'Content-Type': 'application/json;charset=utf-8', Authorization: 'Bearer ' + this.props.token.data.token }
+		};
+		this.props.syncAccountReservations(dataToPost, config);
+
+		// axios.post(getHostUrl() + '/syncreservations', dataToPost, config)
+		// 	.then(res => {
+		// 		this.setState({ message: '', openMessage: false, variant: 'success', submitButtonDisabled: false });
+		// 	}).catch(error => {
+		// 		this.setState({ message: <><div>Αποτυχής προσπάθεια δημιουργίας αρχείου!</div><div>{getServerErrorResponseMessage(error)}</div></>, openMessage: true, variant: 'error', submitButtonDisabled: false });
+		// 	})
+	}
+
 	getRemainAmountOfContract(am1) {
 		var contractDetails = this.props.isSearchMode ? this.props.contractDetailsSearchMode : this.props.contractDetails;
 		return Number(contractDetails.TotalAmount) - Number(am1)
@@ -266,18 +303,18 @@ class AccountInfo extends React.Component {
 				</Paper>
 			</Grid>
 			<div style={{ display: 'block', padding: '0px', width: '100%' }}>
-				{this.getReservations(accountDetails.AmountPure)}
+				{this.getReservations(accountDetails)}
 			</div>
 		</>
 	}
-	getReservations(AmountPure) {
-		return ((this.props.reservations) ?
-			this.props.reservations.map((value, index) => {
+	getReservations(accountDetails) {
+		return ((accountDetails.accountreservations) ?
+			accountDetails.accountreservations.map((value, index) => {
 				var percentage = parseFloat(value.Percentage);
 				var stamp = parseFloat(value.Stamp);
 				var stampOGA = parseFloat(value.StampOGA);
 				if (value.IsReservation) {
-					let a1 = (Number(AmountPure) * Number(percentage / 100)).toFixed(2);
+					let a1 = (Number(accountDetails.AmountPure) * Number(percentage / 100)).toFixed(2);
 					let a2 = (Number(a1) * Number(stamp / 100)).toFixed(2);
 					let a3 = (Number(a2) * Number(stampOGA / 100)).toFixed(2);
 					return (this.getReservationTemplate(value, Number(a1), Number(a2), Number(a3), index))
@@ -328,47 +365,6 @@ class AccountInfo extends React.Component {
 				</div>
 			)
 		}
-	}
-	//#endregion
-
-	//#region AAY
-	getAAYLabelTemplate() {
-		return <Grid item>
-			<Paper style={useStyles.category} square={true}>
-				<Typography>
-					<b>Στοιχεία Απόφασης Ανάληψης Υποχρέωσης (AAY)</b>
-				</Typography>
-			</Paper>
-		</Grid>
-	}
-	getAAYTemplate(contractDetails, accountDetails) {
-		var AAY = accountDetails && accountDetails.aay && accountDetails.aay.length > 0 ? accountDetails.aay[0] : {};
-
-		if (AAY)
-			return <>
-				{this.getAAYLabelTemplate()}
-				<Grid item>
-					<Paper style={{ padding: '5px' }} square={true}>
-						<Typography>
-							<b>ΑΑΥ/ΕΤΟΣ (ΕΑΔ):</b><span>{AAY.Value}/{extractYearFromDate(AAY.ProtocolDate)}</span><span style={{ marginLeft: '5px' }}>(ΕΑΔ </span>{AAY.EadNumber}<span>)</span>
-							<b style={useStyles.distanceBetweenValues}>Α.Π. ΑΑΥ:</b><span>{AAY.ProtocolNumber}/{getDateFormatForDocument(AAY.ProtocolDate)}</span>
-							<b style={useStyles.distanceBetweenValues}>ΑΔΑ:</b><span>{AAY.ADA}</span>
-							<b style={useStyles.distanceBetweenValues}>ΑΑΥ ΠΡΟΗΓΟΥΜΕΝΟΥ ΕΤΟΥΣ (για δαπάνες ΠΟΕ):</b> {AAY.PreviousYear}
-						</Typography>
-					</Paper>
-				</Grid>
-			</>
-		else
-			return <>
-				{this.getAAYLabelTemplate()}
-				<Grid item>
-					<Paper style={{ padding: '5px' }} square={true}>
-						<Typography>
-							<span style={{ color: 'red' }}>Δεν έχουν συμπληρωθεί τα πεδία για την Απόφαση Ανάληψης Υποχρέωσης</span>
-						</Typography>
-					</Paper>
-				</Grid>
-			</>
 	}
 	//#endregion
 
@@ -788,9 +784,9 @@ class AccountInfo extends React.Component {
 										</Paper>
 									</Grid>
 								)
-							} 
-							else 
-							return <></>
+							}
+							else
+								return <></>
 						})
 					}
 				</>
@@ -891,42 +887,53 @@ class AccountInfo extends React.Component {
 		var contractInfo = this.props.isSearchMode ? this.props.contractDetailsSearchMode : this.props.contractDetails;
 		if (accountInfo)
 			return (
-				<Body>
-					<div style={{ width: '100%', height: '100%', display: 'flex', flexFlow: 'column', flexWrap: 'wrap', overflowY: 'hidden' }}>
-						<div style={{ display: 'flex', flexFlow: 'row', flex: '1', overflowY: 'hidden', overflowX: 'hidden', flexWrap: 'wrap' }}>
-							<Scrollbars style={{ display: 'flex', flexFlow: 'column', flexWrap: 'wrap', flexBasis: '100%', flex: '1', backgroundColor: '#fff' }}>
-								<LoadingOverlay
-									active={this.state.submitButtonDisabled ? true : false}
-									spinner
-									text='Το αρχείο δημιουργείται ...'
-									styles={{
-										overlay: (base) => ({
-											...base,
-											textAlign: 'middle'
-										})
-									}}>
-									<Grid container xl style={{ flexGrow: '1', alignItems: 'stretch' }} direction='column' >
-										{this.getDocumentsInfo(contractInfo, accountInfo)}
-										{this.getCCInfoTemplate(contractInfo, accountInfo)}
-										{this.getGeneralAccountInfo(contractInfo, accountInfo)}
-										{this.getReservationsTemplate(contractInfo, accountInfo)}
-										{/* {this.getAAYTemplate(contractInfo, accountInfo)} */}
-										{this.getInvoiceTemplate(contractInfo, accountInfo)}
-										{this.getLawArticleForDownpaymentTemplate(accountInfo)}
-										{this.getDecisionBoardTemplate(contractInfo, accountInfo)}
-										{this.getDecisionCoordinatorDecentrilizedAdministrationTemplate(contractInfo, accountInfo)}
-										{this.getCourtOfAuditorsInfoTemplate(contractInfo, accountInfo)}
-										{this.getMonitoringCommitteeInfoTemplate(contractInfo, accountInfo)}
-										{this.getSignatoriesForDocument1(contractInfo, accountInfo)}
-										{this.getSignatoriesForDocument2(contractInfo, accountInfo)}
-									</Grid>
-								</LoadingOverlay>
-							</Scrollbars>
+				<LoadingOverlay
+					active={this.props.updateAccountPending ? true : false}
+					spinner
+					text='Συγχρονισμός κρατήσεων λογαριασμού ...'
+					styles={{
+						overlay: (base) => ({
+							...base,
+							width: '100%',
+							textAlign: 'middle'
+						})
+					}}>
+					<Body>
+						<div style={{ width: '100%', height: '100%', display: 'flex', flexFlow: 'column', flexWrap: 'wrap', overflowY: 'hidden' }}>
+							<div style={{ display: 'flex', flexFlow: 'row', flex: '1', overflowY: 'hidden', overflowX: 'hidden', flexWrap: 'wrap' }}>
+								<Scrollbars style={{ display: 'flex', flexFlow: 'column', flexWrap: 'wrap', flexBasis: '100%', flex: '1', backgroundColor: '#fff' }}>
+									<LoadingOverlay
+										active={this.state.submitButtonDisabled ? true : false}
+										spinner
+										text='Το αρχείο δημιουργείται ...'
+										styles={{
+											overlay: (base) => ({
+												...base,
+												textAlign: 'middle'
+											})
+										}}>
+										<Grid container xl style={{ flexGrow: '1', alignItems: 'stretch' }} direction='column' >
+											{this.getDocumentsInfo(contractInfo, accountInfo)}
+											{this.getCCInfoTemplate(contractInfo, accountInfo)}
+											{this.getGeneralAccountInfo(contractInfo, accountInfo)}
+											{this.getReservationsTemplate(contractInfo, accountInfo)}
+											{this.getInvoiceTemplate(contractInfo, accountInfo)}
+											{this.getLawArticleForDownpaymentTemplate(accountInfo)}
+											{this.getDecisionBoardTemplate(contractInfo, accountInfo)}
+											{this.getDecisionCoordinatorDecentrilizedAdministrationTemplate(contractInfo, accountInfo)}
+											{this.getCourtOfAuditorsInfoTemplate(contractInfo, accountInfo)}
+											{this.getMonitoringCommitteeInfoTemplate(contractInfo, accountInfo)}
+											{this.getSignatoriesForDocument1(contractInfo, accountInfo)}
+											{this.getSignatoriesForDocument2(contractInfo, accountInfo)}
+										</Grid>
+									</LoadingOverlay>
+								</Scrollbars>
+							</div>
+							{getFooterTemplate(this.props.token)}
 						</div>
-						{getFooterTemplate(this.props.token)}
-					</div>
-					<MySnackbar state={this.state} duration={5000} handleClose={this.handleClose} vertical='bottom' horizontal='right' useScreenDimensions={true} />
-				</Body>
+						<MySnackbar state={this.state} duration={5000} handleClose={this.handleClose} vertical='bottom' horizontal='right' useScreenDimensions={true} />
+					</Body>
+				</LoadingOverlay>
 			)
 		else
 			return (<></>)
@@ -940,6 +947,20 @@ class AccountInfo extends React.Component {
 			store.dispatch({ type: "RESET_ACTION", payload: null });
 			return <Redirect push to="/login" />;
 		} else {
+			if (this.props.updateAccountRejected) {
+				if (this.state.openMessage === false) {
+					this.setState({ message: <><div>Σφάλμα επικοινωνίας με τον διακομιστή!</div></>, openMessage: true, variant: 'error', submitAccountReservationsDisabled: false });
+					store.dispatch({ type: "RESET_UPDATE_ACCOUNT", payload: null });
+				}
+			}
+
+			if (this.props.updatedAccount) {
+				if (this.state.openMessage === false) {
+					this.setState({ message: <><div>Ο συγχρονισμός των κρατήσεων έγινε επιτυχώς!</div></>, openMessage: true, variant: 'success', submitAccountReservationsDisabled: false });
+					store.dispatch({ type: "RESET_UPDATE_ACCOUNT", payload: null });
+				}
+			}
+
 			if (accountInfo) {
 				var contractDetails = this.props.isSearchMode ? this.props.contractDetailsSearchMode : this.props.contractDetails;
 				paidAmount.PureUntilToday = 0;
@@ -964,20 +985,27 @@ class AccountInfo extends React.Component {
 					return this.getAccountInfoTemplate(accountInfo)
 			}
 			else
-				return showGenericMessage('Ο λογαριασμός δεν βρέθηκε!. Παρακαλώ ξαναπροσπαθήστε!', true)
+				return showGenericMessage('Ο λογαριασμός δεν βρέθηκε! Παρακαλώ ξαναπροσπαθήστε!', true)
 		}
 	}
 }
 
 function mapStateToProps(state) {
 	return {
+		account: state.account_reducer.account,
 		contractDetails: state.contracts_reducer.contractDetails,
 		contractDetailsSearchMode: state.contracts_reducer.contractDetailsSearchMode,
 		isSearchMode: state.contracts_reducer.isSearchMode,
-		account: state.account_reducer.account,
+		updateAccountPending: state.contracts_reducer.updateAccountPending,
+		updateAccountRejected: state.contracts_reducer.updateAccountRejected,
+		updatedAccount: state.contracts_reducer.updatedAccount,		
 		reservations: state.parametricdata_reducer.reservations,
 		token: state.token_reducer.token
 	}
 }
 
-export default connect(mapStateToProps, null)(withStyles(useStyles)(AccountInfo))
+function mapDispatchToProps(dispatch) {
+  return bindActionCreators({ syncAccountReservations }, dispatch);
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(withStyles(useStyles)(AccountInfo))

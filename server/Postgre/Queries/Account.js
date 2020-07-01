@@ -76,6 +76,7 @@ const getAccountById = (request, response, next) => {
   // try {
   var sqlQuery = util.format('SELECT *, ' +
     '(SELECT json_agg(Account) FROM (SELECT acc."ProtocolNumber" as firstAccountProtocolNumber, acc."ProtocolDate" as firstAccountProtocolDate FROM "Ordering"."Account" as acc WHERE acc."Number"=1 AND acc."ContractId"=%s) Account) AS FirstProtocolInfo, ' +
+    '(SELECT json_agg(AccountReservations) FROM (SELECT * FROM "Ordering"."AccountReservations" as accres WHERE accres."AccountId" = a."Id") AccountReservations) AS AccountReservations, ' +
     '(SELECT json_agg(Invoice) FROM (SELECT * FROM "Ordering"."Invoice" as i WHERE i."AccountId" = a."Id") Invoice) AS Invoice, ' +
     '(SELECT json_agg(CC) FROM (SELECT * FROM "Ordering"."CC" as cc WHERE cc."AccountId" = a."Id") CC) AS CC, ' +
     '(SELECT json_agg(MonitoringCommittee) FROM (SELECT * FROM "Ordering"."MonitoringCommittee" as mm WHERE mm."AccountId" = a."Id") MonitoringCommittee) AS MonitoringCommittee, ' +
@@ -91,7 +92,7 @@ const getAccountById = (request, response, next) => {
       helper.consoleLog("Failed to get account: \n" + error.message);
     }
     else {
-      helper.consoleLog("Account requested\n");
+      helper.consoleLog("Account.js: Account requested\n");
       var ret = results.rows && results.rows.length > 0 ? results.rows[0] : undefined
       response.status(200).json(ret);
     }

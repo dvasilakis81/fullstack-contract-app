@@ -30,6 +30,7 @@ var dbCourtOfAuditors = require('./Postgre/Queries/CourtOfAuditors')
 var dbAuthorDocumentedRequest = require('./Postgre/Queries/AuthorDocumentedRequest')
 var dbSnippetPractical = require('./Postgre/Queries/SnippetPractical')
 var dbCC = require('./Postgre/Queries/CC')
+var dbAccountReservations = require('./Postgre/Queries/AccountReservations')
 
 var helper = require('./HelperMethods/helpermethods')
 const ENV = process.env.NODE_ENV;
@@ -192,11 +193,11 @@ app.get('/searchcontracts', dbContract.searchContracts);
 app.post('/insertcontract', dbLogin.checkToken, dbContract.insertContract);
 app.post('/deletecontract', dbLogin.checkToken, dbContract.deleteContract);
 app.post('/updatecontract', dbLogin.checkToken, dbContract.updateContract);
-app.get('/account', dbLogin.checkToken, dbAccount.getAccountById);
 app.get('/getfirstaccountprotocolinfo', dbLogin.checkToken, dbAccount.getFirstAccountProtocolInfo);
 app.get('/getremainamountofcontract', dbLogin.checkToken, dbAccount.getRemainAmountOfContract);
 app.get('/getaccountsinfo', dbLogin.checkToken, dbAccount.getAccountsInfo);
 
+app.get('/getaccount', dbLogin.checkToken, dbAccount.getAccountById);
 app.post('/insertaccount', dbLogin.checkToken, dbAccount.insertAccount);
 app.post('/updateaccount', dbLogin.checkToken, dbAccount.updateAccount);
 
@@ -219,6 +220,7 @@ app.post('/insertsnippetpractical', dbLogin.checkToken, dbSnippetPractical.inser
 app.post('/updatesnippetpractical', dbLogin.checkToken, dbSnippetPractical.update);
 app.post('/deletesnippetpractical', dbLogin.checkToken, dbSnippetPractical.remove);
 app.post('/getccfrompreviousaccount', dbLogin.checkToken, dbCC.getccfrompreviousaccount);
+app.post('/syncaccountreservations', dbLogin.checkToken, dbAccountReservations.sync);
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));

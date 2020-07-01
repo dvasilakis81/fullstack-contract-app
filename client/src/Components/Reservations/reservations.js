@@ -24,7 +24,7 @@ class Reservations extends Component {
 
     return (
       <div style={{ width: '100%', height: '100%' }}>
-        <Header title="Διαχειριστικό Κρατήσεων" showAdministrationOption={false} showNewContractOption={false} hstyle="2" />
+        <Header title="Διαχειριστικό Φ.Π.Α. - Κρατήσεων" showAdministrationOption={false} showNewContractOption={false} hstyle="2" />
         <ReservationsContainer />
         <MySnackbar state={this.state} duration={5000} handleClose={this.handleClose} vertical='bottom' horizontal='right' useScreenDimensions={true} />
       </div>

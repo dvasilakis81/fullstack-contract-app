@@ -286,11 +286,14 @@ export default function (state = {}, action, root) {
 
 			state = { ...state, createAccountPending: undefined, createAccountRejected: undefined, createdAccount: action.payload };
 			break;
+		case 'RESET_UPDATE_ACCOUNT':
+			state = { ...state, updateAccountPending: undefined , updateAccountRejected: undefined, updatedAccount: undefined };
+			break;
 		case 'UPDATE_ACCOUNT_PENDING':
 			state = { ...state, updateAccountPending: 'Update account pending', updateAccountRejected: undefined, updatedAccount: undefined };
 			break;
 		case 'UPDATE_ACCOUNT_REJECTED':
-			state = { ...state, accountPending: undefined, accountRejected: action.payload, updatedAccount: undefined };
+			state = { ...state, updateAccountPending: undefined, updateAccountRejected: action.payload, updatedAccount: undefined };
 			break;
 		case 'UPDATE_ACCOUNT_FULFILLED':
 			if (state.contractsList) {
@@ -344,7 +347,7 @@ export default function (state = {}, action, root) {
 				};
 			}
 
-			state = { ...state, updateAccountPending: undefined, updateAccountRejected: undefined, updateAccount: action.payload };
+			state = { ...state, updateAccountPending: undefined, updateAccountRejected: undefined, updatedAccount: action.payload };
 			break;
 		case 'INSERT_CONTRACTINFO_PENDING':
 			state = {

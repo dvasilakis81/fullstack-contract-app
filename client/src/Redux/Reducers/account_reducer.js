@@ -5,14 +5,14 @@ export default function (state = {}, action) {
       state = {}
       break;
     case 'GET_ACCOUNT_PENDING':
-      state = { ...state, accountPending: 'Account pending', accountRejected: undefined, account: undefined };
-      break;
-    case 'GET_ACCOUNT_FULFILLED':
-      state = { ...state, accountPending: undefined, accountRejected: undefined, account: action.payload };
+      state = { ...state, getAccountPending: 'Account pending', getAccountRejected: undefined, account: undefined };
       break;
     case 'GET_ACCOUNT_REJECTED':
-      state = { ...state, accountPending: undefined, accountRejected: action.payload };
+      state = { ...state, getAccountPending: undefined, getAccountRejected: action.payload, account: undefined };
       break;    
+    case 'GET_ACCOUNT_FULFILLED':
+      state = { ...state, getAccountPending: undefined, getAccountRejected: undefined, account: action.payload };
+      break;
     default:
       break;
   }

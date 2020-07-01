@@ -178,7 +178,7 @@ const login = (request, response, next) => {
           else if (err)
             response.status(200).json({ success: false, message: 'Λάθος κωδικός!' });
           else {
-            //let token = jwt.sign({ username: username }, secretKey, { expiresIn: (process.env.TOKEN_EXPIRES_IN || '2h') });            
+            //let token = jwt.sign({ username: username }, secretKey, { expiresIn: (process.env.TOKEN_EXPIRES_IN || '2h') });
             let token = jwt.sign({ username: username }, secretKey, { expiresIn: ('2h') });
             var userReservations = null;
             var userLoginInfo = results.rows[0];
@@ -186,7 +186,7 @@ const login = (request, response, next) => {
               userReservations = results.rows[0].userreservations;
               response.status(200).json({
                 success: true,
-                id: userId,
+                id: userLoginInfo.Id,
                 username: userLoginInfo.Username,
                 role: userLoginInfo.Role,
                 token: token,
@@ -200,10 +200,8 @@ const login = (request, response, next) => {
                 else {
                   userReservations = results.rows;
                   dbUserReservations.createUserReservationForLoginUser(response, token, userLoginInfo, userReservations, jwt, secretKey);
-
                 }
               })
-
             }
           }
         });

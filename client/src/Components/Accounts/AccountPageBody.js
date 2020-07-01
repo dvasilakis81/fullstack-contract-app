@@ -12,9 +12,6 @@ import store from '../../Redux/Store/store'
 class AccountContainer extends Component {
   constructor(props) {
     super(props);
-    this.state = {
-      accountExists: this.props.exists,
-    }
   }
 
   componentDidMount() {
@@ -22,13 +19,13 @@ class AccountContainer extends Component {
   }
 
   getAccountTemplate() {
-    if (this.props.accountPending)
+    if (this.props.getAccountPending)
       return showGenericMessage('Αναμονή για τον λογαριασμό ...', false, false)
     else {
-      if (this.props.accountRejected)
+      if (this.props.getAccountRejected)
         return getFailedConnectionWithServer();
       else {
-        if (this.state.accountExists)
+        if (this.props.exists)
           return <AccountInfo contractId={this.props.contractId} accountNumber={this.props.accountNumber} />
         else
           return <Redirect to={{
@@ -51,22 +48,11 @@ class AccountContainer extends Component {
               FirstAccountProtocolNumber: null,
               IsFirstOfTheYear: false,
               cc: [],
-              AayValue: '',
-              AayYear: '',
-              AayADA: '',
-              AayProtocolNumber: '',
-              AayProtocolDate: undefined,
-              AayEadNumber: '',
-              AayPreviousYear: '',
               InvoiceNumber: '',
               InvoiceDate: undefined,
               InvoiceDeliveredDate: undefined,
               InvoiceDeliveredDateProtocolNumber: '',
               InvoiceDeliveredDateProtocolDate: undefined,
-              CC1Value1: '-1',
-              CC1Value2: '-1',
-              CC2Value1: '-1',
-              CC2Value2: '-1',
               SignType1: '-1',
               SignType2: '-1',
               SignType3: '-1',
@@ -80,30 +66,30 @@ class AccountContainer extends Component {
               HasSecondDecisionDS: false,
               HasCourtOfAuditors: false
             }
-          }} />
+          }} />        
       }
     }
   }
 
   render() {
 
-    if (this.props.account && this.props.account.tokenIsValid === false){
+    if (this.props.account && this.props.account.tokenIsValid === false) {
       resetData(store)
       return <Redirect push to={{
-				pathname: '/login',
-				state: { expired: true }
-			}} />
+        pathname: '/login',
+        state: { expired: true }
+      }} />
     }
     else
-      return (this.getAccountTemplate())    
+      return (this.getAccountTemplate())
   }
 }
 
 function mapStateToProps(state) {
   return {
     account: state.account_reducer.account,
-    accountPending: state.account_reducer.accountPending,
-    accountRejected: state.account_reducer.accountRejected,
+    getAccountPending: state.account_reducer.getAccountPending,
+    getAccountRejected: state.account_reducer.getAccountRejected,
     token: state.token_reducer.token
   }
 }
