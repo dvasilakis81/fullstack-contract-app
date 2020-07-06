@@ -318,6 +318,8 @@ export default function (state = {}, action, root) {
 				state = {
 					...state,
 					contractsList: updatedContractsList,
+					updatedAccount: action.payload.data,
+					account: action.payload.data 
 				};
 			}
 
@@ -343,11 +345,13 @@ export default function (state = {}, action, root) {
 				state = {
 					...state,
 					searchContractsList: updatedContractsSearchList,
-					contractDetailsSearchMode: action.payload
+					contractDetailsSearchMode: action.payload,
+					updatedAccount: action.payload.data,
+					account: action.payload.data
 				};
 			}
 
-			state = { ...state, updateAccountPending: undefined, updateAccountRejected: undefined, updatedAccount: action.payload };
+			state = { ...state, updateAccountPending: undefined, updateAccountRejected: undefined, updatedAccount: action.payload, account: action.payload };
 			break;
 		case 'INSERT_CONTRACTINFO_PENDING':
 			state = {

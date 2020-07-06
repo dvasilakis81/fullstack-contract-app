@@ -56,18 +56,26 @@ class AccountInfo extends React.Component {
 			submitButtonDisabled: false,
 			submitAccountReservationsDisabled: false,
 			navigateToEditAccount: false,
+			syncButtonDisabled: true,
 		}
 
 		this.editAccount = this.editAccount.bind(this);
 		this.createDocument1 = this.createDocument1.bind(this);
 		this.createDocument2 = this.createDocument2.bind(this);
 		this.syncReservations = this.syncReservations.bind(this);
+		this.checkSync = this.checkSync.bind(this);
+		this.getEnabledStatusForSyncButton = this.getEnabledStatusForSyncButton.bind(this);
+
 	}
 
-	// componentDidMount() {
-	// 	this.props.getAccount(this.props.token.data.token, this.props.contractId, this.props.accountNumber)
-	// }
-	componentDidMount(){
+	getEnabledStatusForSyncButton() {
+		if (this.state.submitAccountReservationsDisabled === true)
+			return true;
+		else
+			return this.state.syncButtonDisabled;
+	}
+	componentDidMount() {
+		this.setState({ syncButtonDisabled: this.checkSync() })
 		store.dispatch({ type: "RESET_UPDATE_ACCOUNT", payload: null });
 	}
 	handleClose = (event, reason) => {
@@ -155,7 +163,7 @@ class AccountInfo extends React.Component {
           </Button>
 					<Button variant="contained"
 						style={{ margin: '5px', background: '#17d3cd', textTransform: 'none', fontSize: '16px' }}
-						disabled={this.state.submitAccountReservationsDisabled}
+						disabled={this.getEnabledStatusForSyncButton()}
 						onClick={this.syncReservations}>
 						{/* <SaveAltIcon /> */}
 						Συγχρονισμός Κρατήσεων
@@ -237,9 +245,10 @@ class AccountInfo extends React.Component {
 		e.preventDefault();
 
 		this.setState({ submitAccountReservationsDisabled: true });
-
+		var contractDetails = this.props.isSearchMode ? this.props.contractDetailsSearchMode : this.props.contractDetails;
 		var dataToPost = {
 			userId: this.props.token.data.id,
+			contractId: contractDetails.Id,
 			accountInfo: this.props.account,
 			userreservations: this.props.token.data.reservations
 		};
@@ -248,13 +257,6 @@ class AccountInfo extends React.Component {
 			headers: { 'Content-Type': 'application/json;charset=utf-8', Authorization: 'Bearer ' + this.props.token.data.token }
 		};
 		this.props.syncAccountReservations(dataToPost, config);
-
-		// axios.post(getHostUrl() + '/syncreservations', dataToPost, config)
-		// 	.then(res => {
-		// 		this.setState({ message: '', openMessage: false, variant: 'success', submitButtonDisabled: false });
-		// 	}).catch(error => {
-		// 		this.setState({ message: <><div>Αποτυχής προσπάθεια δημιουργίας αρχείου!</div><div>{getServerErrorResponseMessage(error)}</div></>, openMessage: true, variant: 'error', submitButtonDisabled: false });
-		// 	})
 	}
 
 	getRemainAmountOfContract(am1) {
@@ -320,7 +322,7 @@ class AccountInfo extends React.Component {
 					return (this.getReservationTemplate(value, Number(a1), Number(a2), Number(a3), index))
 				} else
 					return <></>
-			}) : null)
+			}) : <div style={{ color: 'red', padding: '10px' }}>Δεν έχουν οριστεί κρατήσεις. Παρακαλώ κάνετε συγχρονισμό!</div>)
 	}
 	getReservationTemplate(value, a1, a2, a3, index) {
 		var percentage = parseFloat(value.Percentage);
@@ -762,7 +764,7 @@ class AccountInfo extends React.Component {
 			)
 		}
 		else
-			return <span style={{ color: 'red' }}>Δεν έχουν συμπληρωθεί τα πεδία για τις υπογραφές</span>
+			return <span style={{ color: 'red', padding: '10px' }}>Δεν έχουν συμπληρωθεί τα πεδία για τις υπογραφές</span>
 	}
 
 	getSignatoriesForDocument2(contractDetails, accountDetails) {
@@ -939,6 +941,64 @@ class AccountInfo extends React.Component {
 			return (<></>)
 	}
 
+	checkSync() {
+		var ret = true;
+		var userReservations;
+		if (this.props.token && this.props.token.data)
+			userReservations = this.props.token.data.reservations;
+
+		var accountReservations;
+		if (this.props.account) {
+			accountReservations = this.props.account.accountreservations;
+			if (accountReservations) {
+			}
+			else
+				ret = false;
+		}
+
+		if (userReservations && accountReservations) {
+			if (userReservations.length !== accountReservations.length)
+				return false;
+
+			for (let index = 0; index < userReservations.length; index++) {
+				const ur = userReservations[index];
+				var found = false;
+				for (let index = 0; index < accountReservations.length; index++) {
+					const ar = accountReservations[index];
+					if (ur.Name === ar.Name) {
+						found = true;
+						if (isNaN(ur.Percentage) === false && isNaN(ar.Percentage) === false) {
+							if (parseFloat(ur.Percentage) !== parseFloat(ar.Percentage))
+								return false;
+						}
+						else
+							return false;					
+
+						if (isNaN(ur.Stamp) === false && isNaN(ar.Stamp) === false) {
+							if (parseFloat(ur.Stamp) !== parseFloat(ar.Stamp))
+								return false;
+						}
+						else
+							return false;
+
+						if (isNaN(ur.StampOGA) === false && isNaN(ar.StampOGA) === false) {
+							if (parseFloat(ur.StampOGA) !== parseFloat(ar.StampOGA))
+								return false;
+						}
+						else
+							return false;
+
+						break;
+					}
+				}
+				if (found === false)
+					return false;
+			}
+		}
+
+		return ret;
+	}
+
 	render() {
 
 		const accountInfo = this.props.account;
@@ -998,14 +1058,14 @@ function mapStateToProps(state) {
 		isSearchMode: state.contracts_reducer.isSearchMode,
 		updateAccountPending: state.contracts_reducer.updateAccountPending,
 		updateAccountRejected: state.contracts_reducer.updateAccountRejected,
-		updatedAccount: state.contracts_reducer.updatedAccount,		
+		updatedAccount: state.contracts_reducer.updatedAccount,
 		reservations: state.parametricdata_reducer.reservations,
 		token: state.token_reducer.token
 	}
 }
 
 function mapDispatchToProps(dispatch) {
-  return bindActionCreators({ syncAccountReservations }, dispatch);
+	return bindActionCreators({ syncAccountReservations }, dispatch);
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(withStyles(useStyles)(AccountInfo))

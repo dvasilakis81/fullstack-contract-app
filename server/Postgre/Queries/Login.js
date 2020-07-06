@@ -163,7 +163,7 @@ const login = (request, response, next) => {
   const password = request.query.p;
 
   var sqlQuery = 'SELECT *, ' +
-    '(SELECT json_agg(UserReservations) FROM (SELECT * FROM "Ordering"."UserReservations" as ur WHERE ur."UserId" = u."Id") UserReservations) AS UserReservations ' +
+    '(SELECT json_agg(UserReservations) FROM (SELECT * FROM "Ordering"."UserReservations" as ur WHERE ur."UserId" = u."Id" ORDER BY ur."Order" ASC) UserReservations) AS UserReservations ' +
     'FROM "Ordering"."User" as u ' +
     'WHERE u."Username"=' + helper.addQuotes(username);
   pool.query(sqlQuery, (error, results) => {

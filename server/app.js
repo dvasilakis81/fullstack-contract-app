@@ -197,7 +197,7 @@ app.get('/getfirstaccountprotocolinfo', dbLogin.checkToken, dbAccount.getFirstAc
 app.get('/getremainamountofcontract', dbLogin.checkToken, dbAccount.getRemainAmountOfContract);
 app.get('/getaccountsinfo', dbLogin.checkToken, dbAccount.getAccountsInfo);
 
-app.get('/getaccount', dbLogin.checkToken, dbAccount.getAccountById);
+app.post('/getaccount', dbLogin.checkToken, dbAccount.getAccountById);
 app.post('/insertaccount', dbLogin.checkToken, dbAccount.insertAccount);
 app.post('/updateaccount', dbLogin.checkToken, dbAccount.updateAccount);
 

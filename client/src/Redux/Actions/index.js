@@ -35,7 +35,11 @@ export function deleteContract(data, token) {
 
 
 export function getAccount(token, contractId, accountNumber) {
-  const request = axios.get(`${URL}/getaccount?ci=` + contractId + '&an=' + accountNumber, { headers: { Authorization: 'Bearer ' + token } }).then(response => response.data)
+  var data={}
+  data.contractId = contractId;
+  data.accountNumber = accountNumber;
+
+  const request = axios.post(`${URL}/getaccount`, data, { headers: { Authorization: 'Bearer ' + token } }).then(response => response.data)
   return {
     type: 'GET_ACCOUNT',
     payload: request

@@ -1,7 +1,6 @@
 const pool = require('../dbConfig').pool
 const util = require('util')
 const helper = require('../../HelperMethods/helpermethods')
-const aayQueries = require('./AAY')
 const invoiceQueries = require('./Invoice')
 
 
@@ -69,22 +68,33 @@ const getFirstAccountProtocolInfo = (request, response, next) => {
   return ret;
 }
 
-const getAccountById = (request, response, next) => {
-  const contractId = parseInt(request.query.ci)
-  const accountNumber = parseInt(request.query.an)
+function getWhereClauseGetAccount(contractId, accountNumber, accountId) {
+  if (accountId)
+    return util.format('WHERE a."Id"=%s', parseInt(accountId));
+  else
+    return util.format('WHERE a."ContractId"=%s AND a."Number"=%s', contractId, accountNumber);
 
-  // try {
-  var sqlQuery = util.format('SELECT *, ' +
+}
+function getSelectClauseGetAccount(contractId) {
+  return util.format('SELECT *, ' +
     '(SELECT json_agg(Account) FROM (SELECT acc."ProtocolNumber" as firstAccountProtocolNumber, acc."ProtocolDate" as firstAccountProtocolDate FROM "Ordering"."Account" as acc WHERE acc."Number"=1 AND acc."ContractId"=%s) Account) AS FirstProtocolInfo, ' +
-    '(SELECT json_agg(AccountReservations) FROM (SELECT * FROM "Ordering"."AccountReservations" as accres WHERE accres."AccountId" = a."Id") AccountReservations) AS AccountReservations, ' +
+    '(SELECT json_agg(AccountReservations) FROM (SELECT * FROM "Ordering"."AccountReservations" as accres WHERE accres."AccountId" = a."Id" ORDER BY accres."Order" ASC) AccountReservations) AS AccountReservations, ' +
     '(SELECT json_agg(Invoice) FROM (SELECT * FROM "Ordering"."Invoice" as i WHERE i."AccountId" = a."Id") Invoice) AS Invoice, ' +
     '(SELECT json_agg(CC) FROM (SELECT * FROM "Ordering"."CC" as cc WHERE cc."AccountId" = a."Id") CC) AS CC, ' +
     '(SELECT json_agg(MonitoringCommittee) FROM (SELECT * FROM "Ordering"."MonitoringCommittee" as mm WHERE mm."AccountId" = a."Id") MonitoringCommittee) AS MonitoringCommittee, ' +
     '(SELECT json_agg(DocumentSignatory) FROM ( SELECT *, ( SELECT json_agg(Signatory) FROM ( SELECT * FROM "Ordering"."Signatory" as sg WHERE sg."Id" = ds."SignatoryId") Signatory) AS Signatory, ' +
     '(SELECT json_agg(SignatoryType) FROM ( SELECT * FROM "Ordering"."SignatoryType" as sgt WHERE sgt."Id" = ds."SignatoryTypeId") SignatoryType) AS SignatoryType ' +
-    'FROM "Ordering"."DocumentSignatory" as ds WHERE ds."AccountId" = a."Id") DocumentSignatory) AS DocumentSignatory ' +
+    'FROM "Ordering"."DocumentSignatory" as ds WHERE ds."AccountId" = a."Id") DocumentSignatory) AS DocumentSignatory ', contractId);
+}
+
+const getAccountById = (request, response, next) => {
+  const contractId = request.body.contractId;
+  const accountNumber = request.body.accountNumber;
+  const accountId = request.body.accountInfo ? request.body.accountInfo.Id: '';
+
+  var sqlQuery = getSelectClauseGetAccount(contractId) +
     'FROM "Ordering"."Account" as a ' +
-    'WHERE a."ContractId"=%s AND a."Number"=%s', contractId, contractId, accountNumber);
+    getWhereClauseGetAccount(contractId, accountNumber, accountId);
 
   pool.query(sqlQuery, (error, results) => {
     if (error) {
@@ -97,11 +107,34 @@ const getAccountById = (request, response, next) => {
       response.status(200).json(ret);
     }
   })
-  // } catch (error) {
-  //   next(error);
-  //   helper.consoleLog("Failed to get account: \n" + error.message);
-  // }
 }
+
+// const getAccountById = (req, res, next, accountId) => {
+
+//   var sqlQuery = util.format('SELECT *, ' +
+//     '(SELECT json_agg(Account) FROM (SELECT acc."ProtocolNumber" as firstAccountProtocolNumber, acc."ProtocolDate" as firstAccountProtocolDate FROM "Ordering"."Account" as acc WHERE acc."Id"=%s) Account) AS FirstProtocolInfo, ' +
+//     '(SELECT json_agg(AccountReservations) FROM (SELECT * FROM "Ordering"."AccountReservations" as accres WHERE accres."AccountId" = a."Id" ORDER BY accres."Order" ASC) AccountReservations) AS AccountReservations, ' +
+//     '(SELECT json_agg(Invoice) FROM (SELECT * FROM "Ordering"."Invoice" as i WHERE i."AccountId" = a."Id") Invoice) AS Invoice, ' +
+//     '(SELECT json_agg(CC) FROM (SELECT * FROM "Ordering"."CC" as cc WHERE cc."AccountId" = a."Id") CC) AS CC, ' +
+//     '(SELECT json_agg(MonitoringCommittee) FROM (SELECT * FROM "Ordering"."MonitoringCommittee" as mm WHERE mm."AccountId" = a."Id") MonitoringCommittee) AS MonitoringCommittee, ' +
+//     '(SELECT json_agg(DocumentSignatory) FROM ( SELECT *, ( SELECT json_agg(Signatory) FROM ( SELECT * FROM "Ordering"."Signatory" as sg WHERE sg."Id" = ds."SignatoryId") Signatory) AS Signatory, ' +
+//     '(SELECT json_agg(SignatoryType) FROM ( SELECT * FROM "Ordering"."SignatoryType" as sgt WHERE sgt."Id" = ds."SignatoryTypeId") SignatoryType) AS SignatoryType ' +
+//     'FROM "Ordering"."DocumentSignatory" as ds WHERE ds."AccountId" = a."Id") DocumentSignatory) AS DocumentSignatory ' +
+//     'FROM "Ordering"."Account" as a ' +
+//     'WHERE a."Id"=%s', parseInt(accountId), parseInt(accountId));
+
+//   pool.query(sqlQuery, (error, results) => {
+//     if (error) {
+//       next(error);
+//       helper.consoleLog("Failed to get account: \n" + error.message);
+//     } else {
+//       helper.consoleLog("AccountQueries: Account requested\n");
+//       var ret = results.rows && results.rows.length > 0 ? results.rows[0] : undefined
+//       res.status(200).json(ret);
+//     }
+//   })
+// }
+
 const getAccountsInfo = (request, response, next) => {
   const contractId = parseInt(request.query.ci);
   const accountNumber = parseInt(request.query.an);
@@ -123,15 +156,8 @@ const getAccountsInfo = (request, response, next) => {
       }
     })
 }
-// const getProtocolOfFirstTransitory = (req, res, next) => {
-//   pool.query(util.format('SELECT ProtocolNumber,ProtocolDate FROM "Ordering"."Account" WHERE "ContractId"=%s AND "Number"=%s' , 
-//                           helper.addQuotes(req.body.ContractId), helper.addQuotes(1), (error, results) => {
-//     if (error)
-//       next(error);
-//     else
-//       response.status(200).json(results.rows)
-//   }))
-// }
+
+
 const insertAccount = (req, res, next) => {
   var contractId = req.body.ContractId;
   var sqlQuery = util.format('SELECT * ' +

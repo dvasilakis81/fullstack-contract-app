@@ -8,14 +8,12 @@ import MaterialTable, { MTableToolbar } from 'material-table';
 import axios from 'axios';
 
 import { connect } from 'react-redux';
-
 import { getHostUrl, getHeaderHeight, getFooterHeight, getBodyHeight, getDateTimeFormat, getServerErrorResponseMessage } from '../../Helper/helpermethods';
 import MySnackbar from '../Common/MySnackbar';
-import { getFooterTemplate } from '../Common/templates'
-import Body from '../../HOC/Body/body'
-
+import { getFooterTemplate } from '../Common/templates';
+import Body from '../../HOC/Body/body';
 import { resetData } from '../../Helper/helpermethods';
-import store from '../../Redux/Store/store'
+import store from '../../Redux/Store/store';
 
 const styles = {
   stickyActionsColumn: {
@@ -96,18 +94,6 @@ class ReservationsContainer extends Component {
     }
 
     this.handleClose = this.handleClose.bind(this, '');
-  }
-
-  loadUserRoles() {
-    let ret = '';
-
-    if (this.props.userroles) {
-      ret = this.props.userroles.data.map((data, index) => {
-        return <option key={index} value={data.Id}>{data.Name}</option>
-      })
-    }
-
-    return ret;
   }
 
   parameterSelection(e, item) {
@@ -396,6 +382,7 @@ class ReservationsContainer extends Component {
     if (doRequest) {
       axios.post(getHostUrl() + '/' + methodName, newData, { headers: { Authorization: 'Bearer ' + this.props.token.data.token } }).then(res => {
         if (res && res.data && res.data.tokenIsValid === undefined) {
+          this.updateTokenReservation(newData);
           var msg = 'Η επεξεργασία ' + addTypeLabel + ' "' + newDataName + '" έγινε επιτυχώς!!!'
           this.setState({ message: msg, openMessage: true, variant: 'success', submitButtonDisabled: false });
           store.dispatch({ type: dispatchLabel, payload: res.data })
@@ -455,6 +442,25 @@ class ReservationsContainer extends Component {
   handleClose = (event, reason) => {
     this.setState({ openMessage: false });
   };
+
+  updateTokenReservation(data) {
+    var tokenReservations = this.props.token.data ? this.props.token.data.reservations : undefined;
+    if (tokenReservations) {
+      for (let index = 0; index < tokenReservations.length; index++) {
+        const element = tokenReservations[index];
+        if (element.Id == data.Id) {
+          element.Name = data.Name;
+          element.Percentage = data.Percentage;
+          element.Stamp = data.Stamp;
+          element.StampOGA = data.StampOGA;
+          element.IsReservation = data.IsReservation === 'Ναι' ? true : false;
+          element.Order = data.Order;
+
+          break;
+        }
+      }
+    }
+  }
 
   render() {
 

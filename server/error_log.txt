@@ -1,12 +1,11 @@
-Message: Not Found
-Stack: NotFoundError: Not Found
-    at c:\Github\Ordering FullStack\server\app.js:257:8
-    at Layer.handle [as handle_request] (c:\Github\Ordering FullStack\node_modules\express\lib\router\layer.js:95:5)
-    at trim_prefix (c:\Github\Ordering FullStack\node_modules\express\lib\router\index.js:317:13)
-    at c:\Github\Ordering FullStack\node_modules\express\lib\router\index.js:284:7
-    at Function.process_params (c:\Github\Ordering FullStack\node_modules\express\lib\router\index.js:335:12)
-    at next (c:\Github\Ordering FullStack\node_modules\express\lib\router\index.js:275:10)
-    at SendStream.error (c:\Github\Ordering FullStack\node_modules\serve-static\index.js:121:7)
-    at SendStream.emit (events.js:210:5)
-    at SendStream.error (c:\Github\Ordering FullStack\node_modules\send\index.js:270:17)
-    at SendStream.onStatError (c:\Github\Ordering FullStack\node_modules\send\index.js:421:12)
+Message: invalid input syntax for type boolean: "Ναι"
+Stack: error: invalid input syntax for type boolean: "Ναι"
+    at Parser.parseErrorMessage (c:\Github\Ordering FullStack\node_modules\pg-protocol\dist\parser.js:241:15)
+    at Parser.handlePacket (c:\Github\Ordering FullStack\node_modules\pg-protocol\dist\parser.js:89:29)
+    at Parser.parse (c:\Github\Ordering FullStack\node_modules\pg-protocol\dist\parser.js:41:38)
+    at Socket.<anonymous> (c:\Github\Ordering FullStack\node_modules\pg-protocol\dist\index.js:8:42)
+    at Socket.emit (events.js:210:5)
+    at addChunk (_stream_readable.js:309:12)
+    at readableAddChunk (_stream_readable.js:290:11)
+    at Socket.Readable.push (_stream_readable.js:224:10)
+    at TCP.onStreamRead (internal/stream_base_commons.js:182:23)
