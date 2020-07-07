@@ -54,7 +54,6 @@ class AccountInfo extends React.Component {
 			message: '',
 			variant: '',
 			submitButtonDisabled: false,
-			submitAccountReservationsDisabled: false,
 			navigateToEditAccount: false,
 			syncButtonDisabled: true,
 		}
@@ -64,16 +63,8 @@ class AccountInfo extends React.Component {
 		this.createDocument2 = this.createDocument2.bind(this);
 		this.syncReservations = this.syncReservations.bind(this);
 		this.checkSync = this.checkSync.bind(this);
-		this.getEnabledStatusForSyncButton = this.getEnabledStatusForSyncButton.bind(this);
-
 	}
 
-	getEnabledStatusForSyncButton() {
-		if (this.state.submitAccountReservationsDisabled === true)
-			return true;
-		else
-			return this.state.syncButtonDisabled;
-	}
 	componentDidMount() {
 		this.setState({ syncButtonDisabled: this.checkSync() })
 		store.dispatch({ type: "RESET_UPDATE_ACCOUNT", payload: null });
@@ -163,7 +154,7 @@ class AccountInfo extends React.Component {
           </Button>
 					<Button variant="contained"
 						style={{ margin: '5px', background: '#17d3cd', textTransform: 'none', fontSize: '16px' }}
-						disabled={this.getEnabledStatusForSyncButton()}
+						disabled={this.state.syncButtonDisabled}
 						onClick={this.syncReservations}>
 						{/* <SaveAltIcon /> */}
 						Συγχρονισμός Κρατήσεων
@@ -244,7 +235,7 @@ class AccountInfo extends React.Component {
 	syncReservations(e) {
 		e.preventDefault();
 
-		this.setState({ submitAccountReservationsDisabled: true });
+		this.setState({ syncButtonDisabled: true });
 		var contractDetails = this.props.isSearchMode ? this.props.contractDetailsSearchMode : this.props.contractDetails;
 		var dataToPost = {
 			userId: this.props.token.data.id,
@@ -883,59 +874,67 @@ class AccountInfo extends React.Component {
 	}
 	//#endregion
 	//#endregion
+	getLoadingOverlayActiveValue() {
+		var ret = false;
+
+		if (this.props.updateAccountPending)
+			ret = true;
+		else if (this.state.submitButtonDisabled)
+			ret = true;
+
+		return ret;
+	}
+	getLoadingOverlayTextValue() {
+		var ret = '';
+
+		if (this.props.updateAccountPending)
+			ret = 'O συγχρονισμός των κρατήσεων είναι σε εξέλιξη ...';
+		else if (this.state.submitButtonDisabled)
+			ret = 'Το αρχείο δημιουργείται ...';
+
+		return ret;
+	}
 
 	getAccountInfoTemplate(accountInfo) {
 
 		var contractInfo = this.props.isSearchMode ? this.props.contractDetailsSearchMode : this.props.contractDetails;
 		if (accountInfo)
 			return (
-				<LoadingOverlay
-					active={this.props.updateAccountPending ? true : false}
-					spinner
-					text='Συγχρονισμός κρατήσεων λογαριασμού ...'
-					styles={{
-						overlay: (base) => ({
-							...base,
-							width: '100%',
-							textAlign: 'middle'
-						})
-					}}>
-					<Body>
-						<div style={{ width: '100%', height: '100%', display: 'flex', flexFlow: 'column', flexWrap: 'wrap', overflowY: 'hidden' }}>
-							<div style={{ display: 'flex', flexFlow: 'row', flex: '1', overflowY: 'hidden', overflowX: 'hidden', flexWrap: 'wrap' }}>
-								<Scrollbars style={{ display: 'flex', flexFlow: 'column', flexWrap: 'wrap', flexBasis: '100%', flex: '1', backgroundColor: '#fff' }}>
-									<LoadingOverlay
-										active={this.state.submitButtonDisabled ? true : false}
-										spinner
-										text='Το αρχείο δημιουργείται ...'
-										styles={{
-											overlay: (base) => ({
-												...base,
-												textAlign: 'middle'
-											})
-										}}>
-										<Grid container xl style={{ flexGrow: '1', alignItems: 'stretch' }} direction='column' >
-											{this.getDocumentsInfo(contractInfo, accountInfo)}
-											{this.getCCInfoTemplate(contractInfo, accountInfo)}
-											{this.getGeneralAccountInfo(contractInfo, accountInfo)}
-											{this.getReservationsTemplate(contractInfo, accountInfo)}
-											{this.getInvoiceTemplate(contractInfo, accountInfo)}
-											{this.getLawArticleForDownpaymentTemplate(accountInfo)}
-											{this.getDecisionBoardTemplate(contractInfo, accountInfo)}
-											{this.getDecisionCoordinatorDecentrilizedAdministrationTemplate(contractInfo, accountInfo)}
-											{this.getCourtOfAuditorsInfoTemplate(contractInfo, accountInfo)}
-											{this.getMonitoringCommitteeInfoTemplate(contractInfo, accountInfo)}
-											{this.getSignatoriesForDocument1(contractInfo, accountInfo)}
-											{this.getSignatoriesForDocument2(contractInfo, accountInfo)}
-										</Grid>
-									</LoadingOverlay>
-								</Scrollbars>
-							</div>
-							{getFooterTemplate(this.props.token)}
+				<Body>
+					<div style={{ width: '100%', height: '100%', display: 'flex', flexFlow: 'column', flexWrap: 'wrap', overflowY: 'hidden' }}>
+						<div style={{ display: 'flex', flexFlow: 'row', flex: '1', overflowY: 'hidden', overflowX: 'hidden', flexWrap: 'wrap' }}>
+							<Scrollbars style={{ display: 'flex', flexFlow: 'column', flexWrap: 'wrap', flexBasis: '100%', flex: '1', backgroundColor: '#fff' }}>
+								<LoadingOverlay
+									active={this.getLoadingOverlayActiveValue()}
+									spinner
+									text={this.getLoadingOverlayTextValue()}
+									styles={{
+										overlay: (base) => ({
+											...base,
+											textAlign: 'middle'
+										})
+									}}>
+									<Grid container xl style={{ flexGrow: '1', alignItems: 'stretch' }} direction='column' >
+										{this.getDocumentsInfo(contractInfo, accountInfo)}
+										{this.getCCInfoTemplate(contractInfo, accountInfo)}
+										{this.getGeneralAccountInfo(contractInfo, accountInfo)}
+										{this.getReservationsTemplate(contractInfo, accountInfo)}
+										{this.getInvoiceTemplate(contractInfo, accountInfo)}
+										{this.getLawArticleForDownpaymentTemplate(accountInfo)}
+										{this.getDecisionBoardTemplate(contractInfo, accountInfo)}
+										{this.getDecisionCoordinatorDecentrilizedAdministrationTemplate(contractInfo, accountInfo)}
+										{this.getCourtOfAuditorsInfoTemplate(contractInfo, accountInfo)}
+										{this.getMonitoringCommitteeInfoTemplate(contractInfo, accountInfo)}
+										{this.getSignatoriesForDocument1(contractInfo, accountInfo)}
+										{this.getSignatoriesForDocument2(contractInfo, accountInfo)}
+									</Grid>
+								</LoadingOverlay>
+							</Scrollbars>
 						</div>
-						<MySnackbar state={this.state} duration={5000} handleClose={this.handleClose} vertical='bottom' horizontal='right' useScreenDimensions={true} />
-					</Body>
-				</LoadingOverlay>
+						{getFooterTemplate(this.props.token)}
+					</div>
+					<MySnackbar state={this.state} duration={5000} handleClose={this.handleClose} vertical='bottom' horizontal='right' useScreenDimensions={true} />
+				</Body>
 			)
 		else
 			return (<></>)
@@ -943,6 +942,7 @@ class AccountInfo extends React.Component {
 
 	checkSync() {
 		var ret = true;
+
 		var userReservations;
 		if (this.props.token && this.props.token.data)
 			userReservations = this.props.token.data.reservations;
@@ -958,41 +958,47 @@ class AccountInfo extends React.Component {
 
 		if (userReservations && accountReservations) {
 			if (userReservations.length !== accountReservations.length)
-				return false;
+				ret = false;
+			else {
+				for (let index = 0; index < userReservations.length; index++) {
+					var found = false;
 
-			for (let index = 0; index < userReservations.length; index++) {
-				const ur = userReservations[index];
-				var found = false;
-				for (let index = 0; index < accountReservations.length; index++) {
-					const ar = accountReservations[index];
-					if (ur.Name === ar.Name) {
-						found = true;
-						if (isNaN(ur.Percentage) === false && isNaN(ar.Percentage) === false) {
-							if (parseFloat(ur.Percentage) !== parseFloat(ar.Percentage))
-								return false;
+					const ur = userReservations[index];
+					for (let index = 0; index < accountReservations.length; index++) {
+						const ar = accountReservations[index];
+						if (ur.Name === ar.Name) {
+							found = true;
+
+							if (parseFloat(ur.Percentage) !== parseFloat(ar.Percentage)) {
+								ret = false;
+								break;
+							}
+
+							if (ur.Stamp && ar.Stamp) {
+								if (parseFloat(ur.Stamp) !== parseFloat(ar.Stamp)) {
+									ret = false;
+									break;
+								}
+							}
+
+							if (ur.StampOGA && ar.StampOGA) {
+								if (parseFloat(ur.StampOGA) !== parseFloat(ar.StampOGA)) {
+									ret = false;
+									break;
+								}
+							}
+
+							break;
 						}
-						else
-							return false;					
-
-						if (isNaN(ur.Stamp) === false && isNaN(ar.Stamp) === false) {
-							if (parseFloat(ur.Stamp) !== parseFloat(ar.Stamp))
-								return false;
-						}
-						else
-							return false;
-
-						if (isNaN(ur.StampOGA) === false && isNaN(ar.StampOGA) === false) {
-							if (parseFloat(ur.StampOGA) !== parseFloat(ar.StampOGA))
-								return false;
-						}
-						else
-							return false;
-
+					}
+					if (found === false) {
+						ret = false;
 						break;
 					}
+
+					if (ret === false)
+						break;
 				}
-				if (found === false)
-					return false;
 			}
 		}
 
@@ -1009,19 +1015,20 @@ class AccountInfo extends React.Component {
 		} else {
 			if (this.props.updateAccountRejected) {
 				if (this.state.openMessage === false) {
-					this.setState({ message: <><div>Σφάλμα επικοινωνίας με τον διακομιστή!</div></>, openMessage: true, variant: 'error', submitAccountReservationsDisabled: false });
+					this.setState({ message: <><div>Σφάλμα επικοινωνίας με τον διακομιστή!</div></>, openMessage: true, variant: 'error', submitButtonDisabled: false });
 					store.dispatch({ type: "RESET_UPDATE_ACCOUNT", payload: null });
 				}
 			}
 
 			if (this.props.updatedAccount) {
 				if (this.state.openMessage === false) {
-					this.setState({ message: <><div>Ο συγχρονισμός των κρατήσεων έγινε επιτυχώς!</div></>, openMessage: true, variant: 'success', submitAccountReservationsDisabled: false });
+					this.setState({ message: <><div>Ο συγχρονισμός των κρατήσεων έγινε επιτυχώς!</div></>, openMessage: true, variant: 'success', submitButtonDisabled: false });
 					store.dispatch({ type: "RESET_UPDATE_ACCOUNT", payload: null });
 				}
 			}
-
-			if (accountInfo) {
+			if (this.props.updateAccountPending)
+				return this.getAccountInfoTemplate(accountInfo);
+			else if (accountInfo) {
 				var contractDetails = this.props.isSearchMode ? this.props.contractDetailsSearchMode : this.props.contractDetails;
 				paidAmount.PureUntilToday = 0;
 				paidAmount.FpaUntilToday = 0;
@@ -1043,8 +1050,7 @@ class AccountInfo extends React.Component {
 					return this.navigateToEditAccountForm(contractDetails, accountInfo)
 				else
 					return this.getAccountInfoTemplate(accountInfo)
-			}
-			else
+			} else
 				return showGenericMessage('Ο λογαριασμός δεν βρέθηκε! Παρακαλώ ξαναπροσπαθήστε!', true)
 		}
 	}
@@ -1052,13 +1058,12 @@ class AccountInfo extends React.Component {
 
 function mapStateToProps(state) {
 	return {
+		updateAccountPending: state.account_reducer.updateAccountPending,
+		updateAccountRejected: state.account_reducer.updateAccountRejected,
 		account: state.account_reducer.account,
 		contractDetails: state.contracts_reducer.contractDetails,
 		contractDetailsSearchMode: state.contracts_reducer.contractDetailsSearchMode,
 		isSearchMode: state.contracts_reducer.isSearchMode,
-		updateAccountPending: state.contracts_reducer.updateAccountPending,
-		updateAccountRejected: state.contracts_reducer.updateAccountRejected,
-		updatedAccount: state.contracts_reducer.updatedAccount,
 		reservations: state.parametricdata_reducer.reservations,
 		token: state.token_reducer.token
 	}

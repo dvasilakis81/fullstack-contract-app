@@ -285,16 +285,7 @@ export default function (state = {}, action, root) {
 			}
 
 			state = { ...state, createAccountPending: undefined, createAccountRejected: undefined, createdAccount: action.payload };
-			break;
-		case 'RESET_UPDATE_ACCOUNT':
-			state = { ...state, updateAccountPending: undefined , updateAccountRejected: undefined, updatedAccount: undefined };
-			break;
-		case 'UPDATE_ACCOUNT_PENDING':
-			state = { ...state, updateAccountPending: 'Update account pending', updateAccountRejected: undefined, updatedAccount: undefined };
-			break;
-		case 'UPDATE_ACCOUNT_REJECTED':
-			state = { ...state, updateAccountPending: undefined, updateAccountRejected: action.payload, updatedAccount: undefined };
-			break;
+			break;		
 		case 'UPDATE_ACCOUNT_FULFILLED':
 			if (state.contractsList) {
 				let updatedContractsList = state.contractsList.map((item) => {
@@ -317,9 +308,7 @@ export default function (state = {}, action, root) {
 
 				state = {
 					...state,
-					contractsList: updatedContractsList,
-					updatedAccount: action.payload.data,
-					account: action.payload.data 
+					contractsList: updatedContractsList
 				};
 			}
 
@@ -345,13 +334,9 @@ export default function (state = {}, action, root) {
 				state = {
 					...state,
 					searchContractsList: updatedContractsSearchList,
-					contractDetailsSearchMode: action.payload,
-					updatedAccount: action.payload.data,
-					account: action.payload.data
+					contractDetailsSearchMode: action.payload
 				};
 			}
-
-			state = { ...state, updateAccountPending: undefined, updateAccountRejected: undefined, updatedAccount: action.payload, account: action.payload };
 			break;
 		case 'INSERT_CONTRACTINFO_PENDING':
 			state = {
@@ -518,14 +503,14 @@ export default function (state = {}, action, root) {
 			break;
 		case 'SET_CONTRACTINFO_PENDING':
 			state = {
-					...state,
-					deleteContractInfoPending: false,
-					deleteContractInfoRejected: false,
-					insertContractInfoPending: false,
-					insertContractInfoRejected: false,
-					updateDecicionBoardPending: false,
-					updateDecicionBoardRejected: false
-				};
+				...state,
+				deleteContractInfoPending: false,
+				deleteContractInfoRejected: false,
+				insertContractInfoPending: false,
+				insertContractInfoRejected: false,
+				updateDecicionBoardPending: false,
+				updateDecicionBoardRejected: false
+			};
 			break;
 		default:
 			break;
