@@ -7,12 +7,13 @@ const util = require('util')
 var helper = require('../../HelperMethods/helpermethods')
 var dbUserReservations = require('./UserReservations')
 const secretKey = process.env.API_SECRET || 'athens_2019';
+
 // const dbConfig = require('../dbConfig')
 // const Pool = require('pg').Pool
 // const pool = new Pool(dbConfig.params)
-
 //const pool = new Pool(dbConfig.params)
 //const pool = new Pool({connectionString: 'postgresql://postgres:123@localhost:5432/Ordering2', ssl: false})
+
 const pool = require('../dbConfig').pool
 
 //#region update

@@ -113,7 +113,9 @@ class AayView extends Component {
 
   resetState() {
     this.setState({
-      addNewItem: false, editItem: false, deleteItem: false,
+      addNewItem: false, 
+      editItem: false, 
+      deleteItem: false,
       AayValue: '',
       ProtocolNumber: '',
       ProtocolDate: '',

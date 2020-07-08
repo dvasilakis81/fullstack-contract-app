@@ -35,15 +35,16 @@ const update = (req, res, next) => {
 
   var sqlQuery = util.format('UPDATE "Ordering"."AAY" ' +
     'SET "Value"=%s,"ProtocolNumber"=%s,"ProtocolDate"=%s,"EadNumber"=%s,"ADA"=%s,"Type"=%s,"Overthrow"=%s ' +
-    'WHERE "ContractId"=%s',
+    'WHERE "ContractId"=%s AND "OrderNo"=%s',
     helper.addQuotes(req.body.AayValue),
     helper.addQuotes(req.body.ProtocolNumber),
     helper.addQuotes(req.body.ProtocolDate),
     helper.addQuotes(req.body.EadNumber),
     helper.addQuotes(req.body.ADA),
-    helper.addQuotes(req.body.Type),
+    req.body.Type,
     helper.addQuotes(req.body.Overthrow),
-    Number(contractId));
+    Number(contractId),
+    req.body.orderNo);
 
   pool.query(sqlQuery, (error, results) => {
     if (error)

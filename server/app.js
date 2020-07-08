@@ -1,10 +1,11 @@
 
 var createError = require('http-errors');
 var express = require('express');
-var fs = require('fs');
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
+
+var fs = require('fs');
 var InputData = require('./InputData/InputData');
 var docxTemplatorMethods = require('./DocxTemplater/DocxTemplaterMethods');
 const util = require('util');
@@ -39,32 +40,6 @@ app.use(cors());
 app.use(express.static(path.join(__dirname, "./WORD/templates")));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
-
-// app.post('/createTransmissionDocument', dbLogin.checkToken, function (req, res, next) {
-//   var fs = require('fs');
-//   let d = new Date();
-
-//   var inputPath = path.resolve(__dirname, 'WORD/templates/in1.docx');
-//   var outputPath = path.resolve(__dirname, 'WORD/templates/' + d.getHours() + d.getMinutes() + d.getSeconds() + '.docx');
-//   var inputData = accountData.setDataForTransmissionAccount(req.body);
-//   docxTemplatorMethods.generateDocx(inputPath, outputPath, inputData);
-//   var pathUrl = req.path;
-//   if (pathUrl !== '/') {
-//     res.download(outputPath, function (err) {
-//       if (err) {
-//         helper.consoleLog('Handle error, but keep in mind the response may be partially-sent')
-//       } else {
-//         helper.consoleLog('decrement a download credit, etc.');
-//       }
-//       if (fs.existsSync(outputPath))
-//         fs.unlinkSync(outputPath);
-//     });
-//   }
-//   else {
-//     next();
-//   }
-// });
-
 app.post('/createAccountDocument', dbLogin.checkToken, function (req, res, next) {
   var fs = require('fs');
 

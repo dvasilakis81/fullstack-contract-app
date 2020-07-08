@@ -140,7 +140,11 @@ module.exports = {
 						common.getrElement(rText) +
 						'</w:p>'
 				} else if (element.Type == 1 || element.Type == 2) {
-					var rText = util.format('Tη με αρ. %s/%s/%s ΕΑΔ %s ', element.Value, element.ProtocolNumber, element.ProtocolDate, element.EadNumber);
+					var rText = util.format('Tη με αρ. %s/%s/%s %s ', 
+					element.Value, 
+					element.ProtocolNumber, 
+					element.ProtocolDate, 
+					(element.EadNumber ? util.format('ΕΑΔ %s', element.EadNumber) : ''));
 					var lText = 'Απόφασης Ανάληψης Υποχρέωσης';
 					if (element.Type == 2)
 						lText += ' (διάφορα έξοδα ΠΟΕ)';
