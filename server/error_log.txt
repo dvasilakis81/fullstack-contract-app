@@ -1,11 +1,11 @@
-Message: invalid input syntax for type boolean: "Ναι"
-Stack: error: invalid input syntax for type boolean: "Ναι"
-    at Parser.parseErrorMessage (c:\Github\Ordering FullStack\node_modules\pg-protocol\dist\parser.js:241:15)
-    at Parser.handlePacket (c:\Github\Ordering FullStack\node_modules\pg-protocol\dist\parser.js:89:29)
-    at Parser.parse (c:\Github\Ordering FullStack\node_modules\pg-protocol\dist\parser.js:41:38)
-    at Socket.<anonymous> (c:\Github\Ordering FullStack\node_modules\pg-protocol\dist\index.js:8:42)
-    at Socket.emit (events.js:210:5)
-    at addChunk (_stream_readable.js:309:12)
-    at readableAddChunk (_stream_readable.js:290:11)
-    at Socket.Readable.push (_stream_readable.js:224:10)
-    at TCP.onStreamRead (internal/stream_base_commons.js:182:23)
+Message: operator does not exist: character varying = bigint
+Stack: error: operator does not exist: character varying = bigint
+    at Parser.parseErrorMessage (/home/d.vasilakis/Ordering_Development/node_modules/pg-protocol/dist/parser.js:241:15)
+    at Parser.handlePacket (/home/d.vasilakis/Ordering_Development/node_modules/pg-protocol/dist/parser.js:89:29)
+    at Parser.parse (/home/d.vasilakis/Ordering_Development/node_modules/pg-protocol/dist/parser.js:41:38)
+    at Socket.<anonymous> (/home/d.vasilakis/Ordering_Development/node_modules/pg-protocol/dist/index.js:8:42)
+    at Socket.emit (events.js:315:20)
+    at addChunk (_stream_readable.js:302:12)
+    at readableAddChunk (_stream_readable.js:278:9)
+    at Socket.Readable.push (_stream_readable.js:217:10)
+    at TCP.onStreamRead (internal/stream_base_commons.js:186:23)

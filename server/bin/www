@@ -7,6 +7,8 @@
 var app = require('../app');
 var debug = require('debug')('ordering:server');
 var http = require('http');
+var https = require('https');
+var fs = require('fs');
 //import { createServer } from 'http';
 
 /**
@@ -16,14 +18,25 @@ var http = require('http');
 //Here we are configuring express to use body-parser as middle-ware.
 //var port = normalizePort(process.env.SERVER_PORT || 7845);
 
-var port = normalizePort(process.env.PORT || 7845);
+var port = normalizePort(process.env.PORT || 7777);
 app.set('port', port);
+
+
+const options = {
+  key: fs.readFileSync('./server/bin/key.pem'),
+  cert: fs.readFileSync('./server/bin/cert.pem')
+};
+
+// const testFolder = './server/bin'
+// fs.readdirSync(testFolder).forEach(file => {
+//   console.log(file);
+// });
+var server = https.createServer(options, app);
 
 /**
  * Create HTTP server.
  */
-
-var server = http.createServer(app);
+//var server = http.createServer(app);
 
 /**
  * Listen on provided port, on all network interfaces.

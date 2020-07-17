@@ -8,76 +8,28 @@ const util = require('util')
 // });
 //database: 'new_db',
 
-// const getContracts_WEBIX = (request, response, next) => {
-//   var offset;
-//   var limit;
 
-//   if (request.query.start instanceof Array) {
-//     offset = request.query.start[request.query.start.length - 1];
-//     limit = request.query.count[request.query.count.length - 1];
-//   } else {
-//     offset = parseInt(request.query.start);
-//     limit = parseInt(request.query.count);
-//   }
-
-//   var sqlQuery = 'SELECT *,' +
-//     '(SELECT COUNT(*) AS "Total" FROM "Ordering"."Contract"), ' +
-//     '(SELECT json_agg(ContractType) FROM (SELECT * FROM "Ordering"."ContractType" as ct WHERE c."ContractTypeId" = ct."ContractTypeId") ContractType) AS ContractType, ' +
-//     '(SELECT json_agg(Direction) FROM (SELECT * FROM "Ordering"."Direction" as dir WHERE c."DirectionId" = dir."DirectionId") Direction) AS Direction, ' +
-//     '(SELECT json_agg(Department) FROM (SELECT * FROM "Ordering"."Department" as dep WHERE c."DepartmentId" = dep."DepartmentId") Department) AS Department ' +
-//     'FROM "Ordering"."Contract" as c ' +
-//     'ORDER BY c."DateCreated" DESC ' +
-//     'OFFSET ' + offset + ' LIMIT ' + limit
-
-//   pool.query(sqlQuery, (error, results) => {
-//     if (error) {
-//       next(error);
-//       helper.consoleLog("Failed to get contracts: \n" + error.message);
-//     }
-//     else {
-//       helper.consoleLog("Contracts requested\n");
-
-//       var retObject = {} // empty Object
-//       var key = 'data';
-//       retObject[key] = []; // empty Array, which you can push() values into
-//       retObject[key] = results.rows
-
-//       key = 'pos';
-//       retObject[key] = [];
-//       retObject[key] = offset;
-
-//       key = 'total_count';
-//       retObject[key] = [];
-//       retObject[key] = results.rows && results.rows.length > 0 ? results.rows[0].Total : 0;
-
-//       var jstr = JSON.stringify(retObject);
-
-//       response.send(jstr);
-//     }
-//   })
-// }
 function getQueryTotalContractsByUser(loginUserId) {
-  return loginUserId ? util.format('(SELECT COUNT(*) AS "Total" FROM "Ordering"."Contract" as c ' +
-    'WHERE (c."OwnerId"=%s OR c."AllUsers"=true OR (%s IN (SELECT cus."UserId" FROM "Ordering"."ContractUsers" as cus WHERE cus."ContractId"=c."Id")))), ',
-    loginUserId, loginUserId) : '(SELECT COUNT(*) AS "Total" FROM "Ordering"."Contract"), ';
+  return loginUserId
+    ?
+    util.format('(SELECT COUNT(*) AS "Total" FROM "Ordering"."Contract" as c WHERE c."OwnerId"=%s), ', helper.addQuotes(loginUserId))
+    :
+    '(SELECT COUNT(*) AS "Total" FROM "Ordering"."Contract"), ';
 }
 
 function getSelectFromClauses(loginUserId) {
 
   return 'SELECT *, ' +
     getQueryTotalContractsByUser(loginUserId) +
+    '(SELECT json_agg(ContractOwner) FROM (SELECT * FROM "Ordering"."ContractOwner" as co WHERE c."Id" = co."ContractId") ContractOwner) AS ContractOwner, ' +
     '(SELECT json_agg(Account) FROM (SELECT acct."Number",acct."Start",acct."End",acct."AmountPure", acct."AmountFpa", acct."AmountTotal" FROM "Ordering"."Account" as acct WHERE c."Id" = acct."ContractId" ORDER BY acct."Number") Account) AS CreatedAccounts, ' +
     '(SELECT json_agg(ContractType) FROM (SELECT * FROM "Ordering"."ContractType" as ct WHERE c."ContractTypeId" = ct."ContractTypeId") ContractType) AS ContractType, ' +
-    '(SELECT json_agg(Direction) FROM (SELECT * FROM "Ordering"."Direction" as dir WHERE c."DirectionId" = dir."DirectionId") Direction) AS Direction, ' +
-    '(SELECT json_agg(Department) FROM (SELECT * FROM "Ordering"."Department" as dep WHERE c."DepartmentId" = dep."DepartmentId") Department) AS Department, ' +
-    '(SELECT json_agg(ContractUsers) FROM (SELECT * FROM "Ordering"."ContractUsers" as cus WHERE c."Id" = cus."ContractId") ContractUsers) AS ContractUsers, ' +    
     '(SELECT json_agg(DecisionBoard) FROM (SELECT * FROM "Ordering"."DecisionBoard" as dp WHERE dp."ContractId" = c."Id" ORDER BY dp."OrderNo") DecisionBoard) AS DecisionBoard, ' +
     '(SELECT json_agg(DecisionCoordinatorDecentrilizedAdministration) FROM (SELECT * FROM "Ordering"."DecisionCoordinatorDecentrilizedAdministration" as dp WHERE dp."ContractId" = c."Id" ORDER BY dp."OrderNo") DecisionCoordinatorDecentrilizedAdministration) AS DecisionCoordinatorDecentrilizedAdministration, ' +
     '(SELECT json_agg(CourtOfAuditors) FROM (SELECT * FROM "Ordering"."CourtOfAuditors" as dp WHERE dp."ContractId" = c."Id" ORDER BY dp."OrderNo") CourtOfAuditors) AS CourtOfAuditors, ' +
     '(SELECT json_agg(AAY) FROM (SELECT * FROM "Ordering"."AAY" as aay WHERE aay."ContractId" = c."Id" ORDER BY aay."OrderNo") AAY) AS AAY, ' +
     '(SELECT json_agg(AuthorDocumentedRequest) FROM (SELECT * FROM "Ordering"."AuthorDocumentedRequest" as adr WHERE adr."ContractId" = c."Id" ORDER BY adr."OrderNo") AuthorDocumentedRequest) AS AuthorDocumentedRequest, ' +
-    '(SELECT json_agg(SnippetPractical) FROM (SELECT * FROM "Ordering"."SnippetPractical" as sp WHERE sp."ContractId" = c."Id" ORDER BY sp."OrderNo") SnippetPractical) AS SnippetPractical, ' +
-    '(SELECT json_agg(Owner) FROM (SELECT * FROM "Ordering"."User" as usr WHERE c."OwnerId" = usr."Id") Owner) AS Owner ' +
+    '(SELECT json_agg(SnippetPractical) FROM (SELECT * FROM "Ordering"."SnippetPractical" as sp WHERE sp."ContractId" = c."Id" ORDER BY sp."OrderNo") SnippetPractical) AS SnippetPractical ' +
     'FROM "Ordering"."Contract" as c '
 }
 
@@ -85,14 +37,28 @@ function gerOrderBy() {
   return 'ORDER BY c."Start" DESC '
 }
 
+function checkIfLoginUserIsSupervisor(loginUserId) {
+  return util.format(' %s IN (SELECT con."Supervisor" FROM "Ordering"."ContractOwner" as con WHERE con."ContractId"=c."Id" ) ', helper.addQuotes(loginUserId));
+}
+
+function checkIfLoginUserIsDirector(loginUserId) {
+  return util.format(' %s IN (SELECT con."Director" FROM "Ordering"."ContractOwner" as con WHERE con."ContractId"=c."Id" ) ', helper.addQuotes(loginUserId));
+}
+
 const getContracts = (request, response, next) => {
 
-  var loginUserId = parseInt(request.query.loginuserid);
-  var offset = parseInt(request.query.offset);
-  var limit = parseInt(request.query.limit);
-  var where = util.format('WHERE (c."OwnerId"=%s OR c."AllUsers"=true OR %s IN (SELECT cus."UserId" FROM "Ordering"."ContractUsers" as cus WHERE cus."ContractId"=c."Id")) ', loginUserId, loginUserId);
-  var sqlQuery = util.format('%s %s %s OFFSET %s LIMIT %s', getSelectFromClauses(loginUserId), where, gerOrderBy(), offset, limit);
-  
+  var loginUserInfo = request.body.loginUserInfo;
+  var offset = parseInt(request.body.offset);
+  var limit = parseInt(request.body.limit);
+  //var where = util.format('WHERE (c."OwnerId"=%s OR c."AllUsers"=true OR %s IN (SELECT cus."UserId" FROM "Ordering"."ContractUsers" as cus WHERE cus."ContractId"=c."Id")) ', loginUserId, loginUserId);
+  var where = util.format('WHERE c."OwnerId"=%s OR %s OR %s',
+    helper.addQuotes(loginUserInfo.uid),
+    checkIfLoginUserIsSupervisor(loginUserInfo.uid),
+    checkIfLoginUserIsDirector(loginUserInfo.uid)
+  );
+  var sqlQuery = util.format('%s %s %s OFFSET %s LIMIT %s', getSelectFromClauses(loginUserInfo.uid), where, gerOrderBy(), offset, limit);
+
+  console.log('sqlQuery: ' + sqlQuery);
   pool.query(sqlQuery, (error, results) => {
     if (error) {
       next(error);
@@ -106,10 +72,10 @@ const getContracts = (request, response, next) => {
 }
 
 const getContractById = (req, res, next, contractId) => {
-  var loginUserId = parseInt(req.body.loginUserId);
+  var loginUserId = req.body.loginUserId;
   var where = util.format('WHERE c."Id"=%s', contractId);
   var sqlQuery = util.format('%s %s %s', getSelectFromClauses(loginUserId), where, gerOrderBy())
-  
+
   console.log('getContractById : sqlQuery: ' + sqlQuery)
   pool.query(sqlQuery, (error, results) => {
     if (error) {
@@ -210,8 +176,8 @@ const insertContract = (req, res, next) => {
     if (error)
       next(error);
     else
-      if (req.body.contractStuff && req.body.contractStuff.length > 0)
-        insertContractUsers(req, res, next, results.rows[0].Id, undefined)
+      if (req.body.owner)
+        insertContractOwnerInfo(req, res, next, results.rows[0].Id);
       else
         getContractById(req, res, next, results.rows[0].Id);
   })
@@ -232,6 +198,28 @@ const insertContractUsers = (req, res, next, contractId, usersToGiveAccessToCont
     }
     sqlQuery += ' RETURNING * ';
   }
+
+  pool.query(sqlQuery, (error, results) => {
+    if (error)
+      next(error);
+    else
+      getContractById(req, res, next, contractId);
+  })
+}
+
+const insertContractOwnerInfo = (req, res, next, contractId) => {
+  var owner = req.body.owner;
+
+  var sqlQuery = 'INSERT INTO "Ordering"."ContractOwner"("ContractId", "UserId", "Direction", "Department", "Name", "Supervisor", "Director")  VALUES ';
+  sqlQuery += util.format('(%s,%s,%s,%s,%s,%s,%s)',
+  contractId, 
+  helper.addQuotes(owner.uid), 
+  helper.addQuotes(owner.ou), 
+  helper.addQuotes(owner.departmentNumber), 
+  helper.addQuotes(owner.cn), 
+  helper.addQuotes(owner.supervisor), 
+  helper.addQuotes(owner.director));
+  sqlQuery += ' RETURNING * ';
 
   pool.query(sqlQuery, (error, results) => {
     if (error)
@@ -379,25 +367,6 @@ const deleteContract = (req, res, next) => {
       res.status(200).json(results.rows[0])
   })
 }
-
-// const getContracts = (request, response, next) => {
-//   var sqlQuery = 'SELECT * from "Ordering"."Contract" as c ' +
-//     'INNER JOIN "Ordering"."Direction" as dir ON c."DirectionId" = dir."DirectionId" ' +
-//     'INNER JOIN "Ordering"."ContractType" as ct ON c."ContractTypeId" = ct."ContractTypeId"' +
-//     'INNER JOIN "Ordering"."Department" as dep ON c."DepartmentId" = dep."DepartmentId"' +
-//     'ORDER BY c."DateCreated" DESC'
-
-//   pool.query(sqlQuery, (error, results) => {
-//     if (error) {
-//       next(error);
-//       helper.consoleLog("Failed to get contracts: \n" + error.message);
-//     }
-//     else {
-//       helper.consoleLog("Contracts requested\n");
-//       response.status(200).json(results.rows);
-//     }
-//   })
-// }
 
 module.exports = {
   searchContracts,

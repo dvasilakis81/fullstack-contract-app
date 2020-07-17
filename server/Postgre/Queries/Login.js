@@ -187,9 +187,10 @@ const login = (request, response, next) => {
               userReservations = results.rows[0].userreservations;
               response.status(200).json({
                 success: true,
+                userLoginInfo: userLoginInfo,
                 id: userLoginInfo.Id,
                 username: userLoginInfo.Username,
-                role: userLoginInfo.Role,
+                role: userLoginInfo.Role,        
                 token: token,
                 expiresAt: helper.getExpiresAt(token, jwt, secretKey),
                 reservations: userReservations

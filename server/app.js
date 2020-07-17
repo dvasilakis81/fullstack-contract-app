@@ -22,6 +22,7 @@ var dbContract = require('./Postgre/Queries/Contract')
 var dbAccount = require('./Postgre/Queries/Account')
 var dbError = require('./Postgre/Queries/Error')
 var dbLogin = require('./Postgre/Queries/Login')
+var dbLoginLDAP = require('./Postgre/Queries/LoginLDAP')
 var dbParametric = require('./Postgre/Queries/Parametric')
 var dbUserReservations = require('./Postgre/Queries/UserReservations')
 var dbAay = require('./Postgre/Queries/AAY')
@@ -114,12 +115,13 @@ app.post('/createTransmissionDocument', dbLogin.checkToken, function (req, res, 
 // });
 
 app.get('/login', dbLogin.login);
+app.get('/loginWithLDAP', dbLoginLDAP.login);
 app.post('/logClientError', function (req, res, next) {
   var msgError = req.body && req.body.error ? req.body.error : '';
   var msgStack = req.body && req.body.stack ? req.body.stack : '';
   //var msg = util.format('Message: %s\n Stack %s\n', msgError, msgStack);
   var msg = 'Message: ' + msgError + '\nStack: ' + (msgStack.componentStack ? msgStack.componentStack.substring(0, 900) : '') + '\n';
-  dbError.logError(req, res, next, msg, false, true)
+  dbError.logError(req, res, next, msg, false, true);
 })
 
 app.post('/createuser', dbLogin.checkToken, dbLogin.createUser);
@@ -162,7 +164,7 @@ app.get('/users', dbLogin.checkToken, dbParametric.getUsers);
 app.get('/userroles', dbLogin.checkToken, dbParametric.getUserRoles);
 app.get('/reservations', dbLogin.checkToken, dbParametric.getReservations);
 app.post('/contractexists', dbLogin.checkToken, dbContract.contractExists);
-app.get('/contracts', dbLogin.checkToken, dbContract.getContracts);
+app.post('/contracts', dbLogin.checkToken, dbContract.getContracts);
 //app.get('/contracts_webix', dbContract.getContracts_WEBIX);
 app.get('/searchcontracts', dbContract.searchContracts);
 app.post('/insertcontract', dbLogin.checkToken, dbContract.insertContract);
@@ -208,7 +210,7 @@ app.use(cookieParser());
 
 console.log('ENVIROMENT: ' + ENV)
 console.log('__dirname: ' + __dirname)
-if (ENV === 'production') {
+//if (ENV === 'production') {
   console.log('ENVIROMENT: ' + ENV)
   app.use(express.static(path.join(__dirname, '../client/build')))
   app.use((req, res) => {
@@ -219,9 +221,9 @@ if (ENV === 'production') {
     console.log('Accessing all urls except all above ...')
     res.sendFile(path.join(__dirname, '../client/build/index.html'))
   })
-}
-else
- app.use(express.static(path.join(__dirname, 'public')));
+//}
+//else
+// app.use(express.static(path.join(__dirname, 'public')));
 
 // app.use('/', indexRouter);
 // app.use('/users', usersRouter);
