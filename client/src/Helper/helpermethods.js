@@ -7,7 +7,7 @@ export function isTokenExpired(tokenjwt) {
   var ret = false;
 
   var dtNow = new Date();
-  if (tokenjwt && tokenjwt.data && tokenjwt.data.expiresAt) {    
+  if (tokenjwt && tokenjwt.data && tokenjwt.data.expiresAt) {
     var tokenExpiresAt = new Date(tokenjwt.data.expiresAt);
     console.log('isTokenExpired');
     console.log('tokenExpiresAt:' + tokenExpiresAt);
@@ -98,6 +98,17 @@ export function getHostUrl() {
     return ''
   else
     return window.SERVER_URL
+}
+
+export function getLoginUrl(url, isLdap, username, password) {
+  var ret = '';
+
+  if (isLdap === true)
+    ret = url + '/loginWithLDAP?u=' + username + '&p=' + password;
+  else
+    ret = url + '/login?u=' + username + '&p=' + password;
+
+  return ret;
 }
 
 const capitalize = (s) => {

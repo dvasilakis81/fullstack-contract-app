@@ -415,10 +415,10 @@ class ItemDetail extends React.Component {
 		else
 			return <span></span>
 	}
-	getContractUserTemplate(item, color) {
+	getContractUserTemplate(OwnerName, color) {
 		return <div style={{ background: color, color: 'black', fontWeight: 'normal', width: 'auto', paddingLeft: '3px', padding: '3px', marginLeft: '5px', marginRight: '5px', textAlign: 'center', borderRadius: '10px' }}>
 			<span><AccountCircleIcon /></span>
-			<span style={{ verticalAlign: 'top' }}>{item.Firstname} {item.Lastname}</span>
+			<span style={{ verticalAlign: 'top' }}>{OwnerName}</span>
 		</div>
 	}
 	getContractUsersTemplate(contractDetails) {
@@ -509,30 +509,26 @@ class ItemDetail extends React.Component {
 	}
 	getAttachmentTemplate(contractInfo, values, type) {
 
-		return <Grid>
-			<Paper style={styles.paperMoreContractInfo} square={true}>
-				<Typography>
-					{this.getAttachmentTitle(type)}
-					<span style={{ marginLeft: '10px', fontWeight: '' }}>{values ? values.length : 'Δεν έχει'}</span>
-					<Button
-						variant='contained'
-						size='small'
-						style={{ margin: '5px', background: '#F3FCFF', color: '#000' }}
-						onClick={this.handlePopoverClick.bind(this, type)}>
-						Προβολή
-					</Button>
-
-					<Popover
-						open={this.state.openPopover === type ? true : false}
-						onClose={this.handlePopoverClose}
-						anchorReference="anchorPosition"
-						anchorPosition={{ top: this.getPopoverTop(this.state.windowHeight), left: this.getPopoverLeft(this.state.windowWidth) }}
-						style={{ transform: document.getElementById('root').style.transform }}>
-						{this.getAttachmentView(contractInfo, type)}
-					</Popover>
-				</Typography>
-			</Paper>
-		</Grid>
+		return <div style={{ padding: '10px' }}>
+			{this.getAttachmentTitle(type)}
+			<div style={{ textAlign: 'center' }}>
+				<Button
+					variant='contained'
+					size='small'
+					style={{ margin: '5px', background: '#F3FCFF', color: '#000' }}
+					onClick={this.handlePopoverClick.bind(this, type)}>
+					Προβολή ({values ? values.length : 'Δεν έχει'})
+				</Button>
+			</div>
+			<Popover
+				open={this.state.openPopover === type ? true : false}
+				onClose={this.handlePopoverClose}
+				anchorReference="anchorPosition"
+				anchorPosition={{ top: this.getPopoverTop(this.state.windowHeight), left: this.getPopoverLeft(this.state.windowWidth) }}
+				style={{ transform: document.getElementById('root').style.transform }}>
+				{this.getAttachmentView(contractInfo, type)}
+			</Popover>
+		</div>
 	}
 	getLawArticle(contractInfo) {
 		let ret = '';
@@ -557,27 +553,43 @@ class ItemDetail extends React.Component {
 							</Typography>
 						</Paper>
 					</Grid>
-					<Grid item>
+						<Grid item>
 						<Paper style={styles.paperContractInfo} square={true}>
 							<Typography>
 								<List style={{ display: 'flex', flexDirection: 'row', padding: '0px', margin: '0px' }}>
 									<ListItem style={{ width: 'auto', margin: '0px', padding: '0px', wordWrap: 'normal', whiteSpace: 'noWrap' }}><b>Δημιουργός σύμβασης</b></ListItem>
 									<ListItem>
 										<List style={{ display: 'flex', flexDirection: 'row', padding: '0px', flexWrap: 'wrap' }}>
-											{contractInfo.owner ? (this.getContractUserTemplate(contractInfo.owner[0], 'gold')) : ''}
+											{contractInfo.contractowner ? (this.getContractUserTemplate(contractInfo.contractowner[0].Name, 'gold')) : ''}
 										</List>
 									</ListItem>
 								</List>
 							</Typography>
 						</Paper>
 					</Grid>
-					<Grid item>
+					{/* <Grid item>
 						<Paper style={styles.paperContractInfo} square={true}>
 							<Typography>
 								{this.getContractUsersTemplate(contractInfo)}
 							</Typography>
 						</Paper>
+					</Grid> */}
+					{this.getContractMonetaryTemplate(contractInfo)}
+					<Grid item>
+						<Paper style={styles.paperContractInfo} square={true}>
+							<Typography>
+								<b># λογαριασμών</b> {contractInfo.NumberOfAccounts} {contractInfo.HasDownPayment === true ? '(Ο πρώτος λογαριασμός είναι η προκαταβολή)' : ''}
+								{this.getAccountsCreatedMessage(contractInfo)}
+							</Typography>
+						</Paper>
 					</Grid>
+					<Grid item>
+						<Paper style={styles.paperContractInfoLast} square={true}>
+							<Typography>
+								{this.drawAccountButtons(contractInfo)}
+							</Typography>
+						</Paper>
+					</Grid>				
 					<Grid item>
 						<Paper style={styles.paperContractInfo} square={true}>
 							<Typography>
@@ -642,14 +654,19 @@ class ItemDetail extends React.Component {
 													</Typography>
 												</Paper>
 											</Grid>
-											{this.getCPVTemplate(contractInfo)}											
-											{this.getAttachmentTemplate(contractInfo, contractInfo.decisionboard, 1)}
-											{this.getAttachmentTemplate(contractInfo, contractInfo.decisioncoordinatordecentrilizedadministration, 2)}
-											{this.getAttachmentTemplate(contractInfo, contractInfo.courtofauditors, 3)}
-											{this.getAttachmentTemplate(contractInfo, contractInfo.authordocumentedrequest, 4)}
-											{this.getAttachmentTemplate(contractInfo, contractInfo.snippetpractical, 5)}											
-											{this.getAttachmentTemplate(contractInfo, contractInfo.aay, 6)}
-
+											{this.getCPVTemplate(contractInfo)}
+											<Grid>
+												<Paper style={styles.paperMoreContractInfo} square={true}>
+													<Typography div style={{ display: 'flex', flexDirection: 'column', flexWrap: 'wrap', justifyContent: 'flex-start', alignContent: 'space-between', width: '100%' }}>
+														{this.getAttachmentTemplate(contractInfo, contractInfo.decisionboard, 1)}
+														{this.getAttachmentTemplate(contractInfo, contractInfo.decisioncoordinatordecentrilizedadministration, 2)}
+														{this.getAttachmentTemplate(contractInfo, contractInfo.courtofauditors, 3)}
+														{this.getAttachmentTemplate(contractInfo, contractInfo.authordocumentedrequest, 4)}
+														{this.getAttachmentTemplate(contractInfo, contractInfo.snippetpractical, 5)}
+														{this.getAttachmentTemplate(contractInfo, contractInfo.aay, 6)}
+													</Typography>
+												</Paper>
+											</Grid>
 											<Grid item>
 												<Paper style={styles.paperMoreContractInfo} square={true}>
 													<Typography>
@@ -661,28 +678,12 @@ class ItemDetail extends React.Component {
 												<Paper style={styles.paperMoreContractInfo} square={true}>
 													<Typography>
 														<b>Αρ.Απόφασης Κατακύρωσης</b> {contractInfo.AwardNumber}/{getDateFormatForDocument(contractInfo.AwardDate)}{' '}(ΑΔΑ: {contractInfo.AwardAda})
-            			</Typography>
+            							</Typography>
 												</Paper>
 											</Grid>
 										</Grid>
 									</ExpansionPanelDetails>
 								</ExpansionPanel>
-							</Typography>
-						</Paper>
-					</Grid>
-					{this.getContractMonetaryTemplate(contractInfo)}
-					<Grid item>
-						<Paper style={styles.paperContractInfo} square={true}>
-							<Typography>
-								<b># λογαριασμών</b> {contractInfo.NumberOfAccounts} {contractInfo.HasDownPayment === true ? '(Ο πρώτος λογαριασμός είναι η προκαταβολή)' : ''}
-								{this.getAccountsCreatedMessage(contractInfo)}
-							</Typography>
-						</Paper>
-					</Grid>
-					<Grid item>
-						<Paper style={styles.paperContractInfoLast} square={true}>
-							<Typography>
-								{this.drawAccountButtons(contractInfo)}
 							</Typography>
 						</Paper>
 					</Grid>

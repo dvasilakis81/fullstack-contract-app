@@ -74,6 +74,7 @@ class NewContract extends Component {
 			message: '',
 			variant: '',
 			submitButtonDisabled: false,
+			owner: this.props.token.data.user,
 			contractStuff: this.props.location.state ? this.props.location.state.contract.contractusers : [],
 			AllUsers: this.props.location.state ? this.props.location.state.contract.AllUsers : false,
 			OwnerId: this.props.location.state ? this.props.location.state.contract.OwnerId : this.props.token.data.id,
@@ -288,19 +289,19 @@ class NewContract extends Component {
 		return ret;
 	}
 
-	getSelectUsersTemplate() {
+	// getSelectUsersTemplate() {
 
-		if (this.props.token && this.props.token.data) {
-			if (this.props.token.data.id.toString() === this.state.OwnerId.toString()) {
-				return <SelectContractStuff
-					handleContractStuff={this.handleContractStuff}
-					usersHavingAccessToContract={this.state.contractStuff}
-					selectAllStuff={this.selectAllStuff}
-					isAllStuffChecked={this.state.AllUsers}
-					selectedUsers={this.getSelectedUsers()} />
-			}
-		}
-	}
+	// 	if (this.props.token && this.props.token.data) {
+	// 		if (this.props.token.data.id.toString() === this.state.OwnerId.toString()) {
+	// 			return <SelectContractStuff
+	// 				handleContractStuff={this.handleContractStuff}
+	// 				usersHavingAccessToContract={this.state.contractStuff}
+	// 				selectAllStuff={this.selectAllStuff}
+	// 				isAllStuffChecked={this.state.AllUsers}
+	// 				selectedUsers={this.getSelectedUsers()} />
+	// 		}
+	// 	}
+	// }
 
 	render() {
 		var divWidth = this.props.screenDimensions.width > this.props.screenDimensions.height ? '80%' : '100%'
@@ -317,9 +318,9 @@ class NewContract extends Component {
 								<form style={{ padding: '10px' }} autoComplete="off" onSubmit={this.handleSubmit}>
 									{getSubmitButton('contained', 'primary', { position: 'fixed', left: this.props.screenDimensions.width - 250, top: this.props.screenDimensions.height - (getHeaderHeight() + getFooterHeight()) }, null, 'Αποθήκευση', <Icon style={{ marginLeft: '10px', padding: '10px' }}>save</Icon>, this.state.submitButtonDisabled)}
 									<div style={{ display: 'flex', flexFlow: 'column', width: '100%', flexWrap: 'wrap' }}>
-										<div style={{ margin: '10px', width: '100%' }}>
+										{/* <div style={{ margin: '10px', width: '100%' }}>
 											{this.getSelectUsersTemplate()}
-										</div>
+										</div> */}
 										<div style={styles.divRow}>
 											<MyTextField title='Διεύθυνση' id='DirectionId' stateValue={this.state.DirectionId} values={this.loadSelectMunicipalityDirections()} isRequired={true} isDisabled={false} onChange={this.onChange} select={true} width='50%' />
 											<MyTextField title='Τμήμα' id='DepartmentId' stateValue={this.state.DepartmentId} values={this.loadMunicipalityDirectionDepartments(this.state.DirectionId)} isRequired={true} isDisabled={false} onChange={this.onChange} select={true} width='50%' />

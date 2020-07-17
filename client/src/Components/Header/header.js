@@ -62,7 +62,7 @@ class Header extends React.Component {
     }
 
     this.gotoAdministration = this.gotoAdministration.bind(this);
-    this.gotoReservations  = this.gotoReservations .bind(this);    
+    this.gotoReservations = this.gotoReservations.bind(this);
     this.createNewContract = this.createNewContract.bind(this);
     this.logout = this.logout.bind(this);
     this.handleAccountMenuOpen = this.handleAccountMenuOpen.bind(this);
@@ -84,7 +84,8 @@ class Header extends React.Component {
       onClose={this.handleMenuClose}>
       <MenuItem onClick={this.gotoReservations} style={{ transform: document.getElementById('root').style.transform }}>Φ.Π.Α. - Κρατήσεις</MenuItem>
       <MenuItem onClick={this.logout} style={{ transform: document.getElementById('root').style.transform }}>Έξοδος</MenuItem>
-    </Menu>  };
+    </Menu>
+  };
 
   handleMenuClose() {
     this.setState({ accountAnchorEl: null })
@@ -126,7 +127,7 @@ class Header extends React.Component {
                 <AccountCircle />
               </IconButton>
               <div>
-                {this.props.token ? this.props.token.data.username : 'όνομα χρήστη'}
+                {this.props.token && this.props.token.data ? this.props.token.data.user.cn : ''}
               </div>
             </div>
           </Toolbar>
@@ -140,7 +141,7 @@ class Header extends React.Component {
     this.setState({ navigateToLogin: false, navigateToCreateNewContact: false, navigateToAdministration: true, navigateToReservations: false });
   }
   gotoReservations() {
-    this.setState({ navigateToLogin: false, navigateToCreateNewContact: false, navigateToAdministration: false, navigateToReservations:true });
+    this.setState({ navigateToLogin: false, navigateToCreateNewContact: false, navigateToAdministration: false, navigateToReservations: true });
   }
   createNewContract() {
     this.setState({ navigateToLogin: false, navigateToCreateNewContact: true, navigateToAdministration: false, navigateToReservations: false });
@@ -154,13 +155,13 @@ class Header extends React.Component {
   getAdministrationAction(showAdministrationOption) {
     var accessToAdmin = false;
     if (this.props.token && this.props.token.data) {
-      if (this.props.token.data.role === 1 && showAdministrationOption === true)
+      if (this.props.token.data.user.uid == 'd.vasilakis')
         accessToAdmin = true;
     }
 
     //if (showAdministrationOption) {
     if (accessToAdmin === true) {
-      if (this.props.token && this.props.token.data.role <= 3)
+      if (this.props.token && this.props.token.data) {
         return (
           <div onClick={this.gotoAdministration} style={{ textAlign: 'center', padding: '10px' }} >
             <IconButton
@@ -175,6 +176,7 @@ class Header extends React.Component {
           </div>
           // <Button color="inherit" onClick={this.gotoAdministration}>Διαχειριστικό</Button>
         )
+      }
       else
         return <></>
     }
@@ -183,8 +185,8 @@ class Header extends React.Component {
   }
   getNewContractAction(showNewContractOption) {
 
-    if (showNewContractOption) {
-      if (this.props.token && this.props.token.data.role <= 4)
+    if (showNewContractOption === true) {
+      if (this.props.token && this.props.token.data)
         return <div onClick={this.createNewContract} style={{ textAlign: 'center', padding: '10px' }} >
           <IconButton
             className='edgeStart'

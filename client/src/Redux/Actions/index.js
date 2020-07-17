@@ -1,10 +1,15 @@
 import axios from 'axios';
-import { getHostUrl } from '../../Helper/helpermethods';
+import { getHostUrl, getLoginUrl } from '../../Helper/helpermethods';
 
 const URL = getHostUrl();
 
 export function getContracts(tokenData, offset, limit) {
-  const request = axios.get(`${URL}/contracts?loginuserid=` + tokenData.id + '&offset=' + offset + '&limit=' + limit, { headers: { Authorization: 'Bearer ' + tokenData.token } })
+  var data= {}
+  data.loginUserInfo = tokenData.user;
+  data.offset = offset;
+  data.limit = limit;
+
+  const request = axios.post(`${URL}/contracts`, data, { headers: { Authorization: 'Bearer ' + tokenData.token } })
     .then(response => response.data)
   return { type: 'GET_CONTRACTS', payload: request }
 }
@@ -47,8 +52,11 @@ export function getAccount(token, contractId, accountNumber) {
 }
 
 export function login(username, password) {
-  var url = `${URL}/login?u=` + username + '&p=' + password;
-  const request = axios.get(url)
+
+  //var url = `${URL}/login?u=` + username + '&p=' + password;
+  var url = getLoginUrl(`${URL}`, true, username, password);
+  console.log('url: ' + url);
+  const request = axios.get(url);
   return {
     type: 'GET_TOKEN_JWT',
     payload: request
