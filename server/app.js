@@ -19,6 +19,7 @@ var helmet = require('helmet')
 var app = express();
 
 var dbContract = require('./Postgre/API/Contracts/ContractAPI')
+
 var dbAccount = require('./Postgre/API/Accounts/AccountAPI')
 var dbError = require('./Postgre/API/Error')
 var dbLogin = require('./Postgre/API/Login')
