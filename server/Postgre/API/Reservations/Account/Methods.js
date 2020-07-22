@@ -1,22 +1,10 @@
-const util = require('util')
-
 var pool = require('../../../dbConfig').pool
 var queries = require('./Queries');
 
-async function getReservations(req, res, next) {
+async function get(req, res, next) {
 
   try {
-    const { rows } = await pool.query(queries.query_getreservations(req));
-    return rows;
-  } catch (error) {
-    next(error);
-  }
-}
-
-async function getUserReservations(req, res, next, userId) {
-
-  try {
-    const { rows } = await pool.query(queries.query_getuserreservations(userId));
+    const { rows } = await pool.query(queries.query_getaccountreservations(req));
     return rows;
   }
   catch (error) {
@@ -36,18 +24,7 @@ async function insert(req, res, next) {
   }
 }
 
-async function update(req) {
-
-  try {
-    const { rows } = await pool.query(queries.query_update(req));
-    return rows;
-  }
-  catch (error) {
-    next(error);
-  }
-}
-
-async function remove(req) {
+async function remove(req, res, next) {
 
   try {
     const { rows } = await pool.query(queries.query_remove(req));
@@ -59,9 +36,7 @@ async function remove(req) {
 }
 
 module.exports = {
-  getReservations,
-  getUserReservations,
-  insert,
-  update,
+  get,  
+  insert,  
   remove
 }

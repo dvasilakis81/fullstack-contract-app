@@ -1,6 +1,5 @@
 const util = require('util')
 
-var helper = require('../../../HelperMethods/helpermethods')
 var pool = require('../../dbConfig').pool
 var queries = require('./Queries');
 

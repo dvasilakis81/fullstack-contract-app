@@ -1,13 +1,10 @@
-const pool = require('../../dbConfig').pool
-const util = require('util')
-const helper = require('../../../HelperMethods/helpermethods')
-
-const methods = require('./Methods')
-const invoiceMethods = require('../Invoice/Methods')
-const ccMethods = require('../CC/Methods')
-const signatureMethods = require('../Signatures/Methods')
-const monitoringCommitteeMethods = require('../MonitoringCommittee/Methods')
-
+const helper = require('../../../HelperMethods/helpermethods');
+const methods = require('./Methods');
+const invoiceMethods = require('../Invoice/Methods');
+const ccMethods = require('../CC/Methods');
+const signatureMethods = require('../Signatures/Methods');
+const monitoringCommitteeMethods = require('../MonitoringCommittee/Methods');
+const reservationMethods = require('../../API/Reservations/Account/Methods')
 // const getRemainAmountOfContract = (request, response, next) => {
 
 //   var numberOfAccounts = await methods.getContractAccountsNumber(req, res, next);
@@ -67,23 +64,11 @@ async function insertAccount(req, res, next) {
     var rows = await methods.insertAccount(req, res, next);
     if (rows.length > 0 && rows[0].Id) {
       var accountId = rows[0].Id;
-      var rows = await invoiceMethods.insertInvoice(req, res, next, accountId)
-      var rows = await ccMethods.insertCC(req, res, next, accountId)
-      var rows = await signatureMethods.insertSignatures(req, res, next, accountId)
+      var rows = await invoiceMethods.insertInvoice(req, res, next, accountId);
+      var rows = await ccMethods.insertCC(req, res, next, accountId);
+      var rows = await signatureMethods.insertSignatures(req, res, next, accountId);
       var rows = await monitoringCommitteeMethods.insertMonitoringCommittee(req, res, next, accountId);
-
-      // var accountInfo = [];
-      // accountInfo.push({
-      //   Id: results.rows[0].Id,
-      //   ContractId: contractId,
-      //   Number: req.body.AccountNumber,
-      //   Start: results.rows[0].Start,
-      //   End: results.rows[0].End,
-      //   AmountPure: results.rows[0].AmountPure,
-      //   AmountFpa: results.rows[0].AmountFpa,
-      //   AmountTotal: results.rows[0].AmountTotal
-      // })
-      // res.status(200).json(accountInfo);      
+      var rows = await reservationMethods.sync(req, res, next, accountId);
 
       getAccountById(req, res, next);
     }

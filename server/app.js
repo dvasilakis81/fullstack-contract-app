@@ -33,7 +33,7 @@ var dbAuthorDocumentedRequest = require('./Postgre/API/AuthorDocumentedRequest')
 var dbSnippetPractical = require('./Postgre/API/SnippetPractical')
 var dbCC = require('./Postgre/API/CC')
 var dbUserReservations = require('./Postgre/API/Reservations/User/Methods')
-//var dbAccountReservations = require('./Postgre/API/Reservations/Account/Methods')
+var dbAccountReservations = require('./Postgre/API/Reservations/Account/API')
 
 var helper = require('./HelperMethods/helpermethods')
 const ENV = process.env.NODE_ENV;
@@ -198,7 +198,7 @@ app.post('/insertsnippetpractical', dbLogin.checkToken, dbSnippetPractical.inser
 app.post('/updatesnippetpractical', dbLogin.checkToken, dbSnippetPractical.update);
 app.post('/deletesnippetpractical', dbLogin.checkToken, dbSnippetPractical.remove);
 app.post('/getccfrompreviousaccount', dbLogin.checkToken, dbCC.getccfrompreviousaccount);
-//app.post('/syncaccountreservations', dbLogin.checkToken, dbAccountReservations.sync);
+app.post('/syncaccountreservations', dbLogin.checkToken, dbAccountReservations.sync);
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
