@@ -45,6 +45,7 @@
     "jsonwebtoken": "^8.5.1",
     "jszip": "^3.2.2",
     "jszip-utils": "^0.1.0",
+    "ldapjs": "^2.1.0",
     "morgan": "^1.10.0",
     "pg": "^8.2.1",
     "pizzip": "^3.0.6"

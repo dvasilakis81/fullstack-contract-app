@@ -25,7 +25,6 @@ var dbError = require('./Postgre/API/Error')
 var dbLogin = require('./Postgre/API/Login')
 var dbLoginLDAP = require('./Postgre/API/LoginLDAP')
 var dbParametric = require('./Postgre/API/Parametric')
-var dbUserReservations = require('./Postgre/API/UserReservations')
 var dbAay = require('./Postgre/API/AAY')
 var dbBoardDecision = require('./Postgre/API/BoardDecision')
 var dbDecisionCoordinatorDecentrilizedAdministration = require('./Postgre/API/DecisionCoordinatorDecentrilizedAdministration')
@@ -33,7 +32,8 @@ var dbCourtOfAuditors = require('./Postgre/API/CourtOfAuditors')
 var dbAuthorDocumentedRequest = require('./Postgre/API/AuthorDocumentedRequest')
 var dbSnippetPractical = require('./Postgre/API/SnippetPractical')
 var dbCC = require('./Postgre/API/CC')
-var dbAccountReservations = require('./Postgre/API/AccountReservations')
+var dbUserReservations = require('./Postgre/API/Reservations/User/Methods')
+//var dbAccountReservations = require('./Postgre/API/Reservations/Account/Methods')
 
 var helper = require('./HelperMethods/helpermethods')
 const ENV = process.env.NODE_ENV;
@@ -151,9 +151,9 @@ app.post('/updatesignatorytype', dbLogin.checkToken, dbParametric.updateSignator
 app.post('/deletesignatorytype', dbLogin.checkToken, dbParametric.deleteSignatoryType);
 app.post('/deleteerrormessage', dbLogin.checkToken, dbParametric.deleteErrorMessage);
 
-app.post('/createuserreservation', dbLogin.checkToken, dbUserReservations.createUserReservation);
-app.post('/updateuserreservation', dbLogin.checkToken, dbUserReservations.updateUserReservation);
-app.post('/deleteuserreservation', dbLogin.checkToken, dbUserReservations.deleteUserReservation);
+app.post('/createuserreservation', dbLogin.checkToken, dbUserReservations.insert);
+app.post('/updateuserreservation', dbLogin.checkToken, dbUserReservations.update);
+app.post('/deleteuserreservation', dbLogin.checkToken, dbUserReservations.remove);
 
 app.get('/directions', dbLogin.checkToken, dbParametric.getDirections);
 app.get('/contracttypes', dbLogin.checkToken, dbParametric.getContractTypes);
@@ -168,7 +168,6 @@ app.post('/contractexists', dbLogin.checkToken, dbContract.contractExists);
 app.post('/contracts', dbLogin.checkToken, dbContract.getContracts);
 //app.get('/contracts_webix', dbContract.getContracts_WEBIX);
 app.get('/searchcontracts', dbContract.searchContracts);
-app.post('/insertcontract', dbLogin.checkToken, dbContract.insertContract);
 app.post('/insertcontract', dbLogin.checkToken, dbContract.insertContract);
 app.post('/deletecontract', dbLogin.checkToken, dbContract.deleteContract);
 app.post('/updatecontract', dbLogin.checkToken, dbContract.updateContract);
@@ -199,7 +198,7 @@ app.post('/insertsnippetpractical', dbLogin.checkToken, dbSnippetPractical.inser
 app.post('/updatesnippetpractical', dbLogin.checkToken, dbSnippetPractical.update);
 app.post('/deletesnippetpractical', dbLogin.checkToken, dbSnippetPractical.remove);
 app.post('/getccfrompreviousaccount', dbLogin.checkToken, dbCC.getccfrompreviousaccount);
-app.post('/syncaccountreservations', dbLogin.checkToken, dbAccountReservations.sync);
+//app.post('/syncaccountreservations', dbLogin.checkToken, dbAccountReservations.sync);
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));

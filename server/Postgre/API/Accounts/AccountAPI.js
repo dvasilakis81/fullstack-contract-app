@@ -83,8 +83,7 @@ async function insertAccount(req, res, next) {
       //   AmountFpa: results.rows[0].AmountFpa,
       //   AmountTotal: results.rows[0].AmountTotal
       // })
-      // res.status(200).json(accountInfo);
-      // res.status(200).json(accountInfo);
+      // res.status(200).json(accountInfo);      
 
       getAccountById(req, res, next);
     }

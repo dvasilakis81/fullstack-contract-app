@@ -4,7 +4,7 @@ var util = require('util');
 var helper = require('../../HelperMethods/helpermethods')
 var secretKey = process.env.API_SECRET || 'athens_2019';
 const pool = require('../dbConfig').pool
-const reservationsMethods = require('./Reservations/Methods')
+const reservationsMethods = require('./Reservations/User/Methods')
 
 var client = ldap.createClient({
   url: 'ldaps://10.1.24.17:636',
@@ -156,7 +156,7 @@ function searchForDirector(req, response, next, user) {
           user.reservations = userReservations;
         else {
           const reservations = await reservationsMethods.getReservations(req, res, next);
-          await reservationsMethods.query_insert(reservations, user.uid);
+          await reservationsMethods.query_initialize(reservations, user.uid);
           user.reservations = await reservationsMethods.getUserReservations(req, res, next, user.uid);
         }
 
