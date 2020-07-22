@@ -25,13 +25,13 @@ var dbError = require('./Postgre/API/Error')
 var dbLogin = require('./Postgre/API/Login')
 var dbLoginLDAP = require('./Postgre/API/LoginLDAP')
 var dbParametric = require('./Postgre/API/Parametric')
-var dbAay = require('./Postgre/API/AAY')
-var dbBoardDecision = require('./Postgre/API/BoardDecision')
+var dbAay = require('./Postgre/API/AAY/Methods')
+var dbBoardDecision = require('./Postgre/API/BoardDecision/Methods')
 var dbDecisionCoordinatorDecentrilizedAdministration = require('./Postgre/API/DecisionCoordinatorDecentrilizedAdministration')
 var dbCourtOfAuditors = require('./Postgre/API/CourtOfAuditors')
-var dbAuthorDocumentedRequest = require('./Postgre/API/AuthorDocumentedRequest')
+var dbAuthorDocumentedRequest = require('./Postgre/API/AuthorDocumentedRequest/Methods')
 var dbSnippetPractical = require('./Postgre/API/SnippetPractical')
-var dbCC = require('./Postgre/API/CC')
+var dbCC = require('./Postgre/API/CC/Methods')
 var dbUserReservations = require('./Postgre/API/Reservations/User/Methods')
 var dbAccountReservations = require('./Postgre/API/Reservations/Account/API')
 
@@ -197,7 +197,7 @@ app.post('/deleteauthordocumentedrequest', dbLogin.checkToken, dbAuthorDocumente
 app.post('/insertsnippetpractical', dbLogin.checkToken, dbSnippetPractical.insert);
 app.post('/updatesnippetpractical', dbLogin.checkToken, dbSnippetPractical.update);
 app.post('/deletesnippetpractical', dbLogin.checkToken, dbSnippetPractical.remove);
-app.post('/getccfrompreviousaccount', dbLogin.checkToken, dbCC.getccfrompreviousaccount);
+app.post('/getccfrompreviousaccount', dbLogin.checkToken, dbCC.getCCFromPreviousAccount);
 app.post('/syncaccountreservations', dbLogin.checkToken, dbAccountReservations.sync);
 
 // view engine setup

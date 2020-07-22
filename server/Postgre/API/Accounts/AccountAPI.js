@@ -92,9 +92,9 @@ async function updateAccount(req, res, next) {
   //   AmountTotal: results.rows[0].AmountTotal
   // });
 
-  var invoiceRows = await invoiceMethods.updateInvoice(req, res, next)
-  var ccRows = await ccMethods.updateCC(req, res, next)
-  var signaturesRows = await signatureMethods.updateSignatures(req, res, next)
+  var invoiceRows = await invoiceMethods.updateInvoice(req, res, next);
+  var ccRows = await ccMethods.updateCC(req, res, next);
+  var signaturesRows = await signatureMethods.updateSignatures(req, res, next);
   var monitoringCommitteeRows = await monitoringCommitteeMethods.processMonitoringCommittee(req, res, next);
 
   helper.consoleLog('Rows affected: ' + results.rowCount + ' Account Id: ' + req.body.AccountId);
