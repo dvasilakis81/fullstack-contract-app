@@ -88,20 +88,19 @@ class ContractsPageBody extends Component {
     if (this.props.token && this.props.token.data) {
       if (this.props.doRefresh === undefined || (this.props.doRefresh !== undefined && this.props.doRefresh)) {
         //if (this.props.token.data.role === 1) {
+        // axios.get(getHostUrl() + "/users", { headers: { Authorization: "Bearer " + this.props.token.data.token } }).then(response => {
+        //   store.dispatch({
+        //     type: "GET_USERS",
+        //     payload: response
+        //   });
+        // });
 
-        axios.get(getHostUrl() + "/users", { headers: { Authorization: "Bearer " + this.props.token.data.token } }).then(response => {
-          store.dispatch({
-            type: "GET_USERS",
-            payload: response
-          });
-        });
-
-        axios.get(getHostUrl() + "/userroles", { headers: { Authorization: "Bearer " + this.props.token.data.token } }).then(response => {
-          store.dispatch({
-            type: "GET_USER_ROLES",
-            payload: response
-          });
-        });
+        // axios.get(getHostUrl() + "/userroles", { headers: { Authorization: "Bearer " + this.props.token.data.token } }).then(response => {
+        //   store.dispatch({
+        //     type: "GET_USER_ROLES",
+        //     payload: response
+        //   });
+        // });
         //}
 
         axios.get(getHostUrl() + "/agencies", { headers: { Authorization: "Bearer " + this.props.token.data.token } }).then(response => {
@@ -123,14 +122,7 @@ class ContractsPageBody extends Component {
             type: "GET_CONTRACT_TYPES",
             payload: response
           });
-        });
-
-        axios.get(getHostUrl() + "/reservations", { headers: { Authorization: "Bearer " + this.props.token.data.token } }).then(response => {
-          store.dispatch({
-            type: "GET_RESERVATIONS",
-            payload: response
-          });
-        });
+        });        
 
         axios.get(getHostUrl() + "/signatories", { headers: { Authorization: "Bearer " + this.props.token.data.token } }).then(response => {
           store.dispatch({

@@ -103,7 +103,7 @@ class NewContract extends Component {
 			End: this.props.location.state && this.props.location.state.contract.End ? getValidMaterialDateFormat(this.props.location.state.contract.End) : new Date(),
 			NumberOfAccounts: this.props.location.state ? this.props.location.state.contract.NumberOfAccounts : '',
 			HasDownPayment: this.props.location.state ? this.props.location.state.contract.HasDownPayment : false,
-			FpaValue: getFpaValueFromReservations(this.props.reservations)
+			FpaValue: getFpaValueFromReservations(this.props.token.data.user.reservations)
 		}
 
 		this.setCheckboxValue = this.setCheckboxValue.bind(this);
@@ -218,7 +218,7 @@ class NewContract extends Component {
 
 	autoCompleteBudget(event) {
 		event.preventDefault();
-		let fpaValue = getFpaValueFromReservations(this.props.reservations) / 100
+		let fpaValue = getFpaValueFromReservations(this.props.token.data.user.reservations) / 100
 
 		if (this.state.AmountPure && Number(this.state.AmountPure) > 0) {
 			this.setState((state) => ({
@@ -359,7 +359,7 @@ class NewContract extends Component {
 										</div>
 										<div style={styles.divRow}>
 											<MyTextField tp='number' title='Καθαρό Ποσό' id='AmountPure' stateValue={this.state.AmountPure} isRequired={true} isDisabled={false} onChange={this.onChange} inputProps={{ style: { textAlign: "center" } }} InputProps={{ endAdornment: <InputAdornment position="end"><span style={{ fontWeight: 'bolder', marginRight: '10px' }}>€</span></InputAdornment> }} width='20%' />
-											<MyTextField tp='number' title={getFpaLabel(getFpaValueFromReservations(this.props.token.data ? this.props.token.data.reservations : undefined))} id='AmountFpa' stateValue={this.state.AmountFpa} isRequired={true} isDisabled={false} onChange={this.onChange} inputProps={{ style: { textAlign: "center" } }} InputProps={{ endAdornment: <InputAdornment position="end"><span style={{ fontWeight: 'bolder', marginRight: '10px' }}>€</span></InputAdornment> }} width='20%' />
+											<MyTextField tp='number' title={getFpaLabel(getFpaValueFromReservations(this.props.token.data.user.reservations))} id='AmountFpa' stateValue={this.state.AmountFpa} isRequired={true} isDisabled={false} onChange={this.onChange} inputProps={{ style: { textAlign: "center" } }} InputProps={{ endAdornment: <InputAdornment position="end"><span style={{ fontWeight: 'bolder', marginRight: '10px' }}>€</span></InputAdornment> }} width='20%' />
 											<MyTextField tp='number' title='Συνολικό Ποσό' id='AmountTotal' stateValue={this.state.AmountTotal} isRequired={true} isDisabled={false} onChange={this.onChange} inputProps={{ style: { textAlign: "center" } }} InputProps={{ endAdornment: <InputAdornment position="end"><span style={{ fontWeight: 'bolder', marginRight: '10px' }}>€</span></InputAdornment> }} width='20%' />
 											{getButton('contained', 'small', null, styles.btnAuto, this.autoCompleteBudget, 'ΥΠΟΛΟΓΙΣΜΟΣ', null, false)}
 										</div>
@@ -385,8 +385,7 @@ function mapStateToProps(state) {
 		screenDimensions: state.parametricdata_reducer.screenDimensions,
 		municipalityDirections: state.parametricdata_reducer.municipalityDirections,
 		contractTypes: state.parametricdata_reducer.contractTypes,
-		isSearchMode: state.contracts_reducer.isSearchMode,
-		reservations: state.parametricdata_reducer.reservations,
+		isSearchMode: state.contracts_reducer.isSearchMode,		
 		users: state.parametricdata_reducer.users,
 		token: state.token_reducer.token
 	}

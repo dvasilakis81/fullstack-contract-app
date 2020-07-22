@@ -41,7 +41,7 @@ class Login extends Component {
     this.state = {
       openMessage: false,
       message: '',
-      variant: '',      
+      variant: '',
       username: '',
       password: '',
       loginsuccess: false
@@ -52,31 +52,32 @@ class Login extends Component {
     this.handleClose = this.handleClose.bind(this, '');
   }
 
-  componentDidMount() {
-    if (this.props.expired === true) {
-      this.setState({ message: 'Η συνεδρία έληξε!', openMessage: true, variant: 'info' });
-    }
-  }
-  componentWillMount() {
+  UNSAFE_componentWillMount() {
     store.dispatch({ type: 'RESET_TOKEN_JWT_REJECTED', payload: undefined })
+  }
+  componentDidMount() {
+    if (this.props.expired === true) 
+      this.setState({ message: 'Η συνεδρία έληξε!', openMessage: true, variant: 'info' });    
   }
 
   handleSubmit(e) {
     e.preventDefault();
 
     if (this.state.username === '')
-      this.setState({ loginsuccess: false, message: 'Εισάγετε Όνομα Χρήστη!', openMessage: true, variant: 'info' });
+      this.setState({ loginsuccess: false, message: 'Εισάγετε όνομα χρήστη!', openMessage: true, variant: 'info' });
     else if (this.state.password === '')
-      this.setState({ loginsuccess: false, message: 'Εισάγετε Κωδικό!', openMessage: true, variant: 'info' });
+      this.setState({ loginsuccess: false, message: 'Εισάγετε κωδικό!', openMessage: true, variant: 'info' });
     else {
       this.props.login(this.state.username, this.state.password).then(response => {
-        console.log('response.value.data.token: ' + response.value.data.token)
+        // console.log('response.value.data.token: ' + response.value.data.token)       
+
         if (response.value.data.token)
           this.setState({ loginsuccess: true });
-        else
-          this.setState({ loginsuccess: false, message: response.value.data.message, openMessage: true, variant: 'error' });
+        else          
+          this.setState({ loginsuccess: false, message: response.value.data, openMessage: true, variant: 'error' });
+        
       }).catch(error => {
-        var msg = 'Αποτυχία σύνδεσης στον διακομιστή!'
+        var msg = 'Αποτυχία σύνδεσης στον διακομιστή!';
         this.setState({ message: <><div>{msg}</div><div>{getServerErrorResponseMessage(error)}</div></>, openMessage: true, variant: 'error' });
       })
     }
@@ -124,6 +125,7 @@ class Login extends Component {
   }
 
   render() {
+    console.log(this.props.token);
     return (this.getLoginTemplate())
   }
 }

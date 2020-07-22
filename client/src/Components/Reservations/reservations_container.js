@@ -96,47 +96,8 @@ class ReservationsContainer extends Component {
     this.handleClose = this.handleClose.bind(this, '');
   }
 
-  parameterSelection(e, item) {
-    this.setState({ selectedParameter: item, selectedRow: null });
-    this.setColumnsAndData(item);
-  }
-
-  getParametricArray() {
-    var ret = [];
-    ret.push('Κρατήσεις')
-    return ret;
-  }
-
-  getItems() {
-
-    let template = null;
-    let data = this.state.parameters
-    if (data) {
-      template = data.map((item, index) => (
-        <div key={index}
-          id={item}
-          onClick={() => this.parameterSelection(this, item)}
-          style={{ paddingLeft: '10px', paddingRight: '10px', paddingTop: '1px', paddingBottom: '0px' }}>
-          <Grid style={{ flexGrow: '1' }}>
-            <Grid item>
-              <Paper square={true} style={this.state.selectedParameter !== item ? styles.tableStyle1 : styles.tableStyle2}>
-                <Typography>
-                  <span style={{ fontWeight: 'bold', width: 'auto' }}>{item}</span>
-                </Typography>
-              </Paper>
-            </Grid>
-          </Grid>
-        </ div>
-      ));
-    }
-
-    return template;
-  }
-
   componentDidMount() {
-    let parameters = this.getParametricArray();
-    this.setState({ parameters: parameters, selectedParameter: parameters[0] });
-    this.setColumnsAndData(parameters[0])
+    this.setColumnsAndData()
   }
 
   getColumnsForReservations(data) {
@@ -207,16 +168,16 @@ class ReservationsContainer extends Component {
 
     ];
 
-    if (this.props.token && this.props.token.data && this.props.token.data.reservations) {
-      this.props.token.data.reservations.forEach(x => {
+    if (this.props.token && this.props.token.data && this.props.token.data.user.reservations) {
+      this.props.token.data.user.reservations.forEach(x => {
         data.push({ 'Id': x.Id, 'Name': x.Name, 'Percentage': x.Percentage ? parseFloat(x.Percentage) : '', 'Stamp': x.Stamp ? parseFloat(x.Stamp) : '', 'StampOGA': x.StampOGA ? parseFloat(x.StampOGA) : '', 'IsReservation': x.IsReservation ? 'Ναι' : 'Όχι', 'Order': x.Order });
       });
     }
 
-    return columns
+    return columns;
   }
 
-  setColumnsAndData(selectedItem) {
+  setColumnsAndData() {
 
     let data = [];
     let columns = this.getColumnsForReservations(data)
@@ -225,7 +186,6 @@ class ReservationsContainer extends Component {
 
   showData(maxBodyHeight) {
     console.log('showData: getBodyHeight: ' + getBodyHeight());
-    let selectedItem = this.state.selectedParameter;
     return (
       <div style={{ height: getBodyHeight() }}>
         <MaterialTable
@@ -303,14 +263,14 @@ class ReservationsContainer extends Component {
             onRowAdd: newData =>
               new Promise((resolve, reject) => {
                 setTimeout(() => {
-                  this.requestAdd(selectedItem, newData, this.state.data, resolve);
+                  this.requestAdd(newData, this.state.data, resolve);
                   resolve();
                 }, 600)
               }),
             onRowUpdate: (newData, oldData) =>
               new Promise(resolve => {
                 setTimeout(() => {
-                  this.requestUpdate(selectedItem, oldData, newData, this.state.data, resolve);
+                  this.requestUpdate(oldData, newData, this.state.data, resolve);
                   resolve();
                 }, 600);
               })
@@ -318,7 +278,7 @@ class ReservationsContainer extends Component {
             onRowDelete: oldData =>
               new Promise(resolve => {
                 setTimeout(() => {
-                  this.requestDelete(selectedItem, oldData, this.state.data, resolve);
+                  this.requestDelete(oldData, this.state.data, resolve);
                   resolve();
                 }, 600);
               })
@@ -329,7 +289,7 @@ class ReservationsContainer extends Component {
     )
   }
 
-  requestAdd(selectedItem, newData, data, resolve) {
+  requestAdd(newData, data, resolve) {
 
     let notSupported = false;
     var methodName = 'createuserreservation'
@@ -344,14 +304,11 @@ class ReservationsContainer extends Component {
           var msg = 'Η δημιουργία ' + addTypeLabel + ' "' + newDataName + '" έγινε επιτυχώς!!!'
           this.setState({ message: msg, openMessage: true, variant: 'success', submitButtonDisabled: false });
           store.dispatch({ type: dispatchLabel, payload: res.data })
-          if (selectedItem === 'Κρατήσεις')
-            res.data.IsReservation = (res.data.IsReservation ? 'Ναι' : 'Όχι')
-
+          res.data.IsReservation = (res.data.IsReservation ? 'Ναι' : 'Όχι')
           data.push(res.data);
           this.setState({ data }, () => resolve());
-        } else {
+        } else
           this.setState({ message: 'Η συνεδρία έχει λήξει! Ξανακάνετε σύνδεση\n', openMessage: true, submitButtonDisabled: false, navigateToLogin: true });
-        }
       }).catch(error => {
         this.setState({ message: <><div>{msg}</div><div>{getServerErrorResponseMessage(error)}</div></>, openMessage: true, variant: 'error', submitButtonDisabled: false });
       })
@@ -370,7 +327,7 @@ class ReservationsContainer extends Component {
     }
   }
 
-  requestUpdate(selectedItem, oldData, newData, data, resolve) {
+  requestUpdate(oldData, newData, data, resolve) {
     let notSupported = false;
     var doRequest = (newData.Name ? true : false)
     var methodName = 'updateuserreservation'
@@ -414,7 +371,7 @@ class ReservationsContainer extends Component {
     }
   }
 
-  requestDelete(selectedItem, oldData, data, resolve) {
+  requestDelete(oldData, data, resolve) {
 
     var methodName = 'deleteuserreservation'
     var newDataName = oldData.Name
@@ -444,7 +401,7 @@ class ReservationsContainer extends Component {
   };
 
   updateTokenReservation(data) {
-    var tokenReservations = this.props.token.data ? this.props.token.data.reservations : undefined;
+    var tokenReservations = this.props.token.data ? this.props.token.data.user.reservations : undefined;
     if (tokenReservations) {
       for (let index = 0; index < tokenReservations.length; index++) {
         const element = tokenReservations[index];
@@ -475,9 +432,6 @@ class ReservationsContainer extends Component {
         <Body>
           <div style={{ width: '100%', height: '100%', display: 'flex', flexFlow: 'column', flexWrap: 'wrap' }}>
             <div style={{ width: '100%', height: '100%', display: 'flex', flexFlow: 'row', flex: '1', overflowY: 'hidden', overflowX: 'hidden', flexWrap: 'wrap' }}>
-              {/* <div style={{ display: 'flex', flexFlow: 'column', flexWrap: 'wrap', flexBasis: '100%', flex: '0.2', backgroundColor: '#fff', overflowY: 'hidden' }}>
-                {this.getItems()}
-              </div> */}
               <div style={{ display: 'flex', flexFlow: 'column', flexBasis: '100%', flex: '1', backgroundColor: '#fff', overflowY: 'hidden' }}>
                 <div style={{ display: 'flex', flexFlow: 'row', flex: '1', overflowY: 'auto', overflowX: 'hidden' }}>
                   <div style={{ display: 'flex', flexFlow: 'column', flex: '1', overflowY: 'auto', overflowX: 'hidden', margin: '0px', padding: '0px' }}>

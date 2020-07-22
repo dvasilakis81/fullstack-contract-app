@@ -127,7 +127,7 @@ class Header extends React.Component {
                 <AccountCircle />
               </IconButton>
               <div>
-                {this.props.token && this.props.token.data ? this.props.token.data.user.cn : ''}
+                {this.props.token && this.props.token.data && this.props.token.data.user ? this.props.token.data.user.cn : ''}
               </div>
             </div>
           </Toolbar>
@@ -154,7 +154,7 @@ class Header extends React.Component {
 
   getAdministrationAction(showAdministrationOption) {
     var accessToAdmin = false;
-    if (this.props.token && this.props.token.data) {
+    if (this.props.token && this.props.token.data && this.props.token.data.user) {
       if (this.props.token.data.user.uid == 'd.vasilakis')
         accessToAdmin = true;
     }

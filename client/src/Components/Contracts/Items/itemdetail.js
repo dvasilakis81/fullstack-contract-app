@@ -511,7 +511,7 @@ class ItemDetail extends React.Component {
 
 		return <div style={{ padding: '10px' }}>
 			{this.getAttachmentTitle(type)}
-			<div style={{ textAlign: 'center' }}>
+			<span style={{ textAlign: 'center' }}>
 				<Button
 					variant='contained'
 					size='small'
@@ -519,7 +519,7 @@ class ItemDetail extends React.Component {
 					onClick={this.handlePopoverClick.bind(this, type)}>
 					Προβολή ({values ? values.length : 'Δεν έχει'})
 				</Button>
-			</div>
+			</span>
 			<Popover
 				open={this.state.openPopover === type ? true : false}
 				onClose={this.handlePopoverClose}

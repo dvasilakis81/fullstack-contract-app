@@ -241,7 +241,7 @@ class AccountInfo extends React.Component {
 			userId: this.props.token.data.id,
 			contractId: contractDetails.Id,
 			accountInfo: this.props.account,
-			userreservations: this.props.token.data.reservations
+			userreservations: this.props.token.data.user.reservations
 		};
 
 		var config = {
