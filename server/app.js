@@ -18,21 +18,21 @@ var cors = require('cors');
 var helmet = require('helmet')
 var app = express();
 
-var dbContract = require('./Postgre/Queries/Contract')
-var dbAccount = require('./Postgre/Queries/Account')
-var dbError = require('./Postgre/Queries/Error')
-var dbLogin = require('./Postgre/Queries/Login')
-var dbLoginLDAP = require('./Postgre/Queries/LoginLDAP')
-var dbParametric = require('./Postgre/Queries/Parametric')
-var dbUserReservations = require('./Postgre/Queries/UserReservations')
-var dbAay = require('./Postgre/Queries/AAY')
-var dbBoardDecision = require('./Postgre/Queries/BoardDecision')
-var dbDecisionCoordinatorDecentrilizedAdministration = require('./Postgre/Queries/DecisionCoordinatorDecentrilizedAdministration')
-var dbCourtOfAuditors = require('./Postgre/Queries/CourtOfAuditors')
-var dbAuthorDocumentedRequest = require('./Postgre/Queries/AuthorDocumentedRequest')
-var dbSnippetPractical = require('./Postgre/Queries/SnippetPractical')
-var dbCC = require('./Postgre/Queries/CC')
-var dbAccountReservations = require('./Postgre/Queries/AccountReservations')
+var dbContract = require('./Postgre/API/Contracts/ContractAPI')
+var dbAccount = require('./Postgre/API/Accounts/AccountAPI')
+var dbError = require('./Postgre/API/Error')
+var dbLogin = require('./Postgre/API/Login')
+var dbLoginLDAP = require('./Postgre/API/LoginLDAP')
+var dbParametric = require('./Postgre/API/Parametric')
+var dbUserReservations = require('./Postgre/API/UserReservations')
+var dbAay = require('./Postgre/API/AAY')
+var dbBoardDecision = require('./Postgre/API/BoardDecision')
+var dbDecisionCoordinatorDecentrilizedAdministration = require('./Postgre/API/DecisionCoordinatorDecentrilizedAdministration')
+var dbCourtOfAuditors = require('./Postgre/API/CourtOfAuditors')
+var dbAuthorDocumentedRequest = require('./Postgre/API/AuthorDocumentedRequest')
+var dbSnippetPractical = require('./Postgre/API/SnippetPractical')
+var dbCC = require('./Postgre/API/CC')
+var dbAccountReservations = require('./Postgre/API/AccountReservations')
 
 var helper = require('./HelperMethods/helpermethods')
 const ENV = process.env.NODE_ENV;
@@ -168,10 +168,11 @@ app.post('/contracts', dbLogin.checkToken, dbContract.getContracts);
 //app.get('/contracts_webix', dbContract.getContracts_WEBIX);
 app.get('/searchcontracts', dbContract.searchContracts);
 app.post('/insertcontract', dbLogin.checkToken, dbContract.insertContract);
+app.post('/insertcontract', dbLogin.checkToken, dbContract.insertContract);
 app.post('/deletecontract', dbLogin.checkToken, dbContract.deleteContract);
 app.post('/updatecontract', dbLogin.checkToken, dbContract.updateContract);
 app.get('/getfirstaccountprotocolinfo', dbLogin.checkToken, dbAccount.getFirstAccountProtocolInfo);
-app.get('/getremainamountofcontract', dbLogin.checkToken, dbAccount.getRemainAmountOfContract);
+//app.get('/getremainamountofcontract', dbLogin.checkToken, dbAccount.getRemainAmountOfContract);
 app.get('/getaccountsinfo', dbLogin.checkToken, dbAccount.getAccountsInfo);
 
 app.post('/getaccount', dbLogin.checkToken, dbAccount.getAccountById);
