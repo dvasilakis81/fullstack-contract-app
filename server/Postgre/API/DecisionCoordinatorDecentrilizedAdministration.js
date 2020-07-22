@@ -1,7 +1,7 @@
 const pool = require('../dbConfig').pool
 const util = require('util')
 const helper = require('../../HelperMethods/helpermethods')
-const contractMethods = require('./Contract')
+const contractMethods = require('./Contracts/ContractAPI')
 
 const insert = (req, res, next) => {
   var contractId = req.body.contractId;

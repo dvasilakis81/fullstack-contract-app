@@ -1,7 +1,7 @@
 const helper = require('../../HelperMethods/helpermethods')
 const pool = require('../dbConfig').pool
 const util = require('util')
-const accountMethods = require('./Account')
+const accountMethods = require('./Accounts/AccountAPI')
 
 const insert = (req, res, next) => {
   var sqlQuery = util.format('INSERT INTO "Ordering"."AccountReservations"("UserId", "AccountId","Name","Percentage","Stamp","StampOGA", "IsReservation", "Order") VALUES ');

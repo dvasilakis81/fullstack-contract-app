@@ -4,6 +4,7 @@ var util = require('util');
 var helper = require('../../HelperMethods/helpermethods')
 var secretKey = process.env.API_SECRET || 'athens_2019';
 const pool = require('../dbConfig').pool
+const reservationsMethods = require('./Reservations/Methods')
 
 var client = ldap.createClient({
   url: 'ldaps://10.1.24.17:636',
@@ -41,6 +42,7 @@ function searchLoginUser(request, response, next, username, password) {
       res.on('searchEntry', function (entry) {
         console.log('entry: ' + JSON.stringify(entry.object));
         loginUser.push(entry.object);
+        // (SELECT json_agg(UserReservations) FROM (SELECT * FROM "Ordering"."UserReservations" as ur WHERE ur."UserId" = u."Id" ORDER BY ur."Order" ASC) UserReservations) AS UserReservations ' +
         authenticateDN(request, response, next, entry.object, password);
       });
       res.on('searchReference', function (referral) {
@@ -53,7 +55,7 @@ function searchLoginUser(request, response, next, username, password) {
       res.on('end', function (result) {
         console.log('status: ' + result.status);
         if (loginUser && loginUser.length === 0)
-          response.send('Wrong Username');
+          response.send('Λάθος όνομα χρήστη!');
       });
     }
   });
@@ -66,7 +68,7 @@ function authenticateDN(request, response, next, user, password) {
   /*bind use for authentication*/
   client.bind(user.dn, password, function (err) {
     if (err)
-      response.send("Wrong password");
+      response.send("Λάθος κωδικός!");
     else {
       var sqlQuery = util.format('SELECT * FROM "Ordering"."UserReservations" as ur WHERE ur."UserId"=%s ORDER BY ur."Order" ASC ', helper.addQuotes(user.uid));
       pool.query(sqlQuery, (error, results) => {
@@ -78,7 +80,7 @@ function authenticateDN(request, response, next, user, password) {
           } else {
             user.departmentNumber = 'Τμήμα Τεχνολογίας, Πληροφορικής και Επικοινωνιών';
           }
-          
+
           searchForSupervisor(request, response, next, user);
           //searchForPeopleThatBelongsToTheSameDirection(request, response, next, user.ou);
         }
@@ -121,7 +123,7 @@ function searchForSupervisor(request, response, next, user) {
   });
 }
 
-function searchForDirector(request, response, next, user) {
+function searchForDirector(req, response, next, user) {
 
   var opts = {
     filter: '(objectClass=*)',
@@ -144,9 +146,20 @@ function searchForDirector(request, response, next, user) {
       });
       res.on('error', function (err) {
         console.error('error: ' + err.message);
-        response.send('error: ' + err.message);
+        res.send('error: ' + err.message);
       });
-      res.on('end', function (result) {
+      res.on('end', async function (result) {
+
+        //setup user reservations
+        const userReservations  = await reservationsMethods.getUserReservations(req, res, next, user.uid);
+        if (userReservations && userReservations.length > 0)
+          user.reservations = userReservations;
+        else {
+          const reservations = await reservationsMethods.getReservations(req, res, next);
+          await reservationsMethods.query_insert(reservations, user.uid);
+          user.reservations = await reservationsMethods.getUserReservations(req, res, next, user.uid);
+        }
+
         user.director = results[0].uid;
 
         let token = jwt.sign({ username: user.uid }, secretKey, { expiresIn: ('2h') });
@@ -155,8 +168,7 @@ function searchForDirector(request, response, next, user) {
           id: user.uid,
           user: user,
           token: token,
-          expiresAt: helper.getExpiresAt(token, jwt, secretKey),
-          reservations: results.rows
+          expiresAt: helper.getExpiresAt(token, jwt, secretKey)
         });
       });
     }
