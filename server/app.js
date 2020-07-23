@@ -21,16 +21,16 @@ var app = express();
 var dbContract = require('./Postgre/API/Contracts/ContractAPI')
 
 var dbAccount = require('./Postgre/API/Accounts/AccountAPI')
-var dbError = require('./Postgre/API/Error')
-var dbLogin = require('./Postgre/API/Login')
-var dbLoginLDAP = require('./Postgre/API/LoginLDAP')
+var dbError = require('./Postgre/API/Error/Error')
+//var dbLogin = require('./Postgre/API/Login')
+var dbLogin = require('./Postgre/API/LoginLDAP')
 var dbParametric = require('./Postgre/API/Parametric')
 var dbAay = require('./Postgre/API/AAY/Methods')
 var dbBoardDecision = require('./Postgre/API/BoardDecision/Methods')
-var dbDecisionCoordinatorDecentrilizedAdministration = require('./Postgre/API/DecisionCoordinatorDecentrilizedAdministration')
-var dbCourtOfAuditors = require('./Postgre/API/CourtOfAuditors')
+var dbDecisionCoordinatorDecentrilizedAdministration = require('./Postgre/API/DecisionCoordinatorDecentrilizedAdministration/Methods')
+var dbCourtOfAuditors = require('./Postgre/API/CourtOfAuditors/Methods')
 var dbAuthorDocumentedRequest = require('./Postgre/API/AuthorDocumentedRequest/Methods')
-var dbSnippetPractical = require('./Postgre/API/SnippetPractical')
+var dbSnippetPractical = require('./Postgre/API/SnippetPractical/Methods')
 var dbCC = require('./Postgre/API/CC/Methods')
 var dbUserReservations = require('./Postgre/API/Reservations/User/Methods')
 var dbAccountReservations = require('./Postgre/API/Reservations/Account/API')
@@ -115,19 +115,27 @@ app.post('/createTransmissionDocument', dbLogin.checkToken, function (req, res, 
 //   }
 // });
 
-app.get('/login', dbLogin.login);
-app.get('/loginWithLDAP', dbLoginLDAP.login);
+//app.get('/login', dbLogin.login);
+app.get('/loginWithLDAP', dbLogin.login);
 app.post('/logClientError', function (req, res, next) {
   var msgError = req.body && req.body.error ? req.body.error : '';
   var msgStack = req.body && req.body.stack ? req.body.stack : '';
   //var msg = util.format('Message: %s\n Stack %s\n', msgError, msgStack);
   var msg = 'Message: ' + msgError + '\nStack: ' + (msgStack.componentStack ? msgStack.componentStack.substring(0, 900) : '') + '\n';
-  dbError.logError(req, res, next, msg, false, true);
+  dbError.logError(req, res, next, msg, true);
 })
 
-app.post('/createuser', dbLogin.checkToken, dbLogin.createUser);
-app.post('/updateuser', dbLogin.checkToken, dbLogin.updateUser);
-app.post('/deleteuser', dbLogin.checkToken, dbLogin.deleteUser);
+//app.post('/createuser', dbLogin.checkToken, dbLogin.createUser);
+//app.post('/updateuser', dbLogin.checkToken, dbLogin.updateUser);
+//app.post('/deleteuser', dbLogin.checkToken, dbLogin.deleteUser);
+//app.post('/createreservation', dbLogin.checkToken, dbParametric.createReservation);
+//app.post('/updatereservation', dbLogin.checkToken, dbParametric.updateReservation);
+//app.post('/deletereservation', dbLogin.checkToken, dbParametric.deleteReservation);
+//app.get('/reservations', dbLogin.checkToken, dbParametric.getReservations);
+//app.get('/users', dbLogin.checkToken, dbParametric.getUsers);
+//app.get('/userroles', dbLogin.checkToken, dbParametric.getUserRoles);
+
+
 app.post('/createcontracttype', dbLogin.checkToken, dbParametric.createContractType);
 app.post('/updatecontracttype', dbLogin.checkToken, dbParametric.updateContractType);
 app.post('/deletecontracttype', dbLogin.checkToken, dbParametric.deleteContractType);
@@ -140,9 +148,6 @@ app.post('/deletedirection', dbLogin.checkToken, dbParametric.deleteDirection);
 app.post('/createdepartment', dbLogin.checkToken, dbParametric.createDepartment);
 app.post('/updatedepartment', dbLogin.checkToken, dbParametric.updateDepartment);
 app.post('/deletedepartment', dbLogin.checkToken, dbParametric.deleteDepartment);
-app.post('/createreservation', dbLogin.checkToken, dbParametric.createReservation);
-app.post('/updatereservation', dbLogin.checkToken, dbParametric.updateReservation);
-app.post('/deletereservation', dbLogin.checkToken, dbParametric.deleteReservation);
 app.post('/createsignatory', dbLogin.checkToken, dbParametric.createSignatory);
 app.post('/updatesignatory', dbLogin.checkToken, dbParametric.updateSignatory);
 app.post('/deletesignatory', dbLogin.checkToken, dbParametric.deleteSignatory);
@@ -161,9 +166,6 @@ app.get('/agencies', dbLogin.checkToken, dbParametric.getAgencies);
 app.get('/signatories', dbLogin.checkToken, dbParametric.getSignatories);
 app.get('/signatorytypes', dbLogin.checkToken, dbParametric.getSignatoryTypes);
 app.get('/errormessages', dbLogin.checkToken, dbParametric.getErrorMessages);
-app.get('/users', dbLogin.checkToken, dbParametric.getUsers);
-app.get('/userroles', dbLogin.checkToken, dbParametric.getUserRoles);
-app.get('/reservations', dbLogin.checkToken, dbParametric.getReservations);
 app.post('/contractexists', dbLogin.checkToken, dbContract.contractExists);
 app.post('/contracts', dbLogin.checkToken, dbContract.getContracts);
 //app.get('/contracts_webix', dbContract.getContracts_WEBIX);
@@ -242,7 +244,7 @@ app.use(function (err, req, res, next) {
   res.locals.error = req.app.get('env') === 'development' ? err : {};
   helper.consoleLog('ERROR: ' + err.message)
   var errorMessage = 'Message: ' + err.message + '\nStack: ' + err.stack + '\n';
-  dbError.logError(req, res, next, errorMessage.substring(0, 990), true, false)
+  dbError.logError(req, res, next, errorMessage.substring(0, 990), false)
 
   var inputPath = path.join(__dirname, "error_log.txt")
   fs.writeFile(inputPath, errorMessage, (err) => {

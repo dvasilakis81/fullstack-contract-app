@@ -73,11 +73,12 @@ function query_getcontracts(req) {
 }
 
 function query_getcontractbyid(req, contractId) {
+  var cid = contractId ? contractId : req.body.contractId;
   var loginUserId = req.body.loginUserId;
-  return util.format('%s %s', getSelectFromClauses(loginUserId), util.format('WHERE c."Id"=%s', contractId))
+  return util.format('%s %s', getSelectFromClauses(loginUserId), util.format('WHERE c."Id"=%s', cid))
 }
 
-function query_getcontracttypes() {  
+function query_getcontracttypes() {
   return util.format('SELECT * FROM "Ordering"."ContractType"')
 }
 
@@ -177,9 +178,9 @@ module.exports = {
   query_getcontractbyid,
   query_getcontracttypes,
   query_searchcontracts,
-  query_contractexists,  
+  query_contractexists,
   query_insertcontract,
   query_insertcontractowner,
   query_updatecontract,
-  query_deletecontract  
+  query_deletecontract
 }

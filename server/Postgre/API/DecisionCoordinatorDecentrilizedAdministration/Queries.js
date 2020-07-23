@@ -1,9 +1,7 @@
-const pool = require('../dbConfig').pool
 const util = require('util')
-const helper = require('../../HelperMethods/helpermethods')
-const contractMethods = require('./Contracts/ContractAPI')
+const helper = require('../../../HelperMethods/helpermethods')
 
-const insert = (req, res, next) => {
+function query_insert(req) {
   var contractId = req.body.contractId;
 
   var sqlQuery = 'INSERT INTO "Ordering"."DecisionCoordinatorDecentrilizedAdministration"("ContractId","ProtocolNumber","ProtocolDate","ADA", "OrderNo", "DecisionBoardProtocol", "APDA_ProtocolNumber", "APDA_ProtocolDate" , "ActionTransmission", "ActionAccount") VALUES ';
@@ -19,17 +17,10 @@ const insert = (req, res, next) => {
     helper.addQuotes(req.body.ActionTransmission),
     helper.addQuotes(req.body.ActionAccount));
 
-  pool.query(sqlQuery, (error, results) => {
-    if (error)
-      next(error);
-    else {
-      helper.consoleLog("Insert Decision Coordinator Decentrilized Administration \n");
-      contractMethods.getContractById(req, res, next, contractId)
-    }
-  })
+  return sqlQuery
 }
 
-const update = (req, res, next) => {
+function query_update(req) {
 
   var contractId = req.body.contractId;
   var sqlQuery = util.format('UPDATE "Ordering"."DecisionCoordinatorDecentrilizedAdministration" ' +
@@ -46,34 +37,22 @@ const update = (req, res, next) => {
     helper.addQuotes(req.body.ActionTransmission),
     helper.addQuotes(req.body.ActionAccount),
     helper.addQuotes(req.body.Id),
-    contractId)
-  ret = pool.query(sqlQuery, (error, results) => {
-    if (error)
-      next(error);
-    else {
-      helper.consoleLog("Update Decision Coordinator Decentrilized Administration \n");
-      contractMethods.getContractById(req, res, next, contractId)
-    }
-  })
+    contractId);
+
+
+  return sqlQuery;
 }
 
-const remove = (req, res, next) => {
+function query_remove(req) {
   var Id = req.body.Id;
   var contractId = req.body.contractId;
-  var sqlQuery = util.format('DELETE FROM "Ordering"."DecisionCoordinatorDecentrilizedAdministration" WHERE "Id"=%s AND "ContractId"=%s', Id, contractId)
+  var sqlQuery = util.format('DELETE FROM "Ordering"."DecisionCoordinatorDecentrilizedAdministration" WHERE "Id"=%s AND "ContractId"=%s', Id, contractId);
 
-  pool.query(sqlQuery, (error, results) => {
-    if (error)
-      next(error);
-    else {
-      helper.consoleLog('deleteDecisionCoordinatorDecentrilizedAdministration: Delete DecisionCoordinatorDecentrilizedAdministration: Rows affected: ' + results.rowCount + ' ContractId: ' + contractId);
-      contractMethods.getContractById(req, res, next, contractId)
-    }
-  })
+  return sqlQuery;
 }
 
 module.exports = {
-  insert,
-  update,
-  remove
+  query_insert,
+  query_update,
+  query_remove
 }

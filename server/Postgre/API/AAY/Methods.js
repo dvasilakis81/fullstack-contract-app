@@ -2,7 +2,7 @@ var pool = require('../../dbConfig').pool
 var queries = require('./Queries');
 var contractMethods = require('../Contracts/ContractAPI');
 
-async function insert(req, res, next, accountId) {
+async function insert(req, res, next) {
 
   try {
     const { rows } = await pool.query(queries.query_insert(req));

@@ -16,7 +16,7 @@ async function getContracts(req, res, next) {
 
 async function getContractById(req, res, next, contractId) {
 
-  try {
+  try {    
     const { rows } = await pool.query(queries.query_getcontractbyid(req, contractId));
     return rows[0];
   } catch (error) {
@@ -81,7 +81,7 @@ async function updateContract(req, res, next) {
   }
 }
 
-async function updateContract(req, res, next){
+async function updateContract(req, res, next) {
   try {
     const { rows } = await pool.query(queries.updateContract(req, res, next));
     return rows[0].Id;
@@ -90,7 +90,7 @@ async function updateContract(req, res, next){
   }
 }
 
-async function deleteContract(req, res, next){
+async function deleteContract(req, res, next) {
 
   try {
     const { rows } = await pool.query(queries.query_deletecontract(req));

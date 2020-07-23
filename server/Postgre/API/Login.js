@@ -217,38 +217,8 @@ const login = (request, response, next) => {
   return ret;
 }
 
-const checkToken = (req, res, next) => {
-  let token = req.headers['x-access-token'] || req.headers['authorization']; // Express headers are auto converted to lowercase
-  if (token) {
-    if (token.startsWith('Bearer '))
-      token = token.slice(7, token.length);
-
-    jwt.verify(token, secretKey, (err, decoded) => {
-      if (err) {
-        return res.status(200).json({
-          tokenIsValid: false,
-          message: 'Token is not valid',
-          error: err.message,
-          expiresAt: err.expiredAt
-        });
-      } else {
-        //const d = new Date(0);
-        //d.setUTCSeconds(decoded.exp);
-        next();
-      }
-    });
-  } else {
-    console.log("CHECKTOKEN\nprotocol:" + req.protocol + "\nhostname: " + req.hostname + "\npath: " + req.path + "\noriginalUrl: " + req.originalUrl);
-    return res.status(200).json({
-      tokenIsValid: false,
-      message: 'Auth token is not supplied'
-    });
-  }
-};
-
 module.exports = {
-  login,
-  checkToken,
+  login,  
   createUser,
   updateUser,
   deleteUser

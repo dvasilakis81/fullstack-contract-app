@@ -1,6 +1,6 @@
-const pool = require('../dbConfig').pool
+const pool = require('../../dbConfig').pool
 const util = require('util')
-const helper = require('../../HelperMethods/helpermethods')
+const helper = require('../../../HelperMethods/helpermethods')
 const MonitoringCommittee = require('./MonitoringCommittee')
 
 const insertDocumentSignatures = (req, res, next, accountInfo) => {

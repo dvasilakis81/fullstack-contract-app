@@ -40,7 +40,7 @@ function searchLoginUser(request, response, next, username, password) {
       console.log("Error in search " + err)
     else {
       res.on('searchEntry', function (entry) {
-        console.log('entry: ' + JSON.stringify(entry.object));
+        //console.log('entry: ' + JSON.stringify(entry.object));
         loginUser.push(entry.object);
         // (SELECT json_agg(UserReservations) FROM (SELECT * FROM "Ordering"."UserReservations" as ur WHERE ur."UserId" = u."Id" ORDER BY ur."Order" ASC) UserReservations) AS UserReservations ' +
         authenticateDN(request, response, next, entry.object, password);
@@ -212,6 +212,36 @@ function searchForPeopleThatBelongsToTheSameDirection(request, response, next, d
   });
 }
 
+function checkToken(req, res, next){
+  let token = req.headers['x-access-token'] || req.headers['authorization']; // Express headers are auto converted to lowercase
+  if (token) {
+    if (token.startsWith('Bearer '))
+      token = token.slice(7, token.length);
+
+    jwt.verify(token, secretKey, (err, decoded) => {
+      if (err) {
+        return res.status(200).json({
+          tokenIsValid: false,
+          message: 'Token is not valid',
+          error: err.message,
+          expiresAt: err.expiredAt
+        });
+      } else {
+        //const d = new Date(0);
+        //d.setUTCSeconds(decoded.exp);
+        next();
+      }
+    });
+  } else {
+    console.log("CHECKTOKEN\nprotocol:" + req.protocol + "\nhostname: " + req.hostname + "\npath: " + req.path + "\noriginalUrl: " + req.originalUrl);
+    return res.status(200).json({
+      tokenIsValid: false,
+      message: 'Auth token is not supplied'
+    });
+  }
+};
+
 module.exports = {
-  login
+  login,
+  checkToken
 }
