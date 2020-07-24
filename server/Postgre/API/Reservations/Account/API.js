@@ -11,8 +11,12 @@ async function sync(req, res, next) {
   else
     await reservationsMethods.insert(req, res, next);
 
-  const { rows } = await accountMethods.getAccountById(req, res, next);
-  res.status(200).json(rows[0]);
+  try {
+    const { rows } = await accountMethods.getAccountById(req, res, next);
+    res.status(200).json(rows[0]);
+  } catch (error) {
+    next(error);
+  }
 }
 
 module.exports = {

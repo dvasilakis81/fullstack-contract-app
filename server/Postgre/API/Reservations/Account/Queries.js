@@ -3,7 +3,7 @@ const helper = require('../../../../HelperMethods/helpermethods')
 
 function query_getaccountreservations(req) {
   var userId = req.body.userId;
-  var accountId = req.body.accountInfo.Id;
+  var accountId = req.body.AccountInfo.Id;
 
   var sqlQuery = util.format('SELECT * FROM "Ordering"."AccountReservations" as ur WHERE ur."UserId"=%s AND ur."AccountId"=%s',
     helper.addQuotes(userId), helper.addQuotes(accountId));
@@ -33,7 +33,7 @@ function query_insert(req) {
 
   var sqlQuery = util.format('INSERT INTO "Ordering"."AccountReservations"("UserId", "AccountId","Name","Percentage","Stamp","StampOGA", "IsReservation", "Order") VALUES ');
   var userId = req.body.userId;
-  var accountId = req.body.accountInfo.Id;
+  var accountId = req.body.AccountInfo.Id;
   var reservations = req.body.userreservations;
 
   for (var i = 0; i < reservations.length; i++) {
@@ -55,7 +55,7 @@ function query_insert(req) {
 
 function query_remove(req) {
   var userId = req.body.userId;
-  var accountId = req.body.accountInfo.Id;
+  var accountId = req.body.AccountInfo.Id;
 
   var sqlQuery = util.format('DELETE FROM "Ordering"."AccountReservations" as ur WHERE ur."UserId"=%s AND ur."AccountId"=%s',
     helper.addQuotes(userId), helper.addQuotes(accountId));

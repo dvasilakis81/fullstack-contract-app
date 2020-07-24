@@ -1,10 +1,10 @@
-const helper = require('../../../HelperMethods/helpermethods');
 const methods = require('./Methods');
 const invoiceMethods = require('../Invoice/Methods');
 const ccMethods = require('../CC/Methods');
 const signatureMethods = require('../Signatures/Methods');
 const monitoringCommitteeMethods = require('../MonitoringCommittee/Methods');
-const reservationMethods = require('../../API/Reservations/Account/Methods')
+const reservationMethods = require('../../API/Reservations/Account/Methods');
+
 // const getRemainAmountOfContract = (request, response, next) => {
 
 //   var numberOfAccounts = await methods.getContractAccountsNumber(req, res, next);
@@ -45,15 +45,16 @@ async function getAccountById(req, res, next) {
   res.status(200).json(rows[0]);
 }
 
-async function getAccountsInfo(req, res, next) {
-  var rows = await methods.getAccountsInfo(req, res, next);
-  let ret = [];
-  for (let index = 0; index < rows.length; index++) {
-    const element = results.rows[index];
-    ret.push({ number: element.Number, AmountPure: element.AmountPure, AmountFpa: element.AmountFpa, AmountTotal: element.AmountTotal })
-  }
-  res.status(200).json(ret);
-}
+//NOT USED
+// async function getAccountsInfo(req, res, next) {
+//   var rows = await methods.getAccountsInfo(req, res, next);
+//   let ret = [];
+//   for (let index = 0; index < rows.length; index++) {
+//     const element = results.rows[index];
+//     ret.push({ number: element.Number, AmountPure: element.AmountPure, AmountFpa: element.AmountFpa, AmountTotal: element.AmountTotal })
+//   }
+//   res.status(200).json(ret);
+// }
 
 async function insertAccount(req, res, next) {
 
@@ -95,9 +96,7 @@ async function updateAccount(req, res, next) {
   var invoiceRows = await invoiceMethods.updateInvoice(req, res, next);
   var ccRows = await ccMethods.updateCC(req, res, next);
   var signaturesRows = await signatureMethods.updateSignatures(req, res, next);
-  var monitoringCommitteeRows = await monitoringCommitteeMethods.processMonitoringCommittee(req, res, next);
-
-  helper.consoleLog('Rows affected: ' + results.rowCount + ' Account Id: ' + req.body.AccountId);
+  var monitoringCommitteeRows = await monitoringCommitteeMethods.processMonitoringCommittee(req, res, next);  
   getAccountById(req, res, next);
 }
 
@@ -105,6 +104,5 @@ module.exports = {
   getAccountById,
   getFirstAccountProtocolInfo,
   updateAccount,
-  insertAccount,
-  getAccountsInfo
+  insertAccount
 }

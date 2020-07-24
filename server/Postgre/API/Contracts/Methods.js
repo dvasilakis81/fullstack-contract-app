@@ -1,6 +1,3 @@
-const util = require('util')
-
-var helper = require('../../../HelperMethods/helpermethods')
 var pool = require('../../dbConfig').pool
 var queries = require('./Queries');
 
@@ -56,7 +53,7 @@ async function contractExists(req, res, next) {
 async function insertInfoToContractTable(req, res, next) {
 
   try {
-    const { rows } = await pool.query(queries.insertContract(req, res, next));
+    const { rows } = await pool.query(queries.query_insertcontract(req, res, next));
     return rows[0].Id;
   } catch (error) {
     next(error);
@@ -64,7 +61,7 @@ async function insertInfoToContractTable(req, res, next) {
 }
 async function insertContractOwnerInfo(req, res, next, contractId) {
   try {
-    const { rows } = await pool.query(queries.insertContractOwner(req, contractId));
+    const { rows } = await pool.query(queries.query_insertcontractowner(req, contractId));
     return rows[0].Id;
   } catch (error) {
     next(error);
@@ -74,16 +71,7 @@ async function insertContractOwnerInfo(req, res, next, contractId) {
 async function updateContract(req, res, next) {
 
   try {
-    const { rows } = await pool.query(queries.updateContract(req, res, next));
-    return rows[0].Id;
-  } catch (error) {
-    next(error);
-  }
-}
-
-async function updateContract(req, res, next) {
-  try {
-    const { rows } = await pool.query(queries.updateContract(req, res, next));
+    const { rows } = await pool.query(queries.query_updatecontract(req, res, next));
     return rows[0].Id;
   } catch (error) {
     next(error);

@@ -34,7 +34,7 @@ async function updateCC(req, res, next) {
 async function getCCFromPreviousAccount(req, res, next) {
   const previousAccount = await getPreviousAccount(req, res, next);
   const rows = await getCCFromAccount(req, res, next, previousAccount);
-  if (rows && rows.rowCount > 0)
+  if (rows && rows.length > 0)
     res.status(200).json(rows);
   else {
     var cc = [];

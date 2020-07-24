@@ -6,13 +6,13 @@ function query_get(accountId) {
 }
 
 function query_insert(req) {
-  var contractId = req.body.contractId;
+  var contractId = req.body.ContractId;
   var accountId = req.body.AccountId;
   var ccValues = req.body.cc;
   var sqlQuery = '';
 
   if (ccValues && ccValues.length > 0) {
-    var sqlQuery = 'INSERT INTO "Ordering"."CC"("ContractId","AccountId","CC","Order") VALUES ';
+    sqlQuery = 'INSERT INTO "Ordering"."CC"("ContractId","AccountId","CC","Order") VALUES ';
     for (var i = 0; i < ccValues.length; i++) {
       sqlQuery += util.format('(%s,%s,%s,%s)', contractId, accountId, helper.addQuotes(ccValues[i].CC), i);
       if (i < ccValues.length - 1)
@@ -41,7 +41,7 @@ function query_getpreviousaccount(req) {
 
 function query_getccfromaccount(req, previousAccount) {
   var sqlQuery = util.format('SELECT * FROM "Ordering"."CC" as cc Where cc."ContractId"=%s AND cc."AccountId"=%s ORDER BY cc."Order" ',
-    helper.addQuotes(contractId), helper.addQuotes(previousAccount.Id));
+    helper.addQuotes(req.body.ContractId), helper.addQuotes(previousAccount[0].Id));
   return sqlQuery;
 }
 

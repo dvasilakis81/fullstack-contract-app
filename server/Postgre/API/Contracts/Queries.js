@@ -167,6 +167,8 @@ function query_updatecontract(req, res, next) {
     req.body.AllUsers,
     helper.addQuotes(req.body.LawArticle),
     req.body.ContractId);
+    
+  return sqlQuery;
 }
 
 function query_deletecontract(req) {
