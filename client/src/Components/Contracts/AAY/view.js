@@ -336,7 +336,7 @@ class AayView extends Component {
     if (item.Type == 0) {
          rContent = <span>Πρωτότυπο και φωτοαντίγραφο της με αριθμ. {item.ProtocolNumber}/{item.ProtocolDate ? getDateFormatForDocument(item.ProtocolDate) : item.ProtocolDate} Πρότασης Ανάληψης Υποχρέωσης.</span>
     } else if (item.Type == 1 || item.Type == 2) {
-      rContent = <span>Πρωτότυπο και φωτοαντίγραφο της με αριθμ. {item.Value}/{item.ProtocolNumber}/{item.ProtocolDate ? getDateFormatForDocument(item.ProtocolDate) : item.ProtocolDate} ΕΑΔ {item.EadNumber} </span>
+      rContent = <span>Πρωτότυπο και φωτοαντίγραφο της με αριθμ. {item.Value}/{item.ProtocolNumber}/{item.ProtocolDate ? getDateFormatForDocument(item.ProtocolDate) : item.ProtocolDate}  {item.EadNumber ? 'ΕΑΔ ' + item.EadNumber : ''} </span>
       var ada = <></>
       if (item.ADA)
         ada = <><span>(ΑΔΑ: </span><b><u>{item.ADA}</u></b><span>) </span></>

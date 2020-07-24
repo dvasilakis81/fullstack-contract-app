@@ -238,9 +238,9 @@ class AccountInfo extends React.Component {
 		this.setState({ syncButtonDisabled: true });
 		var contractDetails = this.props.isSearchMode ? this.props.contractDetailsSearchMode : this.props.contractDetails;
 		var dataToPost = {
-			userId: this.props.token.data.id,
-			contractId: contractDetails.Id,
-			accountInfo: this.props.account,
+			userId: this.props.token.data.user.uid,
+			ContractId: contractDetails.Id,
+			AccountInfo: this.props.account,
 			userreservations: this.props.token.data.user.reservations
 		};
 
@@ -945,7 +945,7 @@ class AccountInfo extends React.Component {
 
 		var userReservations;
 		if (this.props.token && this.props.token.data)
-			userReservations = this.props.token.data.reservations;
+			userReservations = this.props.token.data.user.reservations;
 
 		var accountReservations;
 		if (this.props.account) {

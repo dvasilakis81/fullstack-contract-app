@@ -295,16 +295,18 @@ class ReservationsContainer extends Component {
     var methodName = 'createuserreservation'
     var newDataName = newData.Name
     let doRequest = (newData.Name && newData.Percentage && newData.Order ? true : false)
-    var dispatchLabel = 'CREATE_RESERVATION'
     var addTypeLabel = 'της Κράτησης'
 
     if (doRequest) {
+      newData.UserId = this.props.token.data.user.uid;
       axios.post(getHostUrl() + '/' + methodName, newData, { headers: { Authorization: 'Bearer ' + this.props.token.data.token } }).then(res => {
         if (res && res.data && res.data.tokenIsValid === undefined) {
           var msg = 'Η δημιουργία ' + addTypeLabel + ' "' + newDataName + '" έγινε επιτυχώς!!!'
           this.setState({ message: msg, openMessage: true, variant: 'success', submitButtonDisabled: false });
-          store.dispatch({ type: dispatchLabel, payload: res.data })
-          res.data.IsReservation = (res.data.IsReservation ? 'Ναι' : 'Όχι')
+          this.addTokenReservation(res.data);
+
+          //res.data.IsReservation = (res.data.IsReservation ? 'Ναι' : 'Όχι')
+          //res.data.IsReservation = res.data.IsReservation ? 'Ναι' : 'Όχι')
           data.push(res.data);
           this.setState({ data }, () => resolve());
         } else
@@ -328,6 +330,7 @@ class ReservationsContainer extends Component {
   }
 
   requestUpdate(oldData, newData, data, resolve) {
+
     let notSupported = false;
     var doRequest = (newData.Name ? true : false)
     var methodName = 'updateuserreservation'
@@ -335,8 +338,8 @@ class ReservationsContainer extends Component {
     var dispatchLabel = 'UPDATE_RESERVATION'
     var addTypeLabel = 'της Κράτησης'
 
-
     if (doRequest) {
+      newData.UserId = this.props.token.data.user.uid;
       axios.post(getHostUrl() + '/' + methodName, newData, { headers: { Authorization: 'Bearer ' + this.props.token.data.token } }).then(res => {
         if (res && res.data && res.data.tokenIsValid === undefined) {
           this.updateTokenReservation(newData);
@@ -375,14 +378,14 @@ class ReservationsContainer extends Component {
 
     var methodName = 'deleteuserreservation'
     var newDataName = oldData.Name
-    var dispatchLabel = 'DELETE_RESERVATION'
     var addTypeLabel = 'της Κράτησης'
 
+    oldData.UserId = this.props.token.data.user.uid;
     axios.post(getHostUrl() + '/' + methodName, oldData, { headers: { Authorization: 'Bearer ' + this.props.token.data.token } }).then(res => {
       if (res && res.data && res.data.tokenIsValid === undefined) {
+        this.removeReservation(res.data);
         var msg = 'Η διαγραφή ' + addTypeLabel + ' "' + newDataName + '" έγινε επιτυχώς!!!'
         this.setState({ message: msg, openMessage: true, variant: 'success', submitButtonDisabled: false });
-        store.dispatch({ type: dispatchLabel, payload: res.data })
 
         const index = data.indexOf(oldData);
         data.splice(index, 1);
@@ -399,6 +402,12 @@ class ReservationsContainer extends Component {
   handleClose = (event, reason) => {
     this.setState({ openMessage: false });
   };
+
+  addTokenReservation(data) {
+    var tokenReservations = this.props.token.data ? this.props.token.data.user.reservations : undefined;
+    if (tokenReservations)
+      tokenReservations.push(data);
+  }
 
   updateTokenReservation(data) {
     var tokenReservations = this.props.token.data ? this.props.token.data.user.reservations : undefined;
@@ -417,6 +426,22 @@ class ReservationsContainer extends Component {
         }
       }
     }
+  }
+
+  removeReservation(deletedReservation) {
+    var tokenReservations = this.props.token.data ? this.props.token.data.user.reservations : undefined;
+    var reservations = [];
+    if (tokenReservations) {
+      for (let index = 0; index < tokenReservations.length; index++) {
+        const element = tokenReservations[index];
+        if (element.Id == deletedReservation.Id) {
+        } else {
+          reservations.push(element);
+        }
+      }
+    }
+
+    this.props.token.data.user.reservations = reservations
   }
 
   render() {

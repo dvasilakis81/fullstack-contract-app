@@ -190,16 +190,15 @@ class ItemDetail extends React.Component {
 
 	getEditAction() {
 		//#17d3cd
-		if (this.props.token.data.role <= 4)
-			return (<Button variant="contained"
-				style={{ margin: '5px', background: 'lightgrey' }}
-				onClick={this.editNewContract}>
-				<EditIcon />
+
+		return (<Button variant="contained"
+			style={{ margin: '5px', background: 'lightgrey' }}
+			onClick={this.editNewContract}>
+			<EditIcon />
 				Επεξεργασία Σύμβασης
-			</Button>)
-		else
-			return <></>
+		</Button>)
 	}
+	
 	getDeleteAction(contractDetails) {
 		//#ff4500
 		if (this.props.token.data.id === contractDetails.OwnerId)
@@ -553,7 +552,7 @@ class ItemDetail extends React.Component {
 							</Typography>
 						</Paper>
 					</Grid>
-						<Grid item>
+					<Grid item>
 						<Paper style={styles.paperContractInfo} square={true}>
 							<Typography>
 								<List style={{ display: 'flex', flexDirection: 'row', padding: '0px', margin: '0px' }}>
@@ -589,7 +588,7 @@ class ItemDetail extends React.Component {
 								{this.drawAccountButtons(contractInfo)}
 							</Typography>
 						</Paper>
-					</Grid>				
+					</Grid>
 					<Grid item>
 						<Paper style={styles.paperContractInfo} square={true}>
 							<Typography>
