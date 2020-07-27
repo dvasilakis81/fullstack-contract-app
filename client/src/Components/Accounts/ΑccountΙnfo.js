@@ -988,6 +988,11 @@ class AccountInfo extends React.Component {
 								}
 							}
 
+							if (ur.IsReservation !== ar.IsReservation) {
+								ret = false;
+								break;
+							}
+
 							break;
 						}
 					}
