@@ -13,9 +13,9 @@ function query_getfirstaccountprotocolinfo(req) {
 
 function query_getaccountbyid(req) {
 
-  const contractId = req.body.contractId;
-  const accountNumber = req.body.accountNumber;
-  const accountId = req.body.accountInfo ? req.body.accountInfo.Id : '';
+  const contractId = req.body.ContractId;
+  const accountNumber = req.body.AccountNumber;
+  const accountId = req.body.AccountInfo ? req.body.AccountInfo.Id : req.body.AccountId;
 
   return getSelectClauseGetAccount(contractId) +
     'FROM "Ordering"."Account" as a ' +

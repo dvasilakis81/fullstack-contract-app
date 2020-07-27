@@ -1,11 +1,8 @@
-const pool = require('../dbConfig').pool
 const util = require('util')
-const helper = require('../../HelperMethods/helpermethods')
-const contractMethods = require('./Contracts/ContractAPI')
+const helper = require('../../../HelperMethods/helpermethods')
 
-const insert = (req, res, next) => {
+function query_insert(req) {
   var contractId = req.body.contractId;
-
   var sqlQuery = util.format('INSERT INTO "Ordering"."AAY"("ContractId","Value","ProtocolNumber","ProtocolDate","EadNumber","ADA","OrderNo","Type","Overthrow") ' +
     'VALUES(%s,%s,%s,%s,%s,%s,%s,%s,%s) ' +
     'RETURNING "Id" ',
@@ -20,19 +17,12 @@ const insert = (req, res, next) => {
     helper.addQuotes(req.body.Overthrow),
   )
 
-  pool.query(sqlQuery, (error, results) => {
-    if (error)
-      next(error);
-    else {
-      helper.consoleLog("ΑΑΥ info created \n");
-      contractMethods.getContractById(req, res, next, contractId);
-    }
-  })
+  return sqlQuery
 }
 
-const update = (req, res, next) => {
-  var contractId = req.body.contractId;
+function query_update(req) {
 
+  var contractId = req.body.contractId;
   var sqlQuery = util.format('UPDATE "Ordering"."AAY" ' +
     'SET "Value"=%s,"ProtocolNumber"=%s,"ProtocolDate"=%s,"EadNumber"=%s,"ADA"=%s,"Type"=%s,"Overthrow"=%s ' +
     'WHERE "ContractId"=%s AND "OrderNo"=%s',
@@ -46,32 +36,18 @@ const update = (req, res, next) => {
     Number(contractId),
     req.body.orderNo);
 
-  pool.query(sqlQuery, (error, results) => {
-    if (error)
-      next(error);
-    else {
-      helper.consoleLog('UpdateAAY: Rows affected: ' + results.rowCount + ' Contract Id: ' + contractId);
-      contractMethods.getContractById(req, res, next, contractId);
-    }
-  })
+  return sqlQuery;
 }
 
-function remove(req, res, next) {
-
+function query_remove(req) {
   var Id = req.body.Id;
   var contractId = req.body.contractId;
   var sqlQuery = util.format('DELETE FROM "Ordering"."AAY" WHERE "Id"=%s AND "ContractId"=%s', Id, contractId)
-
-  pool.query(sqlQuery, (error, results) => {
-    if (error)
-      next(error);
-    else
-      contractMethods.getContractById(req, res, next, contractId)
-  })
+  return sqlQuery;
 }
 
 module.exports = {
-  insert,
-  update,
-  remove
+  query_insert,
+  query_update,
+  query_remove
 }

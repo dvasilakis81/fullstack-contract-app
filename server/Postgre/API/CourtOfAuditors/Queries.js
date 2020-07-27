@@ -1,9 +1,7 @@
-const pool = require('../dbConfig').pool
 const util = require('util')
-const helper = require('../../HelperMethods/helpermethods')
-const contractMethods = require('./Contracts/ContractAPI')
+const helper = require('../../../HelperMethods/helpermethods')
 
-const insert = (req, res, next) => {
+function query_insert(req) {
   var contractId = req.body.contractId;
   var sqlQuery = util.format('INSERT INTO "Ordering"."CourtOfAuditors"("ContractId","ProtocolNumber","ProtocolYear","ScaleNumber","ContentAccount","APDA_ProtocolNumber","APDA_ProtocolDate") ' +
     'VALUES(%s,%s,%s,%s,%s,%s,%s) ' +
@@ -15,19 +13,12 @@ const insert = (req, res, next) => {
     helper.addQuotes(req.body.ContentAccount),
     helper.addQuotes(req.body.APDANumber),
     helper.addQuotes(req.body.APDADate))
-  console.log(sqlQuery);
-  pool.query(sqlQuery, (error, results) => {
-    if (error)
-      next(error);
-    else {
-      helper.consoleLog("Insert in Court of Auditors \n");
-      contractMethods.getContractById(req, res, next, contractId)
-    }
-  })
 
+  return sqlQuery
 }
 
-const update = (req, res, next) => {
+function query_update(req) {
+
   var contractId = req.body.contractId;
   var sqlQuery =
     util.format('UPDATE "Ordering"."CourtOfAuditors" ' +
@@ -43,34 +34,19 @@ const update = (req, res, next) => {
       helper.addQuotes(req.body.Id),
       contractId)
 
-  pool.query(sqlQuery, (error, results) => {
-    if (error)
-      next(error);
-    else {
-      helper.consoleLog("Update CourtOfAuditors \n");
-      contractMethods.getContractById(req, res, next, contractId)
-    }
-  })
 
+  return sqlQuery;
 }
 
-const remove = (req, res, next) => {
+function query_remove(req) {
   var Id = req.body.Id;
   var contractId = req.body.contractId;
-  var sqlQuery = util.format('DELETE FROM "Ordering"."CourtOfAuditors" WHERE "Id"=%s AND "ContractId"=%s', Id, contractId)
-
-  pool.query(sqlQuery, (error, results) => {
-    if (error)
-      next(error);
-    else {
-      helper.consoleLog('courtOfAuditors: Delete CourtOfAuditors: Rows affected: ' + results.rowCount + ' ContractId: ' + contractId);
-      contractMethods.getContractById(req, res, next, contractId)
-    }
-  })
+  var sqlQuery = util.format('DELETE FROM "Ordering"."CourtOfAuditors" WHERE "Id"=%s AND "ContractId"=%s', Id, contractId);
+  return sqlQuery;
 }
 
 module.exports = {
-  insert,
-  update,
-  remove
+  query_insert,
+  query_update,
+  query_remove
 }

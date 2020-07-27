@@ -1,12 +1,9 @@
-const pool = require('../../dbConfig').pool
-const util = require('util')
-const helper = require('../../../HelperMethods/helpermethods')
-
-const methods = require('./Methods')
-const invoiceMethods = require('../Invoice/Methods')
-const ccMethods = require('../CC/Methods')
-const signatureMethods = require('../Signatures/Methods')
-const monitoringCommitteeMethods = require('../MonitoringCommittee/Methods')
+const methods = require('./Methods');
+const invoiceMethods = require('../Invoice/Methods');
+const ccMethods = require('../CC/Methods');
+const signatureMethods = require('../Signatures/Methods');
+const monitoringCommitteeMethods = require('../MonitoringCommittee/Methods');
+const reservationMethods = require('../../API/Reservations/Account/Methods');
 
 // const getRemainAmountOfContract = (request, response, next) => {
 
@@ -48,15 +45,16 @@ async function getAccountById(req, res, next) {
   res.status(200).json(rows[0]);
 }
 
-async function getAccountsInfo(req, res, next) {
-  var rows = await methods.getAccountsInfo(req, res, next);
-  let ret = [];
-  for (let index = 0; index < rows.length; index++) {
-    const element = results.rows[index];
-    ret.push({ number: element.Number, AmountPure: element.AmountPure, AmountFpa: element.AmountFpa, AmountTotal: element.AmountTotal })
-  }
-  res.status(200).json(ret);
-}
+//NOT USED
+// async function getAccountsInfo(req, res, next) {
+//   var rows = await methods.getAccountsInfo(req, res, next);
+//   let ret = [];
+//   for (let index = 0; index < rows.length; index++) {
+//     const element = results.rows[index];
+//     ret.push({ number: element.Number, AmountPure: element.AmountPure, AmountFpa: element.AmountFpa, AmountTotal: element.AmountTotal })
+//   }
+//   res.status(200).json(ret);
+// }
 
 async function insertAccount(req, res, next) {
 
@@ -67,24 +65,11 @@ async function insertAccount(req, res, next) {
     var rows = await methods.insertAccount(req, res, next);
     if (rows.length > 0 && rows[0].Id) {
       var accountId = rows[0].Id;
-      var rows = await invoiceMethods.insertInvoice(req, res, next, accountId)
-      var rows = await ccMethods.insertCC(req, res, next, accountId)
-      var rows = await signatureMethods.insertSignatures(req, res, next, accountId)
+      var rows = await invoiceMethods.insertInvoice(req, res, next, accountId);
+      var rows = await ccMethods.insertCC(req, res, next, accountId);
+      var rows = await signatureMethods.insertSignatures(req, res, next, accountId);
       var rows = await monitoringCommitteeMethods.insertMonitoringCommittee(req, res, next, accountId);
-
-      // var accountInfo = [];
-      // accountInfo.push({
-      //   Id: results.rows[0].Id,
-      //   ContractId: contractId,
-      //   Number: req.body.AccountNumber,
-      //   Start: results.rows[0].Start,
-      //   End: results.rows[0].End,
-      //   AmountPure: results.rows[0].AmountPure,
-      //   AmountFpa: results.rows[0].AmountFpa,
-      //   AmountTotal: results.rows[0].AmountTotal
-      // })
-      // res.status(200).json(accountInfo);
-      // res.status(200).json(accountInfo);
+      var rows = await reservationMethods.sync(req, res, next, accountId);
 
       getAccountById(req, res, next);
     }
@@ -108,12 +93,10 @@ async function updateAccount(req, res, next) {
   //   AmountTotal: results.rows[0].AmountTotal
   // });
 
-  var invoiceRows = await invoiceMethods.updateInvoice(req, res, next)
-  var ccRows = await ccMethods.updateCC(req, res, next)
-  var signaturesRows = await signatureMethods.updateSignatures(req, res, next)
-  var monitoringCommitteeRows = await monitoringCommitteeMethods.processMonitoringCommittee(req, res, next);
-
-  helper.consoleLog('Rows affected: ' + results.rowCount + ' Account Id: ' + req.body.AccountId);
+  var invoiceRows = await invoiceMethods.updateInvoice(req, res, next);
+  var ccRows = await ccMethods.updateCC(req, res, next);
+  var signaturesRows = await signatureMethods.updateSignatures(req, res, next);
+  var monitoringCommitteeRows = await monitoringCommitteeMethods.processMonitoringCommittee(req, res, next);  
   getAccountById(req, res, next);
 }
 
@@ -121,6 +104,5 @@ module.exports = {
   getAccountById,
   getFirstAccountProtocolInfo,
   updateAccount,
-  insertAccount,
-  getAccountsInfo
+  insertAccount
 }

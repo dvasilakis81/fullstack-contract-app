@@ -57,17 +57,6 @@ const getAgencies = (request, response, next) => {
   })
 }
 
-const getReservations = (request, response, next) => {
-  pool.query('SELECT * FROM "Ordering"."Reservations" as r ORDER BY r."Order" ASC', (error, results) => {
-    if (error)
-      next(error);
-    else {
-      helper.consoleLog(new Date().toLocaleString() + ": Reservations requested");
-      response.status(200).json(results.rows)
-    }
-  })
-}
-
 const getSignatories = (request, response, next) => {
   pool.query('SELECT * FROM "Ordering"."Signatory"', (error, results) => {
     if (error)
@@ -325,79 +314,6 @@ const deleteAgency = (req, res, next) => {
   })
 }
 
-const createReservation = (req, res, next) => {
-  var ret = ''
-
-  const Name = req.body.Name;
-  const Percentage = req.body.Percentage;
-  const Stamp = req.body.Stamp;
-  const StampOGA = req.body.StampOGA;
-  const IsReservation = req.body.IsReservation === 'Ναι' ? true : false;
-  const Order = req.body.Order;
-
-  var sqlQuery = util.format('INSERT INTO "Ordering"."Reservations"("Name","Percentage","Stamp","StampOGA", "IsReservation", "Order") ' +
-    'VALUES(%s,%s,%s,%s,%s,%s) ' +
-    'RETURNING * ',
-    helper.addQuotes(Name),
-    helper.addQuotes(Percentage),
-    helper.addQuotes(Stamp),
-    helper.addQuotes(StampOGA),
-    IsReservation,
-    helper.addQuotes(Order))
-
-  pool.query(sqlQuery, (error, results) => {
-    if (error)
-      next(error);
-    else
-      res.status(200).json(results.rows[0]);
-  })
-
-  return ret;
-}
-
-const updateReservation = (req, res, next) => {
-
-  var Id = req.body.Id;
-  const Name = req.body.Name;
-  const Percentage = req.body.Percentage;
-  const Stamp = req.body.Stamp;
-  const StampOGA = req.body.StampOGA;
-  const IsReservation = req.body.IsReservation === 'Ναι' ? true : false;
-  const Order = req.body.Order;
-
-  var sqlQuery = util.format('UPDATE "Ordering"."Reservations" ' +
-    'SET "Name"=%s,"Percentage"=%s,"Stamp"=%s,"StampOGA"=%s, "IsReservation"=%s, "Order"=%s ' +
-    'WHERE "Id"=%s ' +
-    'RETURNING * ',
-    helper.addQuotes(Name),
-    helper.addQuotes(Percentage),
-    helper.addQuotes(Stamp),
-    helper.addQuotes(StampOGA),
-    IsReservation,
-    helper.addQuotes(Order),
-    Id);
-
-  pool.query(sqlQuery, (error, results) => {
-    if (error)
-      next(error);
-    else
-      res.status(200).json(results.rows[0])
-  })
-}
-
-const deleteReservation = (req, res, next) => {
-
-  var Id = req.body.Id;
-  var sqlQuery = util.format('DELETE FROM "Ordering"."Reservations" WHERE "Id"=%s RETURNING * ', Id);
-
-  pool.query(sqlQuery, (error, results) => {
-    if (error)
-      next(error);
-    else
-      res.status(200).json(results.rows[0])
-  })
-}
-
 const createSignatory = (req, res, next) => {
   var ret = ''
 
@@ -567,8 +483,7 @@ const deleteContractType = (req, res, next) => {
 module.exports = {
   getUsers,
   getUserRoles,
-  getDirections,
-  getReservations,
+  getDirections,  
   createDirection,
   updateDirection,
   deleteDirection,
@@ -578,10 +493,7 @@ module.exports = {
   getAgencies,
   createAgency,
   updateAgency,
-  deleteAgency,
-  createReservation,
-  updateReservation,
-  deleteReservation,
+  deleteAgency,  
   getSignatories,
   createSignatory,
   updateSignatory,

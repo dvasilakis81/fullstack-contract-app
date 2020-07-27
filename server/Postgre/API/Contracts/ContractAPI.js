@@ -8,7 +8,7 @@ async function getContracts(req, res, next) {
 
 async function getContractById(req, res, next, contractId){
 
-  var contract = await methods.getContractById(req, res, next);
+  var contract = await methods.getContractById(req, res, next, contractId);
   res.status(200).json(contract);
 }
 
