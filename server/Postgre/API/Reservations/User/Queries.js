@@ -36,7 +36,7 @@ function query_insert(req) {
   const Percentage = req.body.Percentage;
   const Stamp = req.body.Stamp;
   const StampOGA = req.body.StampOGA;
-  const IsReservation = req.body.IsReservation === 'Ναι' ? true : false;
+  const IsReservation = req.body.IsReservation;
   const Order = req.body.Order;
 
   var sqlQuery = util.format('INSERT INTO "Ordering"."UserReservations"("UserId","Name","Percentage","Stamp","StampOGA", "IsReservation", "Order") ' +
@@ -59,7 +59,7 @@ function query_update(req) {
   const Percentage = req.body.Percentage;
   const Stamp = req.body.Stamp;
   const StampOGA = req.body.StampOGA;
-  const IsReservation = req.body.IsReservation === 'Ναι' ? true : false;
+  const IsReservation = req.body.IsReservation;
   const Order = req.body.Order;
 
   var sqlQuery = util.format('UPDATE "Ordering"."UserReservations" ' +

@@ -35,7 +35,7 @@ function query_insert(req) {
   var userId = req.body.userId;
   var accountId = req.body.AccountInfo.Id;
   var reservations = req.body.userreservations;
-
+  
   for (var i = 0; i < reservations.length; i++) {
     sqlQuery += util.format('(%s,%s,%s,%s,%s,%s,%s,%s)',
       helper.addQuotes(userId),

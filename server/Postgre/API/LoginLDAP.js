@@ -13,9 +13,6 @@ var client = ldap.createClient({
   bindCredentials: 'VkLqQzYsNSE5v3x'
 });
 
-//const loginUsername = 'd.vasilakis';
-//const loginPassword = 'DigidddtalMan82';
-
 function login(request, response, next) {
   const username = request.query.u;
   const password = request.query.p;
