@@ -21,7 +21,8 @@ async function getFirstAccountProtocolInfo(req, res, next) {
 
 async function getAccountById(req, res, next) {
   try {
-    return await pool.query(queries.query_getaccountbyid(req));
+    const rows =await pool.query(queries.query_getaccountbyid(req));
+    return rows;
   } catch (error) {
     next(error);
   }

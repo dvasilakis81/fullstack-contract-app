@@ -18,7 +18,7 @@ var fs = require('fs');
 //Here we are configuring express to use body-parser as middle-ware.
 //var port = normalizePort(process.env.SERVER_PORT || 7845);
 
-var port = normalizePort(process.env.PORT || 7777);
+var port = normalizePort(process.env.PORT || 5555);
 app.set('port', port);
 
 

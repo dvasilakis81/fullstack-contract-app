@@ -1,7 +1,10 @@
 const util = require('util')
-const helper = require('../../../HelperMethods/helpermethods')
+const helper = require('../../../HelperMethods/helpermethods');
+const { POINT_CONVERSION_COMPRESSED } = require('constants');
+const { pool } = require('../../dbConfig');
 
 function query_insertcontract(req) {
+
   return util.format('INSERT INTO "Ordering"."Contract"("ContractTypeId", "Title",  "ProtocolNumber",  "ProtocolDate",  "KAE",  "Actor", ' +
     ' "CodeDirection", "AwardNumber", "AwardDate", "AwardAda", "CpvCode", "CpvTitle", "AmountPure", "AmountFpa", "AmountTotal",  ' +
     ' "Balance", "Start", "End", "NumberOfAccounts", "DirectionId", "DepartmentId", "DateCreated", "DateModified", "ConcessionaireName", "ConcessionaireAFM", "HasDownPayment", "FpaValue", "OwnerId", "AllUsers", "LawArticle")  ' +
@@ -57,63 +60,74 @@ function query_insertcontractowner(req, contractId) {
 }
 
 function query_getcontracts(req) {
-
+  // return util.format('SELECT * FROM "Ordering"."Contract" as c ' + 
+  // 'INNER JOIN "Ordering"."Account" as a ' +
+  // ' ON a."ContractId"=c."Id"')
   var loginUserInfo = req.body.loginUserInfo;
+  var select = getSelectFromClauses(loginUserInfo);
+  var where = getWhere(loginUserInfo);
+  var order = 'ORDER BY c."Start" DESC ';
   var offset = parseInt(req.body.offset);
   var limit = parseInt(req.body.limit);
 
-  var where = util.format('WHERE c."OwnerId"=%s OR %s OR %s',
-    helper.addQuotes(loginUserInfo.uid),
-    checkIfLoginUserIsSupervisor(loginUserInfo.uid),
-    checkIfLoginUserIsDirector(loginUserInfo.uid)
-  );
-
-  return util.format('%s %s %s OFFSET %s LIMIT %s', getSelectFromClauses(loginUserInfo.uid), where, 'ORDER BY c."Start" DESC ', offset, limit);
-
+  return util.format('%s %s %s OFFSET %s LIMIT %s', select, where, order, offset, limit);
 }
 
 function query_getcontractbyid(req, contractId) {
   var cid = contractId ? contractId : req.body.contractId;
-  var loginUserId = req.body.loginUserId;
-  return util.format('%s %s', getSelectFromClauses(loginUserId), util.format('WHERE c."Id"=%s', cid))
+  return util.format('%s %s', getSelectFromClauses(req.body.loginUserInfo), util.format('WHERE c."Id"=%s', cid))
 }
 
 function query_getcontracttypes() {
   return util.format('SELECT * FROM "Ordering"."ContractType"')
 }
 
-function getQueryTotalContractsByUser(loginUserId) {
-  return loginUserId
-    ?
-    util.format('(SELECT COUNT(*) AS "Total" FROM "Ordering"."Contract" as c WHERE c."OwnerId"=%s), ', helper.addQuotes(loginUserId))
-    :
-    '(SELECT COUNT(*) AS "Total" FROM "Ordering"."Contract"), ';
+function getQueryTotalContractsByUser(loginUserInfo) {
+  return util.format('(SELECT COUNT(*) AS "Total" FROM "Ordering"."Contract" as c %s), ', getWhere(loginUserInfo));
 }
 
-function getSelectFromClauses(loginUserId) {
+function getWhere(loginUserInfo) {
+  return util.format('WHERE c."OwnerId"=%s OR %s OR %s OR %s',
+    helper.addQuotes(loginUserInfo.uid),
+    checkIfLoginUserBelongToSameDirectionAndDepartment(loginUserInfo),
+    checkIfLoginUserIsSupervisor(loginUserInfo),
+    checkIfLoginUserIsDirector(loginUserInfo)
+  );
+}
+
+function getSelectFromClauses(loginUserInfo) {
 
   return 'SELECT *, ' +
-    getQueryTotalContractsByUser(loginUserId) +
+    getQueryTotalContractsByUser(loginUserInfo) +
     '(SELECT json_agg(ContractOwner) FROM (SELECT * FROM "Ordering"."ContractOwner" as co WHERE c."Id" = co."ContractId") ContractOwner) AS ContractOwner, ' +
     '(SELECT json_agg(Account) FROM (SELECT acct."Number",acct."Start",acct."End",acct."AmountPure", acct."AmountFpa", acct."AmountTotal" FROM "Ordering"."Account" as acct WHERE c."Id" = acct."ContractId" ORDER BY acct."Number") Account) AS CreatedAccounts, ' +
     '(SELECT json_agg(ContractType) FROM (SELECT * FROM "Ordering"."ContractType" as ct WHERE c."ContractTypeId" = ct."ContractTypeId") ContractType) AS ContractType, ' +
+    '(SELECT json_agg(Direction) FROM (SELECT * FROM "Ordering"."Direction" as dir WHERE c."DirectionId" = dir."DirectionId") Direction) AS Direction, ' +
+    '(SELECT json_agg(Department) FROM (SELECT * FROM "Ordering"."Department" as dep WHERE c."DepartmentId" = dep."DepartmentId") Department) AS Department, ' +
     '(SELECT json_agg(DecisionBoard) FROM (SELECT * FROM "Ordering"."DecisionBoard" as dp WHERE dp."ContractId" = c."Id" ORDER BY dp."OrderNo") DecisionBoard) AS DecisionBoard, ' +
     '(SELECT json_agg(DecisionCoordinatorDecentrilizedAdministration) FROM (SELECT * FROM "Ordering"."DecisionCoordinatorDecentrilizedAdministration" as dp WHERE dp."ContractId" = c."Id" ORDER BY dp."OrderNo") DecisionCoordinatorDecentrilizedAdministration) AS DecisionCoordinatorDecentrilizedAdministration, ' +
     '(SELECT json_agg(CourtOfAuditors) FROM (SELECT * FROM "Ordering"."CourtOfAuditors" as dp WHERE dp."ContractId" = c."Id" ORDER BY dp."OrderNo") CourtOfAuditors) AS CourtOfAuditors, ' +
     '(SELECT json_agg(AAY) FROM (SELECT * FROM "Ordering"."AAY" as aay WHERE aay."ContractId" = c."Id" ORDER BY aay."OrderNo") AAY) AS AAY, ' +
     '(SELECT json_agg(AuthorDocumentedRequest) FROM (SELECT * FROM "Ordering"."AuthorDocumentedRequest" as adr WHERE adr."ContractId" = c."Id" ORDER BY adr."OrderNo") AuthorDocumentedRequest) AS AuthorDocumentedRequest, ' +
+    '(SELECT json_agg(EconomicalCommitee) FROM (SELECT * FROM "Ordering"."EconomicalCommitee" as ec WHERE ec."ContractId" = c."Id" ORDER BY ec."OrderNo") EconomicalCommitee) AS EconomicalCommitee, ' +
     '(SELECT json_agg(SnippetPractical) FROM (SELECT * FROM "Ordering"."SnippetPractical" as sp WHERE sp."ContractId" = c."Id" ORDER BY sp."OrderNo") SnippetPractical) AS SnippetPractical ' +
     'FROM "Ordering"."Contract" as c '
 }
 
-function checkIfLoginUserIsSupervisor(loginUserId) {
-  return util.format(' %s IN (SELECT con."Supervisor" FROM "Ordering"."ContractOwner" as con WHERE con."ContractId"=c."Id" ) ', helper.addQuotes(loginUserId));
+function checkIfLoginUserIsSupervisor(loginUserInfo) {
+  return util.format(' %s IN (SELECT con."Supervisor" FROM "Ordering"."ContractOwner" as con WHERE con."ContractId"=c."Id" ) ', helper.addQuotes(loginUserInfo.uid));
 }
 
-function checkIfLoginUserIsDirector(loginUserId) {
-  return util.format(' %s IN (SELECT con."Director" FROM "Ordering"."ContractOwner" as con WHERE con."ContractId"=c."Id" ) ', helper.addQuotes(loginUserId));
+function checkIfLoginUserIsDirector(loginUserInfo) {
+  return util.format(' %s IN (SELECT con."Director" FROM "Ordering"."ContractOwner" as con WHERE con."ContractId"=c."Id" ) ', helper.addQuotes(loginUserInfo.uid));
 }
 
+function checkIfLoginUserBelongToSameDirectionAndDepartment(loginUserInfo) {
+  return util.format(' (%s IN (SELECT con."Direction" FROM "Ordering"."ContractOwner" as con WHERE con."ContractId"=c."Id" )) AND  ' +
+    '(%s IN (SELECT con."Department" FROM "Ordering"."ContractOwner" as con WHERE con."ContractId"=c."Id" ))',
+    helper.addQuotes(loginUserInfo.ou),
+    helper.addQuotes(loginUserInfo.departmentNumber));
+}
 
 function query_searchcontracts(req) {
   var filter = req.query.filter;
@@ -167,7 +181,7 @@ function query_updatecontract(req, res, next) {
     req.body.AllUsers,
     helper.addQuotes(req.body.LawArticle),
     req.body.ContractId);
-    
+
   return sqlQuery;
 }
 

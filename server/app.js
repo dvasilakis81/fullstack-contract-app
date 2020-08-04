@@ -31,6 +31,7 @@ var dbDecisionCoordinatorDecentrilizedAdministration = require('./Postgre/API/De
 var dbCourtOfAuditors = require('./Postgre/API/CourtOfAuditors/Methods')
 var dbAuthorDocumentedRequest = require('./Postgre/API/AuthorDocumentedRequest/Methods')
 var dbSnippetPractical = require('./Postgre/API/SnippetPractical/Methods')
+var dbEconomicalCommitee = require('./Postgre/API/EconomicalCommitee/Methods')
 var dbCC = require('./Postgre/API/CC/Methods')
 var dbUserReservations = require('./Postgre/API/Reservations/User/Methods')
 var dbAccountReservations = require('./Postgre/API/Reservations/Account/API')
@@ -201,6 +202,9 @@ app.post('/deleteauthordocumentedrequest', dbLogin.checkToken, dbAuthorDocumente
 app.post('/insertsnippetpractical', dbLogin.checkToken, dbSnippetPractical.insert);
 app.post('/updatesnippetpractical', dbLogin.checkToken, dbSnippetPractical.update);
 app.post('/deletesnippetpractical', dbLogin.checkToken, dbSnippetPractical.remove);
+app.post('/inserteconomicalcommitee', dbLogin.checkToken, dbEconomicalCommitee.insert);
+app.post('/updateeconomicalcommitee', dbLogin.checkToken, dbEconomicalCommitee.update);
+app.post('/deleteeconomicalcommitee', dbLogin.checkToken, dbEconomicalCommitee.remove);
 app.post('/getccfrompreviousaccount', dbLogin.checkToken, dbCC.getCCFromPreviousAccount);
 app.post('/syncaccountreservations', dbLogin.checkToken, dbAccountReservations.sync);
 

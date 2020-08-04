@@ -1,5 +1,7 @@
 const util = require('util');
 const common = require('./common');
+const helper = require('../../HelperMethods/helpermethods');
+
 const align = 'both'
 module.exports = {
   
@@ -27,7 +29,7 @@ module.exports = {
         '</w:pPr>' +
         common.getrElement(util.format("Διαβίβαση Τιμολογίου για τον %s", body.Account[0].No)) +
         common.getrElement('ο', true) + 
-        common.getrElement(util.format(' Λογαριασμό (υπ’ αριθμ. %s/%s) ποσού %s %s %s και δικαιολογητικών, αναφορικά με τις εργασίες για τη %s περιόδου %s έως και %s, προς έλεγχο και έκδοση χρηματικού εντάλματος.',
+        common.getrElement(helper.fixTextForRawXml(util.format(' Λογαριασμό (υπ’ αριθμ. %s/%s) ποσού %s %s %s και δικαιολογητικών, αναφορικά με τις εργασίες για τη %s περιόδου %s έως και %s, προς έλεγχο και έκδοση χρηματικού εντάλματος.',
           body.Account[0].Invoice[0].Number,
           body.Account[0].Invoice[0].Date,
           body.Account[0].Amount,
@@ -35,7 +37,7 @@ module.exports = {
           body.Contract[0].Concessionaire[0].Name,
           body.Contract[0].Title[0].Value,
           body.Account[0].Start,
-          body.Account[0].End)) +        
+          body.Account[0].End))) +
         '</w:p>'
     }
 
