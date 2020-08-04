@@ -10,7 +10,7 @@ export default function (state = {}, action) {
     case 'GET_TOKEN_JWT_FULFILLED':      
       state = { ...state, tokenPending: undefined, tokenRejected: undefined, token: action.payload };
       break;
-    case 'GET_TOKEN_JWT_REJECTED':            
+    case 'GET_TOKEN_JWT_REJECTED':
       state = { ...state, tokenPending: undefined, tokenRejected: action.payload };
       break;
     case 'RESET_TOKEN_JWT_REJECTED':      

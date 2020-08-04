@@ -103,7 +103,10 @@ class ReservationsContainer extends Component {
   getColumnsForReservations(data) {
     let columns = [
       {
-        title: 'Όνομα', field: 'Name', defaultSort: 'asc', cellStyle: { width: '0px', wordBreak: 'break-word' },
+        title: 'Όνομα',
+        field: 'Name',
+        defaultSort: 'asc',
+        cellStyle: { width: '0px', wordBreak: 'break-word' },
         editComponent: props => (
           <TextField
             required
@@ -114,7 +117,9 @@ class ReservationsContainer extends Component {
           />)
       },
       {
-        title: 'Ποσοστό Κράτησης(%)', field: 'Percentage', cellStyle: { width: '100px', wordBreak: 'break-word' },
+        title: 'Ποσοστό Κράτησης(%)',
+        field: 'Percentage',
+        cellStyle: { width: '100px', wordBreak: 'break-word' },
         editComponent: props => (
           <TextField
             required
@@ -145,7 +150,9 @@ class ReservationsContainer extends Component {
           />)
       },
       {
-        title: 'Κράτηση επί του καθαρού ποσού', field: 'IsReservation', cellStyle: { width: '100px', wordBreak: 'break-word' },
+        title: 'Κράτηση επί του καθαρού ποσού',
+        field: 'IsReservation',
+        cellStyle: { width: '100px', wordBreak: 'break-word' },
         editComponent: props => (
           <Checkbox
             color="primary"
@@ -170,7 +177,7 @@ class ReservationsContainer extends Component {
 
     if (this.props.token && this.props.token.data && this.props.token.data.user.reservations) {
       this.props.token.data.user.reservations.forEach(x => {
-        data.push({ 'Id': x.Id, 'Name': x.Name, 'Percentage': x.Percentage ? parseFloat(x.Percentage) : '', 'Stamp': x.Stamp ? parseFloat(x.Stamp) : '', 'StampOGA': x.StampOGA ? parseFloat(x.StampOGA) : '', 'IsReservation': x.IsReservation ? 'Ναι' : 'Όχι', 'Order': x.Order });
+        data.push({ 'Id': x.Id, 'Name': x.Name, 'Percentage': x.Percentage ? parseFloat(x.Percentage) : '', 'Stamp': x.Stamp ? parseFloat(x.Stamp) : '', 'StampOGA': x.StampOGA ? parseFloat(x.StampOGA) : '', 'IsReservation': x.IsReservation === true ? 'Ναι' : 'Όχι', 'Order': x.Order });
       });
     }
 
@@ -295,16 +302,15 @@ class ReservationsContainer extends Component {
     var methodName = 'createuserreservation'
     var newDataName = newData.Name
     let doRequest = (newData.Name && newData.Percentage && newData.Order ? true : false)
-    var dispatchLabel = 'CREATE_RESERVATION'
     var addTypeLabel = 'της Κράτησης'
-
+    newData.IsReservation = (newData.IsReservation === 'Ναι' ? true : false);
     if (doRequest) {
+      newData.UserId = this.props.token.data.user.uid;
       axios.post(getHostUrl() + '/' + methodName, newData, { headers: { Authorization: 'Bearer ' + this.props.token.data.token } }).then(res => {
         if (res && res.data && res.data.tokenIsValid === undefined) {
           var msg = 'Η δημιουργία ' + addTypeLabel + ' "' + newDataName + '" έγινε επιτυχώς!!!'
           this.setState({ message: msg, openMessage: true, variant: 'success', submitButtonDisabled: false });
-          store.dispatch({ type: dispatchLabel, payload: res.data })
-          res.data.IsReservation = (res.data.IsReservation ? 'Ναι' : 'Όχι')
+          this.addToUserReservations(res.data);
           data.push(res.data);
           this.setState({ data }, () => resolve());
         } else
@@ -328,6 +334,7 @@ class ReservationsContainer extends Component {
   }
 
   requestUpdate(oldData, newData, data, resolve) {
+
     let notSupported = false;
     var doRequest = (newData.Name ? true : false)
     var methodName = 'updateuserreservation'
@@ -335,18 +342,21 @@ class ReservationsContainer extends Component {
     var dispatchLabel = 'UPDATE_RESERVATION'
     var addTypeLabel = 'της Κράτησης'
 
-
     if (doRequest) {
+      newData.UserId = this.props.token.data.user.uid;
+      newData.IsReservation = (newData.IsReservation === 'Ναι' ? true : false);
       axios.post(getHostUrl() + '/' + methodName, newData, { headers: { Authorization: 'Bearer ' + this.props.token.data.token } }).then(res => {
         if (res && res.data && res.data.tokenIsValid === undefined) {
-          this.updateTokenReservation(newData);
-          var msg = 'Η επεξεργασία ' + addTypeLabel + ' "' + newDataName + '" έγινε επιτυχώς!!!'
+          this.updateUserReservations(res.data);
+          var msg = 'Η επεξεργασία ' + addTypeLabel + ' "' + newDataName + '" έγινε επιτυχώς!!!';
           this.setState({ message: msg, openMessage: true, variant: 'success', submitButtonDisabled: false });
-          store.dispatch({ type: dispatchLabel, payload: res.data })
+          store.dispatch({ type: dispatchLabel, payload: res.data });
+
           const data = this.state.data;
           const index = data.indexOf(oldData);
-          res.data.IsReservation = (res.data.IsReservation ? 'Ναι' : 'Όχι')
+          res.data.IsReservation = (res.data.IsReservation === true ? 'Ναι' : 'Όχι');
           data[index] = res.data;
+
           this.setState({ data }, () => resolve());
         } else {
           this.setState({ message: 'Η συνεδρία έχει λήξει! Ξανακάνετε σύνδεση\n', openMessage: true, variant: 'info', submitButtonDisabled: false, navigateToLogin: true });
@@ -375,14 +385,14 @@ class ReservationsContainer extends Component {
 
     var methodName = 'deleteuserreservation'
     var newDataName = oldData.Name
-    var dispatchLabel = 'DELETE_RESERVATION'
     var addTypeLabel = 'της Κράτησης'
 
+    oldData.UserId = this.props.token.data.user.uid;
     axios.post(getHostUrl() + '/' + methodName, oldData, { headers: { Authorization: 'Bearer ' + this.props.token.data.token } }).then(res => {
       if (res && res.data && res.data.tokenIsValid === undefined) {
+        this.removeReservation(res.data);
         var msg = 'Η διαγραφή ' + addTypeLabel + ' "' + newDataName + '" έγινε επιτυχώς!!!'
         this.setState({ message: msg, openMessage: true, variant: 'success', submitButtonDisabled: false });
-        store.dispatch({ type: dispatchLabel, payload: res.data })
 
         const index = data.indexOf(oldData);
         data.splice(index, 1);
@@ -400,7 +410,13 @@ class ReservationsContainer extends Component {
     this.setState({ openMessage: false });
   };
 
-  updateTokenReservation(data) {
+  addToUserReservations(data) {
+    var tokenReservations = this.props.token.data ? this.props.token.data.user.reservations : undefined;
+    if (tokenReservations)
+      tokenReservations.push(data);
+  }
+
+  updateUserReservations(data) {
     var tokenReservations = this.props.token.data ? this.props.token.data.user.reservations : undefined;
     if (tokenReservations) {
       for (let index = 0; index < tokenReservations.length; index++) {
@@ -410,13 +426,29 @@ class ReservationsContainer extends Component {
           element.Percentage = data.Percentage;
           element.Stamp = data.Stamp;
           element.StampOGA = data.StampOGA;
-          element.IsReservation = data.IsReservation === 'Ναι' ? true : false;
+          element.IsReservation = data.IsReservation;
           element.Order = data.Order;
 
           break;
         }
       }
     }
+  }
+
+  removeReservation(deletedReservation) {
+    var tokenReservations = this.props.token.data ? this.props.token.data.user.reservations : undefined;
+    var reservations = [];
+    if (tokenReservations) {
+      for (let index = 0; index < tokenReservations.length; index++) {
+        const element = tokenReservations[index];
+        if (element.Id == deletedReservation.Id) {
+        } else {
+          reservations.push(element);
+        }
+      }
+    }
+
+    this.props.token.data.user.reservations = reservations
   }
 
   render() {

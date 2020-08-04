@@ -117,7 +117,7 @@ export default function (state = {}, action, root) {
 			let contracts = state.contractsList.filter((item) => {
 				let found = false;
 				item.Total = parseInt(item.Total) - 1;
-				if (item.Id.toString() === action.payload.data.Id.toString())
+				if (item.Id.toString() === action.payload.data.toString())
 					found = true;
 
 				if (found === false)

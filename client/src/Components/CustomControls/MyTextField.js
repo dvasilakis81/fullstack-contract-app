@@ -21,7 +21,7 @@ class MyTextField extends Component {
           <StyledTextField {...this.props} style={{ width: divWidth }}/>
         </span>
         :
-        <div style={{ margin: '10px', width: divWidth, border: '1px solid black', height: 'fit-content' }}>
+        <div style={{ margin: '10px', width: divWidth, border: '1px solid black', height: 'fit-content', padding:'1px' }}>
           <InputTitle title={this.props.title} isRequired={this.props.isRequired}/>
           <div style={{ backgroundColor: 'white' }}>
             <StyledTextField {...this.props} style={{ width: '100%' }} />
