@@ -17,6 +17,7 @@ import { getDecisionBoardTooltip } from './tooltip';
 import ProtocolInput from '../../CustomControls/ProtocolInput';
 import MyTextField from '../../CustomControls/MyTextField';
 import store from '../../../Redux/Store/store'
+import { getCopiesPhrase } from '../TooltipMethods'
 
 const styles = {
   paperContractMonetaryInfoFrame: {
@@ -283,7 +284,7 @@ class DecisionBoardView extends Component {
   getTransmissionItemInfo(index, item) {
 
     var rContent = <>
-      <span>Δύο (2) φωτοαντίγραφα της υπ' αριθ. </span>
+      <span>{getCopiesPhrase(item.NoPrototype, item.NoPhotocopy)} της υπ' αριθ. </span>
       <span>{item.ProtocolNumber}/{item.ProtocolDate ? getDateFormatForDocument(item.ProtocolDate) : item.ProtocolDate}</span>
       <span> Απόφασης Δημοτικού Συμβουλίου</span>
     </>;
