@@ -29,3 +29,43 @@ export function getLawArticleTooltip(state) {
     </div>
   </>)
 }
+
+function getNumberLectical(number, startWithCapital) {
+  var ret = ''; 
+
+  if (number == 1)
+    ret = (startWithCapital === true ? 'Ένα (1)' : 'ένα (1)');
+  else if (number == 2)
+    ret = (startWithCapital === true ? 'Δύο (2)' : 'δύο (2)');
+  else if (number == 3)
+    ret = (startWithCapital === true ? 'Τρία (3)' : 'τρία (3)');
+  else if (number == 4)
+    ret = (startWithCapital === true ? 'Τέσσερα (4)' : 'τέσσερα (4)');
+  else if (number == 5)
+    ret = (startWithCapital === true ? 'Πέντε (5)' : 'πέντε (5)');
+  else if (number == 6)
+    ret = (startWithCapital === true ? 'Έξι (6)' : 'έξι (6)');
+  else if (number == 7)
+    ret = (startWithCapital === true ? 'Εφτά (7)' : 'εφτά (7)');
+  else if (number == 8)
+    ret = (startWithCapital === true ? 'Οκτώ (8)' : 'οκτώ (8)');
+  else if (number == 9)
+    ret = (startWithCapital === true ? 'Εννιά (9)' : 'εννιά (9)');
+  
+  return ret;
+}
+
+export function getCopiesPhrase(NoPrototype, NoPhotocopy) {
+  var ret = '';
+
+  if (NoPrototype > 0)
+    ret = getNumberLectical(NoPrototype, true) + (NoPrototype == 1 ? ' πρωτότυπo' : ' πρωτότυπα');
+
+  if (ret)
+    ret += ' και ';
+
+  if (NoPhotocopy > 0)
+    ret += getNumberLectical(NoPhotocopy, (ret ? false : true)) + (NoPhotocopy == 1 ? ' φωτοαντίγραφo' : ' φωτοαντίγραφα');
+
+  return ret;
+}

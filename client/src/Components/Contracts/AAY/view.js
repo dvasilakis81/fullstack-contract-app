@@ -16,7 +16,7 @@ import { processContractInfo } from '../../../Redux/Actions';
 import { getSuggestAYTooltipTemplate, getAayTooltipTemplate, getAayOverthrowTooltipTemplate } from './tooltip';
 import ProtocolInput from '../../CustomControls/ProtocolInput';
 import MyTextField from '../../CustomControls/MyTextField';
-import store from '../../../Redux/Store/store'
+import store from '../../../Redux/Store/store';
 
 const styles = {
   paperContractMonetaryInfoFrame: {
@@ -52,7 +52,7 @@ class AayView extends Component {
     super(props);
 
     this.state = {
-      loginUserId: this.props.token.data.id,
+      loginUserInfo: this.props.token.data.user,
       contractId: this.props.contractDetails.Id,
       submitButtonDisabled: false,
       addNewItem: false,
@@ -397,7 +397,7 @@ class AayView extends Component {
   }
 
   render() {
-    var length = this.props.contractDetails.aay ? this.props.contractDetails.aay.length : 0
+    var length = this.props.contractDetails.aay ? this.props.contractDetails.aay.length : 0;
     return (
       <ContractsPopup
         header='Αποφάσεις Ανάληψης Υποχρέωσης'

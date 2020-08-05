@@ -31,14 +31,14 @@ function getInvoiceDataToPost(accountDetails) {
 
   var Invoice = (accountDetails.invoice && accountDetails.invoice.length > 0 ? accountDetails.invoice[0] : {})
   var InvoiceNumber = (Invoice.Number || '')
-  var InvoiceDate = (getDateFormatForDocument(Invoice.Date) || '')
+  var InvoiceDate = (Invoice.Date || '')
   var InvoiceDeliveredDate = (getDateFormatForDocument(Invoice.DeliveredDate) || '')
   var InvoiceDeliveredDateProtocolNumber = (Invoice.DeliveredDateProtocolNumber || '')
   var InvoiceDeliveredDateProtocolDate = (getDateFormatForDocument(Invoice.DeliveredDateProtocolDate) || '')
 
   return [{
-    Number: InvoiceNumber,
-    Date: InvoiceDate,
+    ProtocolNumber: InvoiceNumber,
+    ProtocolDate: InvoiceDate,
     DeliveredDate: InvoiceDeliveredDate,
     DeliveredDateProtocol: [{ Number: InvoiceDeliveredDateProtocolNumber, Date: InvoiceDeliveredDateProtocolDate }]
   }]

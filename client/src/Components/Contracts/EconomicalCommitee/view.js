@@ -13,7 +13,7 @@ import { getSubmitButton } from '../../MaterialObjects/materialobjects';
 import { bindActionCreators } from 'redux';
 import { processContractInfo } from '../../../Redux/Actions';
 
-import { getDecisionBoardTooltip } from './tooltip';
+import { getEconomicalCommiteeTooltip } from './tooltip';
 import ProtocolInput from '../../CustomControls/ProtocolInput';
 import MyTextField from '../../CustomControls/MyTextField';
 import store from '../../../Redux/Store/store'
@@ -47,7 +47,7 @@ const styles = {
   }
 };
 
-class DecisionBoardView extends Component {
+class EconomicalCommiteeView extends Component {
   constructor(props) {
     super(props);
 
@@ -66,11 +66,8 @@ class DecisionBoardView extends Component {
       Id: this.props.Id ? this.props.Id : '',
       ProtocolNumber: '',
       ProtocolDate: '',
-      ContentTransmission: '',
-      ContentAccount: '',
-      ADA: '',
-      NoPrototype: 0,
-      NoPhotocopy: 0
+      Content: '',
+      ADA: ''
     }
 
     this.onChange = this.onChange.bind(this);
@@ -86,26 +83,25 @@ class DecisionBoardView extends Component {
     this.setState({ [event.target.id]: event.target.value });
   }
 
-  openEditDecisionBoard(index, decisionBoard) {
+  openEdit(index, economicalCommitee) {
     this.setState({
-      Id: decisionBoard.Id,
-      ProtocolNumber: decisionBoard.ProtocolNumber,
-      ProtocolDate: decisionBoard.ProtocolDate,
-      ContentTransmission: decisionBoard.ContentTransmission,
-      ContentAccount: decisionBoard.ContentAccount,
-      NoPrototype: decisionBoard.NoPrototype,
-      NoPhotocopy: decisionBoard.NoPhotocopy,
-      ADA: decisionBoard.ADA,
+      Id: economicalCommitee.ContractId,
+      ProtocolNumber: economicalCommitee.ProtocolNumber,
+      ProtocolDate: economicalCommitee.ProtocolDate,
+      Content: economicalCommitee.Content,
+      ADA: economicalCommitee.ADA,
       orderNo: index + 1,
       editItem: true
     })
   }
 
-  openDeleteDecisionBoard(index, decisionBoard) {
+  openDelete(index, economicalCommitee) {
     this.setState({
-      Id: decisionBoard.Id,
-      ProtocolNumber: decisionBoard.ProtocolNumber,
-      ProtocolDate: decisionBoard.ProtocolDate,
+      Id: economicalCommitee.ContractId,
+      ProtocolNumber: economicalCommitee.ProtocolNumber,
+      ProtocolDate: economicalCommitee.ProtocolDate,
+      Content: economicalCommitee.Content,
+      ADA: economicalCommitee.ADA,
       orderNo: index + 1,
       deleteItem: true
     })
@@ -115,11 +111,8 @@ class DecisionBoardView extends Component {
     this.setState({
       addNewItem: false, editItem: false, deleteItem: false,
       ProtocolNumber: '',
-      ProtocolYear: '',
-      ContentTransmission: '',
-      ContentAccount: ' με την οποία εγκρίθηκαν: η υπογραφή των όρων, το σχέδιο και τα ανά έτος ποσά της προαναφερθείσας Προγραμματικής Σύμβασης. ',
-      NoPrototype: 1,
-      NoPhotocopy: 1,
+      ProtocolDate: '',
+      Content: '',
       ADA: '',
       orderNo: 0
     });
@@ -135,74 +128,62 @@ class DecisionBoardView extends Component {
     this.setState({ submitButtonDisabled: true });
 
     if (this.state.addNewItem === true) {
-      this.props.processContractInfo(this.state, this.props.token.data.token, 'insertdecisionboard').then(res => {
-        var msg = 'Η Α.Δ.Σ. με πρωτόκολλο "' + this.state.ProtocolNumber + '/' + getDateFormatForDocument(this.state.ProtocolDate) + '" δημιουργήθηκε επιτυχώς!!!'
+      this.props.processContractInfo(this.state, this.props.token.data.token, 'inserteconomicalcommitee').then(res => {
+        var msg = 'Η Πράξη Οικονομικής Επιτροπής με πρωτόκολλο "' + this.state.ProtocolNumber + '/' + getDateFormatForDocument(this.state.ProtocolDate) + '" δημιουργήθηκε επιτυχώς!!!'
         this.setState({ openMessage: true, message: msg, variant: 'success', msgPadding: '10px', submitButtonDisabled: false, addNewItem: false, editItem: false });
         this.resetState();
         this.resetMsgInfo();
       }).catch(error => {
         store.dispatch({ type: 'SET_CONTRACTINFO_PENDING', payload: false });
-        var msg = 'Αποτυχία δημιουργίας Α.Δ.Σ. !!';
+        var msg = 'Αποτυχία δημιουργίας Πράξης Οικονομικής Επιτροπής !!';
         this.setState({ openMessage: true, message: <><div>{msg}</div><div>{getServerErrorResponseMessage(error)}</div></>, variant: 'error', msgPadding: '10px', submitButtonDisabled: false });
       })
     } else if (this.state.editItem === true) {
-      this.props.processContractInfo(this.state, this.props.token.data.token, 'updatedecisionboard').then(res => {
-        var msg = 'Η Α.Δ.Σ. με πρωτόκολλο "' + this.state.ProtocolNumber + '/' + getDateFormatForDocument(this.state.ProtocolDate) + '" επεξεργάστηκε επιτυχώς!!!'
+      this.props.processContractInfo(this.state, this.props.token.data.token, 'updateeconomicalcommitee').then(res => {
+        var msg = 'Η Πράξη Οικονομικής Επιτροπής με πρωτόκολλο "' + this.state.ProtocolNumber + '/' + getDateFormatForDocument(this.state.ProtocolDate) + '" επεξεργάστηκε επιτυχώς!!!'
         this.setState({ message: msg, openMessage: true, variant: 'success', msgPadding: '10px', submitButtonDisabled: false, addNewItem: false, editItem: false });
         this.resetState();
         this.resetMsgInfo();
       }).catch(error => {
         store.dispatch({ type: 'SET_CONTRACTINFO_PENDING', payload: false });
-        var msg = 'Αποτυχία δημιουργίας Α.Δ.Σ. !!';
+        var msg = 'Αποτυχία δημιουργίας Πράξης Οικονομικής Επιτροπής !!';
         this.setState({ message: <><div>{msg}</div><div>{getServerErrorResponseMessage(error)}</div></>, openMessage: true, variant: 'error', msgPadding: '10px', submitButtonDisabled: false });
       })
     }
   }
 
-  requestDeleteDecisionBoard() {
+  requestDelete() {
     this.setState({ submitButtonDisabled: true });
 
-    this.props.processContractInfo(this.state, this.props.token.data.token, 'deleteDecisionBoard').then(res => {
-      var msg = 'Η Α.Δ.Σ. με πρωτόκολλο "' + this.state.ProtocolNumber + '/' + getDateFormatForDocument(this.state.ProtocolDate) + '" διεγράφει επιτυχώς!!!'
+    this.props.processContractInfo(this.state, this.props.token.data.token, 'deleteeconomicalcommitee').then(res => {
+      var msg = 'Η Πράξης Οικονομικής Επιτροπής με πρωτόκολλο "' + this.state.ProtocolNumber + '/' + getDateFormatForDocument(this.state.ProtocolDate) + '" διεγράφει επιτυχώς!!!'
       this.setState({ openMessage: true, message: msg, variant: 'success', msgPadding: '10px', submitButtonDisabled: false, addNewItem: false, editItem: false, deleteItem: false });
       this.resetState();
       this.resetMsgInfo();
     }).catch(error => {
-      var msg = 'Αποτυχία διαγραφής Α.Δ.Σ. !!\n' + error;
+      var msg = 'Αποτυχία διαγραφής Πράξης Οικονομικής Επιτροπής!!\n' + error;
       this.setState({ openMessage: true, message: <><div>{msg}</div><div>{getServerErrorResponseMessage(error)}</div></>, variant: 'error', msgPadding: '0px', submitButtonDisabled: false });
     })
   }
 
-  decisionBoardItemForm() {
+  itemForm() {
 
     if (this.state.addNewItem === true || this.state.editItem === true) {
       return <div style={{ display: 'flex', flexFlow: 'column', height: 'auto', background: '#C0C0C0', color: 'black', justifyContent: 'center', padding: '20px' }}>
         <form style={{ padding: '10px', backgroundColor: '#fff' }} autoComplete="off" onSubmit={this.handleSubmit}>
-          <div style={{ textAlign: 'center', fontSize: '22px', fontWeight: 800, paddingBottom: '10px' }}>{this.state.addNewItem === true ? 'Εισαγωγή' : 'Επεξεργασία'} στοιχείων {this.state.orderNo}ης Απόφασης Δημοτικού Συμβουλίου</div>
+          <div style={{ textAlign: 'center', fontSize: '22px', fontWeight: 800, paddingBottom: '10px' }}>{this.state.addNewItem === true ? 'Εισαγωγή' : 'Επεξεργασία'} στοιχείων {this.state.orderNo}ης Πράξης Οικονομικής Επιτροπής</div>
           <div style={{ display: 'flex', flexFlow: 'row', height: 'auto', justifyContent: 'left', padding: '10px' }}>
-            <MyTextField tm={getDecisionBoardTooltip(this.state, 5)} tp='number' title='# πρωτότυπα' label='' id='NoPrototype' stateValue={this.state.NoPrototype} isRequired={true} isDisabled={false} onChange={this.onChange} style={{ width: '100%' }} inputProps={{ style: { textAlign: 'center' } }} width='50%' />
-            <MyTextField tm={getDecisionBoardTooltip(this.state, 5)} tp='number' title='# φωτοαντίγραφα' label='' id='NoPhotocopy' stateValue={this.state.NoPhotocopy} isRequired={true} isDisabled={false} onChange={this.onChange} style={{ width: '100%' }} inputProps={{ style: { textAlign: 'center' } }} width='50%' />
+            <ProtocolInput tm1={getEconomicalCommiteeTooltip(this.state, 1)} tm2={getEconomicalCommiteeTooltip(this.state, 2)} title='Α.Π.' idn='ProtocolNumber' idd='ProtocolDate' protocolNumber={this.state.ProtocolNumber} protocolDate={this.state.ProtocolDate} st={null} onChange={this.onChange} tp1='text' tp2='date' width='50%' />
+            <MyTextField tm={getEconomicalCommiteeTooltip(this.state, 3)} tp='text' title='ΑΔΑ' label='' id='ADA' stateValue={this.state.ADA} isRequired={false} isDisabled={false} onChange={this.onChange} style={{ width: '100%' }} inputProps={{ style: { textAlign: 'center' } }} width='50%' />
           </div>
-          <div style={{ display: 'flex', flexFlow: 'row', height: 'auto', justifyContent: 'left', padding: '10px' }}>
-            <ProtocolInput tm1={getDecisionBoardTooltip(this.state, 1)} tm2={getDecisionBoardTooltip(this.state, 2)} title='Α.Π.' idn='ProtocolNumber' idd='ProtocolDate' protocolNumber={this.state.ProtocolNumber} protocolDate={this.state.ProtocolDate} st={null} onChange={this.onChange} tp1='text' tp2='date' width='50%' />
-            <MyTextField tm={getDecisionBoardTooltip(this.state, 3)} tp='text' title='ΑΔΑ' label='' id='ADA' stateValue={this.state.ADA} isRequired={false} isDisabled={false} onChange={this.onChange} style={{ width: '100%' }} inputProps={{ style: { textAlign: 'center' } }} width='50%' />
+          <div style={{ display: 'flex', flexFlow: 'column', height: 'auto', justifyContent: 'left', padding: '10px' }}>
+            <MyTextField tm={getEconomicalCommiteeTooltip(this.state, 4)} tp='text' title='Περιεχόμενο' label='' id='Content' stateValue={this.state.Content} isRequired={false} isDisabled={false} onChange={this.onChange} width='95%' multiline={true} />
           </div>
-          {
-            this.state.orderNo > 1 ?
-              <div style={{ display: 'flex', flexFlow: 'column', height: 'auto', justifyContent: 'left', padding: '10px' }}>
-                <MyTextField tm={getDecisionBoardTooltip(this.state, 4)} tp='text' title='Περιεχόμενο (Αρχείο Διαβιβαστικού)' label='' id='ContentTransmission' stateValue={this.state.ContentTransmission} isRequired={false} isDisabled={false} onChange={this.onChange} width='95%' multiline={true} />
-                <MyTextField tm={getDecisionBoardTooltip(this.state, 4)} tp='text' title='Περιεχόμενο (Αρχείο Λογαριασμού)' label='' id='ContentAccount' stateValue={this.state.ContentAccount} isRequired={false} isDisabled={false} onChange={this.onChange} width='95%' multiline={true} />
-              </div>
-              :
-              <div style={{ display: 'flex', flexFlow: 'column', height: 'auto', justifyContent: 'left', padding: '10px' }}>
-                <MyTextField tm={getDecisionBoardTooltip(this.state, 4)} tp='text' title='Περιεχόμενο (Αρχείο Λογαριασμού)' label='' id='ContentAccount' stateValue={this.state.ContentAccount} isRequired={false} isDisabled={false} onChange={this.onChange} width='95%' multiline={true} />
-              </div>
-          }
           <div style={{ display: 'flex', flexFlow: 'row', height: 'auto', justifyContent: 'center', padding: '10px' }}>
             <LoadingOverlay
               active={this.props.insertContractInfoPending === true}
               spinner
-              text='Αναμονή για δημιουργία Α.Δ.Σ. ...'
+              text='Αναμονή για δημιουργία Πράξη Οικονομικής Επιτροπής ...'
               styles={{
                 overlay: (base) => ({
                   ...base,
@@ -226,12 +207,12 @@ class DecisionBoardView extends Component {
       </div >
     } else if (this.state.deleteItem === true) {
       return <div style={{ display: 'flex', flexFlow: 'column', height: 'auto', backgroundColor: '#fff', background: '#33C1FF', color: 'black', justifyContent: 'center', padding: '20px' }}>
-        <div style={{ textAlign: 'center', fontSize: '22px', fontWeight: 800, paddingBottom: '10px' }}>Διαγραφή {this.state.orderNo}ης Απόφασης Δημοτικού Συμβουλίου;</div>
+        <div style={{ textAlign: 'center', fontSize: '22px', fontWeight: 800, paddingBottom: '10px' }}>Διαγραφή {this.state.orderNo}ης Πράξης Οικονομικής Επιτροπής</div>
         <div style={{ display: 'flex', flexFlow: 'row', height: 'auto', backgroundColor: '#33C1FF', justifyContent: 'center', padding: '10px' }}>
           <LoadingOverlay
             active={this.props.deleteContractInfoPending === true}
             spinner
-            text='Αναμονή για διαγραφή Α.Δ.Σ. ...'
+            text='Αναμονή για διαγραφή Πράξη Οικονομικής Επιτροπής ...'
             styles={{
               overlay: (base) => ({
                 ...base,
@@ -239,7 +220,7 @@ class DecisionBoardView extends Component {
                 textAlign: 'middle'
               })
             }}>
-            <Button disabled={this.state.submitButtonDisabled} variant='contained' color='primary' style={{ fontSize: '18px', textAlign: 'center', padding: '5px', margin: '5px' }} onClick={() => { this.requestDeleteDecisionBoard() }}>
+            <Button disabled={this.state.submitButtonDisabled} variant='contained' color='primary' style={{ fontSize: '18px', textAlign: 'center', padding: '5px', margin: '5px' }} onClick={() => { this.requestDelete() }}>
               ΝΑΙ
             </Button>
             <Button disabled={this.state.submitButtonDisabled} variant='contained' color='secondary' style={{ fontSize: '18px', textAlign: 'center', padding: '5px', margin: '5px' }} onClick={() => { this.setState({ deleteItem: false }) }}>
@@ -257,17 +238,17 @@ class DecisionBoardView extends Component {
       disabled={this.state.addNewItem === true || this.state.deleteItem === true}
       size='medium'
       color='inherit'
-      onClick={() => { this.openEditDecisionBoard(index, item) }} style={{ textAlign: 'center', padding: '0px', justifyContent: 'end' }}>
+      onClick={() => { this.openEdit(index, item) }} style={{ textAlign: 'center', padding: '0px', justifyContent: 'end' }}>
       <SettingsIcon />
     </IconButton>
   }
   renderDeleteOption(index, item) {
     return <IconButton
       disabled={this.state.addNewItem === true || this.state.editItem === true}
-      size="medium" color={index < this.props.contractDetails.decisionboard.length - 1 ? "disabled" : "inherit"}
+      size="medium" color={index < this.props.contractDetails.economicalcommitee.length - 1 ? "disabled" : "inherit"}
       onClick={() => {
-        if (index.toString() === (this.props.contractDetails.decisionboard.length - 1).toString())
-          this.openDeleteDecisionBoard(index, item)
+        if (index.toString() === (this.props.contractDetails.economicalcommitee.length - 1).toString())
+          this.openDelete(index, item)
       }}
       style={{ textAlign: 'top', padding: '10px', justifyContent: 'end' }}>
       <DeleteIcon />
@@ -285,7 +266,7 @@ class DecisionBoardView extends Component {
     var rContent = <>
       <span>Δύο (2) φωτοαντίγραφα της υπ' αριθ. </span>
       <span>{item.ProtocolNumber}/{item.ProtocolDate ? getDateFormatForDocument(item.ProtocolDate) : item.ProtocolDate}</span>
-      <span> Απόφασης Δημοτικού Συμβουλίου</span>
+      <span> Πράξης Οικονομικής Επιτροπής</span>
     </>;
     var ada = <></>
     if (item.ADA)
@@ -293,7 +274,7 @@ class DecisionBoardView extends Component {
 
     var lContent = <></>;
     if (index + 1 > 1)
-      lContent = <span>{item.ContentTransmission}</span>
+      lContent = <span>{item.Content}</span>
 
     return <>
       <span style={{ fontWeight: "bold" }}>Διαβιβαστικό (ΣΥΝΗΜΜΕΝΑ ΔΙΚΑΙΟΛΟΓΗΤΙΚΑ)</span>
@@ -305,9 +286,13 @@ class DecisionBoardView extends Component {
   }
   getAccountItemInfo(index, item) {
 
-    var rContent = <span>Τη με αρ. {item.ProtocolNumber}/{item.ProtocolDate} Απόφαση του Δημοτικού Συμβουλίου (Α.Δ.Σ.) Αθηναίων</span>;
-    var ada = <><span> (ΑΔΑ: </span><b><u>{item.ADA}</u></b><span>) </span></>;
-    var lContent = <span>{item.ContentAccount}</span>;
+    var rContent = <span>Τη με αρ. {item.ProtocolNumber}/{item.ProtocolDate} Πράξη της Οικονομικής Επιτροπής.</span>;
+    var ada = <></>
+    if (item.ADA)
+      ada = <><span> (ΑΔΑ: </span><b><u>{item.ADA}</u></b><span>) </span></>;
+    var lContent = <></>
+    if (item.Content)
+      lContent = <><span>{item.Content}</span></>;
 
     return <>
       <br />
@@ -320,10 +305,10 @@ class DecisionBoardView extends Component {
   }
 
   render() {
-    var length = this.props.contractDetails.decisionboard ? this.props.contractDetails.decisionboard.length : 0
+    var length = this.props.contractDetails.economicalcommitee ? this.props.contractDetails.economicalcommitee.length : 0
     return (
       <ContractsPopup
-        header='Αποφάσεις Δημοτικού Συμβουλίου'
+        header='Πράξεις Οικονομικής Επιτροπής'
         openMessage={this.state.openMessage}
         message={this.state.message}
         variant={this.state.variant}>
@@ -332,7 +317,7 @@ class DecisionBoardView extends Component {
         </div>
         <div style={{ display: 'flex', flexFlow: 'column', flex: '1', backgroundColor: '#fff', overflowY: 'scroll', overflowX: 'auto', flexWrap: 'nowrap', height: '600px' }}>
           {
-            this.props.contractDetails.decisionboard ? this.props.contractDetails.decisionboard.map((item, index) => {
+            this.props.contractDetails.economicalcommitee ? this.props.contractDetails.economicalcommitee.map((item, index) => {
               return (<Grid item key={index}>
                 <Paper style={styles.paperMoreContractInfo} square={true}>
                   <Typography>
@@ -351,7 +336,7 @@ class DecisionBoardView extends Component {
             }) : <></>
           }
         </div>
-        {this.decisionBoardItemForm(length)}
+        {this.itemForm(length)}
         <div style={{ display: 'flex', flexFlow: 'row', height: 'auto', backgroundColor: '#fff', background: 'white', justifyContent: 'center' }}>
           <Button
             disabled={this.state.deleteItem === true || this.state.editItem === true}
@@ -360,7 +345,7 @@ class DecisionBoardView extends Component {
               this.setState({
                 addNewItem: true,
                 orderNo: length + 1,
-                ContentAccount: length == 0 ? ' με την οποία εγκρίθηκαν: η υπογραφή των όρων, το σχέδιο και τα ανά έτος ποσά της προαναφερθείσας Προγραμματικής Σύμβασης. ' : ''
+                Content: ''
               })
             }}>
             ΠΡΟΣΘΗΚΗ
@@ -392,4 +377,4 @@ function mapDispatchToProps(dispatch) {
   return bindActionCreators({ processContractInfo }, dispatch)
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(DecisionBoardView)
+export default connect(mapStateToProps, mapDispatchToProps)(EconomicalCommiteeView)

@@ -52,7 +52,7 @@ class CourtOfAuditorsView extends Component {
     super(props);
 
     this.state = {
-      loginUserId: this.props.token.data.id,
+      loginUserInfo: this.props.token.data.user,
       contractId: this.props.contractDetails.Id,
       submitButtonDisabled: false,
       addNewItem: false,

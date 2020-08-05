@@ -26,6 +26,7 @@ import DecisionCoordinatorDecentrilizedAdministrationView from '../DecisionCoord
 import CourtOfAuditorsView from '../CourtOfAuditors/view';
 import AuthorDocumentedRequestView from '../AuthorDocumentedRequest/view';
 import SnippetPracticalView from '../SnippetPractical/view';
+import EconomicalCommiteeView from '../EconomicalCommitee/view';
 
 import EditIcon from '@material-ui/icons/Edit';
 import DeleteIcon from '@material-ui/icons/Delete';
@@ -491,6 +492,8 @@ class ItemDetail extends React.Component {
 			return <b>Απόσπασμα Πρακτικού</b>
 		else if (type === 6)
 			return <b>Πρόταση/Αποφάση/Ανατροπή Ανάληψης Υποχρέωσης</b>
+		else if (type === 7)
+			return <b>Πράξεις Οικονομικής Επιτροπής</b>
 	}
 	getAttachmentView(contractDetails, type) {
 		if (type === 1)
@@ -505,6 +508,8 @@ class ItemDetail extends React.Component {
 			return <SnippetPracticalView contractId={contractDetails.Id} />
 		else if (type === 6)
 			return <AayView contractId={contractDetails.Id} />
+		else if (type === 7)
+			return <EconomicalCommiteeView contractId={contractDetails.Id} />
 	}
 	getAttachmentTemplate(contractInfo, values, type) {
 
@@ -663,6 +668,7 @@ class ItemDetail extends React.Component {
 														{this.getAttachmentTemplate(contractInfo, contractInfo.authordocumentedrequest, 4)}
 														{this.getAttachmentTemplate(contractInfo, contractInfo.snippetpractical, 5)}
 														{this.getAttachmentTemplate(contractInfo, contractInfo.aay, 6)}
+														{this.getAttachmentTemplate(contractInfo, contractInfo.economicalcommitee, 7)}
 													</Typography>
 												</Paper>
 											</Grid>
