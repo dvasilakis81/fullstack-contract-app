@@ -1,4 +1,5 @@
 const util = require('util');
+const helper = require('../../HelperMethods/helpermethods');
 
 module.exports = {
 
@@ -31,7 +32,7 @@ module.exports = {
           '<w:szCs w:val="20"/>' +
           '<w:lang w:val="en-US"/>' +
           '</w:rPr>' +
-          util.format('<w:t>%s</w:t>', ccValue) +
+          util.format('<w:t>%s</w:t>', helper.fixTextForRawXml(ccValue)) +
           '</w:r>' +
           '</w:p>'
       }

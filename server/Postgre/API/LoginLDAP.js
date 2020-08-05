@@ -16,7 +16,6 @@ var client = ldap.createClient({
 function login(request, response, next) {
   const username = request.query.u;
   const password = request.query.p;
-  console.log('login');
 
   searchLoginUser(request, response, next, username, password);
 }
@@ -37,9 +36,7 @@ function searchLoginUser(request, response, next, username, password) {
       console.log("Error in search " + err)
     else {
       res.on('searchEntry', function (entry) {
-        //console.log('entry: ' + JSON.stringify(entry.object));
-        loginUser.push(entry.object);
-        // (SELECT json_agg(UserReservations) FROM (SELECT * FROM "Ordering"."UserReservations" as ur WHERE ur."UserId" = u."Id" ORDER BY ur."Order" ASC) UserReservations) AS UserReservations ' +
+        loginUser.push(entry.object);        
         authenticateDN(request, response, next, entry.object, password);
       });
       res.on('searchReference', function (referral) {
@@ -47,7 +44,7 @@ function searchLoginUser(request, response, next, username, password) {
       });
       res.on('error', function (err) {
         console.error('error: ' + err.message);
-        response.send('error: ' + err.message)
+        response.send('error: ' + err.message);
       });
       res.on('end', function (result) {
         console.log('status: ' + result.status);
@@ -73,12 +70,14 @@ function authenticateDN(request, response, next, user, password) {
           next(error);
         else {
 
-          if (user.departmentNumber) {
-          } else {
-            user.departmentNumber = 'Τμήμα Τεχνολογίας, Πληροφορικής και Επικοινωνιών';
+          if (user.uid === 'd.vasilakis' || user.uid === 's.partasidis') {
+            if (user.departmentNumber) {
+            } else {
+              user.departmentNumber = 'Τμήμα Τεχνολογίας, Πληροφορικής και Επικοινωνιών';
+            }
           }
-
           searchForSupervisor(request, response, next, user);
+          //searchForDirectionInfo(request, response, next, user);
           //searchForPeopleThatBelongsToTheSameDirection(request, response, next, user.ou);
         }
       })
@@ -86,10 +85,48 @@ function authenticateDN(request, response, next, user, password) {
   });
 }
 
+function searchForDirectionInfo(request, response, next, user) {
+
+  var opts = {    
+    // filter: '(ou=' + user.ou + ')',
+     filter: "(objectclass=organizationalUnit)",
+    // filter: 'ou=Δ.ΓΕΝΙΚΟΣ ΓΡΑΜΜΑΤΕΑΣ,ou=ΟΕΥ,ou=ΠΡΟΣΩΠΑ,ou=OEY,dc=cityofathens,dc=gr',
+    scope: 'sub',
+    attributes: ['*']
+  };
+
+  var results = [];
+  var queryOEY = 'ou=OEY,dc=cityofathens,dc=gr';
+  //var queryOEY = 'ou=ΟΕΥ,ou=ΠΡΟΣΩΠΑ,ou=OEY,dc=cityofathens,dc=gr';
+  
+  client.search(queryOEY, opts, function (err, res) {
+    if (err)
+      console.log("Error in search " + err);
+    else {
+      res.on('searchEntry', function (entry) {
+        results.push(entry.object);
+      });
+      res.on('searchReference', function (referral) {
+        console.log('referral: ' + referral.uris.join());
+      });
+      res.on('error', function (err) {
+        console.error('error: ' + err.message);
+        response.send('error: ' + err.message);
+      });
+      res.on('end', function (result) {
+        console.log('status: ' + result.status);
+        if (results && results.length > 0)
+          user.supervisor = results[0].uid;
+        searchForDirector(request, response, next, user);
+      });
+    }
+  });
+}
+
 function searchForSupervisor(request, response, next, user) {
 
   var opts = {
-    filter: '(objectClass=*)',
+    // filter: '(objectClass=*)',
     filter: '(&(ou=' + user.ou + ')(departmentNumber=' + user.departmentNumber + ')(|(personalTitle=ΠΡΟΙΣΤΑΜΕΝΟΣ)(personalTitle=ΠΡΟΙΣΤΑΜΕΝH)))',
     scope: 'sub',
     attributes: ['*']
@@ -113,7 +150,8 @@ function searchForSupervisor(request, response, next, user) {
       });
       res.on('end', function (result) {
         console.log('status: ' + result.status);
-        user.supervisor = results[0].uid;
+        if (results && results.length > 0)
+          user.supervisor = results[0].uid;
         searchForDirector(request, response, next, user);
       });
     }
@@ -148,17 +186,18 @@ function searchForDirector(req, response, next, user) {
       res.on('end', async function (result) {
 
         //setup user reservations
-        const userReservations  = await reservationsMethods.getUserReservations(req, res, next, user.uid);
+        const userReservations = await reservationsMethods.getUserReservations(req, res, next, user.uid);
         if (userReservations && userReservations.length > 0)
           user.reservations = userReservations;
         else {
           const reservations = await reservationsMethods.getReservations(req, res, next);
-          await reservationsMethods.query_initialize(reservations, user.uid);
+          await reservationsMethods.initializeUserReservations(reservations, user.uid);
           user.reservations = await reservationsMethods.getUserReservations(req, res, next, user.uid);
         }
 
-        user.director = results[0].uid;
-
+        if (results && results.length > 0)
+          user.director = results[0].uid;
+          
         let token = jwt.sign({ username: user.uid }, secretKey, { expiresIn: ('2h') });
         response.status(200).json({
           success: true,
@@ -209,7 +248,7 @@ function searchForPeopleThatBelongsToTheSameDirection(request, response, next, d
   });
 }
 
-function checkToken(req, res, next){
+function checkToken(req, res, next) {
   let token = req.headers['x-access-token'] || req.headers['authorization']; // Express headers are auto converted to lowercase
   if (token) {
     if (token.startsWith('Bearer '))

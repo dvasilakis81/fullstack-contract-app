@@ -74,7 +74,7 @@ async function insertAccount(req, res, next) {
       getAccountById(req, res, next);
     }
     else
-      res.status(408).json('Ο λογαριασμός δεν μπόρεσε να δημιουργηθεί ');
+      res.status(408).json('Ο λογαριασμός δεν μπόρεσε να δημιουργηθεί');
   }
 
 }

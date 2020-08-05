@@ -4,7 +4,7 @@
 < -> &lt;
 & -> &amp;*/
 
-const fixTextForRawXml = (text) => {
+function fixTextForRawXml(text) {
   var ret = ''
   ret = text.replace(/&/g, '&amp;').replace(/'/g, '&apos').replace(/"/g, '&quot;').replace(/>/g, '&gt;').replace(/</g, '&lt;')
   return ret;
@@ -14,9 +14,13 @@ function addQuotes(value) {
   var ret = null;
 
   if (value)
-    ret = '\''.concat(value.toString().replace(/'/g, "''")).concat('\'');
+    ret = '\''.concat(fixQuotes(value)).concat('\'');
 
   return ret;
+}
+
+function fixQuotes(value) {
+  return value.toString().replace(/'/g, "''");
 }
 
 function consoleLog(value) {
@@ -147,7 +151,7 @@ function getDateString(protocolDate) {
   return ret;
 }
 
-function getExpiresAt(token, jwt, secretKey){
+function getExpiresAt(token, jwt, secretKey) {
   var expiresAt = new Date(0);
 
   if (token) {

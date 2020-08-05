@@ -10,8 +10,8 @@ module.exports = {
   setDataForTransmissionDocument: function (body) {
     var ret = '';
     var subjectRawData = transmissionSubject.getSubjectXmlValue(body);
-    var attachmentsRawData = transmissionAttachments.getAttachmentsXmlValue(body);
-    var ccValuesRawData = transmissionCC.getCCValues(body);
+    var attachmentsRawData = transmissionAttachments.getAttachmentsXmlValue(body);    
+    var ccValuesRawData = transmissionCC.getCCValues(body);    
     var AAY = null;
     if (body.AAY) {
       for (let i = 0; i < body.AAY.length; i++) {
@@ -30,12 +30,12 @@ module.exports = {
         dir_name_lower: body.Direction[0].NameInLower,
         dep_name: body.Direction[0].Department[0].Name,
         dep_name_lower: body.Direction[0].Department[0].NameInLower,
-        dir_addr: body.Direction[0].Department[0].Address,
-        dir_pc: body.Direction[0].Department[0].PostalCode,
-        dir_ct: body.Direction[0].Department[0].City,
-        dir_sv: body.Direction[0].Department[0].Supervisor[0].Name,
-        dir_sv_tn: body.Direction[0].Department[0].Supervisor[0].Tel,
-        dir_sv_em: body.Direction[0].Department[0].Supervisor[0].Email,
+        dir_addr: (body.Direction[0].Department[0].Address || ''),
+        dir_pc: (body.Direction[0].Department[0].PostalCode || ''),
+        dir_ct: (body.Direction[0].Department[0].City || ''),
+        dir_sv: (body.Direction[0].Department[0].Supervisor[0].Name || ''),
+        dir_sv_tn: (body.Direction[0].Department[0].Supervisor[0].Tel || ''),
+        dir_sv_em: (body.Direction[0].Department[0].Supervisor[0].Email || ''),
         c_type: body.Contract[0].ContractType,
         c_conc_a: body.Contract[0].Concessionaire[0].Article,
         c_conc: body.Contract[0].Concessionaire[0].Name,
@@ -132,8 +132,8 @@ module.exports = {
         a_word_cap: body.Account[0].AmountInWordsCapital,
         a_sd: body.Account[0].Start,
         a_ed: body.Account[0].End,
-        a_in: body.Account[0].Invoice[0].Number,
-        a_id: body.Account[0].Invoice[0].Date,
+        a_in: body.Account[0].Invoice[0].ProtocolNumber,
+        a_id: body.Account[0].Invoice[0].ProtocolDate,
         aay: body.AAY ? body.AAY[0].Value : '',
         aay_year: body.AAY ? body.AAY[0].Year : '',
         aay_pn: body.AAY ? body.AAY[0].ProtocolNumber : '',
