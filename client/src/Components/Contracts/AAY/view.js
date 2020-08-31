@@ -70,7 +70,9 @@ class AayView extends Component {
       ProtocolDate: '',
       EadNumber: '',
       ADA: '',
-      Overthrow: ''
+      Overthrow: '',
+      NoPrototype: 0,
+      NoPhotocopy: 2
     }
 
     this.onChange = this.onChange.bind(this);
@@ -97,6 +99,8 @@ class AayView extends Component {
       ADA: Aay.ADA,
       Overthrow: Aay.Overthrow,
       orderNo: index + 1,
+      NoPrototype: Aay.NoPrototype,
+      NoPhotocopy: Aay.NoPhotocopy,
       editItem: true
     })
   }
@@ -122,6 +126,8 @@ class AayView extends Component {
       EadNumber: '',
       ADA: '',
       Overthrow: '',
+      NoPrototype: 0,
+      NoPhotocopy: 2,
       orderNo: 0
     });
   }
@@ -251,6 +257,10 @@ class AayView extends Component {
       return <div style={{ display: 'flex', flexFlow: 'column', height: 'auto', background: '#C0C0C0', color: 'black', justifyContent: 'center', padding: '20px' }}>
         <form style={{ padding: '10px', backgroundColor: '#fff' }} autoComplete="off" onSubmit={this.handleSubmit}>
           <div style={{ textAlign: 'center', fontSize: '22px', fontWeight: 800, paddingBottom: '10px' }}>{this.state.addNewItem === true ? 'Εισαγωγή' : 'Επεξεργασία'} στοιχείων {this.state.orderNo}ης Απόφασης Ανάληψης Υποχρέωσης</div>
+          <div style={{ display: 'flex', flexFlow: 'row', height: 'auto', justifyContent: 'left', padding: '10px' }}>
+            <MyTextField tm={getAayTooltipTemplate(this.state, 5)} tp='number' title='# πρωτότυπα' label='' id='NoPrototype' stateValue={this.state.NoPrototype} isRequired={true} isDisabled={false} onChange={this.onChange} style={{ width: '100%' }} inputProps={{ style: { textAlign: 'center' } }} width='50%' />
+            <MyTextField tm={getAayTooltipTemplate(this.state, 5)} tp='number' title='# φωτοαντίγραφα' label='' id='NoPhotocopy' stateValue={this.state.NoPhotocopy} isRequired={true} isDisabled={false} onChange={this.onChange} style={{ width: '100%' }} inputProps={{ style: { textAlign: 'center' } }} width='50%' />
+          </div>
           <div style={{ display: 'flex', flexFlow: 'row', height: 'auto', justifyContent: 'center', padding: '10px', flexWrap: 'wrap', width: '90%' }}>
             <MyTextField title='Tύπος' id='Type' stateValue={this.state.Type} values={this.getAayTypes()} isRequired={true} isDisabled={false} onChange={this.onChange} select={true} width='100%' />
           </div>

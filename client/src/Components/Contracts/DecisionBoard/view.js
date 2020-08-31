@@ -71,7 +71,7 @@ class DecisionBoardView extends Component {
       ContentAccount: '',
       ADA: '',
       NoPrototype: 0,
-      NoPhotocopy: 0
+      NoPhotocopy: 2
     }
 
     this.onChange = this.onChange.bind(this);
@@ -119,8 +119,8 @@ class DecisionBoardView extends Component {
       ProtocolYear: '',
       ContentTransmission: '',
       ContentAccount: ' με την οποία εγκρίθηκαν: η υπογραφή των όρων, το σχέδιο και τα ανά έτος ποσά της προαναφερθείσας Προγραμματικής Σύμβασης. ',
-      NoPrototype: 1,
-      NoPhotocopy: 1,
+      NoPrototype: 0,
+      NoPhotocopy: 2,
       ADA: '',
       orderNo: 0
     });

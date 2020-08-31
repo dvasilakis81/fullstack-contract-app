@@ -57,7 +57,7 @@ function getNumberLectical(number, startWithCapital) {
 
 export function getCopiesPhrase(NoPrototype, NoPhotocopy) {
   var ret = '';
-
+  
   if (NoPrototype > 0)
     ret = getNumberLectical(NoPrototype, true) + (NoPrototype == 1 ? ' πρωτότυπo' : ' πρωτότυπα');
 

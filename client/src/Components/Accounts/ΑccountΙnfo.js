@@ -113,14 +113,14 @@ class AccountInfo extends React.Component {
 				CC1Value2: accountDetails.cc && accountDetails.cc[0] && accountDetails.cc[0].CC2 ? accountDetails.cc[0].CC2 : '-1',
 				CC2Value1: accountDetails.cc && accountDetails.cc[1] && accountDetails.cc[1].CC1 ? accountDetails.cc[1].CC1 : '-1',
 				CC2Value2: accountDetails.cc && accountDetails.cc[1] && accountDetails.cc[1].CC2 ? accountDetails.cc[1].CC2 : '-1',
-				SignType1: accountDetails ? this.getSignatoryTypeId(accountDetails.documentsignatory, 1) : '-1',
-				SignType2: accountDetails ? this.getSignatoryTypeId(accountDetails.documentsignatory, 3) : '-1',
-				SignType3: accountDetails ? this.getSignatoryTypeId(accountDetails.documentsignatory, 2) : '-1',
-				SignType4: accountDetails ? this.getSignatoryTypeId(accountDetails.documentsignatory, 4) : '-1',
-				SignName1: accountDetails ? this.getSignatoryId(accountDetails.documentsignatory, 1) : '-1',
-				SignName2: accountDetails ? this.getSignatoryId(accountDetails.documentsignatory, 3) : '-1',
-				SignName3: accountDetails ? this.getSignatoryId(accountDetails.documentsignatory, 2) : '-1',
-				SignName4: accountDetails ? this.getSignatoryId(accountDetails.documentsignatory, 4) : '-1',
+				SignType1: accountDetails ? this.getSignatoryTitle(accountDetails.documentsignatory, 1) : '',
+				SignType2: accountDetails ? this.getSignatoryTitle(accountDetails.documentsignatory, 3) : '',
+				SignType3: accountDetails ? this.getSignatoryTitle(accountDetails.documentsignatory, 2) : '',
+				SignType4: accountDetails ? this.getSignatoryTitle(accountDetails.documentsignatory, 4) : '',
+				SignName1: accountDetails ? this.getSignatoryName(accountDetails.documentsignatory, 1) : '',
+				SignName2: accountDetails ? this.getSignatoryName(accountDetails.documentsignatory, 3) : '',
+				SignName3: accountDetails ? this.getSignatoryName(accountDetails.documentsignatory, 2) : '',
+				SignName4: accountDetails ? this.getSignatoryName(accountDetails.documentsignatory, 4) : '',
 				AbsenseOfDirector1: accountDetails ? this.getSignatoryAbsense(accountDetails.documentsignatory, 1) : false,
 				AbsenseOfDirector2: accountDetails ? this.getSignatoryAbsense(accountDetails.documentsignatory, 2) : false
 			}
@@ -740,8 +740,8 @@ class AccountInfo extends React.Component {
 									<Grid item>
 										<Paper style={{ padding: '5px' }} square={true}>
 											<Typography>
-												<b>{item.signatorytype[0].Name}:</b>
-												<span>{item.Absense ? 'κ.κ.α' : ''} {item.signatory[0].Name}</span>
+												<b>{item.SignatoryTitle}:</b>
+												<span>{item.Absense ? 'κ.κ.α' : ''} {item.SignatoryName}</span>
 											</Typography>
 										</Paper>
 									</Grid>
@@ -771,8 +771,8 @@ class AccountInfo extends React.Component {
 									<Grid key={index} item style={{ flexGrow: '1' }}>
 										<Paper style={{ padding: '5px' }} square={true}>
 											<Typography>
-												<b>{item.signatorytype[0].Name}:</b>
-												<span>{item.Absense ? 'κ.κ.α' : ''} {item.signatory[0].Name}</span>
+												<b>{item.SignatoryTitle}:</b>
+												<span>{item.Absense ? 'κ.κ.α' : ''} {item.SignatoryName}</span>
 											</Typography>
 										</Paper>
 									</Grid>
@@ -796,54 +796,30 @@ class AccountInfo extends React.Component {
 	}
 	//#enderegion
 	//#region get signatory values
-	getSignatoryTypeId(documentsignatory, signatoryType) {
-		var ret = -1;
+	getSignatoryTitle(documentsignatory, signatoryType) {
+		var ret = '';
+
 		if (documentsignatory) {
 			for (let index = 0; index < documentsignatory.length; index++) {
 				const item = documentsignatory[index];
-				if (item.DocumentType === 1) {
-					if (signatoryType === 1 && item.SignatoryTypeId <= 2) {
-						ret = item.SignatoryTypeId;
-						break;
-					}
-					else if (signatoryType === 2 && (item.SignatoryTypeId === 3 || item.SignatoryTypeId === 4)) {
-						ret = item.SignatoryTypeId;
-						break;
-					}
-					else if (signatoryType === 3 && (item.SignatoryTypeId === 5 || item.SignatoryTypeId === 6)) {
-						ret = item.SignatoryTypeId;
-						break;
-					}
-				}
-				else if (signatoryType === 4 && item.DocumentType === 2) {
-					ret = item.SignatoryTypeId;
+				if (item.Type === signatoryType) {
+					ret = item.SignatoryTitle;
 					break;
 				}
 			}
 		}
+
 		return ret;
 	}
-	getSignatoryId(documentsignatory, signatoryType) {
-		var ret = -1;
+
+	getSignatoryName(documentsignatory, signatoryType) {
+		var ret = '';
+
 		if (documentsignatory) {
 			for (let index = 0; index < documentsignatory.length; index++) {
 				const item = documentsignatory[index];
-				if (item.DocumentType === 1) {
-					if (signatoryType === 1 && item.SignatoryTypeId <= 2) {
-						ret = item.SignatoryId;
-						break;
-					}
-					else if (signatoryType === 2 && (item.SignatoryTypeId === 3 || item.SignatoryTypeId === 4)) {
-						ret = item.SignatoryId;
-						break;
-					}
-					else if (signatoryType === 3 && (item.SignatoryTypeId === 5 || item.SignatoryTypeId === 6)) {
-						ret = item.SignatoryId;
-						break;
-					}
-				}
-				else if (signatoryType === 4 && item.DocumentType === 2) {
-					ret = item.SignatoryId;
+				if (item.Type === signatoryType) {
+					ret = item.SignatoryName;
 					break;
 				}
 			}

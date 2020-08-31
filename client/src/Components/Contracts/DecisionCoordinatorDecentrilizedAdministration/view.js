@@ -16,7 +16,8 @@ import { processContractInfo } from '../../../Redux/Actions';
 import { getDecisionCoordinatorDecentrilizedAdministrationTooltip } from './tooltip';
 import ProtocolInput from '../../CustomControls/ProtocolInput';
 import MyTextField from '../../CustomControls/MyTextField';
-import store from '../../../Redux/Store/store'
+import store from '../../../Redux/Store/store';
+import { getCopiesPhrase } from '../TooltipMethods';
 
 const styles = {
   paperContractMonetaryInfoFrame: {
@@ -52,7 +53,7 @@ class DecisionCoordinatorDecentrilizedAdministrationView extends Component {
     super(props);
 
     this.state = {
-      loginUserId: this.props.token.data.id,
+      loginUserInfo: this.props.token.data.user,
       contractId: this.props.contractDetails.Id,
       submitButtonDisabled: false,
       addNewItem: false,
@@ -71,7 +72,9 @@ class DecisionCoordinatorDecentrilizedAdministrationView extends Component {
       APDA_ProtocolNumber: '',
       APDA_ProtocolDate: '',
       ADA: '',
-      orderNo: 0
+      orderNo: 0,
+      NoPrototype: 0,
+      NoPhotocopy: 2
     }
 
     this.onChange = this.onChange.bind(this);
@@ -96,9 +99,11 @@ class DecisionCoordinatorDecentrilizedAdministrationView extends Component {
       ActionAccount: item.ActionAccount,
       APDA_ProtocolNumber: item.APDA_ProtocolNumber,
       APDA_ProtocolDate: item.APDA_ProtocolDate,
-      DecisionBoardProtocol: item.DecisionBoardProtocol,
+      DecisionBoardProtocol: item.DecisionBoardProtocol,      
       ADA: item.ADA,
       orderNo: index + 1,
+      NoPrototype: item.NoPrototype,
+      NoPhotocopy: item.NoPhotocopy,
       editItem: true
     })
   }
@@ -121,7 +126,9 @@ class DecisionCoordinatorDecentrilizedAdministrationView extends Component {
       ProtocolDate: '',
       Content: '',
       ADA: '',
-      orderNo: 0
+      orderNo: 0,
+      NoPrototype: 0,
+      NoPhotocopy: 2,
     });
   }
   resetMsgInfo() {
@@ -214,7 +221,11 @@ class DecisionCoordinatorDecentrilizedAdministrationView extends Component {
     if (this.state.addNewItem === true || this.state.editItem === true) {
       return <div style={{ display: 'flex', flexFlow: 'column', height: 'auto', background: '#C0C0C0', color: 'black', justifyContent: 'center', padding: '20px' }}>
         <form style={{ padding: '10px', backgroundColor: '#fff' }} autoComplete="off" onSubmit={this.handleSubmit}>
-          <div style={{ textAlign: 'center', fontSize: '22px', fontWeight: 800, paddingBottom: '10px' }}>{this.state.addNewItem === true ? 'Εισαγωγή' : 'Επεξεργασία'} στοιχείων {this.state.orderNo}ης Απόφασης Ελέγχου Νομιμότητας της Αποκεντρωμένης</div>
+          <div style={{ textAlign: 'center', fontSize: '22px', fontWeight: 800, paddingBottom: '10px' }}>{this.state.addNewItem === true ? 'Εισαγωγή' : 'Επεξεργασία'} στοιχείων {this.state.orderNo}ης Απόφασης Ελέγχου Νομιμότητας της Αποκεντρωμένης</div>          
+          <div style={{ display: 'flex', flexFlow: 'row', height: 'auto', justifyContent: 'left', padding: '10px' }}>
+            <MyTextField tm={getDecisionCoordinatorDecentrilizedAdministrationTooltip(this.state, 9)} tp='number' title='# πρωτότυπα' label='' id='NoPrototype' stateValue={this.state.NoPrototype} isRequired={true} isDisabled={false} onChange={this.onChange} style={{ width: '100%' }} inputProps={{ style: { textAlign: 'center' } }} width='50%' />
+            <MyTextField tm={getDecisionCoordinatorDecentrilizedAdministrationTooltip(this.state, 9)} tp='number' title='# φωτοαντίγραφα' label='' id='NoPhotocopy' stateValue={this.state.NoPhotocopy} isRequired={true} isDisabled={false} onChange={this.onChange} style={{ width: '100%' }} inputProps={{ style: { textAlign: 'center' } }} width='50%' />
+          </div>
           <div style={{ display: 'flex', flexFlow: 'row', height: 'auto', backgroundColor: '#fff', justifyContent: 'left', padding: '10px' }}>
             <ProtocolInput
               tm1={getDecisionCoordinatorDecentrilizedAdministrationTooltip(this.state, 1)}
@@ -335,7 +346,7 @@ class DecisionCoordinatorDecentrilizedAdministrationView extends Component {
   getTransmissionItemInfo(index, item) {
 
     var rContent = <>
-      <span>Δύο (2) φωτοαντίγραφα της υπ' αριθ. </span>
+      <span>{getCopiesPhrase(item.NoPrototype, item.NoPhotocopy)} της υπ' αριθ. </span>
       <span>{item.ProtocolNumber}/{item.ProtocolDate ? getDateFormatForDocument(item.ProtocolDate) : item.ProtocolDate}</span>
       <span> Απόφασης του Συντονιστή Αποκεντρωμένης  Διοίκησης Αττικής </span>
     </>;

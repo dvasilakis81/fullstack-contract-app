@@ -66,7 +66,9 @@ class AuthorDocumentedRequestView extends Component {
       ProtocolNumber: '',
       ProtocolDate: '',
       ADA: '',
-      orderNo: 0
+      orderNo: 0,
+      NoPrototype: 1,
+      NoPhotocopy: 1
     }
 
     this.onChange = this.onChange.bind(this);
@@ -89,7 +91,9 @@ class AuthorDocumentedRequestView extends Component {
       ProtocolDate: item.ProtocolDate,
       ADA: item.ADA,
       editItem: true,
-      orderNo: index + 1
+      orderNo: index + 1,
+      NoPrototype: item.NoPrototype,
+      NoPhotocopy: item.NoPhotocopy
     })
   }
 
@@ -106,7 +110,9 @@ class AuthorDocumentedRequestView extends Component {
       ProtocolNumber: '',
       ProtocolDate: '',
       ADA: '',
-      orderNo: 0
+      orderNo: 0,
+      NoPrototype: 0,
+      NoPhotocopy: 2
     });
   }
   resetMsgInfo() {
@@ -248,10 +254,16 @@ class AuthorDocumentedRequestView extends Component {
   renderItemInput() {
 
     return (
-      <div style={{ display: 'flex', flexDirection: 'row', margin: '5px', flexWrap: 'nowrap', justifyContent: 'flex-start' }}>
-        <ProtocolInput tm1={getTooltip(this.state, 1)} tm2={getTooltip(this.state, 2)} title='Αρ. Πράξης' idn='ProtocolNumber' idd='ProtocolDate' protocolNumber={this.state.ProtocolNumber} protocolDate={this.state.ProtocolDate} onChange={this.onChange} tp1='text' tp2='date' width='50%' />
-        <MyTextField tm={getTooltip(this.state, 3)} tp='text' title='ΑΔΑ' label='' variant='outlined' id='ADA' stateValue={this.state.ADA} isRequired={false} isDisabled={false} onChange={this.onChange} width='50%' />
+      <><div style={{ display: 'flex', flexFlow: 'row', height: 'auto', justifyContent: 'left', padding: '10px' }}>
+        <MyTextField tm={getTooltip(this.state, 4)} tp='number' title='# πρωτότυπα' label='' id='NoPrototype' stateValue={this.state.NoPrototype} isRequired={true} isDisabled={false} onChange={this.onChange} style={{ width: '100%' }} inputProps={{ style: { textAlign: 'center' } }} width='50%' />
+        <MyTextField tm={getTooltip(this.state, 4)} tp='number' title='# φωτοαντίγραφα' label='' id='NoPhotocopy' stateValue={this.state.NoPhotocopy} isRequired={true} isDisabled={false} onChange={this.onChange} style={{ width: '100%' }} inputProps={{ style: { textAlign: 'center' } }} width='50%' />
       </div>
+
+        <div style={{ display: 'flex', flexDirection: 'row', margin: '5px', flexWrap: 'nowrap', justifyContent: 'flex-start' }}>
+          <ProtocolInput tm1={getTooltip(this.state, 1)} tm2={getTooltip(this.state, 2)} title='Αρ. Πράξης' idn='ProtocolNumber' idd='ProtocolDate' protocolNumber={this.state.ProtocolNumber} protocolDate={this.state.ProtocolDate} onChange={this.onChange} tp1='text' tp2='date' width='50%' />
+          <MyTextField tm={getTooltip(this.state, 3)} tp='text' title='ΑΔΑ' label='' variant='outlined' id='ADA' stateValue={this.state.ADA} isRequired={false} isDisabled={false} onChange={this.onChange} width='50%' />
+        </div>
+      </>
     )
   }
   renderServerResponse() {

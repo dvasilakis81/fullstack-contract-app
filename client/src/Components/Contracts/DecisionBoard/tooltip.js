@@ -64,7 +64,7 @@ export function getDecisionBoardTooltip(state, ind) {
   var style2 = (ind === 2 ? useStyles.tooltipIndicate : useStyles.tooltip)
   var style3 = (ind === 3 ? useStyles.tooltipIndicate : useStyles.tooltip)
   var style4 = (ind === 4 ? useStyles.tooltipIndicate : useStyles.tooltip)
-  var style5 = (ind === 5 ? useStyles.tooltipIndicate : useStyles.tooltip)
+  var style5 = (ind === 5 ? useStyles.tooltipIndicate : useStyles.tooltip)  
 
   //Διαβιβαστικό
   //2.	Δύο (2) φωτοαντίγραφα της με αρ. 866/14-6-2018 Απόφασης του Δημοτικού Συμβουλίου (Α.Δ.Σ.) με Α.Δ.Α.

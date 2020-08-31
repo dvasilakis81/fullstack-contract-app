@@ -67,7 +67,9 @@ class EconomicalCommiteeView extends Component {
       ProtocolNumber: '',
       ProtocolDate: '',
       Content: '',
-      ADA: ''
+      ADA: '',
+      NoPrototype: 0,
+      NoPhotocopy: 2
     }
 
     this.onChange = this.onChange.bind(this);
@@ -91,6 +93,8 @@ class EconomicalCommiteeView extends Component {
       Content: economicalCommitee.Content,
       ADA: economicalCommitee.ADA,
       orderNo: index + 1,
+      NoPrototype: economicalCommitee.NoPrototype,
+      NoPhotocopy: economicalCommitee.NoPhotocopy,
       editItem: true
     })
   }
@@ -114,7 +118,9 @@ class EconomicalCommiteeView extends Component {
       ProtocolDate: '',
       Content: '',
       ADA: '',
-      orderNo: 0
+      orderNo: 0,
+      NoPrototype: 0,
+      NoPhotocopy: 2
     });
   }
   resetMsgInfo() {
@@ -172,6 +178,10 @@ class EconomicalCommiteeView extends Component {
       return <div style={{ display: 'flex', flexFlow: 'column', height: 'auto', background: '#C0C0C0', color: 'black', justifyContent: 'center', padding: '20px' }}>
         <form style={{ padding: '10px', backgroundColor: '#fff' }} autoComplete="off" onSubmit={this.handleSubmit}>
           <div style={{ textAlign: 'center', fontSize: '22px', fontWeight: 800, paddingBottom: '10px' }}>{this.state.addNewItem === true ? 'Εισαγωγή' : 'Επεξεργασία'} στοιχείων {this.state.orderNo}ης Πράξης Οικονομικής Επιτροπής</div>
+          <div style={{ display: 'flex', flexFlow: 'row', height: 'auto', justifyContent: 'left', padding: '10px' }}>
+            <MyTextField tm={getEconomicalCommiteeTooltip(this.state, 5)} tp='number' title='# πρωτότυπα' label='' id='NoPrototype' stateValue={this.state.NoPrototype} isRequired={true} isDisabled={false} onChange={this.onChange} style={{ width: '100%' }} inputProps={{ style: { textAlign: 'center' } }} width='50%' />
+            <MyTextField tm={getEconomicalCommiteeTooltip(this.state, 5)} tp='number' title='# φωτοαντίγραφα' label='' id='NoPhotocopy' stateValue={this.state.NoPhotocopy} isRequired={true} isDisabled={false} onChange={this.onChange} style={{ width: '100%' }} inputProps={{ style: { textAlign: 'center' } }} width='50%' />
+          </div>
           <div style={{ display: 'flex', flexFlow: 'row', height: 'auto', justifyContent: 'left', padding: '10px' }}>
             <ProtocolInput tm1={getEconomicalCommiteeTooltip(this.state, 1)} tm2={getEconomicalCommiteeTooltip(this.state, 2)} title='Α.Π.' idn='ProtocolNumber' idd='ProtocolDate' protocolNumber={this.state.ProtocolNumber} protocolDate={this.state.ProtocolDate} st={null} onChange={this.onChange} tp1='text' tp2='date' width='50%' />
             <MyTextField tm={getEconomicalCommiteeTooltip(this.state, 3)} tp='text' title='ΑΔΑ' label='' id='ADA' stateValue={this.state.ADA} isRequired={false} isDisabled={false} onChange={this.onChange} style={{ width: '100%' }} inputProps={{ style: { textAlign: 'center' } }} width='50%' />

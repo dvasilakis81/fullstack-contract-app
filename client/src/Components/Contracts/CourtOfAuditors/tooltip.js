@@ -1,5 +1,6 @@
 import React from 'react';
 import '../../../Styles/styles.css';
+import { getCopiesPhrase } from '../TooltipMethods';
 
 const useStyles = {
   tooltip: {
@@ -25,6 +26,7 @@ export function getCourtOfAuditorsTooltip(state, ind) {
   var style4 = (ind === 4 ? useStyles.tooltipIndicate : useStyles.tooltip)
   var style5 = (ind === 5 ? useStyles.tooltipIndicate : useStyles.tooltip)
   var style6 = (ind === 6 ? useStyles.tooltipIndicate : useStyles.tooltip)
+  var style7 = (ind === 7 ? useStyles.tooltipIndicate : useStyles.tooltip)
 
   //Αρχείο Διαβιβαστικού
   //6.	Πρωτότυπο και φωτοαντίγραφο της Κοινοποίησης της με αρ. 329/2018 Πράξης του Ζ΄ Κλιμακίου του Ελεγκτικού Συνεδρίου (Α.Π.Δ.Α. 243357/2-10-2018) 
@@ -33,7 +35,8 @@ export function getCourtOfAuditorsTooltip(state, ind) {
   return (<>
     <div style={useStyles.tooltipTitle}>ΣΥΝΗΜΜΕΝΑ ΔΙΚΑΙΟΛΟΓΗΤΙΚΑ (Έγγραφο διαβιβαστικού)</div>
     <div>
-      <span style={useStyles.tooltip}>Πρωτότυπο και φωτοαντίγραφο της Κοινοποίησης της με αρ. </span>
+      <span style={style7}>{getCopiesPhrase(state.NoPrototype, state.NoPhotocopy)}</span>
+      <span style={useStyles.tooltip}> της Κοινοποίησης της με αρ. </span>
       <span style={style1}>{state.ProtocolNumber ? state.ProtocolNumber : '___'}</span>
       <span style={useStyles.tooltip}>/</span>
       <span style={style2}>{state.ProtocolYear ? state.ProtocolYear : '____'}</span>
