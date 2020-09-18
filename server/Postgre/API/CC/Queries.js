@@ -5,9 +5,9 @@ function query_get(accountId) {
   return util.format('SELECT * FROM "Ordering"."CC" as cc Where cc."AccountId"=%s', helper.addQuotes(accountId));
 }
 
-function query_insert(req) {
+function query_insert(req, accountId) {
   var contractId = req.body.ContractId;
-  var accountId = req.body.AccountId;
+  var accountId = accountId ? accountId : req.body.AccountId;
   var ccValues = req.body.cc;
   var sqlQuery = '';
 

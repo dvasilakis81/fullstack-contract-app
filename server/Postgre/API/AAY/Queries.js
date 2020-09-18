@@ -3,8 +3,8 @@ const helper = require('../../../HelperMethods/helpermethods')
 
 function query_insert(req) {
   var contractId = req.body.contractId;
-  var sqlQuery = util.format('INSERT INTO "Ordering"."AAY"("ContractId","Value","ProtocolNumber","ProtocolDate","EadNumber","ADA","OrderNo","Type","Overthrow") ' +
-    'VALUES(%s,%s,%s,%s,%s,%s,%s,%s,%s) ' +
+  var sqlQuery = util.format('INSERT INTO "Ordering"."AAY"("ContractId","Value","ProtocolNumber","ProtocolDate","EadNumber","ADA","OrderNo","Type","Overthrow", "NoPrototype", "NoPhotocopy") ' +
+    'VALUES(%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s) ' +
     'RETURNING "Id" ',
     helper.addQuotes(contractId),
     helper.addQuotes(req.body.AayValue),
@@ -15,7 +15,8 @@ function query_insert(req) {
     helper.addQuotes(req.body.orderNo),
     helper.addQuotes(req.body.Type),
     helper.addQuotes(req.body.Overthrow),
-  )
+    helper.addQuotes(req.body.NoPrototype),
+    helper.addQuotes(req.body.NoPhotocopy));
 
   return sqlQuery
 }
@@ -24,7 +25,7 @@ function query_update(req) {
 
   var contractId = req.body.contractId;
   var sqlQuery = util.format('UPDATE "Ordering"."AAY" ' +
-    'SET "Value"=%s,"ProtocolNumber"=%s,"ProtocolDate"=%s,"EadNumber"=%s,"ADA"=%s,"Type"=%s,"Overthrow"=%s ' +
+    'SET "Value"=%s,"ProtocolNumber"=%s,"ProtocolDate"=%s,"EadNumber"=%s,"ADA"=%s,"Type"=%s,"Overthrow"=%s,"NoPrototype"=%s,"NoPhotocopy"=%s  ' +
     'WHERE "ContractId"=%s AND "OrderNo"=%s',
     helper.addQuotes(req.body.AayValue),
     helper.addQuotes(req.body.ProtocolNumber),
@@ -33,6 +34,8 @@ function query_update(req) {
     helper.addQuotes(req.body.ADA),
     req.body.Type,
     helper.addQuotes(req.body.Overthrow),
+    helper.addQuotes(req.body.NoPrototype),
+    helper.addQuotes(req.body.NoPhotocopy),
     Number(contractId),
     req.body.orderNo);
 

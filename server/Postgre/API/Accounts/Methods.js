@@ -19,9 +19,9 @@ async function getFirstAccountProtocolInfo(req, res, next) {
   }
 }
 
-async function getAccountById(req, res, next) {
+async function getAccountById(contractId, accountId, accountNumber, next) {
   try {
-    const rows =await pool.query(queries.query_getaccountbyid(req));
+    const rows = await pool.query(queries.query_getaccountbyid(contractId, accountId, accountNumber));
     return rows;
   } catch (error) {
     next(error);
@@ -46,12 +46,12 @@ async function getAccountInfo(req, res, next) {
   }
 }
 
-async function insertAccount(req, res, next) {
+async function insertAccount(req, res, next, client) {
   try {
-    const { rows } = await pool.query(queries.query_insertaccount(req));
+    const { rows } = await client.query(queries.query_insertaccount(req));
     return rows;
-  } catch (error) {
-    next(error);
+  } catch (e) {
+    throw e;
   }
 }
 
@@ -59,8 +59,8 @@ async function updateAccount(req, res, next) {
   try {
     const { rows } = await pool.query(queries.query_updateaccount(req));
     return rows;
-  } catch (error) {
-    next(error);
+  } catch (e) {
+    throw e;
   }
 }
 

@@ -1,24 +1,46 @@
-var reservationsMethods = require('../../Reservations/Account/Methods');
 var accountMethods = require('../../Accounts/Methods');
 
-async function sync(req, res, next) {
+var accountReservationsMethods = require('../../Reservations/Account/Methods');
+var userReservationsMethods = require('../../Reservations/User/Methods');
 
-  const reservations = await reservationsMethods.get(req, res, next);
-  if (reservations && reservations.length > 0) {
-    await reservationsMethods.remove(req, res, next);
-    await reservationsMethods.insert(req, res, next);
-  }
-  else
-    await reservationsMethods.insert(req, res, next);
+async function insert_reservations(req, res, next, accountId, client) {
 
   try {
-    const { rows } = await accountMethods.getAccountById(req, res, next);
-    res.status(200).json(rows[0]);
+    await accountReservationsMethods.insert(req.body.loginUserInfo.uid, accountId, req.body.reservations, client, next);
   } catch (error) {
     next(error);
   }
+
+}
+
+async function sync(req, res, next) {
+
+  try {
+    var userId = req.body.loginUserInfo.uid;
+    var accountId = req.body.AccountInfo.Id;
+
+    // remove the old account reservations
+    await accountReservationsMethods.remove(req, res, next);
+
+    // get the user reservations
+    const userReservations = await userReservationsMethods.getUserReservations(userId, next);
+    // insert the new account reservations
+    await accountReservationsMethods.insert(userId, accountId, userReservations, null, next);
+
+    // get the new account    
+    var { rows } = await accountMethods.getAccountById(req.body.ContractId, accountId, req.body.AccountNumber, next);
+    if (rows && rows.length == 1)
+      res.status(200).json(rows[0]);
+    else
+      next("Account not found");
+
+  } catch (error) {
+    next(error);
+  }
+
 }
 
 module.exports = {
+  insert_reservations,
   sync
 }

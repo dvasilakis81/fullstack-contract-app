@@ -3,31 +3,31 @@ const util = require('util')
 var pool = require('../../dbConfig').pool
 var queries = require('./Queries');
 
-async function insertCC(req, res, next, accountId) {
+async function insertCC(req, res, next, accountId, client) {
 
   try {
-    const { rows } = await pool.query(queries.query_get(accountId));
+    const { rows } = await client.query(queries.query_get(accountId));
     if (rows && rows.length > 0)
       res.status(200).json(results.rows[0].Id);
     else {
-      const { rows } = await pool.query(queries.query_insert(req, accountId));
+      const { rows } = await client.query(queries.query_insert(req, accountId));
       return rows;
     }
-  } catch (error) {
-    next(error);
+  } catch (e) {
+    throw e;
   }
 }
 
-async function updateCC(req, res, next) {
+async function updateCC(req, res, next, client) {
 
   try {
-    await pool.query(queries.query_delete(req));
+    await client.query(queries.query_delete(req));
     if (req.body.cc && req.body.cc.length > 0) {
-      const { rows } = await pool.query(queries.query_insert(req));
+      const { rows } = await client.query(queries.query_insert(req));
       return rows;
     }
-  } catch (error) {
-    next(error);
+  } catch (e) {
+    throw e;
   }
 }
 

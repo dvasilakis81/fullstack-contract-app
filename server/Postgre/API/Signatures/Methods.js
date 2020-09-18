@@ -1,30 +1,65 @@
-const util = require('util')
-
-var pool = require('../../dbConfig').pool
 var queries = require('./Queries');
 
-async function insertSignatures(req, res, next, accountId) {
+async function insertSignatures(req, res, next, accountId, client) {
 
   try {
-    const { rows } = await pool.query(queries.query_get(accountId));
-    if (rows.length > 0)
-      res.status(200).json(results.rows[0].Id);
-    else {
-      const { rows } = await pool.query(queries.query_insert(req, accountId));
-      return rows;
-    }
-  } catch (error) {
-    next(error);
+    const { rows } = await client.query(queries.query_insert(req, accountId));
+    return rows;
+  } catch (e) {
+    throw e;
   }
 }
 
-async function updateSignatures(req, res, next) {
+async function updateSignatures(req, res, next, client) {
 
   try {
-    const { rows } = await pool.query(queries.query_update(req));
+    const rows1 = updateSignature1(req, res, next, client);
+    const rows2 = updateSignature2(req, res, next, client);
+    const rows3 = updateSignature3(req, res, next, client);
+    const rows4 = updateSignature4(req, res, next, client);
+    return rows1;
+  } catch (e) {
+    throw e;
+  }
+}
+
+async function updateSignature1(req, res, next, client) {
+
+  try {
+    const { rows } = await client.query(queries.query_update_signature1(req));
     return rows;
-  } catch (error) {
-    next(error);
+  } catch (e) {
+    throw e;
+  }
+}
+
+async function updateSignature2(req, res, next, client) {
+
+  try {
+    const { rows } = await client.query(queries.query_update_signature2(req));
+    return rows;
+  } catch (e) {
+    throw e;
+  }
+}
+
+async function updateSignature3(req, res, next, client) {
+
+  try {
+    const { rows } = await client.query(queries.query_update_signature3(req));
+    return rows;
+  } catch (e) {
+    throw e;
+  }
+}
+
+async function updateSignature4(req, res, next, client) {
+
+  try {
+    const { rows } = await client.query(queries.query_update_signature4(req));
+    return rows;
+  } catch (e) {
+    throw e;
   }
 }
 

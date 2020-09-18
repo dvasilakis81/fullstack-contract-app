@@ -2,7 +2,7 @@ const util = require('util')
 const helper = require('../../../../HelperMethods/helpermethods')
 
 function query_getaccountreservations(req) {
-  var userId = req.body.userId;
+  var userId = req.body.loginUserInfo.uid;
   var accountId = req.body.AccountInfo.Id;
 
   var sqlQuery = util.format('SELECT * FROM "Ordering"."AccountReservations" as ur WHERE ur."UserId"=%s AND ur."AccountId"=%s',
@@ -29,13 +29,9 @@ function query_initialize(reservations, userId) {
   return sqlQuery;
 }
 
-function query_insert(req) {
+function query_insert(userId, accountId, reservations) {
 
   var sqlQuery = util.format('INSERT INTO "Ordering"."AccountReservations"("UserId", "AccountId","Name","Percentage","Stamp","StampOGA", "IsReservation", "Order") VALUES ');
-  var userId = req.body.userId;
-  var accountId = req.body.AccountInfo.Id;
-  var reservations = req.body.userreservations;
-  
   for (var i = 0; i < reservations.length; i++) {
     sqlQuery += util.format('(%s,%s,%s,%s,%s,%s,%s,%s)',
       helper.addQuotes(userId),
@@ -53,9 +49,9 @@ function query_insert(req) {
   return sqlQuery;
 }
 
-function query_remove(req) {
-  var userId = req.body.userId;
-  var accountId = req.body.AccountInfo.Id;
+function query_remove(req, accountId) {
+  var userId = req.body.loginUserInfo.uid;
+  var accountId = accountId ? accountId : req.body.AccountInfo.Id;
 
   var sqlQuery = util.format('DELETE FROM "Ordering"."AccountReservations" as ur WHERE ur."UserId"=%s AND ur."AccountId"=%s',
     helper.addQuotes(userId), helper.addQuotes(accountId));

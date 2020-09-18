@@ -99,8 +99,7 @@ class AccountInfo extends React.Component {
 				ProtocolNumber: accountDetails.ProtocolNumber ? accountDetails.ProtocolNumber : null,
 				ProtocolDate: accountDetails.ProtocolDate ? getValidMaterialDateFormat(accountDetails.ProtocolDate) : '',
 				FirstAccountProtocolNumber: accountDetails.FirstAccountProtocolNumber ? accountDetails.FirstAccountProtocolNumber : null,
-				FirstAccountProtocolDate: accountDetails.FirstAccountProtocolDate ? getValidMaterialDateFormat(accountDetails.FirstAccountProtocolDate) : '',
-				IsFirstOfTheYear: accountDetails.IsFirstOfTheYear ? accountDetails.IsFirstOfTheYear : false,
+				FirstAccountProtocolDate: accountDetails.FirstAccountProtocolDate ? getValidMaterialDateFormat(accountDetails.FirstAccountProtocolDate) : '',				
 				WorkConfirmationDate: accountDetails.WorkConfirmationDate ? getValidMaterialDateFormat(accountDetails.WorkConfirmationDate) : '',
 				DeliveryGoodsDate: accountDetails.DeliveryGoodsDate ? getValidMaterialDateFormat(accountDetails.DeliveryGoodsDate) : '',
 				InvoiceNumber: accountDetails.invoice && accountDetails.invoice[0] && accountDetails.invoice[0].Number ? accountDetails.invoice[0].Number : '',
@@ -419,7 +418,6 @@ class AccountInfo extends React.Component {
 					<Typography>
 						<b>Έναρξη:</b> {getDateFormat(accountDetails.Start)}
 						<b style={{ marginLeft: '20px' }}>Λήξη:</b> {getDateFormat(accountDetails.End)}
-						<b style={{ marginLeft: '20px' }}>1ος του έτους:</b> {accountDetails.IsFirstOfTheYear ? 'Ναι' : 'Όχι'}
 					</Typography>
 				</Paper>
 			</Grid>

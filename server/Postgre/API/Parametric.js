@@ -58,14 +58,15 @@ const getAgencies = (request, response, next) => {
 }
 
 const getSignatories = (request, response, next) => {
-  pool.query('SELECT * FROM "Ordering"."Signatory"', (error, results) => {
-    if (error)
-      next(error);
-    else {
-      helper.consoleLog(new Date().toLocaleString() + ": Signatories requested");
-      response.status(200).json(results.rows)
-    }
-  })
+
+  // pool.query('SELECT * FROM "Ordering"."Signatory"', (error, results) => {
+  //   if (error)
+  //     next(error);
+  //   else {
+  //     helper.consoleLog(new Date().toLocaleString() + ": Signatories requested");
+  //     response.status(200).json(results.rows)
+  //   }
+  // })
 }
 
 const getSignatoryTypes = (request, response, next) => {

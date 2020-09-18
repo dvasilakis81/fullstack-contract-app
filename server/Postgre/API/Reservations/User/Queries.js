@@ -9,6 +9,7 @@ function query_getuserreservations(userId) {
   return 'SELECT * ' +
     'FROM "Ordering"."UserReservations" as u ' +
     'WHERE u."UserId"=' + helper.addQuotes(userId) +
+    ' AND u."IsReservation"=true ' + 
     ' ORDER BY u."Order" ASC';
 }
 
@@ -31,7 +32,7 @@ function query_initialize(reservations, userId) {
 }
 
 function query_insert(req) {
-  const UserId = req.body.UserId;
+  const UserId = req.body.loginUserInfo.uid;
   const Name = req.body.Name;
   const Percentage = req.body.Percentage;
   const Stamp = req.body.Stamp;

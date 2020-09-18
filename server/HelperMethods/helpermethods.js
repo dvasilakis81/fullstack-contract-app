@@ -14,12 +14,12 @@ function addQuotes(value) {
   var ret = null;
 
   if (value)
-    ret = '\''.concat(fixQuotes(value)).concat('\'');
+    ret = '\''.concat(fixInputQuotes(value)).concat('\'');
 
   return ret;
 }
 
-function fixQuotes(value) {
+function fixInputQuotes(value) {
   return value.toString().replace(/'/g, "''");
 }
 
@@ -163,6 +163,46 @@ function getExpiresAt(token, jwt, secretKey) {
   return expiresAt;
 }
 
+function getLectical(number, startWithCapital) {
+  var ret = '';  
+
+  if (number == 1)
+    ret = (startWithCapital === true ? 'Ένα (1)' : 'ένα (1)');
+  else if (number == 2)
+    ret = (startWithCapital === true ? 'Δύο (2)' : 'δύο (2)');
+  else if (number == 3)
+    ret = (startWithCapital === true ? 'Τρία (3)' : 'τρία (3)');
+  else if (number == 4)
+    ret = (startWithCapital === true ? 'Τέσσερα (4)' : 'τέσσερα (4)');
+  else if (number == 5)
+    ret = (startWithCapital === true ? 'Πέντε (5)' : 'πέντε (5)');
+  else if (number == 6)
+    ret = (startWithCapital === true ? 'Έξι (6)' : 'έξι (6)');
+  else if (number == 7)
+    ret = (startWithCapital === true ? 'Εφτά (7)' : 'εφτά (7)');
+  else if (number == 8)
+    ret = (startWithCapital === true ? 'Οκτώ (8)' : 'οκτώ (8)');
+  else if (number == 9)
+    ret = (startWithCapital === true ? 'Εννιά (9)' : 'εννιά (9)');
+  
+  return ret;
+}
+
+function getCopiesPhrase(element) {
+  var ret = '';
+
+  if (element.NoPrototype > 0)
+    ret = getLectical(element.NoPrototype, true) + (element.NoPrototype == 1 ? ' πρωτότυπo' : ' πρωτότυπα');
+
+  if (ret)
+    ret += ' και ';
+
+  if (element.NoPhotocopy > 0)
+    ret += getLectical(element.NoPhotocopy, (ret ? false : true)) + (element.NoPhotocopy == 1 ? ' φωτοαντίγραφo' : ' φωτοαντίγραφα');
+
+  return ret;
+}
+
 module.exports = {
   addQuotes,
   fixTextForRawXml,
@@ -171,7 +211,8 @@ module.exports = {
   getNumberLectical,
   extractYearFromDate,
   getDateString,
-  getExpiresAt
+  getExpiresAt,
+  getCopiesPhrase
 }
 
 
