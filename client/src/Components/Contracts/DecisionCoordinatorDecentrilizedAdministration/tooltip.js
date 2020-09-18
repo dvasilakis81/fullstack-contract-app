@@ -1,6 +1,7 @@
 import React from 'react';
 import { getDateFormatForDocument } from '../../../Helper/helpermethods';
 import '../../../Styles/styles.css';
+import { getCopiesPhrase } from '../TooltipMethods';
 
 const useStyles = {
   tooltip: {
@@ -27,7 +28,8 @@ export function getDecisionCoordinatorDecentrilizedAdministrationTooltip(state, 
   var style5 = (ind === 5 ? useStyles.tooltipIndicate : useStyles.tooltip)
   var style6 = (ind === 6 ? useStyles.tooltipIndicate : useStyles.tooltip)
   var style7 = (ind === 7 ? useStyles.tooltipIndicate : useStyles.tooltip)
-  var style8 = (ind === 7 ? useStyles.tooltipIndicate : useStyles.tooltip)
+  var style8 = (ind === 8 ? useStyles.tooltipIndicate : useStyles.tooltip)
+  var style9 = (ind === 9 ? useStyles.tooltipIndicate : useStyles.tooltip)
 
   //Διαβιβαστικό
   //4.	Δύο (2) φωτοαντίγραφα της με Α.Π. 177724/10-7-2018 Απόφασης του Συντονιστή της Αποκεντρωμένης Διοίκησης Αττικής
@@ -37,7 +39,8 @@ export function getDecisionCoordinatorDecentrilizedAdministrationTooltip(state, 
   return (<>
     <div style={useStyles.tooltipTitle}>ΣΥΝΗΜΜΕΝΑ ΔΙΚΑΙΟΛΟΓΗΤΙΚΑ(Διαβιβαστικό)</div>
     <div>
-      <span style={useStyles.tooltip}>	Δύο (2) φωτοαντίγραφα της με Α.Π. </span>
+      <span style={style9}>{getCopiesPhrase(state.NoPrototype, state.NoPhotocopy)}</span>
+      <span style={useStyles.tooltip}> της με Α.Π. </span>
       <span style={style1}>{state.ProtocolNumber ? state.ProtocolNumber : '___'}</span>
       <span style={useStyles.tooltip}>/</span>
       <span style={style2}>{state.ProtocolDate ? getDateFormatForDocument(state.ProtocolDate) : '__-__-____'}</span>

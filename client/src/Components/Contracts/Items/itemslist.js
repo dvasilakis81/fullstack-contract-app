@@ -6,7 +6,7 @@ class ItemsList extends React.Component {
 
 	getItems() {
 		let template = null;
-		if (this.props.data !== undefined) {
+		if (this.props.data) {
 			template = this.props.data.map((item, i) => (
 				<ItemList key={item.Id} item={{ item }} defaultSelectedItem={this.props.defaultSelectedItem} />
 			));

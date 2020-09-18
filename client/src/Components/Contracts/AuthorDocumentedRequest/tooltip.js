@@ -1,4 +1,5 @@
 import React from 'react';
+import { getCopiesPhrase } from '../TooltipMethods';
 
 const useStyles = {
   tooltip: {
@@ -21,6 +22,7 @@ export function getTooltip(state, ind) {
   var style1 = (ind === 1 ? useStyles.tooltipIndicate : useStyles.tooltip)
   var style2 = (ind === 2 ? useStyles.tooltipIndicate : useStyles.tooltip)
   var style3 = (ind === 3 ? useStyles.tooltipIndicate : useStyles.tooltip)
+  var style4 = (ind === 4 ? useStyles.tooltipIndicate : useStyles.tooltip)
   
   //Αρχείο Διαβιβαστικού
   // Πρωτότυπο και φωτοαντίγραφο του υπ΄ αριθμ. 061640/12-03-20 Τεκμηριωμένου Αιτήματος του Διατάκτη
@@ -29,7 +31,7 @@ export function getTooltip(state, ind) {
   return (<>
     <div style={useStyles.tooltipTitle}>ΣΥΝΗΜΜΕΝΑ ΔΙΚΑΙΟΛΟΓΗΤΙΚΑ (Έγγραφο διαβιβαστικού)</div>
     <div>
-      <span style={useStyles.tooltip}>Πρωτότυπο και φωτοαντίγραφο του υπ΄ αριθμ. </span>
+      <span style={style4}>{getCopiesPhrase(state.NoPrototype, state.NoPhotocopy)} </span>
       <span style={style1}>{state.ProtocolNumber ? state.ProtocolNumber : '___'}</span>
       <span style={useStyles.tooltip}>/</span>
       <span style={style2}>{state.ProtocolDate ? state.ProtocolDate : '____'}</span>

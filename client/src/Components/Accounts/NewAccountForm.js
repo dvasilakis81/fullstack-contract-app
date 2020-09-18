@@ -14,6 +14,7 @@ import InputAdornment from '@material-ui/core/InputAdornment';
 import ClearIcon from '@material-ui/icons/Clear';
 import ProtocolInput from '../CustomControls/ProtocolInput';
 import MyTextField from '../CustomControls/MyTextField';
+import MyAutocomplete from '../CustomControls/MyAutocomplete';
 
 // Then import the virtualized Select HOC
 //import VirtualizedSelect from 'react-virtualized-select'
@@ -145,7 +146,7 @@ class NewAccountForm extends Component {
 			SignName1: this.props.location.state.SignName1,
 			SignName2: this.props.location.state.SignName2,
 			SignName3: this.props.location.state.SignName3,
-			SignName4: this.props.location.state.SignName4,
+			SignName4: this.props.location.state.SignName4 != -1 ? this.props.location.state.SignName4 : this.props.token.data.user.directorName,
 			AbsenseOfDirector1: this.props.location.state.AbsenseOfDirector1,
 			AbsenseOfDirector2: this.props.location.state.AbsenseOfDirector2,
 			HasMonitoringCommittee: this.props.location.state.MonitoringCommittee ? true : false,
@@ -161,6 +162,9 @@ class NewAccountForm extends Component {
 
 		this.setCheckboxValue = this.setCheckboxValue.bind(this);
 		this.onChange = this.onChange.bind(this);
+		this.onAutocompleteChange = this.onAutocompleteChange.bind(this);
+		this.onAutocompleteInputChange = this.onAutocompleteInputChange.bind(this);
+		this.clearAutocomplete = this.clearAutocomplete.bind(this);
 		this.handleSubmit = this.handleSubmit.bind(this);
 		this.autoComplete = this.autoComplete.bind(this);
 		this.autoCompleteFullWritten = this.autoCompleteFullWritten.bind(this);
@@ -217,7 +221,30 @@ class NewAccountForm extends Component {
 	}
 
 	onChange(e) {
-		this.setState({ [e.target.id]: e.target.value });
+
+		if (e && e.target)
+			this.setState({ [e.target.id]: e.target.value });
+	}
+
+	onAutocompleteChange(e, v, r) {
+
+		if (e) {
+			console.log('onChange: e:' + e + ' v:' + v)
+			this.setState({ [e.target.id]: v });
+		}
+	}
+	clearAutocomplete(targetId)	{
+		this.setState({ [targetId]: '' });
+	}
+	onAutocompleteInputChange(e, v, r) {
+		if (r === 'clear'){
+		} else if (e) {
+			console.log('onInputChange: e.target.id: ' + e.target.id + ' e.target.value:' + e.target.value + ' v:' + v)
+			var targetId = e.target.id;
+			if (e.target.id.indexOf('-') > 0)
+				targetId = e.target.id.substring(0, e.target.id.indexOf('-'))
+			this.setState({ [targetId]: v });
+		}
 	}
 	handleClose = (event, reason) => {
 		this.setState({ message: '', openMessage: false, submitButtonDisabled: false });
@@ -340,8 +367,7 @@ class NewAccountForm extends Component {
 
 	setCC(e, v, r, i) {
 		if (r === 'reset') {
-		}
-		else {
+		} else {
 			const list = this.state.cc.map((item, j) => {
 				if (j === i) {
 					if (item && item.CC)
@@ -488,11 +514,11 @@ class NewAccountForm extends Component {
 				{this.getDeliveryGoodsDate()}
 			</div>
 		</>
-	}	
+	}
 	getInvoiceInfo() {
-					var contractDetails = this.props.isSearchMode ? this.props.contractDetailsSearchMode : this.props.contractDetails
-		return<>
-			< header style = { useStyles.category } > Στοιχεία Τιμολογίου</header>
+		var contractDetails = this.props.isSearchMode ? this.props.contractDetailsSearchMode : this.props.contractDetails
+		return <>
+			< header style={useStyles.category} > Στοιχεία Τιμολογίου</header>
 			<div style={useStyles.divRowFlex}>
 				<MyTextField tm={getInvoiceTooltipTemplate(this.state, contractDetails.ConcessionaireName, 5)} tp='date' title='Ημ/νία Παραλαβής Τιμολογίου' id='InvoiceDeliveredDate' stateValue={this.state.InvoiceDeliveredDate} isRequired={false} isDisabled={false} onChange={this.onChange} inputProps={{ style: { textAlign: 'center' } }} isRequired={false} />
 				<ProtocolInput tm1={getInvoiceTooltipTemplate(this.state, contractDetails.ConcessionaireName, 3)} tm2={getInvoiceTooltipTemplate(this.state, contractDetails.ConcessionaireName, 4)} title='Α.Π. Ημ/νίας Παραλαβής Τιμολογίου' idn='InvoiceDeliveredDateProtocolNumber' idd='InvoiceDeliveredDateProtocolDate' protocolNumber={this.state.InvoiceDeliveredDateProtocolNumber} protocolDate={this.state.InvoiceDeliveredDateProtocolDate} onChange={this.onChange} tp1='text' tp2='date' isRequired={false} />
@@ -504,24 +530,130 @@ class NewAccountForm extends Component {
 		return <>
 			<header style={useStyles.category}>Υπογραφές για αρχείο '{this.state.AccountNumber}ος Λογαριασμός' </header>
 			<div style={useStyles.divRowFlex}>
-				<MyTextField title='Τίτλος' id='SignType1' stateValue={this.state.SignType1} values={this.loadSignatoryTypes([1, 2])} isRequired={true} isDisabled={false} onChange={this.onChange} inputProps={{ style: { textAlign: 'center' } }} select={true} width='20%' />
-				<MyTextField title='Όνομα' id='SignName1' stateValue={this.state.SignName1} values={this.loadSignatories(this.state.SignName1)} isRequired={true} isDisabled={false} onChange={this.onChange} inputProps={{ style: { textAlign: 'center' } }} select={true} width='20%' />
+				<MyAutocomplete
+					id='SignType1'
+					title='Τίτλος'
+					options={this.getSignatureTitles()}
+					onChange={this.onAutocompleteChange}
+					onInputChange={this.onAutocompleteInputChange}
+					clearAutocomplete={this.clearAutocomplete}
+					inputValue={this.state.SignType1}
+				/>
+
+				<MyAutocomplete
+					id='SignName1'
+					title='Όνομα'
+					options={this.getNameFromUsers()}
+					onChange={this.onAutocompleteChange}
+					onInputChange={this.onAutocompleteInputChange}
+					clearAutocomplete={this.clearAutocomplete}
+					inputValue={this.state.SignName1}
+				/>
+
+				{/* <MyTextField title='Τίτλος' id='SignType1' stateValue={this.state.SignType1} values={this.loadSignatoryTypes([1, 2])} isRequired={true} isDisabled={false} onChange={this.onChange} inputProps={{ style: { textAlign: 'center' } }} select={true} width='20%' />
+				<MyTextField title='Όνομα' id='SignName1' stateValue={this.state.SignName1} values={this.loadSignatories(this.state.SignName1)} isRequired={true} isDisabled={false} onChange={this.onChange} inputProps={{ style: { textAlign: 'center' } }} select={true} width='20%' /> */}
 			</div>
 			<div style={useStyles.divRowFlex}>
-				<MyTextField title='Τίτλος' id='SignType2' stateValue={this.state.SignType2} values={this.loadSignatoryTypes([5, 6])} isRequired={true} isDisabled={false} onChange={this.onChange} select={true} width='20%' />
-				<MyTextField title='Όνομα' id='SignName2' stateValue={this.state.SignName2} values={this.loadSignatories(this.state.SignName2)} isRequired={true} isDisabled={false} onChange={this.onChange} select={true} width='20%' />
+				<MyAutocomplete
+					id='SignType2'
+					title='Τίτλος'
+					options={this.getSignatureTitles()}
+					onChange={this.onAutocompleteChange}
+					onInputChange={this.onAutocompleteInputChange}
+					clearAutocomplete={this.clearAutocomplete}
+					inputValue={this.state.SignType2}
+				/>
+
+				<MyAutocomplete
+					id='SignName2'
+					title='Όνομα'
+					options={this.getNameFromUsers()}
+					onChange={this.onAutocompleteChange}
+					onInputChange={this.onAutocompleteInputChange}
+					clearAutocomplete={this.clearAutocomplete}
+					inputValue={this.state.SignName2}
+				/>
+
+				{/* <MyTextField title='Τίτλος' id='SignType2' stateValue={this.state.SignType2} values={this.loadSignatoryTypes([5, 6])} isRequired={true} isDisabled={false} onChange={this.onChange} select={true} width='20%' />
+				<MyTextField title='Όνομα' id='SignName2' stateValue={this.state.SignName2} values={this.loadSignatories(this.state.SignName2)} isRequired={true} isDisabled={false} onChange={this.onChange} select={true} width='20%' /> */}
 			</div>
+			
 			<div style={useStyles.divRowFlex}>
-				<MyTextField title='Τίτλος' id='SignType3' stateValue={this.state.SignType3} values={this.loadSignatoryTypes([3, 4])} isRequired={true} isDisabled={false} onChange={this.onChange} select={true} width='20%' />
-				<MyTextField title='Όνομα' id='SignName3' stateValue={this.state.SignName3} values={this.loadSignatories(this.state.SignName3)} isRequired={true} isDisabled={false} onChange={this.onChange} select={true} width='20%' />
+				<MyAutocomplete
+					id='SignType3'
+					title='Τίτλος'
+					options={this.getSignatureTitles()}
+					onChange={this.onAutocompleteChange}
+					onInputChange={this.onAutocompleteInputChange}
+					clearAutocomplete={this.clearAutocomplete}
+					inputValue={this.state.SignType3}
+				/>
+
+				<MyAutocomplete
+					id='SignName3'
+					title='Όνομα'
+					options={this.getNameFromUsers()}
+					onChange={this.onAutocompleteChange}
+					onInputChange={this.onAutocompleteInputChange}
+					clearAutocomplete={this.clearAutocomplete}
+					inputValue={this.state.SignName3}
+				/>
+				{/* <MyTextField title='Τίτλος' id='SignType3' stateValue={this.state.SignType3} values={this.loadSignatoryTypes([3, 4])} isRequired={true} isDisabled={false} onChange={this.onChange} select={true} width='20%' />
+				<MyTextField title='Όνομα' id='SignName3' stateValue={this.state.SignName3} values={this.loadSignatories(this.state.SignName3)} isRequired={true} isDisabled={false} onChange={this.onChange} select={true} width='20%' /> */}
 				{getCheckboxField('AbsenseOfDirector1', 'κ.κ.α.', this.state.AbsenseOfDirector1, useStyles.accountInfoItem, this.setCheckboxValue)}
 			</div>
 		</>
 	}
+	getNameFromUsers() {
+		var ret = [];
+
+		for (let i = 0; i < this.props.token.data.user.users.length; i++) {
+			const user = this.props.token.data.user.users[i];
+			ret.push(user.cn);
+		}
+
+		return ret;
+	}
+	getSignatureTitles() {
+		var ret = [
+			'Η ΣΥΝΤΑΞΑΣΑ',
+			'O ΣΥΝΤΑΚΤΗΣ',
+			'Η ΠΡΟΪΣΤΑΜΕΝΗ ΤΜΗΜΑΤΟΣ',
+			'Ο ΠΡΟΪΣΤΑΜΕΝΟΣ ΤΜΗΜΑΤΟΣ',
+			'Η ΠΡΟΪΣΤΑΜΕΝΗ ΔΙΕΥΘΥΝΣΗΣ',
+			'Ο ΠΡΟΪΣΤΑΜΕΝΟΣ ΔΙΕΥΘΥΝΣΗΣ'
+		];
+
+		return ret;
+	}
 	getSignaturesForTransmission() {
+
 		return <>
 			<header style={useStyles.category}>Υπογραφές για αρχείο 'Διαβιβαστικό Έγγραφο {this.state.AccountNumber}ου Λογαριασμού' </header>
+
+
 			<div style={useStyles.divRowFlex}>
+
+				<MyAutocomplete
+					id='SignType4'
+					title='Τίτλος'
+					options={this.getSignatureTitles()}
+					onChange={this.onAutocompleteChange}
+					onInputChange={this.onAutocompleteInputChange}
+					clearAutocomplete={this.clearAutocomplete}
+					inputValue={this.state.SignType4}
+				/>
+
+				<MyAutocomplete
+					id='SignName4'
+					title='Όνομα'
+					options={this.getNameFromUsers()}
+					onChange={this.onAutocompleteChange}
+					onInputChange={this.onAutocompleteInputChange}
+					clearAutocomplete={this.clearAutocomplete}
+					inputValue={this.state.SignName4}
+				/>
+
 				<MyTextField title='Τίτλος' id='SignType4' stateValue={this.state.SignType4} values={this.loadSignatoryTypes([3, 4])} isRequired={true} isDisabled={false} onChange={this.onChange} select={true} width='20%' />
 				<MyTextField title='Όνομα' id='SignName4' stateValue={this.state.SignName4} values={this.loadSignatories(this.state.SignName4)} isRequired={true} isDisabled={false} onChange={this.onChange} select={true} width='20%' />
 				{getCheckboxField('AbsenseOfDirector2', 'κ.κ.α.', this.state.AbsenseOfDirector2, useStyles.accountInfoItem, this.setCheckboxValue)}
@@ -571,9 +703,9 @@ class NewAccountForm extends Component {
 									<Icon style={{ marginLeft: '10px', padding: '10px' }}>save</Icon>,
 									this.state.submitButtonDisabled)}
 								{this.getDocumentsInfo()}
-								{this.getBasicAccountInfo()}								
+								{this.getBasicAccountInfo()}
 								{this.getInvoiceInfo()}
-								{this.getMonitoringCommiteeInfo()}								
+								{this.getMonitoringCommiteeInfo()}
 								{this.getSignaturesForAccount()}
 								{this.getSignaturesForTransmission()}
 							</form >

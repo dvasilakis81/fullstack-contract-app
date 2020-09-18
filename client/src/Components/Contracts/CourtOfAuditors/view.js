@@ -17,6 +17,7 @@ import { getCourtOfAuditorsTooltip } from './tooltip';
 import ProtocolInput from '../../CustomControls/ProtocolInput';
 import MyTextField from '../../CustomControls/MyTextField';
 import store from '../../../Redux/Store/store'
+import { getCopiesPhrase } from '../TooltipMethods';
 
 const styles = {
   paperContractMonetaryInfoFrame: {
@@ -52,7 +53,7 @@ class CourtOfAuditorsView extends Component {
     super(props);
 
     this.state = {
-      loginUserId: this.props.token.data.id,
+      loginUserInfo: this.props.token.data.user,
       contractId: this.props.contractDetails.Id,
       submitButtonDisabled: false,
       addNewItem: false,
@@ -69,7 +70,9 @@ class CourtOfAuditorsView extends Component {
       ContentAccount: '',
       APDANumber: '',
       APDADate: '',
-      orderNo: 0
+      orderNo: 0,
+      NoPrototype: 0,
+      NoPhotocopy: 2
     }
 
     this.onChange = this.onChange.bind(this);
@@ -95,7 +98,9 @@ class CourtOfAuditorsView extends Component {
       APDANumber: courtOfAuditors.APDA_ProtocolNumber,
       APDADate: courtOfAuditors.APDA_ProtocolDate,
       editItem: true,
-      orderNo: index + 1
+      orderNo: index + 1,
+      NoPrototype: courtOfAuditors.NoPrototype,
+      NoPhotocopy: courtOfAuditors.NoPhotocopy,
     })
   }
 
@@ -115,7 +120,9 @@ class CourtOfAuditorsView extends Component {
       ContentAccount: '',
       APDANumber: '',
       APDADate: '',
-      orderNo: 0
+      orderNo: 0,
+      NoPrototype: 0,
+      NoPhotocopy: 2,
     });
   }
   resetMsgInfo() {
@@ -260,6 +267,10 @@ class CourtOfAuditorsView extends Component {
 
     return (
       <>
+        <div style={{ display: 'flex', flexFlow: 'row', height: 'auto', justifyContent: 'left', padding: '10px' }}>
+          <MyTextField tm={getCourtOfAuditorsTooltip(this.state, 7)} tp='number' title='# πρωτότυπα' label='' id='NoPrototype' stateValue={this.state.NoPrototype} isRequired={true} isDisabled={false} onChange={this.onChange} style={{ width: '100%' }} inputProps={{ style: { textAlign: 'center' } }} width='50%' />
+          <MyTextField tm={getCourtOfAuditorsTooltip(this.state, 7)} tp='number' title='# φωτοαντίγραφα' label='' id='NoPhotocopy' stateValue={this.state.NoPhotocopy} isRequired={true} isDisabled={false} onChange={this.onChange} style={{ width: '100%' }} inputProps={{ style: { textAlign: 'center' } }} width='50%' />
+        </div>
         <div style={{ display: 'flex', flexDirection: 'row', margin: '5px', flexWrap: 'nowrap', justifyContent: 'flex-start' }}>
           <ProtocolInput tm1={getCourtOfAuditorsTooltip(this.state, 1)} tm2={getCourtOfAuditorsTooltip(this.state, 2)} title='Αρ. Πράξης' idn='ProtocolNumber' idd='ProtocolYear' protocolNumber={this.state.ProtocolNumber} protocolDate={this.state.ProtocolYear} onChange={this.onChange} tp1='text' tp2='text' width='50%' />
           <MyTextField tm={getCourtOfAuditorsTooltip(this.state, 3)} tp='text' title='Κλιμάκιο' label='' variant='outlined' id='ScaleNumber' stateValue={this.state.ScaleNumber} isRequired={true} isDisabled={false} onChange={this.onChange} width='50%' />
@@ -280,7 +291,8 @@ class CourtOfAuditorsView extends Component {
 
   getTransmissionItemInfo(index, item) {
     var rContent = <>
-      <span>Δύο (2) φωτοαντίγραφα της Κοινοποίησης της με αρ. </span>
+      <span>{getCopiesPhrase(item.NoPrototype, item.NoPhotocopy)} </span>
+      <span>της Κοινοποίησης της με αρ. </span>
       <span>{item.ProtocolNumber}/{item.ProtocolDate ? getDateFormatForDocument(item.ProtocolYear) : item.ProtocolYear}</span>
       <span> Πράξης του {item.ScaleNumber} Κλιμακίου του Ελεγκτικού Συνεδρίου </span>
       {

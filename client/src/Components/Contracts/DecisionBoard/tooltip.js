@@ -1,6 +1,7 @@
 import React from 'react';
 import { getDateFormatForDocument } from '../../../Helper/helpermethods';
 import '../../../Styles/styles.css';
+import { getCopiesPhrase } from '../TooltipMethods';
 
 const useStyles = {
   tooltip: {
@@ -63,17 +64,19 @@ export function getDecisionBoardTooltip(state, ind) {
   var style2 = (ind === 2 ? useStyles.tooltipIndicate : useStyles.tooltip)
   var style3 = (ind === 3 ? useStyles.tooltipIndicate : useStyles.tooltip)
   var style4 = (ind === 4 ? useStyles.tooltipIndicate : useStyles.tooltip)
+  var style5 = (ind === 5 ? useStyles.tooltipIndicate : useStyles.tooltip)  
 
   //Διαβιβαστικό
   //2.	Δύο (2) φωτοαντίγραφα της με αρ. 866/14-6-2018 Απόφασης του Δημοτικού Συμβουλίου (Α.Δ.Σ.) με Α.Δ.Α.
   //Λογαριασμός
-  //2.	Τη με αρ. 866/14-6-2018 Απόφαση του Δημοτικού Συμβουλίου (Α.Δ.Σ.) Αθηναίων με την οποία εγκρίθηκαν: η υπογραφή των όρων, το σχέδιο και τα ανά έτος ποσά της προαναφερθείσας Προγραμματικής Σύμβασης. 
+  //2.	Τη με αρ. 866/14-6-2018 Απόφαση του Δημοτικού Συμβουλίου (Α.Δ.Σ.) Αθηναίων με την οποία εγκρίθηκαν: η υπογραφή των όρων, το σχέδιο και τα ανά έτος ποσά της προαναφερθείσας Προγραμματικής Σύμβασης.   
 
   return (<>
 
     <div style={useStyles.tooltipTitle}>ΣΥΝΗΜΜΕΝΑ ΔΙΚΑΙΟΛΟΓΗΤΙΚΑ(Διαβιβαστικό)</div>
     <div>
-      <span style={useStyles.tooltip}>2. Δύο (2) φωτοαντίγραφα της με αρ. </span>
+      <span style={style5}>{getCopiesPhrase(state.NoPrototype, state.NoPhotocopy)}</span>
+      <span style={useStyles.tooltip}> της με αρ. </span>
       <span style={style1}>{state.ProtocolNumber ? state.ProtocolNumber : '___'}</span>
       <span style={useStyles.tooltip}>/</span>
       <span style={style2}>{state.ProtocolDate ? getDateFormatForDocument(state.ProtocolDate) : '__-__-____'}</span>
@@ -89,7 +92,7 @@ export function getDecisionBoardTooltip(state, ind) {
     </div>
     <div style={useStyles.tooltipTitle}>ΣΥΝΗΜΜΕΝΑ ΔΙΚΑΙΟΛΟΓΗΤΙΚΑ(Λογαριασμός)</div>
     <div>
-      <span style={useStyles.tooltip}>2.	Τη με αρ. </span>
+      <span style={useStyles.tooltip}>Tη με αρ. </span>
       <span style={style1}>{state.ProtocolNumber ? state.ProtocolNumber : '___'}</span>
       <span style={useStyles.tooltip}>/</span>
       <span style={style2}>{state.ProtocolDate ? getDateFormatForDocument(state.ProtocolDate) : '__-__-____'}</span>

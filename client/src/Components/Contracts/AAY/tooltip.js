@@ -1,6 +1,7 @@
 import React from 'react';
 import { getDateFormatForDocument } from '../../../Helper/helpermethods';
 import '../../../Styles/styles.css';
+import { getCopiesPhrase } from '../TooltipMethods';
 
 const useStyles = {
   tooltip: {
@@ -49,7 +50,7 @@ export function getAayTooltipTemplate(state, ind) {
   var style3 = (ind === 3 ? useStyles.tooltipIndicate : useStyles.tooltip)
   var style4 = (ind === 4 ? useStyles.tooltipIndicate : useStyles.tooltip)
   var style5 = (ind === 5 ? useStyles.tooltipIndicateBold : useStyles.tooltipBold)
-
+  var style6 = (ind === 5 ? useStyles.tooltipIndicate : useStyles.tooltip)
   //Διαβιβαστικό
   //IP: Πρωτότυπο και φωτοαντίγραφο της με αριθμ. Α00661/070524/30-03-2020/ΕΑΔ 661 ΑΔΑ ΨΛΓΘΩ6Μ-Ο5Η Απόφασης Ανάληψης Υποχρέωσης 
   //(Προκαταβολή)  7.	Πρωτότυπο και φωτοαντίγραφο της με αρ. Π00799/2018 (Α.Π. 179391/11-7-2018) και ΑΔΑ ΩΨ6ΡΩ6Μ-9ΩΠ Απόφασης Ανάληψης Υποχρέωσης
