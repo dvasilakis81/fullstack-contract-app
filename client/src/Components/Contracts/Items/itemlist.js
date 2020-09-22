@@ -62,6 +62,9 @@ class ItemList extends React.Component {
         style={{ padding: '0px', background: '#fff' }}>
         <Grid item style={{ flexGrow: '1' }}>
           <Paper square={true} style={listItemStyle}>
+            {itemToRender.Discreet ? <Typography>
+              <span style={{ fontWeight: 'bold' }}>{this.getTitle(itemToRender.Discreet)}</span>
+            </Typography> : <></>}
             <Typography>
               <span style={{ fontWeight: 'bold', width: 'auto' }}>Τίτλος:</span>
               <span style={{ marginLeft: '5px' }}>{this.getTitle(itemToRender.Title)}</span>

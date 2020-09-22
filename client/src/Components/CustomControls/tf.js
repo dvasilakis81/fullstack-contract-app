@@ -63,7 +63,7 @@ const StyledTextField = props => {
           </React.Fragment>
         }>
         <TextField
-          select
+          select          
           disabled={isDisabled}
           required={isRequired}
           id={id}

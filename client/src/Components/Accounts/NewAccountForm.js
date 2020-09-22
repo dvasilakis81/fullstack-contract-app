@@ -104,6 +104,7 @@ class NewAccountForm extends Component {
 	constructor(props) {
 		super(props);
 		this.state = {
+			loginUserInfo: this.props.token.data.user,
 			openMessage: false,
 			message: '',
 			variant: '',
@@ -158,7 +159,7 @@ class NewAccountForm extends Component {
 			PracticalDate: this.props.location.state.MonitoringCommittee ? this.props.location.state.MonitoringCommittee[0].PracticalDate : '',
 			GivenPhysicalObjectContentTime: this.props.location.state.MonitoringCommittee ? this.props.location.state.MonitoringCommittee[0].GivenPhysicalObjectContentTime : '',
 			cc: this.props.location.state.cc ? this.props.location.state.cc : [],
-			accountReservations: this.props.location.accountReservations ? this.props.location.accountReservations : []
+			accountReservations: this.props.location.accountReservations ? this.props.location.accountReservations : this.props.token.data.user.reservations
 		}
 
 		this.setCheckboxValue = this.setCheckboxValue.bind(this);
@@ -656,8 +657,6 @@ class NewAccountForm extends Component {
 					inputValue={this.state.SignName4}
 				/>
 
-				<MyTextField title='Τίτλος' id='SignType4' stateValue={this.state.SignType4} values={this.loadSignatoryTypes([3, 4])} isRequired={true} isDisabled={false} onChange={this.onChange} select={true} width='20%' />
-				<MyTextField title='Όνομα' id='SignName4' stateValue={this.state.SignName4} values={this.loadSignatories(this.state.SignName4)} isRequired={true} isDisabled={false} onChange={this.onChange} select={true} width='20%' />
 				{getCheckboxField('AbsenseOfDirector2', 'κ.κ.α.', this.state.AbsenseOfDirector2, useStyles.accountInfoItem, this.setCheckboxValue)}
 			</div>
 		</>

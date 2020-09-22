@@ -73,8 +73,8 @@ class NewContract extends Component {
 			openMessage: false,
 			message: '',
 			variant: '',
-			submitButtonDisabled: false,
-			owner: this.props.token.data.user,
+			submitButtonDisabled: false,			
+			loginUserInfo: this.props.token.data.user,
 			contractStuff: this.props.location.state ? this.props.location.state.contract.contractusers : [],
 			AllUsers: this.props.location.state ? this.props.location.state.contract.AllUsers : false,
 			OwnerId: this.props.location.state ? this.props.location.state.contract.OwnerId : this.props.token.data.id,
@@ -101,6 +101,7 @@ class NewContract extends Component {
 			AmountTotal: this.props.location.state ? Number(this.props.location.state.contract.AmountTotal) : '',
 			Start: this.props.location.state && this.props.location.state.contract.Start ? getValidMaterialDateFormat(this.props.location.state.contract.Start) : new Date(),
 			End: this.props.location.state && this.props.location.state.contract.End ? getValidMaterialDateFormat(this.props.location.state.contract.End) : new Date(),
+			Discreet: this.props.location.state && this.props.location.state.contract.Discreet ? this.props.location.state.contract.Discreet : '',
 			NumberOfAccounts: this.props.location.state ? this.props.location.state.contract.NumberOfAccounts : '',
 			HasDownPayment: this.props.location.state ? this.props.location.state.contract.HasDownPayment : false,
 			FpaValue: getFpaValueFromReservations(this.props.token.data.user.reservations)
@@ -355,6 +356,7 @@ class NewContract extends Component {
 											<MyTextField tp='text' title='Α.Φ.Μ. Αναδόχου' id='ConcessionaireAFM' stateValue={this.state.ConcessionaireAFM} isRequired={true} isDisabled={false} onChange={this.onChange} inputProps={{ style: { textAlign: 'center' } }} width='20%' />
 										</div>
 										<div style={styles.divRow}>
+											<MyTextField tp='text' title='Διακριτικός Τίτλος' id='Discreet' stateValue={this.state.Discreet} isRequired={false} isDisabled={false} onChange={this.onChange} inputProps={{ style: { textAlign: 'center', inputProps: { maxLength: 2000 } } }} multiline={true} width='100%' />
 											<MyTextField tp='text' title='Τίτλος' id='Title' stateValue={this.state.Title} isRequired={true} isDisabled={false} onChange={this.onChange} inputProps={{ style: { textAlign: 'center', inputProps: { maxLength: 2000 } } }} multiline={true} width='100%' />
 										</div>
 										<div style={styles.divRow}>
