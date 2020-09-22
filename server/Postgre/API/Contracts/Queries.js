@@ -1,7 +1,5 @@
 const util = require('util')
 const helper = require('../../../HelperMethods/helpermethods');
-const { POINT_CONVERSION_COMPRESSED } = require('constants');
-const { pool } = require('../../dbConfig');
 
 function query_insertcontract(req) {
 

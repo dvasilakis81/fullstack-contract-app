@@ -8,8 +8,7 @@ function query_getreservations() {
 function query_getuserreservations(userId) {
   return 'SELECT * ' +
     'FROM "Ordering"."UserReservations" as u ' +
-    'WHERE u."UserId"=' + helper.addQuotes(userId) +
-    ' AND u."IsReservation"=true ' + 
+    'WHERE u."UserId"=' + helper.addQuotes(userId) +    
     ' ORDER BY u."Order" ASC';
 }
 

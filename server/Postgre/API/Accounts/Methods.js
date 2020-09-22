@@ -19,9 +19,10 @@ async function getFirstAccountProtocolInfo(req, res, next) {
   }
 }
 
-async function getAccountById(contractId, accountId, accountNumber, next) {
+async function getAccountById(contractId, accountId, accountNumber, next, client) {
   try {
-    const rows = await pool.query(queries.query_getaccountbyid(contractId, accountId, accountNumber));
+    var poolQuery = client ? client : pool;
+    const { rows } = await poolQuery.query(queries.query_getaccountbyid(contractId, accountId, accountNumber));
     return rows;
   } catch (error) {
     next(error);

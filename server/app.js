@@ -219,16 +219,16 @@ app.use(cookieParser());
 console.log('ENVIROMENT: ' + ENV)
 console.log('__dirname: ' + __dirname)
 //if (ENV === 'production') {
-  console.log('ENVIROMENT: ' + ENV)
-  app.use(express.static(path.join(__dirname, '../client/build')))
-  app.use((req, res) => {
-    console.log('Redirect to index.html')
-    res.sendFile(path.join(__dirname, '../client/build/index.html'))
-  })
-  app.all('/*', function (req, res, next) {
-    console.log('Accessing all urls except all above ...')
-    res.sendFile(path.join(__dirname, '../client/build/index.html'))
-  })
+console.log('ENVIROMENT: ' + ENV)
+app.use(express.static(path.join(__dirname, '../client/build')))
+app.use((req, res) => {
+  console.log('Redirect to index.html')
+  res.sendFile(path.join(__dirname, '../client/build/index.html'))
+})
+app.all('/*', function (req, res, next) {
+  console.log('Accessing all urls except all above ...')
+  res.sendFile(path.join(__dirname, '../client/build/index.html'))
+})
 //}
 //else
 // app.use(express.static(path.join(__dirname, 'public')));
