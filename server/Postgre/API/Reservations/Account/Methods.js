@@ -12,11 +12,11 @@ async function get(req, res, next) {
   }
 }
 
-async function insert(req, res, next) {
+async function insert(userId, accountId, reservations, client, next) {
 
   try {
-
-    const { rows } = await pool.query(queries.query_insert(req));
+    var s = client ? client : pool;
+    const { rows } = await s.query(queries.query_insert(userId, accountId, reservations));
     return rows;
   }
   catch (error) {
@@ -24,11 +24,27 @@ async function insert(req, res, next) {
   }
 }
 
-async function remove(req, res, next) {
+async function remove(req, res, next, accountId, client) {
 
   try {
-    const { rows } = await pool.query(queries.query_remove(req));
+    var s = client ? client : pool;
+    const { rows } = await s.query(queries.query_remove(req, accountId));
     return rows;
+  }
+  catch (error) {
+    next(error);
+  }
+}
+
+async function sync(req, res, next) {
+
+  try {
+
+    const reservations = await get(req, res, next);
+    if (reservations && reservations.length > 0)
+      await remove(req, res, next);
+    await insert(req, res, next);
+
   }
   catch (error) {
     next(error);
@@ -36,7 +52,8 @@ async function remove(req, res, next) {
 }
 
 module.exports = {
-  get,  
-  insert,  
-  remove
+  get,
+  insert,
+  remove,
+  sync
 }

@@ -1,23 +1,22 @@
-var pool = require('../../dbConfig').pool
-var queries = require('./Queries');
 
-async function insertInvoice(req, res, next, accountId) {
+var queries = require('./Queries');
+async function insertInvoice(req, res, next, accountId, client) {
 
   try {
-    const { rows } = await pool.query(queries.query_insert(req, accountId));
+    const { rows } = await client.query(queries.query_insert(req, accountId));
     return rows;
   } catch (error) {
-    next(error);
+    throw error;
   }
 }
 
-async function updateInvoice(req, res, next) {
+async function updateInvoice(req, res, next, client) {
 
   try {
-    const { rows } = await pool.query(queries.query_update(req));
+    const { rows } = await client.query(queries.query_update(req));
     return rows;
   } catch (error) {
-    next(error);
+    throw error;
   }
 }
 

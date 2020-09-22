@@ -16,7 +16,7 @@ const insertDocumentSignatures = (req, res, next, accountInfo) => {
         res.status(200).json(results.rows[0].Id);
       else {
 
-        var sqlQuery = 'INSERT INTO "Ordering"."DocumentSignatory"("AccountId","SignatoryTypeId","SignatoryId","DocumentType","Absense") VALUES ';
+        var sqlQuery = 'INSERT INTO "Ordering"."DocumentSignatory"("AccountId","SignatoryTitle","SignatoryName","DocumentType","Absense","Type") VALUES ';
         for (var i = 0; i < signatureValues.length; i++) {
           sqlQuery += util.format('(%s,%s,%s,%s,%s)', signatureValues[i][0], signatureValues[i][1], signatureValues[i][2], signatureValues[i][3], signatureValues[i][4])
           if (i < signatureValues.length - 1)

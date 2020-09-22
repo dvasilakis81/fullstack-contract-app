@@ -11,7 +11,7 @@ async function getReservations(req, res, next) {
   }
 }
 
-async function getUserReservations(req, res, next, userId) {
+async function getUserReservations(userId, next) {
 
   try {
     const { rows } = await pool.query(queries.query_getuserreservations(userId));

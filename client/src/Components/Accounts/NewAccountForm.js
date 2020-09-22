@@ -126,8 +126,7 @@ class NewAccountForm extends Component {
 			ProtocolNumber: this.props.location.state.ProtocolNumber,
 			ProtocolDate: this.props.location.state.ProtocolDate,
 			FirstAccountProtocolNumber: this.props.location.state.FirstAccountProtocolNumber,
-			FirstAccountProtocolDate: this.props.location.state.FirstAccountProtocolDate,
-			IsFirstOfTheYear: this.props.location.state.IsFirstOfTheYear,
+			FirstAccountProtocolDate: this.props.location.state.FirstAccountProtocolDate,			
 			WorkConfirmationDate: this.props.location.state.WorkConfirmationDate,
 			DeliveryGoodsDate: this.props.location.state.DeliveryGoodsDate,
 			AayValue: this.props.location.state.AayValue,
@@ -499,8 +498,7 @@ class NewAccountForm extends Component {
 			{this.addFirstAccountProtocolInfo()}
 			<div style={useStyles.divRowFlex}>
 				<MyTextField tm={getAccountStartDateTooltipTemplate(this.state)} tp='date' title='Έναρξη Λογαριασμού' id='Start' stateValue={this.state.Start} isRequired={false} isDisabled={false} onChange={this.onChange} />
-				<MyTextField tm={getAccountStartDateTooltipTemplate(this.state)} tp='date' title='Λήξη Λογαριασμού' id='End' stateValue={this.state.End} isRequired={false} isDisabled={false} onChange={this.onChange} />
-				{getCheckboxField('IsFirstOfTheYear', '1ος τους έτους', this.state.IsFirstOfTheYear, useStyles.accountInfoItem, this.setCheckboxValue)}
+				<MyTextField tm={getAccountStartDateTooltipTemplate(this.state)} tp='date' title='Λήξη Λογαριασμού' id='End' stateValue={this.state.End} isRequired={false} isDisabled={false} onChange={this.onChange} />				
 			</div>
 			<div style={useStyles.divRowFlex}>
 				<MyTextField tp='number' title='Καθαρό Ποσό' id='AmountPure' stateValue={this.state.AmountPure} isRequired={true} isDisabled={false} onChange={this.onChange} inputProps={{ style: { textAlign: "center" } }} InputProps={{ endAdornment: <InputAdornment position="end"><span style={{ fontWeight: 'bolder', marginRight: '10px' }}>€</span></InputAdornment> }} />

@@ -34,7 +34,7 @@ function setArrayWithProtocolDates(body) {
 	return inputDates;
 }
 function getAttachmentsInOrder(body) {
-	var ret = '';	
+	var ret = '';
 	var inputDates = setArrayWithProtocolDates(body);
 
 	for (let index = 0; index < inputDates.length; index++) {
@@ -94,7 +94,7 @@ function getAttachmentDecisionBoard(body) {
 	if (body.DecisionBoard) {
 		for (let index = 0; index < body.DecisionBoard.length; index++) {
 			const element = body.DecisionBoard[index];
-			var rText = util.format("Δύο (2) φωτοαντίγραφα της υπ' αριθ. %s/%s ", element.ProtocolNumber, element.ProtocolDate);
+			var rText = util.format("%s της υπ' αριθ. %s/%s ", helper.getCopiesPhrase(element), element.ProtocolNumber, element.ProtocolDate);
 			var lText = util.format('Απόφασης του Δημοτικού Συμβουλίου %s', (element.ContentTransmission ? element.ContentTransmission : ''));
 
 			ret += '<w:p>' +
@@ -122,7 +122,9 @@ function getAttachmentDecisionCoordinatorDecentrilizedAdministration(body) {
 		for (let index = 0; index < body.DecisionCoordinatorDecentrilizedAdministration.length; index++) {
 			const element = body.DecisionCoordinatorDecentrilizedAdministration[index];
 
-			var rText = util.format('Δύο (2) φωτοαντίγραφα της με Α.Π. %s/%s Απόφασης του Συντονιστή της Αποκεντρωμένης Διοίκησης Αττικής ', element.ProtocolNumber, element.ProtocolDate)
+			var rText = util.format('%s της με Α.Π. %s/%s Απόφασης του Συντονιστή της Αποκεντρωμένης Διοίκησης Αττικής ',
+				helper.getCopiesPhrase(element),
+				element.ProtocolNumber, element.ProtocolDate);
 			var lText = util.format('%s %s Α.Δ.Σ.', element.ActionTransmission, element.DecisionBoardProtocol);
 			if (element.APDA_ProtocolNumber)
 				lText += util.format('(Α.Π.Δ.Α. %s/%s)', element.APDA_ProtocolNumber, element.APDA_ProtocolDate);
@@ -150,7 +152,8 @@ function getAttachmentCourtOfAuditors(body) {
 	if (body.CourtOfAuditors) {
 		for (let index = 0; index < body.CourtOfAuditors.length; index++) {
 			const element = body.CourtOfAuditors[index];
-			var rText = util.format('Δύο (2) φωτοαντίγραφα της Κοινοποίησης της με αρ. %s/%s Πράξης του %s Κλιμακίου του Ελεγκτικού Συνεδρίου',
+			var rText = util.format('%s της Κοινοποίησης της με αρ. %s/%s Πράξης του %s Κλιμακίου του Ελεγκτικού Συνεδρίου',
+				helper.getCopiesPhrase(element),
 				element.ProtocolNumber,
 				element.ProtocolYear,
 				element.ScaleNumber)
@@ -344,7 +347,10 @@ function getAuthorDocumentedRequest(body, protocolDate) {
 				element = body.ADR[index];
 		}
 
-		var rText = util.format("Πρωτότυπο και φωτοαντίγραφο της με αριθμ. %s/%s", element.ProtocolNumber, element.ProtocolDate);
+		var rText = util.format("%s της με αριθμ. %s/%s",
+			helper.getCopiesPhrase(element),
+			element.ProtocolNumber,
+			element.ProtocolDate);
 		var lText = ' Τεκμηριωμένου Αιτήματος του Διατάκτη';
 		ret += '<w:p>' +
 			'<w:pPr>' +
@@ -439,7 +445,10 @@ function getAttachmentsForEconomicalCommittee(body, protocolDate) {
 			if (body.EconomicalCommittee[index].ProtocolDate === protocolDate)
 				element = body.EconomicalCommittee[index];
 		}
-		var rText = util.format("Δύο (2) φωτοαντίγραφα της υπ' αριθ. %s/%s ", element.ProtocolNumber, element.ProtocolDate);
+		var rText = util.format("%s της υπ' αριθ. %s/%s ",
+			helper.getCopiesPhrase(element),
+			element.ProtocolNumber,
+			element.ProtocolDate);
 		var lText = util.format('Πράξης της Οικονομικής Επιτροπής %s.', body.Account[0].EconomicalCommittee[0].Content ? body.Account[0].EconomicalCommittee[0].Content : '');
 
 		ret += '<w:p>' +
@@ -560,7 +569,7 @@ function getAttachmentsForMonitoringCommittee(body) {
 	return ret;
 }
 
-function getAttachmentsXmlValue(body) {	
+function getAttachmentsXmlValue(body) {
 	var ret = '<w:p>' +
 		'<w:pPr>' +
 		'<w:spacing w:before="240"/>' +

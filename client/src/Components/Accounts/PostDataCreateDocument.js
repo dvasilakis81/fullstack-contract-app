@@ -186,8 +186,7 @@ export function createTransmissionDocument(contractInfo, accountInfo, paidAmount
       Invoice: getInvoiceDataToPost(accountInfo),
       AYY: getAAYDataToPost(accountInfo),
       MonitoringCommittee: accountInfo.monitoringcommittee,
-      FirstAccountProtocol: firstAccountProtocol,
-      IsFirstOfTheYear: accountInfo.IsFirstOfTheYear,
+      FirstAccountProtocol: firstAccountProtocol,      
       CC: accountInfo.cc
     }],
     DecisionBoard: contractInfo.decisionboard,

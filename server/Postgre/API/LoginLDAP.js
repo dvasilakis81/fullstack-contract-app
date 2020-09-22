@@ -36,7 +36,7 @@ function searchLoginUser(request, response, next, username, password) {
       console.log("Error in search " + err)
     else {
       res.on('searchEntry', function (entry) {
-        loginUser.push(entry.object);        
+        loginUser.push(entry.object);
         authenticateDN(request, response, next, entry.object, password);
       });
       res.on('searchReference', function (referral) {
@@ -87,9 +87,9 @@ function authenticateDN(request, response, next, user, password) {
 
 function searchForDirectionInfo(request, response, next, user) {
 
-  var opts = {    
+  var opts = {
     // filter: '(ou=' + user.ou + ')',
-     filter: "(objectclass=organizationalUnit)",
+    filter: "(objectclass=organizationalUnit)",
     // filter: 'ou=Δ.ΓΕΝΙΚΟΣ ΓΡΑΜΜΑΤΕΑΣ,ou=ΟΕΥ,ou=ΠΡΟΣΩΠΑ,ou=OEY,dc=cityofathens,dc=gr',
     scope: 'sub',
     attributes: ['*']
@@ -98,7 +98,7 @@ function searchForDirectionInfo(request, response, next, user) {
   var results = [];
   var queryOEY = 'ou=OEY,dc=cityofathens,dc=gr';
   //var queryOEY = 'ou=ΟΕΥ,ou=ΠΡΟΣΩΠΑ,ou=OEY,dc=cityofathens,dc=gr';
-  
+
   client.search(queryOEY, opts, function (err, res) {
     if (err)
       console.log("Error in search " + err);
@@ -116,7 +116,10 @@ function searchForDirectionInfo(request, response, next, user) {
       res.on('end', function (result) {
         console.log('status: ' + result.status);
         if (results && results.length > 0)
+        {
           user.supervisor = results[0].uid;
+          user.supervisorName = results[0].uid;
+        }
         searchForDirector(request, response, next, user);
       });
     }
@@ -150,15 +153,17 @@ function searchForSupervisor(request, response, next, user) {
       });
       res.on('end', function (result) {
         console.log('status: ' + result.status);
-        if (results && results.length > 0)
+        if (results && results.length > 0){
           user.supervisor = results[0].uid;
+          user.supervisorName = results[0].cn;
+        }
         searchForDirector(request, response, next, user);
       });
     }
   });
 }
 
-function searchForDirector(req, response, next, user) {
+function searchForDirector(req, res, next, user) {
 
   var opts = {
     filter: '(objectClass=*)',
@@ -169,55 +174,50 @@ function searchForDirector(req, response, next, user) {
 
   var results = [];
   var queryOEY = 'ou=OEY,dc=cityofathens,dc=gr';
-  client.search(queryOEY, opts, function (err, res) {
+  client.search(queryOEY, opts, function (err, searchresult) {
     if (err)
       console.log("Error in search " + err);
     else {
-      res.on('searchEntry', function (entry) {
+      searchresult.on('searchEntry', function (entry) {
         results.push(entry.object);
       });
-      res.on('searchReference', function (referral) {
+      searchresult.on('searchReference', function (referral) {
         console.log('referral: ' + referral.uris.join());
       });
-      res.on('error', function (err) {
+      searchresult.on('error', function (err) {
         console.error('error: ' + err.message);
-        res.send('error: ' + err.message);
+        searchresult.send('error: ' + err.message);
       });
-      res.on('end', async function (result) {
+      searchresult.on('end', async function (result) {
 
         //setup user reservations
-        const userReservations = await reservationsMethods.getUserReservations(req, res, next, user.uid);
+        const userReservations = await reservationsMethods.getUserReservations(req, searchresult, next, user.uid);
         if (userReservations && userReservations.length > 0)
           user.reservations = userReservations;
         else {
-          const reservations = await reservationsMethods.getReservations(req, res, next);
+          const reservations = await reservationsMethods.getReservations(req, searchresult, next);
           await reservationsMethods.initializeUserReservations(reservations, user.uid);
-          user.reservations = await reservationsMethods.getUserReservations(req, res, next, user.uid);
+          user.reservations = await reservationsMethods.getUserReservations(req, searchresult, next, user.uid);
         }
 
-        if (results && results.length > 0)
+        if (results && results.length > 0){
           user.director = results[0].uid;
-          
-        let token = jwt.sign({ username: user.uid }, secretKey, { expiresIn: ('2h') });
-        response.status(200).json({
-          success: true,
-          id: user.uid,
-          user: user,
-          token: token,
-          expiresAt: helper.getExpiresAt(token, jwt, secretKey)
-        });
+          user.directorName = results[0].cn;          
+        }
+
+        searchForPeopleThatBelongsToTheSameDirection(req, res, next, user);
       });
     }
   });
 }
 
-function searchForPeopleThatBelongsToTheSameDirection(request, response, next, direction) {
+function searchForPeopleThatBelongsToTheSameDirection(re, res, next, user) {
   var opts = {
     filter: '(objectClass=*)',
     //filter: '(&(uid=2)(sn=John))',// and search
     //filter: '(|(uid=2)(sn=John)(cn=Smith))', // or search
     //filter: '(uid=d.vasilakis)',
-    filter: '(ou=' + direction + ')',
+    filter: '(departmentNumber=' + user.departmentNumber + ')',
     scope: 'sub',
     //attributes: ['sn']
     attributes: ['*']
@@ -226,23 +226,30 @@ function searchForPeopleThatBelongsToTheSameDirection(request, response, next, d
   var queryOEY = 'ou=OEY,dc=cityofathens,dc=gr';
   // var queryGroups = 'cn=delme,ou=groups,ou=OEY,dc=cityofathens,dc=gr';
 
-  client.search(queryOEY, opts, function (err, res) {
+  client.search(queryOEY, opts, function (err, searchresult) {
     if (err)
       console.log("Error in search " + err);
     else {
-      res.on('searchEntry', function (entry) {
+      searchresult.on('searchEntry', function (entry) {
         results.push(entry.object);
       });
-      res.on('searchReference', function (referral) {
+      searchresult.on('searchReference', function (referral) {
         console.log('referral: ' + referral.uris.join());
       });
-      res.on('error', function (err) {
-        console.error('error: ' + err.message);
-        response.send('error: ' + err.message);
+      searchresult.on('error', function (err) {        
+        searchresult.send('error: ' + err.message);
       });
-      res.on('end', function (result) {
-        console.log('status: ' + result.status);
-        response.send(results);
+      searchresult.on('end', function (result) {
+        
+        user.users = results;
+        let token = jwt.sign({ username: user.uid }, secretKey, { expiresIn: ('2h') });
+        res.status(200).json({
+          success: true,
+          id: user.uid,
+          user: user,
+          token: token,
+          expiresAt: helper.getExpiresAt(token, jwt, secretKey)
+        });
       });
     }
   });

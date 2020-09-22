@@ -19,7 +19,6 @@ var helmet = require('helmet')
 var app = express();
 
 var dbContract = require('./Postgre/API/Contracts/ContractAPI')
-
 var dbAccount = require('./Postgre/API/Accounts/AccountAPI')
 var dbError = require('./Postgre/API/Error/Error')
 //var dbLogin = require('./Postgre/API/Login')
@@ -164,7 +163,7 @@ app.post('/deleteuserreservation', dbLogin.checkToken, dbUserReservations.remove
 app.get('/directions', dbLogin.checkToken, dbParametric.getDirections);
 app.get('/contracttypes', dbLogin.checkToken, dbParametric.getContractTypes);
 app.get('/agencies', dbLogin.checkToken, dbParametric.getAgencies);
-app.get('/signatories', dbLogin.checkToken, dbParametric.getSignatories);
+app.post('/signatories', dbLogin.checkToken, dbParametric.getSignatories);
 app.get('/signatorytypes', dbLogin.checkToken, dbParametric.getSignatoryTypes);
 app.get('/errormessages', dbLogin.checkToken, dbParametric.getErrorMessages);
 app.post('/contractexists', dbLogin.checkToken, dbContract.contractExists);

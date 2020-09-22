@@ -11,11 +11,11 @@ function query_getfirstaccountprotocolinfo(req) {
 }
 
 
-function query_getaccountbyid(req) {
+function query_getaccountbyid(contractId, accountId, accountNumber) {
 
-  const contractId = req.body.ContractId;
-  const accountNumber = req.body.AccountNumber;
-  const accountId = req.body.AccountInfo ? req.body.AccountInfo.Id : req.body.AccountId;
+  //const contractId = req.body.ContractId;
+  //const accountNumber = req.body.AccountNumber;
+  //const aid = accountId ? accountId : req.body.AccountId;
 
   return getSelectClauseGetAccount(contractId) +
     'FROM "Ordering"."Account" as a ' +
@@ -40,7 +40,7 @@ function query_getaccountinfo(req) {
 
   return util.format('SELECT * ' +
     'FROM "Ordering"."Account" as acc ' +
-    'WHERE acc."ContractId"=%s AND acc."Number"=%s', helper.addQuotes(contractId), helper.addQuotes(req.body.AccountNumber));
+    'WHERE acc."ContractId"=%s AND acc."Number"=%s', helper.addQuotes(contractId), helper.addQuotes(accountNumber));
 }
 
 function getWhereClauseGetAccount(contractId, accountNumber, accountId) {
@@ -58,17 +58,15 @@ function getSelectClauseGetAccount(contractId) {
     '(SELECT json_agg(Invoice) FROM (SELECT * FROM "Ordering"."Invoice" as i WHERE i."AccountId" = a."Id") Invoice) AS Invoice, ' +
     '(SELECT json_agg(CC) FROM (SELECT * FROM "Ordering"."CC" as cc WHERE cc."AccountId" = a."Id") CC) AS CC, ' +
     '(SELECT json_agg(MonitoringCommittee) FROM (SELECT * FROM "Ordering"."MonitoringCommittee" as mm WHERE mm."AccountId" = a."Id") MonitoringCommittee) AS MonitoringCommittee, ' +
-    '(SELECT json_agg(DocumentSignatory) FROM ( SELECT *, ( SELECT json_agg(Signatory) FROM ( SELECT * FROM "Ordering"."Signatory" as sg WHERE sg."Id" = ds."SignatoryId") Signatory) AS Signatory, ' +
-    '(SELECT json_agg(SignatoryType) FROM ( SELECT * FROM "Ordering"."SignatoryType" as sgt WHERE sgt."Id" = ds."SignatoryTypeId") SignatoryType) AS SignatoryType ' +
-    'FROM "Ordering"."DocumentSignatory" as ds WHERE ds."AccountId" = a."Id") DocumentSignatory) AS DocumentSignatory ', contractId);
+    '(SELECT json_agg(DocumentSignatory) FROM (SELECT * FROM "Ordering"."DocumentSignatory" as ds WHERE ds."AccountId" = a."Id") DocumentSignatory) AS DocumentSignatory ', 
+    contractId);
 }
-
 
 function query_insertaccount(req) {
   return util.format('INSERT INTO "Ordering"."Account"("ContractId","Number","Start","End", ' +
-    '"AmountPure","AmountFpa","AmountTotal","ProtocolNumber","ProtocolDate", "AmountFullWritten", "IsFirstOfTheYear",' +
+    '"AmountPure","AmountFpa","AmountTotal","ProtocolNumber","ProtocolDate", "AmountFullWritten",' +
     '"WorkConfirmationDate","DeliveryGoodsDate", "DocumentDate", "FirstAccountProtocolNumber", "FirstAccountProtocolDate", "DateCreated", "DateModified") ' +
-    'VALUES(%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s) ' +
+    'VALUES(%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s) ' +
     'RETURNING * ',
     helper.addQuotes(req.body.ContractId),
     helper.addQuotes(req.body.AccountNumber),
@@ -79,8 +77,7 @@ function query_insertaccount(req) {
     helper.addQuotes(req.body.AmountTotal),
     helper.addQuotes(req.body.ProtocolNumber),
     helper.addQuotes(req.body.ProtocolDate),
-    helper.addQuotes(req.body.AmountFullWritten),
-    req.body.IsFirstOfTheYear,
+    helper.addQuotes(req.body.AmountFullWritten),    
     helper.addQuotes(req.body.WorkConfirmationDate),
     helper.addQuotes(req.body.DeliveryGoodsDate),
     helper.addQuotes(req.body.DocumentDate),
@@ -93,7 +90,7 @@ function query_insertaccount(req) {
 function query_updateaccount(req) {
   return util.format('UPDATE "Ordering"."Account" ' +
     'SET "Start"=%s,"End"=%s,"AmountPure"=%s,"AmountFpa"=%s,"AmountTotal"=%s,"ProtocolNumber"=%s,"ProtocolDate"=%s,"AmountFullWritten"=%s,' +
-    '"IsFirstOfTheYear"=%s,"WorkConfirmationDate"=%s,"DeliveryGoodsDate"=%s,"DocumentDate"=%s,"FirstAccountProtocolNumber"=%s,"FirstAccountProtocolDate"=%s, "DateModified"=%s ' +
+    '"WorkConfirmationDate"=%s,"DeliveryGoodsDate"=%s,"DocumentDate"=%s,"FirstAccountProtocolNumber"=%s,"FirstAccountProtocolDate"=%s, "DateModified"=%s ' +
     'WHERE "Id"=%s ' +
     'RETURNING *',
     helper.addQuotes(req.body.Start),
@@ -103,8 +100,7 @@ function query_updateaccount(req) {
     helper.addQuotes(req.body.AmountTotal),
     helper.addQuotes(req.body.ProtocolNumber),
     helper.addQuotes(req.body.ProtocolDate),
-    helper.addQuotes(req.body.AmountFullWritten),
-    req.body.IsFirstOfTheYear,
+    helper.addQuotes(req.body.AmountFullWritten),    
     helper.addQuotes(req.body.WorkConfirmationDate),
     helper.addQuotes(req.body.DeliveryGoodsDate),
     helper.addQuotes(req.body.DocumentDate),
