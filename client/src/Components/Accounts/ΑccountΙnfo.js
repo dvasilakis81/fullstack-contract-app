@@ -237,7 +237,7 @@ class AccountInfo extends React.Component {
 		this.setState({ syncButtonDisabled: true });
 		var contractDetails = this.props.isSearchMode ? this.props.contractDetailsSearchMode : this.props.contractDetails;
 		var dataToPost = {
-			userId: this.props.token.data.user.uid,
+			loginUserInfo: this.props.token.data.user,
 			ContractId: contractDetails.Id,
 			AccountInfo: this.props.account,
 			userreservations: this.props.token.data.user.reservations
@@ -931,15 +931,23 @@ class AccountInfo extends React.Component {
 		}
 
 		if (userReservations && accountReservations) {
-			if (userReservations.length !== accountReservations.length)
-				ret = false;
-			else {
-				for (let index = 0; index < userReservations.length; index++) {
-					var found = false;
 
-					const ur = userReservations[index];
+			for (let index = 0; index < userReservations.length; index++) {
+
+
+				var found = false;
+
+				const ur = userReservations[index];
+				if (ur.IsReservation === false)
+					continue;
+
+				if (ur.IsReservation === true) {
+
 					for (let index = 0; index < accountReservations.length; index++) {
 						const ar = accountReservations[index];
+						if (ar.IsReservation === false)
+							continue;
+
 						if (ur.Name === ar.Name) {
 							found = true;
 
@@ -970,15 +978,17 @@ class AccountInfo extends React.Component {
 							break;
 						}
 					}
-					if (found === false) {
-						ret = false;
-						break;
-					}
-
-					if (ret === false)
-						break;
 				}
+
+				if (found === false) {
+					ret = false;
+					break;
+				}
+
+				if (ret === false)
+					break;
 			}
+
 		}
 
 		return ret;
