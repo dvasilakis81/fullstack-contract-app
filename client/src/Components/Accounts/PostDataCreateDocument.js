@@ -196,9 +196,9 @@ export function createTransmissionDocument(contractInfo, accountInfo, paidAmount
     ADR: contractInfo.authordocumentedrequest,
     SnippetPractical: contractInfo.snippetpractical,
     Signature: [{
-      SignatoryTitle: accountInfo.documentsignatory[3].signatorytype[0].Name,
-      Kaa: accountInfo.documentsignatory[3].Absense ? 'κ.κ.α' : '',
-      SignatoryName: accountInfo.documentsignatory[3].signatory[0].Name
+      SignatoryTitle: accountInfo.documentsignatory[3].SignatoryTitle,
+      Kaa: accountInfo.documentsignatory[3].Absense === true ? 'κ.κ.α' : '',
+      SignatoryName: accountInfo.documentsignatory[3].SignatoryName
     }]
   };
 
@@ -218,21 +218,25 @@ export function createAccountDocument(contractInfo, accountInfo, paidAmount, res
   var ForemanDirectionName = '';
   var ForemanDirectionAbsense = '';
 
+
+  // SignatoryTitle: accountInfo.documentsignatory[3].SignatoryTitle,
+  //     Kaa: accountInfo.documentsignatory[3].Absense === true ? 'κ.κ.α' : '',
+  //     SignatoryName: accountInfo.documentsignatory[3].SignatoryName
   if (accountInfo.documentsignatory) {
     for (let index = 0; index < accountInfo.documentsignatory.length; index++) {
       const element = accountInfo.documentsignatory[index];
 
-      if (element.signatorytype[0].Id === 1 || element.signatorytype[0].Id === 2) {
-        WriterTitle = element.signatorytype[0].Name
-        WriterName = element.signatory[0].Name;
-      } else if (element.signatorytype[0].Id === 3 || element.signatorytype[0].Id === 4) {
-        ForemanDirectionAbsense = element.Absense ? 'κ.α.α' : '';
-        ForemanDirectionTitle = element.signatorytype[0].Name;
-        ForemanDirectionName = element.signatory[0].Name;
-      } else if (element.signatorytype[0].Id === 5 || element.signatorytype[0].Id === 6) {
-        ForemanDepartmentTitle = element.signatorytype[0].Name
-        ForemanDepartmentName = element.signatory[0].Name;
-      }
+      if (element.Type === 1) {
+        WriterTitle = element.SignatoryTitle;
+        WriterName = element.SignatoryName;
+      } else if (element.Type === 2) {
+        ForemanDepartmentTitle = element.SignatoryTitle
+        ForemanDepartmentName = element.SignatoryName;
+      } else if (element.Type === 3) {
+        ForemanDirectionAbsense = element.Absense === true ? 'κ.α.α' : '';
+        ForemanDirectionTitle = element.SignatoryTitle;
+        ForemanDirectionName = element.SignatoryName;
+      } 
     }
   }
 
