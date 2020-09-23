@@ -30,7 +30,13 @@ function query_delete(req) {
 
 function query_getpreviousaccount(req) {
   var contractId = req.body.ContractId;
-  var sqlQuery = util.format('SELECT a."Id",MAX(a."Number") ' +
+  // var sqlQuery = util.format('SELECT a."Id",MAX(a."Number") ' +
+  //   'FROM "Ordering"."Account" as a ' +
+  //   'WHERE a."ContractId"=%s ' +
+  //   'GROUP BY a."Id"',
+  //   helper.addQuotes(contractId));
+
+  var sqlQuery = util.format('SELECT a."Id",a."Number" ' +
     'FROM "Ordering"."Account" as a ' +
     'WHERE a."ContractId"=%s ' +
     'GROUP BY a."Id"',
@@ -41,7 +47,7 @@ function query_getpreviousaccount(req) {
 
 function query_getccfromaccount(req, previousAccount) {
   var sqlQuery = util.format('SELECT * FROM "Ordering"."CC" as cc Where cc."ContractId"=%s AND cc."AccountId"=%s ORDER BY cc."Order" ',
-    helper.addQuotes(req.body.ContractId), helper.addQuotes(previousAccount[0].Id));
+    helper.addQuotes(req.body.ContractId), helper.addQuotes(previousAccount.Id));
   return sqlQuery;
 }
 

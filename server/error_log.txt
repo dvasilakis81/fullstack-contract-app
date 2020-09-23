@@ -1,4 +1,0 @@
-Message: Cannot access 'accountRows' before initialization
-Stack: ReferenceError: Cannot access 'accountRows' before initialization
-    at insertAccount (/home/d.vasilakis/Ordering_Development/server/Postgre/API/Accounts/AccountAPI.js:34:25)
-    at processTicksAndRejections (internal/process/task_queues.js:97:5)

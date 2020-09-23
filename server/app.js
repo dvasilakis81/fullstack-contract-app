@@ -135,7 +135,6 @@ app.post('/logClientError', function (req, res, next) {
 //app.get('/users', dbLogin.checkToken, dbParametric.getUsers);
 //app.get('/userroles', dbLogin.checkToken, dbParametric.getUserRoles);
 
-
 app.post('/createcontracttype', dbLogin.checkToken, dbParametric.createContractType);
 app.post('/updatecontracttype', dbLogin.checkToken, dbParametric.updateContractType);
 app.post('/deletecontracttype', dbLogin.checkToken, dbParametric.deleteContractType);
@@ -155,11 +154,9 @@ app.post('/createsignatorytype', dbLogin.checkToken, dbParametric.createSignator
 app.post('/updatesignatorytype', dbLogin.checkToken, dbParametric.updateSignatoryType);
 app.post('/deletesignatorytype', dbLogin.checkToken, dbParametric.deleteSignatoryType);
 app.post('/deleteerrormessage', dbLogin.checkToken, dbParametric.deleteErrorMessage);
-
 app.post('/createuserreservation', dbLogin.checkToken, dbUserReservations.insert);
 app.post('/updateuserreservation', dbLogin.checkToken, dbUserReservations.update);
 app.post('/deleteuserreservation', dbLogin.checkToken, dbUserReservations.remove);
-
 app.get('/directions', dbLogin.checkToken, dbParametric.getDirections);
 app.get('/contracttypes', dbLogin.checkToken, dbParametric.getContractTypes);
 app.get('/agencies', dbLogin.checkToken, dbParametric.getAgencies);
@@ -168,21 +165,17 @@ app.get('/signatorytypes', dbLogin.checkToken, dbParametric.getSignatoryTypes);
 app.get('/errormessages', dbLogin.checkToken, dbParametric.getErrorMessages);
 app.post('/contractexists', dbLogin.checkToken, dbContract.contractExists);
 app.post('/contracts', dbLogin.checkToken, dbContract.getContracts);
-
 //app.get('/contracts_webix', dbContract.getContracts_WEBIX);
 //app.get('/getremainamountofcontract', dbLogin.checkToken, dbAccount.getRemainAmountOfContract);
-
 app.get('/searchcontracts', dbContract.searchContracts);
 app.post('/insertcontract', dbLogin.checkToken, dbContract.insertContract);
 app.post('/deletecontract', dbLogin.checkToken, dbContract.deleteContract);
 app.post('/updatecontract', dbLogin.checkToken, dbContract.updateContract);
 app.get('/getfirstaccountprotocolinfo', dbLogin.checkToken, dbAccount.getFirstAccountProtocolInfo);
-
 // app.get('/getaccountsinfo', dbLogin.checkToken, dbAccount.getAccountsInfo);
 app.post('/getaccount', dbLogin.checkToken, dbAccount.getAccountById);
 app.post('/insertaccount', dbLogin.checkToken, dbAccount.insertAccount);
 app.post('/updateaccount', dbLogin.checkToken, dbAccount.updateAccount);
-
 app.post('/insertdecisionboard', dbLogin.checkToken, dbBoardDecision.insert);
 app.post('/updatedecisionboard', dbLogin.checkToken, dbBoardDecision.update);
 app.post('/deletedecisionboard', dbLogin.checkToken, dbBoardDecision.remove);
