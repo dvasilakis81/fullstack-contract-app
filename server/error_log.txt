@@ -1,12 +1,4 @@
-Message: Cannot read property 'query' of undefined
-Stack: TypeError: Cannot read property 'query' of undefined
-    at Object.remove (/home/d.vasilakis/Ordering_Production/server/Postgre/API/Reservations/Account/Methods.js:30:35)
-    at sync (/home/d.vasilakis/Ordering_Production/server/Postgre/API/Reservations/Account/API.js:23:38)
-    at Layer.handle [as handle_request] (/home/d.vasilakis/Ordering_Production/node_modules/express/lib/router/layer.js:95:5)
-    at next (/home/d.vasilakis/Ordering_Production/node_modules/express/lib/router/route.js:137:13)
-    at /home/d.vasilakis/Ordering_Production/server/Postgre/API/LoginLDAP.js:275:9
-    at /home/d.vasilakis/Ordering_Production/node_modules/jsonwebtoken/verify.js:223:12
-    at getSecret (/home/d.vasilakis/Ordering_Production/node_modules/jsonwebtoken/verify.js:90:14)
-    at Object.module.exports [as verify] (/home/d.vasilakis/Ordering_Production/node_modules/jsonwebtoken/verify.js:94:10)
-    at checkToken (/home/d.vasilakis/Ordering_Production/server/Postgre/API/LoginLDAP.js:264:9)
-    at Layer.handle [as handle_request] (/home/d.vasilakis/Ordering_Production/node_modules/express/lib/router/layer.js:95:5)
+Message: Cannot access 'accountRows' before initialization
+Stack: ReferenceError: Cannot access 'accountRows' before initialization
+    at insertAccount (/home/d.vasilakis/Ordering_Development/server/Postgre/API/Accounts/AccountAPI.js:34:25)
+    at processTicksAndRejections (internal/process/task_queues.js:97:5)

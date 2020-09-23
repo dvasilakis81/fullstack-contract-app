@@ -16,8 +16,12 @@ async function insert(userId, accountId, reservations, client, next) {
 
   try {
     var s = client ? client : pool;
-    const { rows } = await s.query(queries.query_insert(userId, accountId, reservations));
-    return rows;
+    if (reservations && reservations.length > 0) {
+      const { rows } = await s.query(queries.query_insert(userId, accountId, reservations));
+      return rows;
+    }
+    else
+      return null;
   }
   catch (error) {
     next(error);

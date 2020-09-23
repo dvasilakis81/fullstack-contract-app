@@ -1,7 +1,7 @@
 var pool = require('../../../dbConfig').pool
 var queries = require('./Queries');
 
-async function getReservations(req, res, next) {
+async function getReservations(req, next) {
 
   try {
     const { rows } = await pool.query(queries.query_getreservations(req));

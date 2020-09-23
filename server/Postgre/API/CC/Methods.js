@@ -6,15 +6,10 @@ var queries = require('./Queries');
 async function insertCC(req, res, next, accountId, client) {
 
   try {
-    const { rows } = await client.query(queries.query_get(accountId));
-    if (rows && rows.length > 0)
-      res.status(200).json(results.rows[0].Id);
-    else {
-      const { rows } = await client.query(queries.query_insert(req, accountId));
-      return rows;
-    }
+    const { rows } = await client.query(queries.query_insert(req, accountId));
+    return rows;
   } catch (e) {
-    throw e;
+    next(error);
   }
 }
 
@@ -27,7 +22,7 @@ async function updateCC(req, res, next, client) {
       return rows;
     }
   } catch (e) {
-    throw e;
+    next(error);
   }
 }
 

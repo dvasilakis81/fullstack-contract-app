@@ -6,7 +6,8 @@ var userReservationsMethods = require('../../Reservations/User/Methods');
 async function insert_reservations(req, res, next, accountId, client) {
 
   try {
-    await accountReservationsMethods.insert(req.body.loginUserInfo.uid, accountId, req.body.reservations, client, next);
+    var reservations = req.body.reservations ? req.body.reservations : req.body.accountReservations;
+    await accountReservationsMethods.insert(req.body.loginUserInfo.uid, accountId, reservations, client, next);
   } catch (error) {
     next(error);
   }

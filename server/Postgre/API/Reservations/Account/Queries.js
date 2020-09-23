@@ -33,17 +33,19 @@ function query_insert(userId, accountId, reservations) {
 
   var sqlQuery = util.format('INSERT INTO "Ordering"."AccountReservations"("UserId", "AccountId","Name","Percentage","Stamp","StampOGA", "IsReservation", "Order") VALUES ');
   for (var i = 0; i < reservations.length; i++) {
-    sqlQuery += util.format('(%s,%s,%s,%s,%s,%s,%s,%s)',
-      helper.addQuotes(userId),
-      helper.addQuotes(accountId),
-      helper.addQuotes(reservations[i].Name),
-      helper.addQuotes(reservations[i].Percentage),
-      helper.addQuotes(reservations[i].Stamp),
-      helper.addQuotes(reservations[i].StampOGA),
-      reservations[i].IsReservation,
-      helper.addQuotes(reservations[i].Order));
-    if (i < reservations.length - 1)
-      sqlQuery += ','
+    if (reservations[i].IsReservation === true) {
+      sqlQuery += util.format('(%s,%s,%s,%s,%s,%s,%s,%s)',
+        helper.addQuotes(userId),
+        helper.addQuotes(accountId),
+        helper.addQuotes(reservations[i].Name),
+        helper.addQuotes(reservations[i].Percentage),
+        helper.addQuotes(reservations[i].Stamp),
+        helper.addQuotes(reservations[i].StampOGA),
+        reservations[i].IsReservation,
+        helper.addQuotes(reservations[i].Order));
+      if (i < reservations.length && reservations[i + 1].IsReservation === true)
+        sqlQuery += ','
+    }
   }
 
   return sqlQuery;

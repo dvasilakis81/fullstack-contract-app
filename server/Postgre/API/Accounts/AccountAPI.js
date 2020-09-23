@@ -14,14 +14,12 @@ async function getFirstAccountProtocolInfo(req, res, next) {
 }
 
 async function getAccountById(req, res, next) {
-  const { rows } = await methods.getAccountById(req.body.ContractId, req.body.AccountId, req.body.AccountNumber, next);
-  if (rows && rows.length == 1)
-    res.status(200).json(rows[0]);
+  const rows = await methods.getAccountById(req.body.ContractId, req.body.AccountId, req.body.AccountNumber, next);
+  res.status(200).json(rows[0]);
 }
 
 async function insertAccount(req, res, next) {
 
-  var account;
   var rows = await methods.getAccountInfo(req, res, next);
   if (rows && rows.length > 0)
     res.status(200).json(rows);
@@ -31,15 +29,16 @@ async function insertAccount(req, res, next) {
 
       await client.query('BEGIN');
 
-      var rows = await methods.insertAccount(req, res, next, client);
-      if (rows.length > 0 && rows[0].Id) {
-        var accountId = rows[0].Id;
+      var accountRows = await methods.insertAccount(req, res, next, client);
+      if (accountRows.length > 0 && accountRows[0].Id) {
+        var accountId = accountRows[0].Id;
         var invoiceRows = await invoiceMethods.insertInvoice(req, res, next, accountId, client);
         var ccRows = await ccMethods.insertCC(req, res, next, accountId, client);
         var signatureRows = await signatureMethods.insertSignatures(req, res, next, accountId, client);
         var mcRows = await monitoringCommitteeMethods.insertMonitoringCommittee(req, res, next, accountId, client);
         var syncRows = await reservationMethods.insert_reservations(req, res, next, accountId, client);
-        account = getAccountById(req.body.ContractId, req.body.AccountNumber, accountId, next);
+        const rows = await methods.getAccountById(req.body.ContractId, req.body.AccountId, req.body.AccountNumber, next, client);
+        res.status(200).json(rows);
         await client.query('COMMIT');
       }
       else {
@@ -52,9 +51,6 @@ async function insertAccount(req, res, next) {
     } finally {
       client.release();
     }
-
-    if (account && account.length == 1)
-      res.status(200).json(account[0]);
   }
 }
 

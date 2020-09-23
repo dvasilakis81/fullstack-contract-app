@@ -191,13 +191,13 @@ function searchForDirector(req, res, next, user) {
       searchresult.on('end', async function (result) {
 
         //setup user reservations
-        const userReservations = await reservationsMethods.getUserReservations(req, searchresult, next, user.uid);
+        const userReservations = await reservationsMethods.getUserReservations(user.uid, next);
         if (userReservations && userReservations.length > 0)
           user.reservations = userReservations;
         else {
-          const reservations = await reservationsMethods.getReservations(req, searchresult, next);
+          const reservations = await reservationsMethods.getReservations(req, next);
           await reservationsMethods.initializeUserReservations(reservations, user.uid);
-          user.reservations = await reservationsMethods.getUserReservations(req, searchresult, next, user.uid);
+          user.reservations = await reservationsMethods.getUserReservations(user.uid, next);
         }
 
         if (results && results.length > 0){
