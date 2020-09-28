@@ -41,7 +41,13 @@ async function getPreviousAccount(req, res, next) {
 
   try {
     const { rows } = await pool.query(queries.query_getpreviousaccount(req));
-    return rows;
+    var max = {Id: 0, Number: 0};
+    rows.forEach(element => {
+      if (element.Number > max.Number)
+        max = element;
+    });
+
+    return max;
   } catch (error) {
     next(error);
   }

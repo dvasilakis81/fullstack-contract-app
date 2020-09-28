@@ -25,15 +25,13 @@ async function sync(req, res, next) {
 
     // get the user reservations
     const userReservations = await userReservationsMethods.getUserReservations(userId, next);
+    
     // insert the new account reservations
     await accountReservationsMethods.insert(userId, accountId, userReservations, null, next);
 
     // get the new account    
-    var { rows } = await accountMethods.getAccountById(req.body.ContractId, accountId, req.body.AccountNumber, next);
-    if (rows && rows.length == 1)
-      res.status(200).json(rows[0]);
-    else
-      next("Account not found");
+    var rows = await accountMethods.getAccountById(req.body.ContractId, accountId, req.body.AccountNumber, next);
+    res.status(200).json(rows[0]);
 
   } catch (error) {
     next(error);

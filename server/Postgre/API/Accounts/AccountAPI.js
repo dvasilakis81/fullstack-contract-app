@@ -9,8 +9,13 @@ const reservationMethods = require('../../API/Reservations/Account/API');
 
 async function getFirstAccountProtocolInfo(req, res, next) {
 
-  const { rows } = await methods.getFirstAccountProtocolInfo(req, res, next);
-  res.status(200).json(rows[0]);
+  try {
+    const { rows } = await methods.getFirstAccountProtocolInfo(req, res, next);
+    res.status(200).json(rows[0]);  
+  } catch (error) {
+    var msg = 'Το πρωτόκολλο του πρώτου λογαριασμού δεν μπόρεσε να αποκτηθεί';
+    res.status(408).json(msg);
+  }
 }
 
 async function getAccountById(req, res, next) {
@@ -38,8 +43,9 @@ async function insertAccount(req, res, next) {
         var mcRows = await monitoringCommitteeMethods.insertMonitoringCommittee(req, res, next, accountId, client);
         var syncRows = await reservationMethods.insert_reservations(req, res, next, accountId, client);
         const rows = await methods.getAccountById(req.body.ContractId, req.body.AccountId, req.body.AccountNumber, next, client);
-        res.status(200).json(rows);
         await client.query('COMMIT');
+
+        res.status(200).json(rows);
       }
       else {
         await client.query('COMMIT');
@@ -51,7 +57,7 @@ async function insertAccount(req, res, next) {
     } finally {
       client.release();
     }
-  }
+  }  
 }
 
 async function updateAccount(req, res, next) {
@@ -60,17 +66,19 @@ async function updateAccount(req, res, next) {
   try {
     await client.query('BEGIN');
 
-    var rows = await methods.updateAccount(req, res, next, client);
+    var updatedAccounts = await methods.updateAccount(req, res, next, client);
     var invoiceRows = await invoiceMethods.updateInvoice(req, res, next, client);
     var ccRows = await ccMethods.updateCC(req, res, next, client);
     var signaturesRows = await signatureMethods.updateSignatures(req, res, next, client);
     var monitoringCommitteeRows = await monitoringCommitteeMethods.processMonitoringCommittee(req, res, next, client);
 
     await client.query('COMMIT');
-    getAccountById(req, res, next);
+    const rows = await methods.getAccountById(req.body.ContractId, req.body.AccountId, req.body.AccountNumber, next);
+    res.status(200).json(rows[0]);
   } catch (error) {
     await client.query('ROLLBACK')
     next(error);
+    res.status(408).json('Ο λογαριασμός δεν μπόρεσε να τροποποιηθεί');
   } finally {
     client.release();
   }

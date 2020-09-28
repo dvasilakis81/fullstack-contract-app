@@ -240,8 +240,9 @@ function getAttachmentAAY(body, protocolDate) {
 }
 function getAttachmentInvoice(body) {
 
-	//12.	Το με Α.Π. 071886/1-04-2020 διαβιβαστικό έγγραφο, με το οποίο μας διαβιβάστηκε το υπ’ αριθ. Σειρά Γ 28/31-03-2020 
-	//Τιμολόγιο της Δ.Α.Ε.Μ. Α.Ε.,
+	// 12.	Το με Α.Π. 071886/1-04-2020 διαβιβαστικό έγγραφο, με το οποίο μας διαβιβάστηκε το υπ’ αριθ. Σειρά Γ 28/31-03-2020 	
+	// Τιμολόγιο της Δ.Α.Ε.Μ. Α.Ε.,
+	// Το με αριθμ. 22/28-12-2018 Τιμολόγιο Παροχής Υπηρεσιών της Δ.Α.Ε.Μ. Α.Ε.
 	if (body.Account[0].Invoice) {
 		var rText = '';
 		if (body.Account[0].Invoice[0].DeliveredDate) {
@@ -253,9 +254,8 @@ function getAttachmentInvoice(body) {
 				body.Contract[0].Concessionaire[0].Name,
 				body.Account[0].Invoice[0].DeliveredDate)
 		} else {
-			rText = util.format('Το με Α.Π. %s/%s διαβιβαστικό έγγραφο, με το οποίο μας διαβιβάστηκε το υπ’ αριθ. %s/%s Τιμολόγιο της %s',
-				body.Account[0].Invoice[0].DeliveredDateProtocol[0].Number,
-				body.Account[0].Invoice[0].DeliveredDateProtocol[0].Date,
+			
+			rText = util.format('Το με αριθμ. %s/%s Τιμολόγιο Παροχής Υπηρεσιών της %s.',
 				body.Account[0].Invoice[0].ProtocolNumber,
 				body.Account[0].Invoice[0].ProtocolDate,
 				body.Contract[0].Concessionaire[0].Name)
