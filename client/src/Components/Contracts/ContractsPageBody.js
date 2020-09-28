@@ -118,7 +118,7 @@ class ContractsPageBody extends Component {
 
         var ddd = (this.props.token.data.token ? this.props.token.data.token : 'tokenData.token: undefined');
         var fff = (this.props.token.data ? ddd : 'tokenData: undefined');
-        console.log('getContracts: ' + fff);
+        
         if (this.props.isSearchMode)
           this.props.searchContracts(this.props.token.data, this.props.searchModeValue);
         else

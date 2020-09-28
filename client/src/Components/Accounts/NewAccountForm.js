@@ -33,6 +33,7 @@ import { getFooterTemplate } from '../Common/templates'
 
 import MySnackbar from '../Common/MySnackbar'
 import Body from '../../HOC/Body/body';
+import store from '../../Redux/Store/store'
 
 //import ProtocolNumber from '../CustomControls/ProtocolNumber';
 
@@ -103,6 +104,7 @@ const useStyles = {
 class NewAccountForm extends Component {
 	constructor(props) {
 		super(props);
+
 		this.state = {
 			loginUserInfo: this.props.token.data.user,
 			openMessage: false,
@@ -126,7 +128,7 @@ class NewAccountForm extends Component {
 			ProtocolNumber: this.props.location.state.ProtocolNumber,
 			ProtocolDate: this.props.location.state.ProtocolDate,
 			FirstAccountProtocolNumber: this.props.location.state.FirstAccountProtocolNumber,
-			FirstAccountProtocolDate: this.props.location.state.FirstAccountProtocolDate,			
+			FirstAccountProtocolDate: this.props.location.state.FirstAccountProtocolDate,
 			WorkConfirmationDate: this.props.location.state.WorkConfirmationDate,
 			DeliveryGoodsDate: this.props.location.state.DeliveryGoodsDate,
 			AayValue: this.props.location.state.AayValue,
@@ -147,7 +149,7 @@ class NewAccountForm extends Component {
 			SignName1: this.props.location.state.SignName1,
 			SignName2: this.props.location.state.SignName2,
 			SignName3: this.props.location.state.SignName3,
-			SignName4: this.props.location.state.SignName4 != -1 ? this.props.location.state.SignName4 : this.props.token.data.user.directorName,
+			SignName4: this.props.location.state.SignName4,
 			AbsenseOfDirector1: this.props.location.state.AbsenseOfDirector1,
 			AbsenseOfDirector2: this.props.location.state.AbsenseOfDirector2,
 			HasMonitoringCommittee: this.props.location.state.MonitoringCommittee ? true : false,
@@ -170,8 +172,7 @@ class NewAccountForm extends Component {
 		this.autoComplete = this.autoComplete.bind(this);
 		this.autoCompleteFullWritten = this.autoCompleteFullWritten.bind(this);
 		this.autoCompleteFirstAccountProtocolNumber = this.autoCompleteFirstAccountProtocolNumber.bind(this);
-		this.handleClose = this.handleClose.bind(this);
-		this.showEditHeader = this.showEditHeader.bind(this);
+		this.handleClose = this.handleClose.bind(this);		
 		this.setCC = this.setCC.bind(this);
 		this.addCC = this.addCC.bind(this);
 		this.removeCC = this.removeCC.bind(this);
@@ -210,6 +211,13 @@ class NewAccountForm extends Component {
 		else {
 			this.props.createAccount(this.state, this.props.token.data.token).then(res => {
 				this.setState({ AccountId: res.value.data[0].Id, message: 'Ο λογαριασμός δημιουργήθηκε επιτυχώς!!!', openMessage: true, variant: 'success', submitButtonDisabled: false });
+
+				var snackbarInfo = {}
+				snackbarInfo.openMessage = true;
+				snackbarInfo.message = 'Ο ' + res.value.data[0].Number + 'ος λογαριασμός δημιουργήθηκε επιτυχώς!!!';
+				snackbarInfo.variant = 'success';
+
+				store.dispatch({ type: 'SHOW_SNACKBAR', payload: snackbarInfo });
 				this.props.history.goBack();
 			}).catch(error => {
 				this.setState({ message: <><div>Αποτυχία δημιουργίας λογαριασμών!</div><div>{getServerErrorResponseMessage(error)}</div></>, openMessage: true, variant: 'error', submitButtonDisabled: false });
@@ -234,11 +242,11 @@ class NewAccountForm extends Component {
 			this.setState({ [e.target.id]: v });
 		}
 	}
-	clearAutocomplete(targetId)	{
+	clearAutocomplete(targetId) {
 		this.setState({ [targetId]: '' });
 	}
 	onAutocompleteInputChange(e, v, r) {
-		if (r === 'clear'){
+		if (r === 'clear') {
 		} else if (e) {
 			console.log('onInputChange: e.target.id: ' + e.target.id + ' e.target.value:' + e.target.value + ' v:' + v)
 			var targetId = e.target.id;
@@ -442,27 +450,20 @@ class NewAccountForm extends Component {
 		</div>
 	}
 
-	getEditHeaderTitle(title, accountNumber) {
-		let ftitle = title ? title.substring(0, 100) + (title.length > 100 ? '...' : '') : '(Χωρίς Τίτλο)'
+	getEditHeaderTitle(discreet, title, accountNumber) {
+		let ftitle = '';
+		if (discreet)
+			ftitle = discreet;
+		else
+			ftitle = title ? title.substring(0, 100) + (title.length > 100 ? '...' : '') : '(Χωρίς Τίτλο)';
+
 		return (<div>
-			<span>Σύμβαση {ftitle}</span>
+			<span>{ftitle}</span>
 			<br />
 			<span>Επεξεργασία {accountNumber} 'ου λογαριασμού'</span>
 		</div>)
 	}
-
-	showEditHeader() {
-		if (this.state.isEdit === true) {
-			return (
-				<Header
-					title={this.getEditHeaderTitle(this.props.contractDetails.Title, this.state.AccountNumber)}
-					showAdministrationOption={false}
-					showNewContractOption={false}
-				/>
-			)
-		}
-	}
-
+	
 	getWorkConfirmationDate() {
 		if (this.state.IsDownpayment === false)
 			return <MyTextField tp='date' title='Ημ. Βεβαίωσης Έργου' id='WorkConfirmationDate' stateValue={this.state.WorkConfirmationDate} isRequired={true} isDisabled={false} onChange={this.onChange} inputProps={{ style: { textAlign: 'center' } }} isRequired={false} />
@@ -498,7 +499,7 @@ class NewAccountForm extends Component {
 			{this.addFirstAccountProtocolInfo()}
 			<div style={useStyles.divRowFlex}>
 				<MyTextField tm={getAccountStartDateTooltipTemplate(this.state)} tp='date' title='Έναρξη Λογαριασμού' id='Start' stateValue={this.state.Start} isRequired={false} isDisabled={false} onChange={this.onChange} />
-				<MyTextField tm={getAccountStartDateTooltipTemplate(this.state)} tp='date' title='Λήξη Λογαριασμού' id='End' stateValue={this.state.End} isRequired={false} isDisabled={false} onChange={this.onChange} />				
+				<MyTextField tm={getAccountStartDateTooltipTemplate(this.state)} tp='date' title='Λήξη Λογαριασμού' id='End' stateValue={this.state.End} isRequired={false} isDisabled={false} onChange={this.onChange} />
 			</div>
 			<div style={useStyles.divRowFlex}>
 				<MyTextField tp='number' title='Καθαρό Ποσό' id='AmountPure' stateValue={this.state.AmountPure} isRequired={true} isDisabled={false} onChange={this.onChange} inputProps={{ style: { textAlign: "center" } }} InputProps={{ endAdornment: <InputAdornment position="end"><span style={{ fontWeight: 'bolder', marginRight: '10px' }}>€</span></InputAdornment> }} />
@@ -578,7 +579,7 @@ class NewAccountForm extends Component {
 				{/* <MyTextField title='Τίτλος' id='SignType2' stateValue={this.state.SignType2} values={this.loadSignatoryTypes([5, 6])} isRequired={true} isDisabled={false} onChange={this.onChange} select={true} width='20%' />
 				<MyTextField title='Όνομα' id='SignName2' stateValue={this.state.SignName2} values={this.loadSignatories(this.state.SignName2)} isRequired={true} isDisabled={false} onChange={this.onChange} select={true} width='20%' /> */}
 			</div>
-			
+
 			<div style={useStyles.divRowFlex}>
 				<MyAutocomplete
 					id='SignType3'
@@ -612,6 +613,9 @@ class NewAccountForm extends Component {
 			const user = this.props.token.data.user.users[i];
 			ret.push(user.cn);
 		}
+
+		ret.push(this.props.token.data.user.supervisorName);
+		ret.push(this.props.token.data.user.directorName);
 
 		return ret;
 	}

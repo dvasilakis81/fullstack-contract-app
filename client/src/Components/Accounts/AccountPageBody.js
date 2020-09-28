@@ -39,6 +39,7 @@ class AccountContainer extends Component {
               isDownpayment: this.props.isDownpayment,
               isEdit: false,
               DownpaymentLawArticle: '',
+              Discreet: this.props.discreet,
               AmountPure: null,
               AmountFpa: null,
               AmountTotal: null,

@@ -73,7 +73,7 @@ class NewContract extends Component {
 			openMessage: false,
 			message: '',
 			variant: '',
-			submitButtonDisabled: false,			
+			submitButtonDisabled: false,
 			loginUserInfo: this.props.token.data.user,
 			contractStuff: this.props.location.state ? this.props.location.state.contract.contractusers : [],
 			AllUsers: this.props.location.state ? this.props.location.state.contract.AllUsers : false,
@@ -86,6 +86,7 @@ class NewContract extends Component {
 			ConcessionaireName: this.props.location.state ? this.props.location.state.contract.ConcessionaireName : '',
 			ConcessionaireAFM: this.props.location.state ? this.props.location.state.contract.ConcessionaireAFM : '',
 			Title: this.props.location.state ? this.props.location.state.contract.Title : '',
+			Discreet: this.props.location.state ? this.props.location.state.contract.Discreet : '',
 			ProtocolNumber: this.props.location.state ? this.props.location.state.contract.ProtocolNumber : '',
 			ProtocolDate: this.props.location.state && this.props.location.state.contract.ProtocolDate ? getValidMaterialDateFormat(this.props.location.state.contract.ProtocolDate) : new Date(),
 			KAE: this.props.location.state ? this.props.location.state.contract.KAE : '',
@@ -190,7 +191,12 @@ class NewContract extends Component {
 				}
 				else {
 					axios.post(getHostUrl() + '/insertcontract', this.state, { headers: { Authorization: 'Bearer ' + this.props.token.data.token } }).then(res => {
-						var msg = 'Η σύμβαση με πρωτόκολλο ' + this.state.ProtocolNumber + '/' + this.state.ProtocolDate + ' δημιουργήθηκε επιτυχώς!!!';
+						var msg = "";
+						if (res.data && res.data.ProtocolNumber)
+							msg = 'Η σύμβαση με πρωτόκολλο ' + this.state.ProtocolNumber + '/' + getDateFormatForDocument(this.state.ProtocolDate) + ' δημιουργήθηκε επιτυχώς!!!';
+						else
+							msg = 'Η σύμβαση δημιουργήθηκε επιτυχώς!!!';
+
 						this.setState({ message: msg, openMessage: true, variant: 'success', submitButtonDisabled: false });
 						store.dispatch({ type: 'INSERT_CONTRACT', payload: res.data });
 
@@ -198,7 +204,7 @@ class NewContract extends Component {
 						snackbarInfo.openMessage = true;
 						snackbarInfo.message = msg;
 						snackbarInfo.variant = 'success';
-						
+
 						store.dispatch({ type: 'SHOW_SNACKBAR', payload: snackbarInfo });
 						this.props.history.goBack();
 					}).catch(error => {
@@ -280,12 +286,18 @@ class NewContract extends Component {
 	}
 	loadContractTypes() {
 		let ret = '';
-
-		if (this.props.contractTypes) {
-			ret = this.props.contractTypes.map((data, index) => {
+		let contractTypes = [
+			{ ContractTypeId: 1, ContractTypeName: 'Δημόσιας Ανάθεσης' },
+			{ ContractTypeId: 2, ContractTypeName: 'Προγραμματική' }
+		];
+		//if (this.props.contractTypes) {
+		ret = contractTypes.map((data, index) => {
+			if (data.ContractTypeId === 2)
+				return <option key={index} value={data.ContractTypeId} selected>{data.ContractTypeName}</option>
+			else
 				return <option key={index} value={data.ContractTypeId}>{data.ContractTypeName}</option>
-			})
-		}
+		})
+		//}
 
 		return ret;
 	}
@@ -306,10 +318,14 @@ class NewContract extends Component {
 
 	render() {
 		var divWidth = this.props.screenDimensions.width > this.props.screenDimensions.height ? '80%' : '100%'
+		var title = 'Δημιουργία Σύμβασης';
+		if (this.state.ContractId) 
+			title = <div><span>Επεξεργασία Σύμβασης</span><br /><span style={{ color: 'gold' }}>{this.state.Discreet}</span></div>;		
+
 		return (
 			<div>
 				<Header
-					title={this.state.ContractId ? 'Επεξεργασία Σύμβασης' : 'Δημιουργία Σύμβασης'}
+					title={title}
 					showAdministrationOption={false}
 					showNewContractOption={false} />
 				<Body>
@@ -387,7 +403,7 @@ function mapStateToProps(state) {
 		screenDimensions: state.parametricdata_reducer.screenDimensions,
 		municipalityDirections: state.parametricdata_reducer.municipalityDirections,
 		contractTypes: state.parametricdata_reducer.contractTypes,
-		isSearchMode: state.contracts_reducer.isSearchMode,		
+		isSearchMode: state.contracts_reducer.isSearchMode,
 		users: state.parametricdata_reducer.users,
 		token: state.token_reducer.token
 	}
