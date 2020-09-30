@@ -14,8 +14,10 @@ class ItemList extends React.Component {
 
   getTitle(title) {
     var ret = title;
+
     if (title && title.length > 100)
       ret = title.substring(0, 200) + '...';
+  
     return ret;
   }
 
@@ -23,7 +25,10 @@ class ItemList extends React.Component {
 
     const tableStyle1 = {
       tableLayout: 'fixed',
-      padding: '10px',
+      paddingTop: '0px',
+      paddingLeft: '10px',
+      paddingRight: '10px',
+      paddingBottom: '10px',
       fontSize: '12px',
       background: 'white',
       border: '2px',
@@ -33,7 +38,10 @@ class ItemList extends React.Component {
 
     const tableStyle2 = {
       tableLayout: 'fixed',
-      padding: '10px',
+      paddingTop: '0px',
+      paddingLeft: '10px',
+      paddingRight: '10px',
+      paddingBottom: '10px',
       fontSize: '12px',
       background: 'lightblue',
       border: '2px',
@@ -61,10 +69,13 @@ class ItemList extends React.Component {
         onClick={() => this.changeSelectedItem(this, itemToRender)}
         style={{ padding: '0px', background: '#fff' }}>
         <Grid item style={{ flexGrow: '1' }}>
+
+          <div style={{ background: '#fbfbfb', minHeight: '30px' }}>
+            <span style={{ fontWeight: 'bold', fontSize: '20px', marginLeft: '10px', verticalAlign: 'center' }}>
+              {this.getTitle(itemToRender.Discreet)}
+            </span>
+          </div>
           <Paper square={true} style={listItemStyle}>
-            {itemToRender.Discreet ? <Typography>
-              <span style={{ fontWeight: 'bold' }}>{this.getTitle(itemToRender.Discreet)}</span>
-            </Typography> : <></>}
             <Typography>
               <span style={{ fontWeight: 'bold', width: 'auto' }}>Τίτλος:</span>
               <span style={{ marginLeft: '5px' }}>{this.getTitle(itemToRender.Title)}</span>

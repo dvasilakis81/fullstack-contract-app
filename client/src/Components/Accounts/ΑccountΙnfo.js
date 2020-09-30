@@ -81,6 +81,7 @@ class AccountInfo extends React.Component {
 			state: {
 				ContractId: contractDetails.Id,
 				ContractTitle: contractDetails.Title,
+				ContractDiscreet: contractDetails.Discreet,
 				ContractTypeId: contractDetails.ContractTypeId,
 				isDownpayment: contractDetails.HasDownPayment && accountDetails.Number == 1,
 				isEdit: true,

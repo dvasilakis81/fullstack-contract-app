@@ -186,7 +186,7 @@ export function createTransmissionDocument(contractInfo, accountInfo, paidAmount
       Invoice: getInvoiceDataToPost(accountInfo),
       AYY: getAAYDataToPost(accountInfo),
       MonitoringCommittee: accountInfo.monitoringcommittee,
-      FirstAccountProtocol: firstAccountProtocol,      
+      FirstAccountProtocol: firstAccountProtocol,
       CC: accountInfo.cc
     }],
     DecisionBoard: contractInfo.decisionboard,
@@ -218,7 +218,6 @@ export function createAccountDocument(contractInfo, accountInfo, paidAmount, res
   var ForemanDirectionName = '';
   var ForemanDirectionAbsense = '';
 
-
   // SignatoryTitle: accountInfo.documentsignatory[3].SignatoryTitle,
   //     Kaa: accountInfo.documentsignatory[3].Absense === true ? 'κ.κ.α' : '',
   //     SignatoryName: accountInfo.documentsignatory[3].SignatoryName
@@ -230,13 +229,13 @@ export function createAccountDocument(contractInfo, accountInfo, paidAmount, res
         WriterTitle = element.SignatoryTitle;
         WriterName = element.SignatoryName;
       } else if (element.Type === 2) {
-        ForemanDepartmentTitle = element.SignatoryTitle
-        ForemanDepartmentName = element.SignatoryName;
-      } else if (element.Type === 3) {
         ForemanDirectionAbsense = element.Absense === true ? 'κ.α.α' : '';
         ForemanDirectionTitle = element.SignatoryTitle;
         ForemanDirectionName = element.SignatoryName;
-      } 
+      } else if (element.Type === 3) {
+        ForemanDepartmentTitle = element.SignatoryTitle;
+        ForemanDepartmentName = element.SignatoryName;
+      }
     }
   }
 

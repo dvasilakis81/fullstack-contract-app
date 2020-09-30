@@ -153,6 +153,7 @@ class ItemDetail extends React.Component {
 		var contractTypeId = contractInfo.ContractTypeId;
 		var numberOfAccounts = contractInfo.NumberOfAccounts;
 		var title = contractInfo.Title;
+		var discreet = contractInfo.Discreet;
 		var hasDownpayment = contractInfo.HasDownPayment;
 
 		var buttonInfo = {}
@@ -173,6 +174,7 @@ class ItemDetail extends React.Component {
 										ci: contractId,
 										an: value.index,
 										ct: contractTypeId,
+										discreet:discreet,
 										title: title,
 										exists: (value.color === 'lightGreen' ? true : false),
 										isDownpayment: (hasDownpayment && value.index === 1)
@@ -268,7 +270,7 @@ class ItemDetail extends React.Component {
 			toApprovalAccountNumber = contractDetails.createdaccounts[contractDetails.createdaccounts.length - 1].Number
 		}
 
-		var monetaryColor = (contractDetails.AmountTotal < paidAmountTotal ? 'red' : 'gold')
+		var monetaryColor = (contractDetails.AmountTotal < (paidAmountTotal + toApprovalAmountTotal) ? 'red' : 'gold')
 		ret = <>
 			<Grid item>
 				<Paper style={styles.paperContractMonetaryInfoFrame} square={true}>
@@ -553,7 +555,7 @@ class ItemDetail extends React.Component {
 					<Grid item>
 						<Paper style={{ padding: '5px', fontSize: '20px', background: 'lightYellow', border: '1px solid black', display: 'flex', justifyContent: 'center' }} square={true}>
 							<Typography>
-								<b>Πληροφορίες σύμβασης</b>
+								<b>Πληροφορίες σύμβασης '{contractInfo.Discreet}'</b>
 							</Typography>
 						</Paper>
 					</Grid>

@@ -51,19 +51,20 @@ class NewAccount extends Component {
     var ret = <></>;
     if (this.props.location && this.props.location.state) {
       var accountLabel = '';
-      if (this.props.location.state.isEdit)
-        accountLabel = 'Επεξεργασία ' + this.props.location.state.AccountNumber + 'ου λογαριασμού'
+      if (this.props.location.state.isEdit === true)
+        accountLabel = 'Επεξεργασία ' + this.props.location.state.AccountNumber + 'ου λογαριασμού';
       else
-        accountLabel = 'Δημιουργία ' + this.props.location.state.AccountNumber + 'ου λογαριασμού'
+        accountLabel = 'Δημιουργία ' + this.props.location.state.AccountNumber + 'ου λογαριασμού';
 
       return (<div>
-        {this.props.location.state.ContractTitle}
+        <span style={{fontSize: '22px'}}>{this.props.location.state.Discreet || this.props.location.state.ContractDiscreet || this.props.location.state.ContractTitle}</span>
         <br />
-        {accountLabel}
+        <span style={{ color: 'gold' }}>{accountLabel}</span>
       </div>)
     }
     return ret;
   }
+
   render(props) {
     return (
       <div>
