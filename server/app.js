@@ -35,13 +35,15 @@ var dbCC = require('./Postgre/API/CC/Methods')
 var dbUserReservations = require('./Postgre/API/Reservations/User/Methods')
 var dbAccountReservations = require('./Postgre/API/Reservations/Account/API')
 
-var helper = require('./HelperMethods/helpermethods')
+var helper = require('./HelperMethods/helpermethods');
+
 const ENV = process.env.NODE_ENV;
 app.use(helmet())
 app.use(cors());
 app.use(express.static(path.join(__dirname, "./WORD/templates")));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
+
 app.post('/createAccountDocument', dbLogin.checkToken, function (req, res, next) {
   var fs = require('fs');
 
@@ -91,30 +93,6 @@ app.post('/createTransmissionDocument', dbLogin.checkToken, function (req, res, 
   }
 });
 
-// app.post('/createAccountDocument', function (req, res, next) {
-//   var fs = require('fs');
-
-//   let d = new Date();
-//   var inputPath = path.join(__dirname, "WORD/templates/account.docx")
-//   var outputPath = path.resolve(__dirname, 'WORD/templates/' + d.getHours() + d.getMinutes() + d.getSeconds() + '.docx');
-//   var inputData = InputData.setDataForAccountDocument(req.body);
-//   docxTemplatorMethods.generateDocx(inputPath, outputPath, inputData);
-//   var pathUrl = req.path;
-//   if (pathUrl !== '/') {
-//     res.download(outputPath, function (err) {
-//       if (err) {
-//         helper.consoleLog('Handle error, but keep in mind the response may be partially-sent');
-//       } else {
-//         helper.consoleLog('decrement a download credit, etc.');
-//       }
-//       fs.unlinkSync(outputPath);
-//     });
-//   }
-//   else {
-//     next();
-//   }
-// });
-
 //app.get('/login', dbLogin.login);
 app.get('/loginWithLDAP', dbLogin.login);
 app.post('/logClientError', function (req, res, next) {
@@ -163,16 +141,15 @@ app.get('/agencies', dbLogin.checkToken, dbParametric.getAgencies);
 app.post('/signatories', dbLogin.checkToken, dbParametric.getSignatories);
 app.get('/signatorytypes', dbLogin.checkToken, dbParametric.getSignatoryTypes);
 app.get('/errormessages', dbLogin.checkToken, dbParametric.getErrorMessages);
+
 app.post('/contractexists', dbLogin.checkToken, dbContract.contractExists);
 app.post('/contracts', dbLogin.checkToken, dbContract.getContracts);
-//app.get('/contracts_webix', dbContract.getContracts_WEBIX);
-//app.get('/getremainamountofcontract', dbLogin.checkToken, dbAccount.getRemainAmountOfContract);
 app.get('/searchcontracts', dbContract.searchContracts);
 app.post('/insertcontract', dbLogin.checkToken, dbContract.insertContract);
 app.post('/deletecontract', dbLogin.checkToken, dbContract.deleteContract);
 app.post('/updatecontract', dbLogin.checkToken, dbContract.updateContract);
+
 app.get('/getfirstaccountprotocolinfo', dbLogin.checkToken, dbAccount.getFirstAccountProtocolInfo);
-// app.get('/getaccountsinfo', dbLogin.checkToken, dbAccount.getAccountsInfo);
 app.post('/getaccount', dbLogin.checkToken, dbAccount.getAccountById);
 app.post('/insertaccount', dbLogin.checkToken, dbAccount.insertAccount);
 app.post('/updateaccount', dbLogin.checkToken, dbAccount.updateAccount);
@@ -216,11 +193,13 @@ console.log('ENVIROMENT: ' + ENV)
 app.use(express.static(path.join(__dirname, '../client/build')))
 app.use((req, res) => {
   console.log('Redirect to index.html')
-  res.sendFile(path.join(__dirname, '../client/build/index.html'))
+  res.setHeader("Expires", new Date(Date.now() - 2592000000).toUTCString());
+  res.sendFile(path.join(__dirname, '../client/build/index.html'));
 })
 app.all('/*', function (req, res, next) {
   console.log('Accessing all urls except all above ...')
-  res.sendFile(path.join(__dirname, '../client/build/index.html'))
+  res.setHeader("Expires", new Date(Date.now() - 2592000000).toUTCString());
+  res.sendFile(path.join(__dirname, '../client/build/index.html'));
 })
 //}
 //else

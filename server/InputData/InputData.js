@@ -10,8 +10,8 @@ module.exports = {
   setDataForTransmissionDocument: function (body) {
     var ret = '';
     var subjectRawData = transmissionSubject.getSubjectXmlValue(body);
-    var attachmentsRawData = transmissionAttachments.getAttachmentsXmlValue(body);    
-    var ccValuesRawData = transmissionCC.getCCValues(body);    
+    var attachmentsRawData = transmissionAttachments.getAttachmentsXmlValue(body);
+    var ccValuesRawData = transmissionCC.getCCValues(body);
     var AAY = null;
     if (body.AAY) {
       for (let i = 0; i < body.AAY.length; i++) {
@@ -46,9 +46,9 @@ module.exports = {
         c_et: body.Contract[0].Date[0].End,
         c_pn: body.Contract[0].Protocol[0].Number,
         c_pd: body.Contract[0].Protocol[0].Date,
-        c_an: body.Contract[0].Award[0].Number,
-        c_ad: body.Contract[0].Award[0].Date,
-        c_aa: body.Contract[0].Award[0].Ada,
+        c_an: body.Contract[0].Award[0].Number || '',
+        c_ad: body.Contract[0].Award[0].Date || '',
+        c_aa: body.Contract[0].Award[0].Ada || '',
         kae: body.Contract[0].Kae,
         c_actor: body.Contract[0].Actor,
         c_dir: body.Contract[0].CodeDirection,
@@ -60,22 +60,22 @@ module.exports = {
         a_sd: body.Account[0].Start,
         a_ed: body.Account[0].End,
         a_ta: body.Account[0].Amount,
-        a_in: body.Account[0].Invoice[0].Number,
-        a_id: body.Account[0].Invoice[0].Date,
+        a_in: body.Account[0].Invoice[0].ProtocolNumber,
+        a_id: body.Account[0].Invoice[0].ProtocolDate,
         a_idd: body.Account[0].Invoice[0].DeliveredDate,
         a_iddpn: body.Account[0].Invoice[0].DeliveredDateProtocol[0].Number,
         a_iddpd: body.Account[0].Invoice[0].DeliveredDateProtocol[0].Date,
-        aay: AAY ? AAY.Value : '',
-        aay_year: AAY ? AAY.Year : '',
-        aay_pn: AAY ? AAY.ProtocolNumber : '',
-        aay_pdt: AAY ? AAY.ProtocolDate : '',
-        aay_ead_n: AAY ? AAY.EadNumber : '',
-        aay_ada: AAY ? AAY.ADA : '',
+        aay: AAY && AAY.Value ? AAY.Value : '',
+        aay_year: AAY && AAY.Year ? AAY.Year : '',
+        aay_pn: AAY && AAY.ProtocolNumber ? AAY.ProtocolNumber : '',
+        aay_pdt: AAY && AAY.ProtocolDate ? AAY.ProtocolDate : '',
+        aay_ead_n: AAY && AAY.EadNumber ? AAY.EadNumber : '',
+        aay_ada: AAY && AAY.ADA ? AAY.ADA : '',
         sign_title: body.Signature[0].SignatoryTitle,
         kaa: (body.Signature[0].Kaa || ''),
         sign_name: body.Signature[0].SignatoryName.toLowerCase().includes("κακριδ") ? '' : body.Signature[0].SignatoryName,
         sign_sv: body.Signature[0].SignatoryName.toLowerCase().includes("κακριδ") ? body.Signature[0].SignatoryName : '',
-        ft_pn: body.Account[0].FirstAccountProtocol || '',        
+        ft_pn: body.Account[0].FirstAccountProtocol || '',
         t_e_s: body.Contract[0].TitleStartExpense
       }
     }
@@ -134,12 +134,12 @@ module.exports = {
         a_ed: body.Account[0].End,
         a_in: body.Account[0].Invoice[0].ProtocolNumber,
         a_id: body.Account[0].Invoice[0].ProtocolDate,
-        aay: body.AAY ? body.AAY[0].Value : '',
+        aay: body.AAY && body.AAY[0].Value ? body.AAY[0].Value : '',
         aay_year: body.AAY ? body.AAY[0].Year : '',
-        aay_pn: body.AAY ? body.AAY[0].ProtocolNumber : '',
-        aay_pdt: body.AAY ? body.AAY[0].ProtocolDate : '',
-        aay_ead_n: body.AAY ? body.AAY[0].EADNumber : '',
-        aay_ada: body.AAY ? body.AAY[0].ADA : '',
+        aay_pn: body.AAY && body.AAY[0].ProtocolNumber ? body.AAY[0].ProtocolNumber : '',
+        aay_pdt: body.AAY && body.AAY[0].ProtocolDate ? body.AAY[0].ProtocolDate : '',
+        aay_ead_n: body.AAY && body.AAY[0].EADNumber ? body.AAY[0].EADNumber : '',
+        aay_ada: body.AAY && body.AAY[0].ADA ? body.AAY[0].ADA : '',
         a_mra: body.Account[0].MixedRemainApproval,
         kaa: body.Signature[0].Kaa,
         writer_title: body.Signature[0].WriterTitle,

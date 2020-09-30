@@ -196,7 +196,7 @@ function searchForDirector(req, res, next, user) {
           user.reservations = userReservations;
         else {
           const reservations = await reservationsMethods.getReservations(req, next);
-          await reservationsMethods.initializeUserReservations(reservations, user.uid);
+          await reservationsMethods.initializeUserReservations(reservations, user.uid, next);
           user.reservations = await reservationsMethods.getUserReservations(user.uid, next);
         }
 
@@ -242,7 +242,7 @@ function searchForPeopleThatBelongsToTheSameDirection(re, res, next, user) {
       searchresult.on('end', function (result) {
         
         user.users = results;
-        let token = jwt.sign({ username: user.uid }, secretKey, { expiresIn: ('2h') });
+        let token = jwt.sign({ username: user.uid }, secretKey, { expiresIn: ('8h') });
         res.status(200).json({
           success: true,
           id: user.uid,

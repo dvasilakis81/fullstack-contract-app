@@ -30,8 +30,8 @@ module.exports = {
         common.getrElement(util.format("Διαβίβαση Τιμολογίου για τον %s", body.Account[0].No)) +
         common.getrElement('ο', true) + 
         common.getrElement(helper.fixTextForRawXml(util.format(' Λογαριασμό (υπ’ αριθμ. %s/%s) ποσού %s %s %s και δικαιολογητικών, αναφορικά με τις εργασίες για τη %s περιόδου %s έως και %s, προς έλεγχο και έκδοση χρηματικού εντάλματος.',
-          body.Account[0].Invoice[0].Number,
-          body.Account[0].Invoice[0].Date,
+          body.Account[0].Invoice[0].ProtocolNumber,
+          body.Account[0].Invoice[0].ProtocolDate,
           body.Account[0].Amount,
           body.Contract[0].Concessionaire[0].Article,
           body.Contract[0].Concessionaire[0].Name,

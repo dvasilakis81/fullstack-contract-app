@@ -1,0 +1,11 @@
+{
+    "parametricdata_reducer": {
+        "screenDimensions": {
+            "width": 1730,
+            "height": 1211.25
+        }
+    },
+    "contracts_reducer": {},
+    "account_reducer": {},
+    "token_reducer": {}
+}
