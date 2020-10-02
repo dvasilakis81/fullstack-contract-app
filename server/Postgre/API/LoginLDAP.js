@@ -243,7 +243,7 @@ function searchForPeopleThatBelongsToTheSameDirection(re, res, next, user) {
       searchresult.on('end', function (result) {
         
         user.users = results;
-        user.ou = 'ΓΕΝΙΚΟΣ ΓΡΑΜΜΑΤΕΑΣ';
+        //user.ou = 'ΓΕΝΙΚΟΣ ΓΡΑΜΜΑΤΕΑΣ';
         let token = jwt.sign({ username: user.uid }, secretKey, { expiresIn: ('8h') });
         res.status(200).json({
           success: true,

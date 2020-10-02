@@ -5,8 +5,8 @@ function query_insertcontract(req) {
 
   return util.format('INSERT INTO "Ordering"."Contract"("ContractTypeId", "Title",  "ProtocolNumber",  "ProtocolDate",  "KAE",  "Actor", ' +
     ' "CodeDirection", "AwardNumber", "AwardDate", "AwardAda", "CpvCode", "CpvTitle", "AmountPure", "AmountFpa", "AmountTotal",  ' +
-    ' "Balance", "Start", "End", "NumberOfAccounts", "DirectionId", "DepartmentId", "DateCreated", "DateModified", "ConcessionaireName", "ConcessionaireAFM", "HasDownPayment", "FpaValue", "OwnerId", "AllUsers", "LawArticle","Discreet")  ' +
-    ' VALUES(%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s) ' +
+    ' "Balance", "Start", "End", "NumberOfAccounts", "DirectionId", "DepartmentId", "DateCreated", "DateModified", "ConcessionaireName", "ConcessionaireAFM", "HasDownPayment", "FpaValue", "OwnerId", "AllUsers", "LawArticle","Discreet","AccountPer")  ' +
+    ' VALUES(%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s) ' +
     ' RETURNING *',
     helper.addQuotes(req.body.ContractTypeId),
     helper.addQuotes(req.body.Title),
@@ -38,7 +38,8 @@ function query_insertcontract(req) {
     helper.addQuotes(req.body.OwnerId),
     req.body.AllUsers,
     helper.addQuotes(req.body.LawArticle),
-    helper.addQuotes(req.body.Discreet));
+    helper.addQuotes(req.body.Discreet),
+    helper.addQuotes(req.body.AccountPer));
 }
 
 function query_insertcontractowner(req, contractId) {
@@ -160,7 +161,7 @@ function query_updatecontract(req, res, next) {
     'SET "ContractTypeId"=%s,"Title"=%s,"ProtocolNumber"=%s,"ProtocolDate"=%s,"KAE"=%s,"Actor"=%s,' +
     '"CodeDirection"=%s,"AwardNumber"=%s,"AwardDate"=%s,"AwardAda"=%s,"CpvCode"=%s,"CpvTitle"=%s,"AmountPure"=%s,"AmountFpa"=%s,"AmountTotal"=%s,' +
     '"Balance"=%s,"Start"=%s,"End"=%s,"NumberOfAccounts"=%s,"DirectionId"=%s,' +
-    '"DepartmentId"=%s,"DateModified"=%s,"ConcessionaireName"=%s,"ConcessionaireAFM"=%s,"HasDownPayment"=%s,"FpaValue"=%s, "AllUsers"=%s,"LawArticle"=%s,"Discreet"=%s ' +
+    '"DepartmentId"=%s,"DateModified"=%s,"ConcessionaireName"=%s,"ConcessionaireAFM"=%s,"HasDownPayment"=%s,"FpaValue"=%s, "AllUsers"=%s,"LawArticle"=%s,"Discreet"=%s,"AccountPer"=%s ' +
     'WHERE "Id"=%s ' +
     'RETURNING * ',
     helper.addQuotes(req.body.ContractTypeId),
@@ -192,6 +193,7 @@ function query_updatecontract(req, res, next) {
     req.body.AllUsers,
     helper.addQuotes(req.body.LawArticle),
     helper.addQuotes(req.body.Discreet),
+    helper.addQuotes(req.body.AccountPer),    
     req.body.ContractId);
 
   return sqlQuery;
