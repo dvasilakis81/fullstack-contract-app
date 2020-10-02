@@ -17,6 +17,7 @@ function login(request, response, next) {
   const username = request.query.u;
   const password = request.query.p;
 
+  //searchForPeople(request, response, next);
   searchLoginUser(request, response, next, username, password);
 }
 
@@ -227,6 +228,59 @@ function searchForPeopleThatBelongsToTheSameDirection(re, res, next, user) {
   // var queryGroups = 'cn=delme,ou=groups,ou=OEY,dc=cityofathens,dc=gr';
 
   client.search(queryOEY, opts, function (err, searchresult) {
+    if (err)
+      console.log("Error in search " + err);
+    else {
+      searchresult.on('searchEntry', function (entry) {
+        results.push(entry.object);
+      });
+      searchresult.on('searchReference', function (referral) {
+        console.log('referral: ' + referral.uris.join());
+      });
+      searchresult.on('error', function (err) {        
+        searchresult.send('error: ' + err.message);
+      });
+      searchresult.on('end', function (result) {
+        
+        user.users = results;
+        user.ou = 'ΓΕΝΙΚΟΣ ΓΡΑΜΜΑΤΕΑΣ';
+        let token = jwt.sign({ username: user.uid }, secretKey, { expiresIn: ('8h') });
+        res.status(200).json({
+          success: true,
+          id: user.uid,
+          user: user,
+          token: token,
+          expiresAt: helper.getExpiresAt(token, jwt, secretKey)
+        });
+      });
+    }
+  });
+}
+
+function  searchForPeople(req, res, next) {
+  var opts = {
+    // filter: '(objectClass=*)',
+    //filter: 'uid=v.priovolos',
+    scope: 'sub',
+    attributes: ['*'],
+    //filter: '(|(personalTitle=ΔΙΕΥΘΥΝΤΗΣ)(personalTitle=ΔΙΕΥΘΥΝΤΡΙΑ))',
+    // filter: '(objectClass=*)',
+    // //filter: '(&(uid=2)(sn=John))',// and search
+    // //filter: '(|(uid=2)(sn=John)(cn=Smith))', // or search
+    //filter: '(uid=g.papazogloy)',
+    //filter: '(uid=a.tsiatsiamis)',
+    //filter: '(uid=k.bakoyannis)',
+    filter: '(uid=i.chatzieustratiou)',
+    // scope: 'sub',
+    // //attributes: ['sn']
+    // attributes: ['*']
+  };
+  var results = [];
+  var query = 'dc=cityofathens,dc=gr';
+
+  // var queryOEY = 'ou=OEY,dc=cityofathens,dc=gr';
+  // var queryGroups = 'cn=delme,ou=groups,ou=OEY,dc=cityofathens,dc=gr';
+  client.search(query, opts, function (err, searchresult) {
     if (err)
       console.log("Error in search " + err);
     else {

@@ -63,6 +63,7 @@ function query_getcontracts(req) {
   // return util.format('SELECT * FROM "Ordering"."Contract" as c ' + 
   // 'INNER JOIN "Ordering"."Account" as a ' +
   // ' ON a."ContractId"=c."Id"')
+  
   var loginUserInfo = req.body.loginUserInfo;
   var select = getSelectFromClauses(loginUserInfo);
   var where = getWhere(loginUserInfo);
@@ -75,11 +76,11 @@ function query_getcontracts(req) {
 
 function query_getcontractbyid(req, contractId) {
   var cid = contractId ? contractId : req.body.contractId;
-  return util.format('%s %s', getSelectFromClauses(req.body.loginUserInfo), util.format('WHERE c."Id"=%s', cid))
+  return util.format('%s %s', getSelectFromClauses(req.body.loginUserInfo), util.format('WHERE c."Id"=%s', cid));
 }
 
 function query_getcontracttypes() {
-  return util.format('SELECT * FROM "Ordering"."ContractType"')
+  return util.format('SELECT * FROM "Ordering"."ContractType"');
 }
 
 function getQueryTotalContractsByUser(loginUserInfo) {
@@ -87,8 +88,10 @@ function getQueryTotalContractsByUser(loginUserInfo) {
 }
 
 function getWhere(loginUserInfo) {
-  return util.format('WHERE c."OwnerId"=%s OR %s OR %s OR %s',
+  return util.format('WHERE c."OwnerId"=%s OR %s OR %s OR %s OR %s OR %s',
     helper.addQuotes(loginUserInfo.uid),
+    checkIfLoginUserIsTheGeneralManager(loginUserInfo),
+    checkIfLoginUserIsTheMayor(loginUserInfo),
     checkIfLoginUserBelongToSameDirectionAndDepartment(loginUserInfo),
     checkIfLoginUserIsSupervisor(loginUserInfo),
     checkIfLoginUserIsDirector(loginUserInfo)
@@ -112,6 +115,14 @@ function getSelectFromClauses(loginUserInfo) {
     '(SELECT json_agg(EconomicalCommitee) FROM (SELECT * FROM "Ordering"."EconomicalCommitee" as ec WHERE ec."ContractId" = c."Id" ORDER BY ec."OrderNo") EconomicalCommitee) AS EconomicalCommitee, ' +
     '(SELECT json_agg(SnippetPractical) FROM (SELECT * FROM "Ordering"."SnippetPractical" as sp WHERE sp."ContractId" = c."Id" ORDER BY sp."OrderNo") SnippetPractical) AS SnippetPractical ' +
     'FROM "Ordering"."Contract" as c '
+}
+
+function checkIfLoginUserIsTheGeneralManager(loginUserInfo) {
+  return util.format(" %s='ΓΕΝΙΚΟΣ ΓΡΑΜΜΑΤΕΑΣ' OR %s='ΓΕΝΙΚΟΣ ΓΡΑΜΜΑΤΕΑΣ' " , helper.addQuotes(loginUserInfo.ou), helper.addQuotes(loginUserInfo.personalTitle));
+}
+
+function checkIfLoginUserIsTheMayor(loginUserInfo) {
+  return util.format(" %s='ΔΗΜΑΡΧΟΣ' OR %s='ΔΗΜΑΡΧΟΣ' ", helper.addQuotes(loginUserInfo.ou), helper.addQuotes(loginUserInfo.personalTitle));
 }
 
 function checkIfLoginUserIsSupervisor(loginUserInfo) {

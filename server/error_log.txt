@@ -1,11 +1,10 @@
-Message: relation "Ordering.SignatoryType" does not exist
-Stack: error: relation "Ordering.SignatoryType" does not exist
-    at Parser.parseErrorMessage (/home/d.vasilakis/Ordering_Development/node_modules/pg-protocol/dist/parser.js:241:15)
-    at Parser.handlePacket (/home/d.vasilakis/Ordering_Development/node_modules/pg-protocol/dist/parser.js:89:29)
-    at Parser.parse (/home/d.vasilakis/Ordering_Development/node_modules/pg-protocol/dist/parser.js:41:38)
-    at Socket.<anonymous> (/home/d.vasilakis/Ordering_Development/node_modules/pg-protocol/dist/index.js:8:42)
-    at Socket.emit (events.js:315:20)
-    at addChunk (_stream_readable.js:302:12)
-    at readableAddChunk (_stream_readable.js:278:9)
-    at Socket.Readable.push (_stream_readable.js:217:10)
-    at TCP.onStreamRead (internal/stream_base_commons.js:186:23)
+Message: Cannot read property 'uid' of undefined
+Stack: TypeError: Cannot read property 'uid' of undefined
+    at getWhere (/home/d.vasilakis/Ordering_Development/server/Postgre/API/Contracts/Queries.js:91:36)
+    at getQueryTotalContractsByUser (/home/d.vasilakis/Ordering_Development/server/Postgre/API/Contracts/Queries.js:86:91)
+    at getSelectFromClauses (/home/d.vasilakis/Ordering_Development/server/Postgre/API/Contracts/Queries.js:103:5)
+    at Object.query_getcontractbyid (/home/d.vasilakis/Ordering_Development/server/Postgre/API/Contracts/Queries.js:78:31)
+    at Object.getContractById (/home/d.vasilakis/Ordering_Development/server/Postgre/API/Contracts/Methods.js:18:45)
+    at getContractById (/home/d.vasilakis/Ordering_Development/server/Postgre/API/Contracts/ContractAPI.js:11:32)
+    at updateContract (/home/d.vasilakis/Ordering_Development/server/Postgre/API/Contracts/ContractAPI.js:39:3)
+    at processTicksAndRejections (internal/process/task_queues.js:97:5)
