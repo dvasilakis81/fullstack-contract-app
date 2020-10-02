@@ -81,7 +81,7 @@ export function createAccount(data, token) {
 
 export function updateAccount(data, token) {
 
-  const request = axios.post(`${URL}/updateaccount`, data, { headers: { Authorization: 'Bearer ' + token } })
+  const request = axios.post(`${URL}/updateaccount`, data, { headers: { Authorization: 'Bearer ' + token } });
   return {
     type: 'UPDATE_ACCOUNT',
     payload: request

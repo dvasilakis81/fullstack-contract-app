@@ -110,12 +110,18 @@ class NewContract extends Component {
 
 		this.setCheckboxValue = this.setCheckboxValue.bind(this);
 		this.onChange = this.onChange.bind(this);
+		this.onChangeStart = this.onChangeStart.bind(this);
+		this.onChangeEnd = this.onChangeEnd.bind(this);
+		this.onChangeProtocolDate = this.onChangeProtocolDate.bind(this);
+		this.onChangeAwardDate = this.onChangeAwardDate.bind(this);
+		
 		this.handleSubmit = this.handleSubmit.bind(this);
 		this.autoCompleteBudget = this.autoCompleteBudget.bind(this);
 		this.handleClose = this.handleClose.bind(this, '');
 		this.handleContractStuff = this.handleContractStuff.bind(this);
 		this.selectAllStuff = this.selectAllStuff.bind(this);
 		this.getSelectedUsers = this.getSelectedUsers.bind(this);
+		this.loadSelectAccountPer = this.loadSelectAccountPer.bind(this);
 	}
 
 	handleContractStuff(e) {
@@ -169,6 +175,13 @@ class NewContract extends Component {
 					msg = 'Η σύμβαση επεξεργάστηκε επιτυχώς!!!'
 				this.setState({ message: msg, openMessage: true, variant: 'success', submitButtonDisabled: false });
 				store.dispatch({ type: 'UPDATE_CONTRACT', payload: res.data })
+
+				var snackbarInfo = {}
+				snackbarInfo.openMessage = true;
+				snackbarInfo.message = msg;
+				snackbarInfo.variant = 'success';
+
+				store.dispatch({ type: 'SHOW_SNACKBAR', payload: snackbarInfo });
 
 				this.props.history.goBack();
 			}).catch(error => {
@@ -249,12 +262,87 @@ class NewContract extends Component {
 	setCheckboxValue(e) {
 		this.setState({ [e.target.id]: e.target.checked });
 	}
+	monthDiff(d1, d2) {
+		var months;
+		months = (d2.getFullYear() - d1.getFullYear()) * 12;
+		months -= d1.getMonth();
+		months += d2.getMonth();
+		return months <= 0 ? 0 : months;
+	}
 	onChange(event) {
+		if (event.target.id === 'AccountPer') {			
+
+			var accountPer = event.target.value;
+			if (accountPer) {
+				var months = this.monthDiff(new Date(this.state.Start), new Date(this.state.End));
+				var numOfAccounts = Math.round(months / Number(accountPer));
+				this.setState({ NumberOfAccounts: numOfAccounts });
+			}
+		}
+
 		this.setState({ [event.target.id]: event.target.value });
 	}
+	onChangeProtocolDate(date) {		
+		this.setState({ ProtocolDate: date });
+	}
+	onChangeAwardDate(date) {		
+		this.setState({ AwardDate: date });
+	}
+	onChangeStart(date) {
+
+		var start = date;
+		var end = this.state.End;
+		var accountPer = this.state.AccountPer;
+
+		if (start && end && accountPer) {
+			var months = this.monthDiff(new Date(start), new Date(end));
+			var numOfAccounts = Math.round(months / Number(accountPer));
+			this.setState({ NumberOfAccounts: numOfAccounts });
+		}
+
+		this.setState({ Start: start });
+	}
+	onChangeEnd(date) {
+
+		var start = this.state.Start;
+		var end = date;
+		var accountPer = this.state.AccountPer;
+
+		if (start && end && accountPer) {
+			var months = this.monthDiff(new Date(start), new Date(end));
+			var numOfAccounts = Math.round(months / Number(accountPer));
+			this.setState({ NumberOfAccounts: numOfAccounts });
+		}
+
+		this.setState({ End: end });
+	}
+
 	handleClose = (event, reason) => {
 		this.setState({ message: '', openMessage: false, submitButtonDisabled: false });
 	};
+
+	loadSelectAccountPer() {
+		let ret = '';
+		let accountPer = [];
+		accountPer.push({ key: 1, value: "ανά μήνα" });
+		accountPer.push({ key: 2, value: "ανά 2-μηνο" });
+		accountPer.push({ key: 3, value: "ανά 3-μηνο" });
+		accountPer.push({ key: 4, value: "ανά 4-μηνο" });
+		accountPer.push({ key: 5, value: "ανά 5-μηνο" });
+		accountPer.push({ key: 6, value: "ανά 6-μηνο" });
+		accountPer.push({ key: 7, value: "ανά 7-μηνο" });
+		accountPer.push({ key: 8, value: "ανά 8-μηνο" });
+		accountPer.push({ key: 9, value: "ανά 9-μηνο" });
+		accountPer.push({ key: 10, value: "ανά 10-μηνο" });
+		accountPer.push({ key: 11, value: "ανά 11-μηνο" });
+		accountPer.push({ key: 12, value: "ανά 12-μηνο" });
+
+		ret = accountPer.map((data, index) => {
+			return <option key={index} value={data.key}>{data.value}</option>
+		})
+
+		return ret;
+	}
 
 	loadSelectMunicipalityDirections() {
 		let ret = '';
@@ -319,8 +407,8 @@ class NewContract extends Component {
 	render() {
 		var divWidth = this.props.screenDimensions.width > this.props.screenDimensions.height ? '80%' : '100%'
 		var title = 'Δημιουργία Σύμβασης';
-		if (this.state.ContractId) 
-			title = <div><span>Επεξεργασία Σύμβασης</span><br /><span style={{ color: 'gold' }}>{this.state.Discreet}</span></div>;		
+		if (this.state.ContractId)
+			title = <div><span>Επεξεργασία Σύμβασης</span><br /><span style={{ color: 'gold' }}>{this.state.Discreet}</span></div>;
 
 		return (
 			<div>
@@ -339,50 +427,52 @@ class NewContract extends Component {
 											{this.getSelectUsersTemplate()}
 										</div> */}
 										<div style={styles.divRow}>
-											<MyTextField title='Διεύθυνση' id='DirectionId' stateValue={this.state.DirectionId} values={this.loadSelectMunicipalityDirections()} isRequired={true} isDisabled={false} onChange={this.onChange} select={true} width='50%' />
-											<MyTextField title='Τμήμα' id='DepartmentId' stateValue={this.state.DepartmentId} values={this.loadMunicipalityDirectionDepartments(this.state.DirectionId)} isRequired={true} isDisabled={false} onChange={this.onChange} select={true} width='50%' />
+										{/* style={{ margin: '0px', padding: '0px', width: w, textAlignLast: 'center' }} */}
+											<MyTextField title='Διεύθυνση' id='DirectionId' stateValue={this.state.DirectionId} values={this.loadSelectMunicipalityDirections()} InputProps={{ inputProps: { style: { textAlignLast: 'center' } } }} isRequired={true} isDisabled={false} onChange={this.onChange} select={true} width='50%' />
+											<MyTextField title='Τμήμα' id='DepartmentId' stateValue={this.state.DepartmentId} values={this.loadMunicipalityDirectionDepartments(this.state.DirectionId)} InputProps={{ inputProps: { style: { textAlignLast: 'center' } } }} isRequired={true} isDisabled={false} onChange={this.onChange} select={true} width='50%' />
 										</div>
 										<div style={styles.divRow}>
-											<ProtocolInput title='Α.Π.' idn='ProtocolNumber' idd='ProtocolDate' protocolNumber={this.state.ProtocolNumber} protocolDate={this.state.ProtocolDate} onChange={this.onChange} tp1='text' tp2='date' width='33.33%' />
-											<MyTextField tp='date' title='Έναρξη Σύμβασης' id='Start' stateValue={this.state.Start} isRequired={true} isDisabled={false} onChange={this.onChange} inputProps={{ style: { textAlign: 'center' } }} width='33.33%' />
-											<MyTextField tp='date' title='Λήξη Σύμβασης' id='End' stateValue={this.state.End} isRequired={true} isDisabled={false} onChange={this.onChange} inputProps={{ style: { textAlign: 'center' } }} width='33.33%' />
+											<ProtocolInput title='Α.Π.' idn='ProtocolNumber' idd='ProtocolDate' protocolNumber={this.state.ProtocolNumber} protocolDate={this.state.ProtocolDate} onChange={this.onChange} onChangeDate={this.onChangeProtocolDate} tp1='text' tp2='date' width='33.33%' />
+											<MyTextField tp='date' title='Έναρξη Σύμβασης' id='Start' stateValue={this.state.Start} isRequired={true} isDisabled={false} onChangeDate={this.onChangeStart} inputProps={{ style: { textAlign: 'center' } }} width='33.33%' />
+											<MyTextField tp='date' title='Λήξη Σύμβασης' id='End' stateValue={this.state.End} isRequired={true} isDisabled={false} onChangeDate={this.onChangeEnd} inputProps={{ style: { textAlign: 'center' } }} width='33.33%' />
 										</div>
 										<div style={styles.divRow}>
-											<MyTextField title='Τύπος' id='ContractTypeId' stateValue={this.state.ContractTypeId} values={this.loadContractTypes(this.state.ContractTypeId)} isRequired={true} isDisabled={false} onChange={this.onChange} select={true} width='20%' />
+											<MyTextField title='Τύπος' id='ContractTypeId' stateValue={this.state.ContractTypeId} values={this.loadContractTypes(this.state.ContractTypeId)} InputProps={{ inputProps: { style: { textAlignLast: 'center' } } }} isRequired={true} isDisabled={false} onChange={this.onChange} select={true} width='20%' />
 											{this.state.ContractTypeId.toString() === '2' ?
 												<MyTextField tm={getLawArticleTooltip(this.state)} title='Άρθρο Προγραμματικής' id='LawArticle' stateValue={this.state.LawArticle} isRequired={true} isDisabled={false} onChange={this.onChange} width='80%' />
 												:
 												<></>}
 										</div>
 										<div style={styles.divRow}>
-											<MyTextField tp='text' title='K.A.E.' id='KAE' stateValue={this.state.KAE} isRequired={true} isDisabled={false} onChange={this.onChange} inputProps={{ style: { textAlign: 'center' }, inputProps: { maxLength: 20 } }} width='20%' />
-											<MyTextField tp='text' title='Φ.' id='Actor' stateValue={this.state.Actor} isRequired={true} isDisabled={false} onChange={this.onChange} inputProps={{ style: { textAlign: 'center' }, inputProps: { maxLength: 5 } }} width='20%' />
-											<MyTextField tp='text' title='Δ.' id='CodeDirection' stateValue={this.state.CodeDirection} isRequired={true} isDisabled={false} onChange={this.onChange} inputProps={{ style: { textAlign: 'center' }, inputProps: { maxLength: 5 } }} width='20%' />
-											<ProtocolInput title='Α.Α.Κ. Α.Π.' idn='AwardNumber' idd='AwardDate' protocolNumber={this.state.AwardNumber} protocolDate={this.state.AwardDate} onChange={this.onChange} tp1='text' tp2='date' width='20%' />
-											<MyTextField tp='text' title='Α.Α.Κ. ΑΔΑ' id='AwardAda' stateValue={this.state.AwardAda} isRequired={false} isDisabled={false} onChange={this.onChange} inputProps={{ style: { textAlign: 'center' } }} width='20%' />
+											<MyTextField tp='text' title='K.A.E.' id='KAE' stateValue={this.state.KAE} isRequired={true} isDisabled={false} onChange={this.onChange} InputProps={{ inputProps: { maxLength: 20, style: { textAlign: 'center' } } }} width='20%' />
+											<MyTextField tp='text' title='Φ.' id='Actor' stateValue={this.state.Actor} isRequired={true} isDisabled={false} onChange={this.onChange} InputProps={{ inputProps: { maxLength: 5, style: { textAlign: 'center' } } }} width='20%' />
+											<MyTextField tp='text' title='Δ.' id='CodeDirection' stateValue={this.state.CodeDirection} isRequired={true} isDisabled={false} onChange={this.onChange} InputProps={{ inputProps: { maxLength: 5, style: { textAlign: 'center' } } }} width='20%' />
+											<ProtocolInput title='Α.Α.Κ. Α.Π.' idn='AwardNumber' idd='AwardDate' protocolNumber={this.state.AwardNumber} protocolDate={this.state.AwardDate} onChange={this.onChange} onChangeDate={this.onChangeAwardDate} tp1='text' tp2='date' width='20%' />
+											<MyTextField tp='text' title='Α.Α.Κ. ΑΔΑ' id='AwardAda' stateValue={this.state.AwardAda} isRequired={false} isDisabled={false} onChange={this.onChange} ΙnputProps={{ style: { textAlign: 'center' } }} width='20%' />
 										</div>
 										{
 											this.state.ContractTypeId.toString() === '1' ? <div style={styles.divRow}>
-												<MyTextField tp='text' title='CPV Κωδικός' id='CpvCode' stateValue={this.state.CpvCode} isRequired={false} isDisabled={false} onChange={this.onChange} inputProps={{ style: { textAlign: 'center' }, inputProps: { maxLength: 20 } }} width='20%' />
-												<MyTextField tp='text' title='CPV Τίτλος' id='CpvTitle' stateValue={this.state.CpvTitle} isRequired={false} isDisabled={false} onChange={this.onChange} inputProps={{ style: { textAlign: 'center' }, inputProps: { maxLength: 355 } }} width='80%' />
+												<MyTextField tp='text' title='CPV Κωδικός' id='CpvCode' stateValue={this.state.CpvCode} isRequired={false} isDisabled={false} onChange={this.onChange} InputProps={{ inputProps: { maxLength: 20, style: { textAlign: 'center' } } }} width='20%' />
+												<MyTextField tp='text' title='CPV Τίτλος' id='CpvTitle' stateValue={this.state.CpvTitle} isRequired={false} isDisabled={false} onChange={this.onChange} InputProps={{ inputProps: { maxLength: 355, style: { textAlign: 'center' } } }} width='80%' />
 											</div> : <></>
 										}
 										<div style={styles.divRow}>
-											<MyTextField tp='text' title='Όνομα Αναδόχου' id='ConcessionaireName' stateValue={this.state.ConcessionaireName} isRequired={true} isDisabled={false} onChange={this.onChange} inputProps={{ style: { textAlign: 'center' } }} width='80%' />
-											<MyTextField tp='text' title='Α.Φ.Μ. Αναδόχου' id='ConcessionaireAFM' stateValue={this.state.ConcessionaireAFM} isRequired={true} isDisabled={false} onChange={this.onChange} inputProps={{ style: { textAlign: 'center' } }} width='20%' />
+											<MyTextField tp='text' title='Όνομα Αναδόχου' id='ConcessionaireName' stateValue={this.state.ConcessionaireName} isRequired={true} isDisabled={false} onChange={this.onChange} InputProps={{ style: { textAlign: 'center' } }} width='80%' />
+											<MyTextField tp='text' title='Α.Φ.Μ. Αναδόχου' id='ConcessionaireAFM' stateValue={this.state.ConcessionaireAFM} isRequired={true} isDisabled={false} onChange={this.onChange} InputProps={{ style: { textAlign: 'center' } }} width='20%' />
 										</div>
 										<div style={styles.divRow}>
-											<MyTextField tp='text' title='Διακριτικός Τίτλος' id='Discreet' stateValue={this.state.Discreet} isRequired={false} isDisabled={false} onChange={this.onChange} inputProps={{ style: { textAlign: 'center', inputProps: { maxLength: 2000 } } }} multiline={true} width='100%' />
-											<MyTextField tp='text' title='Τίτλος' id='Title' stateValue={this.state.Title} isRequired={true} isDisabled={false} onChange={this.onChange} inputProps={{ style: { textAlign: 'center', inputProps: { maxLength: 2000 } } }} multiline={true} width='100%' />
+											<MyTextField tp='text' title='Διακριτικός Τίτλος' id='Discreet' stateValue={this.state.Discreet} isRequired={false} isDisabled={false} onChange={this.onChange} InputProps={{ inputProps: { maxLength: 2000, style: { textAlign: 'center' } } }} multiline={true} width='100%' />
+											<MyTextField tp='text' title='Τίτλος' id='Title' stateValue={this.state.Title} isRequired={true} isDisabled={false} onChange={this.onChange} InputProps={{ inputProps: { maxLength: 2000, style: { textAlign: 'center' } } }} multiline={true} width='100%' />
 										</div>
 										<div style={styles.divRow}>
 											<MyTextField tp='number' title='Καθαρό Ποσό' id='AmountPure' stateValue={this.state.AmountPure} isRequired={true} isDisabled={false} onChange={this.onChange} inputProps={{ style: { textAlign: "center" } }} InputProps={{ endAdornment: <InputAdornment position="end"><span style={{ fontWeight: 'bolder', marginRight: '10px' }}>€</span></InputAdornment> }} width='20%' />
 											<MyTextField tp='number' title={getFpaLabel(getFpaValueFromReservations(this.props.token.data.user.reservations))} id='AmountFpa' stateValue={this.state.AmountFpa} isRequired={true} isDisabled={false} onChange={this.onChange} inputProps={{ style: { textAlign: "center" } }} InputProps={{ endAdornment: <InputAdornment position="end"><span style={{ fontWeight: 'bolder', marginRight: '10px' }}>€</span></InputAdornment> }} width='20%' />
-											<MyTextField tp='number' title='Συνολικό Ποσό' id='AmountTotal' stateValue={this.state.AmountTotal} isRequired={true} isDisabled={false} onChange={this.onChange} inputProps={{ style: { textAlign: "center" } }} InputProps={{ endAdornment: <InputAdornment position="end"><span style={{ fontWeight: 'bolder', marginRight: '10px' }}>€</span></InputAdornment> }} width='20%' />
+											<MyTextField tp='number' title='Συνολικό Ποσό' id='AmountTotal' stateValue={this.state.AmountTotal} isRequired={true} isDisabled={false} onChange={this.onChange} inputProps={{ style: { textAlign: 'center' } }} InputProps={{ endAdornment: <InputAdornment position="end"><span style={{ fontWeight: 'bolder', marginRight: '10px' }}>€</span></InputAdornment> }} width='20%' />
 											{getButton('contained', 'small', null, styles.btnAuto, this.autoCompleteBudget, 'ΥΠΟΛΟΓΙΣΜΟΣ', null, false)}
 										</div>
 										<div style={styles.divRow}>
-											<MyTextField tp='number' title='# Παραδοτέων (Λογαριασμών)' id='NumberOfAccounts' stateValue={this.state.NumberOfAccounts} isRequired={true} isDisabled={false} onChange={this.onChange} inputProps={{ style: { textAlign: "center" }, inputProps: { min: 0, max: 100 } }} width='20%' />
+											<MyTextField title='Λογαριασμός ανά' id='AccountPer' stateValue={this.state.AccountPer} values={this.loadSelectAccountPer()} InputProps={{ inputProps: { style: { textAlignLast: 'center' } } }} isRequired={true} isDisabled={false} onChange={this.onChange} select={true} width='20%' />
+											<MyTextField tp='number' title='# Παραδοτέων (Λογαριασμών)' id='NumberOfAccounts' stateValue={this.state.NumberOfAccounts} isRequired={true} isDisabled={false} onChange={this.onChange} InputProps={{ inputProps: { max: 100, min: 1, style: { textAlign: 'center' } } }} width='20%' />
 											{getCheckboxField('HasDownPayment', 'Eχει προκαταβολή (Αν ναι θα είναι ο 1ος λογαριασμός)', this.state.HasDownPayment, null, this.setCheckboxValue)}
 										</div>
 									</div>
