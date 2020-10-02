@@ -257,8 +257,8 @@ function getAttachmentInvoice(body) {
 				body.Contract[0].Concessionaire[0].Name,
 				body.Account[0].Invoice[0].DeliveredDate ? util.format('στης %s', body.Account[0].Invoice[0].DeliveredDate) : '')
 		else
-			rText = util.format('Το υπ΄ αρίθμ %s/%s τιμολόγιο του δικαιούχου %s και φωτοαντίγραφο του', body.Account[0].Invoice[0].Number,
-				body.Account[0].Invoice[0].Date, body.Contract[0].Concessionaire[0].Name)
+			rText = util.format('Το υπ΄ αρίθμ %s/%s τιμολόγιο του δικαιούχου %s και φωτοαντίγραφο του', body.Account[0].Invoice[0].ProtocolNumber,
+				body.Account[0].Invoice[0].ProtocolDate, body.Contract[0].Concessionaire[0].Name)
 
 		ret += '<w:p>' +
 			'<w:pPr>' +

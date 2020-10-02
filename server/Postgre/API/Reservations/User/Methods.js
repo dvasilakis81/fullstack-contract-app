@@ -55,7 +55,7 @@ async function remove(req, res, next) {
   }
 }
 
-async function initializeUserReservations(reservations, userId) {
+async function initializeUserReservations(reservations, userId, next) {
 
   try {
     const { rows } = await pool.query(queries.query_initialize(reservations, userId));
@@ -72,5 +72,5 @@ module.exports = {
   getUserReservations,
   insert,
   update,
-  remove  
+  remove
 }

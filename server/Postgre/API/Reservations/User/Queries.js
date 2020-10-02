@@ -21,7 +21,7 @@ function query_initialize(reservations, userId) {
       helper.addQuotes(reservations[i].Percentage),
       helper.addQuotes(reservations[i].Stamp),
       helper.addQuotes(reservations[i].StampOGA),
-      helper.addQuotes(reservations[i].IsReservation),
+      reservations[i].IsReservation ? reservations[i].IsReservation : false,
       helper.addQuotes(reservations[i].Order));
     if (i < reservations.length - 1)
       sqlQuery += ','
@@ -59,7 +59,7 @@ function query_update(req) {
   const Percentage = req.body.Percentage;
   const Stamp = req.body.Stamp;
   const StampOGA = req.body.StampOGA;
-  const IsReservation = req.body.IsReservation;
+  const IsReservation = req.body.IsReservation ? req.body.IsReservation : false;
   const Order = req.body.Order;
 
   var sqlQuery = util.format('UPDATE "Ordering"."UserReservations" ' +

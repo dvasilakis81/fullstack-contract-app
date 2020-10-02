@@ -5,8 +5,8 @@ function query_insertcontract(req) {
 
   return util.format('INSERT INTO "Ordering"."Contract"("ContractTypeId", "Title",  "ProtocolNumber",  "ProtocolDate",  "KAE",  "Actor", ' +
     ' "CodeDirection", "AwardNumber", "AwardDate", "AwardAda", "CpvCode", "CpvTitle", "AmountPure", "AmountFpa", "AmountTotal",  ' +
-    ' "Balance", "Start", "End", "NumberOfAccounts", "DirectionId", "DepartmentId", "DateCreated", "DateModified", "ConcessionaireName", "ConcessionaireAFM", "HasDownPayment", "FpaValue", "OwnerId", "AllUsers", "LawArticle","Discreet")  ' +
-    ' VALUES(%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s) ' +
+    ' "Balance", "Start", "End", "NumberOfAccounts", "DirectionId", "DepartmentId", "DateCreated", "DateModified", "ConcessionaireName", "ConcessionaireAFM", "HasDownPayment", "FpaValue", "OwnerId", "AllUsers", "LawArticle","Discreet","AccountPer")  ' +
+    ' VALUES(%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s) ' +
     ' RETURNING *',
     helper.addQuotes(req.body.ContractTypeId),
     helper.addQuotes(req.body.Title),
@@ -38,7 +38,8 @@ function query_insertcontract(req) {
     helper.addQuotes(req.body.OwnerId),
     req.body.AllUsers,
     helper.addQuotes(req.body.LawArticle),
-    helper.addQuotes(req.body.Discreet));
+    helper.addQuotes(req.body.Discreet),
+    helper.addQuotes(req.body.AccountPer));
 }
 
 function query_insertcontractowner(req, contractId) {
@@ -63,6 +64,7 @@ function query_getcontracts(req) {
   // return util.format('SELECT * FROM "Ordering"."Contract" as c ' + 
   // 'INNER JOIN "Ordering"."Account" as a ' +
   // ' ON a."ContractId"=c."Id"')
+  
   var loginUserInfo = req.body.loginUserInfo;
   var select = getSelectFromClauses(loginUserInfo);
   var where = getWhere(loginUserInfo);
@@ -75,11 +77,11 @@ function query_getcontracts(req) {
 
 function query_getcontractbyid(req, contractId) {
   var cid = contractId ? contractId : req.body.contractId;
-  return util.format('%s %s', getSelectFromClauses(req.body.loginUserInfo), util.format('WHERE c."Id"=%s', cid))
+  return util.format('%s %s', getSelectFromClauses(req.body.loginUserInfo), util.format('WHERE c."Id"=%s', cid));
 }
 
 function query_getcontracttypes() {
-  return util.format('SELECT * FROM "Ordering"."ContractType"')
+  return util.format('SELECT * FROM "Ordering"."ContractType"');
 }
 
 function getQueryTotalContractsByUser(loginUserInfo) {
@@ -87,8 +89,10 @@ function getQueryTotalContractsByUser(loginUserInfo) {
 }
 
 function getWhere(loginUserInfo) {
-  return util.format('WHERE c."OwnerId"=%s OR %s OR %s OR %s',
+  return util.format('WHERE c."OwnerId"=%s OR %s OR %s OR %s OR %s OR %s',
     helper.addQuotes(loginUserInfo.uid),
+    checkIfLoginUserIsTheGeneralManager(loginUserInfo),
+    checkIfLoginUserIsTheMayor(loginUserInfo),
     checkIfLoginUserBelongToSameDirectionAndDepartment(loginUserInfo),
     checkIfLoginUserIsSupervisor(loginUserInfo),
     checkIfLoginUserIsDirector(loginUserInfo)
@@ -112,6 +116,14 @@ function getSelectFromClauses(loginUserInfo) {
     '(SELECT json_agg(EconomicalCommitee) FROM (SELECT * FROM "Ordering"."EconomicalCommitee" as ec WHERE ec."ContractId" = c."Id" ORDER BY ec."OrderNo") EconomicalCommitee) AS EconomicalCommitee, ' +
     '(SELECT json_agg(SnippetPractical) FROM (SELECT * FROM "Ordering"."SnippetPractical" as sp WHERE sp."ContractId" = c."Id" ORDER BY sp."OrderNo") SnippetPractical) AS SnippetPractical ' +
     'FROM "Ordering"."Contract" as c '
+}
+
+function checkIfLoginUserIsTheGeneralManager(loginUserInfo) {
+  return util.format(" %s='ΓΕΝΙΚΟΣ ΓΡΑΜΜΑΤΕΑΣ' OR %s='ΓΕΝΙΚΟΣ ΓΡΑΜΜΑΤΕΑΣ' " , helper.addQuotes(loginUserInfo.ou), helper.addQuotes(loginUserInfo.personalTitle));
+}
+
+function checkIfLoginUserIsTheMayor(loginUserInfo) {
+  return util.format(" %s='ΔΗΜΑΡΧΟΣ' OR %s='ΔΗΜΑΡΧΟΣ' ", helper.addQuotes(loginUserInfo.ou), helper.addQuotes(loginUserInfo.personalTitle));
 }
 
 function checkIfLoginUserIsSupervisor(loginUserInfo) {
@@ -149,7 +161,7 @@ function query_updatecontract(req, res, next) {
     'SET "ContractTypeId"=%s,"Title"=%s,"ProtocolNumber"=%s,"ProtocolDate"=%s,"KAE"=%s,"Actor"=%s,' +
     '"CodeDirection"=%s,"AwardNumber"=%s,"AwardDate"=%s,"AwardAda"=%s,"CpvCode"=%s,"CpvTitle"=%s,"AmountPure"=%s,"AmountFpa"=%s,"AmountTotal"=%s,' +
     '"Balance"=%s,"Start"=%s,"End"=%s,"NumberOfAccounts"=%s,"DirectionId"=%s,' +
-    '"DepartmentId"=%s,"DateModified"=%s,"ConcessionaireName"=%s,"ConcessionaireAFM"=%s,"HasDownPayment"=%s,"FpaValue"=%s, "AllUsers"=%s,"LawArticle"=%s,"Discreet"=%s ' +
+    '"DepartmentId"=%s,"DateModified"=%s,"ConcessionaireName"=%s,"ConcessionaireAFM"=%s,"HasDownPayment"=%s,"FpaValue"=%s, "AllUsers"=%s,"LawArticle"=%s,"Discreet"=%s,"AccountPer"=%s ' +
     'WHERE "Id"=%s ' +
     'RETURNING * ',
     helper.addQuotes(req.body.ContractTypeId),
@@ -181,6 +193,7 @@ function query_updatecontract(req, res, next) {
     req.body.AllUsers,
     helper.addQuotes(req.body.LawArticle),
     helper.addQuotes(req.body.Discreet),
+    helper.addQuotes(req.body.AccountPer),    
     req.body.ContractId);
 
   return sqlQuery;
