@@ -14,7 +14,7 @@ async function getContracts(req, res, next) {
 
 async function getContractById(req, res, next, contractId) {
 
-  try {    
+  try {
     const { rows } = await db.query(queries.query_getcontractbyid(req, contractId));
     return rows[0];
   } catch (error) {
@@ -51,28 +51,25 @@ async function contractExists(req, res, next) {
     next(error);
   }
 }
-async function insertInfoToContractTable(req, res, next) {
+async function insertInfoToContractTable(req, res, next, client) {
 
-  try {
-    const { rows } = await db.query(queries.query_insertcontract(req, res, next));
-    return rows[0].Id;
-  } catch (error) {
-    next(error);
-  }
+  const { rows } = await client.query(queries.query_insertcontract(req, res, next));
+  return rows[0].Id;
 }
-async function insertContractOwnerInfo(req, res, next, contractId) {
-  try {
-    const { rows } = await db.query(queries.query_insertcontractowner(req, contractId));
-    return rows[0].Id;
-  } catch (error) {
-    next(error);
-  }
+async function insertContractOwnerInfo(req, res, next, contractId, client) {
 
+  const { rows } = await client.query(queries.query_insertcontractowner(req, contractId));
+  return rows[0].Id;
 }
-async function updateContract(req, res, next) {
+async function insertActivity(req, res, next, contractId, activityType, client) {
+
+  const { rows } = await client.query(queries.query_insertactivity(req, contractId, activityType));
+  return rows[0].Id;
+}
+async function updateContract(req, res, next, client) {
 
   try {
-    const { rows } = await db.query(queries.query_updatecontract(req, res, next));
+    const { rows } = await client.query(queries.query_updatecontract(req));
     return rows[0].Id;
   } catch (error) {
     next(error);
@@ -98,5 +95,6 @@ module.exports = {
   insertContractOwnerInfo,
   deleteContract,
   contractExists,
-  updateContract
+  updateContract,
+  insertActivity
 }

@@ -1,45 +1,48 @@
-const util = require('util')
+const util = require('util');
 const helper = require('../../../HelperMethods/helpermethods');
 
 function query_insertcontract(req) {
+  var contractInfo = req.body.contractInfo;
 
-  return util.format('INSERT INTO "Ordering"."Contract"("ContractTypeId", "Title",  "ProtocolNumber",  "ProtocolDate",  "KAE",  "Actor", ' +
-    ' "CodeDirection", "AwardNumber", "AwardDate", "AwardAda", "CpvCode", "CpvTitle", "AmountPure", "AmountFpa", "AmountTotal",  ' +
-    ' "Balance", "Start", "End", "NumberOfAccounts", "DirectionId", "DepartmentId", "DateCreated", "DateModified", "ConcessionaireName", "ConcessionaireAFM", "HasDownPayment", "FpaValue", "OwnerId", "AllUsers", "LawArticle","Discreet","AccountPer")  ' +
-    ' VALUES(%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s) ' +
-    ' RETURNING *',
-    helper.addQuotes(req.body.ContractTypeId),
-    helper.addQuotes(req.body.Title),
-    helper.addQuotes(req.body.ProtocolNumber),
-    helper.addQuotes(req.body.ProtocolDate),
-    helper.addQuotes(req.body.KAE),
-    helper.addQuotes(req.body.Actor),
-    helper.addQuotes(req.body.CodeDirection),
-    helper.addQuotes(req.body.AwardNumber),
-    helper.addQuotes(req.body.AwardDate),
-    helper.addQuotes(req.body.AwardAda),
-    helper.addQuotes(req.body.CpvCode),
-    helper.addQuotes(req.body.CpvTitle),
-    helper.addQuotes(req.body.AmountPure),
-    helper.addQuotes(req.body.AmountFpa),
-    helper.addQuotes(req.body.AmountTotal),
-    helper.addQuotes(req.body.Balance),
-    helper.addQuotes(req.body.Start),
-    helper.addQuotes(req.body.End),
-    helper.addQuotes(req.body.NumberOfAccounts),
-    helper.addQuotes(req.body.DirectionId),
-    helper.addQuotes(req.body.DepartmentId),
-    helper.addQuotes(new Date().toLocaleString()),
-    helper.addQuotes(new Date().toLocaleString()),
-    helper.addQuotes(req.body.ConcessionaireName),
-    helper.addQuotes(req.body.ConcessionaireAFM),
-    req.body.HasDownPayment,
-    helper.addQuotes(req.body.FpaValue),
-    helper.addQuotes(req.body.OwnerId),
-    req.body.AllUsers,
-    helper.addQuotes(req.body.LawArticle),
-    helper.addQuotes(req.body.Discreet),
-    helper.addQuotes(req.body.AccountPer));
+  var sqlQuery = util.format('INSERT INTO "Ordering"."Contract"("ContractTypeId", "Title",  "ProtocolNumber",  "ProtocolDate",  "KAE",  "Actor", ' +
+  ' "CodeDirection", "AwardNumber", "AwardDate", "AwardAda", "CpvCode", "CpvTitle", "AmountPure", "AmountFpa", "AmountTotal",  ' +
+  ' "Balance", "Start", "End", "NumberOfAccounts", "DirectionId", "DepartmentId", "DateCreated", "DateModified", "ConcessionaireName", "ConcessionaireAFM", "HasDownPayment", "FpaValue", "OwnerId", "AllUsers", "LawArticle","Discreet","AccountPer")  ' +
+  ' VALUES(%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s) ' +
+  ' RETURNING *',
+  helper.addQuotes(contractInfo.ContractTypeId),
+  helper.addQuotes(contractInfo.Title),
+  helper.addQuotes(contractInfo.ProtocolNumber),
+  helper.addQuotes(contractInfo.ProtocolDate),
+  helper.addQuotes(contractInfo.KAE),
+  helper.addQuotes(contractInfo.Actor),
+  helper.addQuotes(contractInfo.CodeDirection),
+  helper.addQuotes(contractInfo.AwardNumber),
+  helper.addQuotes(contractInfo.AwardDate),
+  helper.addQuotes(contractInfo.AwardAda),
+  helper.addQuotes(contractInfo.CpvCode),
+  helper.addQuotes(contractInfo.CpvTitle),
+  helper.addQuotes(contractInfo.AmountPure),
+  helper.addQuotes(contractInfo.AmountFpa),
+  helper.addQuotes(contractInfo.AmountTotal),
+  helper.addQuotes(contractInfo.Balance),
+  helper.addQuotes(contractInfo.Start),
+  helper.addQuotes(contractInfo.End),
+  helper.addQuotes(contractInfo.NumberOfAccounts),
+  helper.addQuotes(contractInfo.DirectionId),
+  helper.addQuotes(contractInfo.DepartmentId),
+  helper.addQuotes(new Date().toLocaleString()),
+  helper.addQuotes(new Date().toLocaleString()),
+  helper.addQuotes(contractInfo.ConcessionaireName),
+  helper.addQuotes(contractInfo.ConcessionaireAFM),
+  contractInfo.HasDownPayment,
+  helper.addQuotes(contractInfo.FpaValue),
+  helper.addQuotes(contractInfo.OwnerId),
+  contractInfo.AllUsers,
+  helper.addQuotes(contractInfo.LawArticle),
+  helper.addQuotes(contractInfo.Discreet),
+  helper.addQuotes(contractInfo.AccountPer));
+
+  return sqlQuery;
 }
 
 function query_insertcontractowner(req, contractId) {
@@ -59,12 +62,30 @@ function query_insertcontractowner(req, contractId) {
   return sqlQuery;
 }
 
+function query_insertactivity(req, contractId, action) {
+  var loginUserInfo = req.body.loginUserInfo;
+  var contractInfo = req.body.contractInfo;
+
+  var sqlQuery = 'INSERT INTO "Ordering"."Activities"("ContractId", "AccountId", "IpAddress", "Username", "Action", "Info", "Created")  VALUES ';
+  sqlQuery += util.format('(%s,%s,%s,%s,%s,%s,%s)',
+    helper.addQuotes(contractId),
+    helper.addQuotes(null),
+    helper.addQuotes(contractInfo.IpAddress),
+    helper.addQuotes(loginUserInfo.uid),
+    helper.addQuotes(action),
+    helper.addQuotes(JSON.stringify(contractInfo)),
+    helper.addQuotes(new Date().toLocaleString()));
+  sqlQuery += ' RETURNING * ';
+
+  return sqlQuery;
+}
+
 function query_getcontracts(req) {
-  
+
   // return util.format('SELECT * FROM "Ordering"."Contract" as c ' + 
   // 'INNER JOIN "Ordering"."Account" as a ' +
   // ' ON a."ContractId"=c."Id"')
-  
+
   var loginUserInfo = req.body.loginUserInfo;
   var select = getSelectFromClauses(loginUserInfo);
   var where = getWhere(loginUserInfo);
@@ -89,7 +110,7 @@ function getQueryTotalContractsByUser(loginUserInfo) {
 }
 
 function getWhere(loginUserInfo) {
-  return util.format('WHERE c."OwnerId"=%s OR %s OR %s OR %s OR %s OR %s',
+  return util.format('WHERE (c."OwnerId"=%s OR %s OR %s OR %s OR %s OR %s)',
     helper.addQuotes(loginUserInfo.uid),
     checkIfLoginUserIsTheGeneralManager(loginUserInfo),
     checkIfLoginUserIsTheMayor(loginUserInfo),
@@ -119,7 +140,7 @@ function getSelectFromClauses(loginUserInfo) {
 }
 
 function checkIfLoginUserIsTheGeneralManager(loginUserInfo) {
-  return util.format(" %s='ΓΕΝΙΚΟΣ ΓΡΑΜΜΑΤΕΑΣ' OR %s='ΓΕΝΙΚΟΣ ΓΡΑΜΜΑΤΕΑΣ' " , helper.addQuotes(loginUserInfo.ou), helper.addQuotes(loginUserInfo.personalTitle));
+  return util.format(" %s='ΓΕΝΙΚΟΣ ΓΡΑΜΜΑΤΕΑΣ' OR %s='ΓΕΝΙΚΟΣ ΓΡΑΜΜΑΤΕΑΣ' ", helper.addQuotes(loginUserInfo.ou), helper.addQuotes(loginUserInfo.personalTitle));
 }
 
 function checkIfLoginUserIsTheMayor(loginUserInfo) {
@@ -142,12 +163,13 @@ function checkIfLoginUserBelongToSameDirectionAndDepartment(loginUserInfo) {
 }
 
 function query_searchcontracts(req) {
-  var filter = req.query.filter;
-  var loginUserId = parseInt(req.query.loginuserid);
-  var where = 'WHERE ((LOWER(c."Title") LIKE LOWER(\'%' + filter + '%\')' + ' OR LOWER(c."ConcessionaireName") LIKE LOWER(\'%' + filter + '%\')) ' +
-    'AND (c."OwnerId"=' + loginUserId + ' OR c."AllUsers"=true OR ' + loginUserId + ' IN (SELECT cus."UserId" FROM "Ordering"."ContractUsers" as cus WHERE cus."ContractId"=c."Id"))) ';
+  var filter = req.body.filter;
+  var loginUserInfo = req.body.data.user;
 
-  return util.format('%s %s %s %s', getSelectFromClauses(loginUserId), where, 'ORDER BY c."Start" DESC ', 'OFFSET 0 LIMIT 100')
+  var whereFilter = getWhere(loginUserInfo) + ' AND LOWER(c."Title") LIKE LOWER(\'%' + filter + '%\')' + ' OR LOWER(c."ConcessionaireName") LIKE LOWER(\'%' + filter + '%\') ' +
+    'AND (c."OwnerId"=' + helper.addQuotes(loginUserInfo.uid) + ' OR c."AllUsers"=true) ';
+
+  return util.format('%s %s %s %s', getSelectFromClauses(loginUserInfo), whereFilter, 'ORDER BY c."Start" DESC ', 'OFFSET 0 LIMIT 100')
 }
 
 function query_contractexists(req) {
@@ -156,7 +178,9 @@ function query_contractexists(req) {
     'Where "Ordering"."Contract"."ProtocolNumber"=%s ', helper.addQuotes(req.body.ProtocolNumber))
 }
 
-function query_updatecontract(req, res, next) {
+function query_updatecontract(req) {
+  var contractInfo = req.body.contractInfo;
+
   var sqlQuery = util.format('UPDATE "Ordering"."Contract" ' +
     'SET "ContractTypeId"=%s,"Title"=%s,"ProtocolNumber"=%s,"ProtocolDate"=%s,"KAE"=%s,"Actor"=%s,' +
     '"CodeDirection"=%s,"AwardNumber"=%s,"AwardDate"=%s,"AwardAda"=%s,"CpvCode"=%s,"CpvTitle"=%s,"AmountPure"=%s,"AmountFpa"=%s,"AmountTotal"=%s,' +
@@ -164,37 +188,37 @@ function query_updatecontract(req, res, next) {
     '"DepartmentId"=%s,"DateModified"=%s,"ConcessionaireName"=%s,"ConcessionaireAFM"=%s,"HasDownPayment"=%s,"FpaValue"=%s, "AllUsers"=%s,"LawArticle"=%s,"Discreet"=%s,"AccountPer"=%s ' +
     'WHERE "Id"=%s ' +
     'RETURNING * ',
-    helper.addQuotes(req.body.ContractTypeId),
-    helper.addQuotes(req.body.Title),
-    helper.addQuotes(req.body.ProtocolNumber),
-    helper.addQuotes(req.body.ProtocolDate),
-    helper.addQuotes(req.body.KAE),
-    helper.addQuotes(req.body.Actor),
-    helper.addQuotes(req.body.CodeDirection),
-    helper.addQuotes(req.body.AwardNumber),
-    helper.addQuotes(req.body.AwardDate),
-    helper.addQuotes(req.body.AwardAda),
-    helper.addQuotes(req.body.CpvCode),
-    helper.addQuotes(req.body.CpvTitle),
-    helper.addQuotes(req.body.AmountPure),
-    helper.addQuotes(req.body.AmountFpa),
-    helper.addQuotes(req.body.AmountTotal),
-    helper.addQuotes(req.body.Balance),
-    helper.addQuotes(req.body.Start),
-    helper.addQuotes(req.body.End),
-    helper.addQuotes(req.body.NumberOfAccounts),
-    helper.addQuotes(req.body.DirectionId),
-    helper.addQuotes(req.body.DepartmentId),
+    helper.addQuotes(contractInfo.ContractTypeId),
+    helper.addQuotes(contractInfo.Title),
+    helper.addQuotes(contractInfo.ProtocolNumber),
+    helper.addQuotes(contractInfo.ProtocolDate),
+    helper.addQuotes(contractInfo.KAE),
+    helper.addQuotes(contractInfo.Actor),
+    helper.addQuotes(contractInfo.CodeDirection),
+    helper.addQuotes(contractInfo.AwardNumber),
+    helper.addQuotes(contractInfo.AwardDate),
+    helper.addQuotes(contractInfo.AwardAda),
+    helper.addQuotes(contractInfo.CpvCode),
+    helper.addQuotes(contractInfo.CpvTitle),
+    helper.addQuotes(contractInfo.AmountPure),
+    helper.addQuotes(contractInfo.AmountFpa),
+    helper.addQuotes(contractInfo.AmountTotal),
+    helper.addQuotes(contractInfo.Balance),
+    helper.addQuotes(contractInfo.Start),
+    helper.addQuotes(contractInfo.End),
+    helper.addQuotes(contractInfo.NumberOfAccounts),
+    helper.addQuotes(contractInfo.DirectionId),
+    helper.addQuotes(contractInfo.DepartmentId),
     helper.addQuotes(new Date().toLocaleString()),
-    helper.addQuotes(req.body.ConcessionaireName),
-    helper.addQuotes(req.body.ConcessionaireAFM),
-    req.body.HasDownPayment,
-    helper.addQuotes(req.body.FpaValue),
-    req.body.AllUsers,
-    helper.addQuotes(req.body.LawArticle),
-    helper.addQuotes(req.body.Discreet),
-    helper.addQuotes(req.body.AccountPer),    
-    req.body.ContractId);
+    helper.addQuotes(contractInfo.ConcessionaireName),
+    helper.addQuotes(contractInfo.ConcessionaireAFM),
+    contractInfo.HasDownPayment,
+    helper.addQuotes(contractInfo.FpaValue),
+    contractInfo.AllUsers,
+    helper.addQuotes(contractInfo.LawArticle),
+    helper.addQuotes(contractInfo.Discreet),
+    helper.addQuotes(contractInfo.AccountPer),
+    contractInfo.ContractId);
 
   return sqlQuery;
 }
@@ -212,5 +236,6 @@ module.exports = {
   query_insertcontract,
   query_insertcontractowner,
   query_updatecontract,
-  query_deletecontract
+  query_deletecontract,
+  query_insertactivity
 }

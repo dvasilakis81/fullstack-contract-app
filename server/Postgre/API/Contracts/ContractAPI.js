@@ -1,41 +1,72 @@
 const methods = require('./Methods');
 const { restart } = require('nodemon');
+var pool = require('../../dbConfig').pool;
 
 async function getContracts(req, res, next) {
   var contracts = await methods.getContracts(req, res, next);
   res.status(200).json(contracts);
 }
 
-async function getContractById(req, res, next, contractId){
+async function getContractById(req, res, next, contractId) {
 
   var contract = await methods.getContractById(req, res, next, contractId);
   res.status(200).json(contract);
 }
 
-async function getContractTypes(req, res, next){
+async function getContractTypes(req, res, next) {
   var contractType = await methods.getContractTypes(req, res, next);
   res.status(200).json(contractType);
 }
 
-async function searchContracts(req, res, next){
+async function searchContracts(req, res, next) {
   var searchResults = await methods.searchContracts(req, res, next);
   res.status(200).json(searchResults);
 }
 
-async function contractExists(req, res, next){
+async function contractExists(req, res, next) {
 
   var row = await methods.contractExists(req, res, next);
-  res.status(200).json(row);  
+  res.status(200).json(row);
 }
 
 async function insertContract(req, res, next) {
-  var contractId = await methods.insertInfoToContractTable(req, res, next);
-  var ownerId = await methods.insertContractOwnerInfo(req, res, next, contractId);
+  const client = await pool.connect();
+
+  try {
+    await client.query('BEGIN');
+
+    var contractId = await methods.insertInfoToContractTable(req, res, next, client);
+    var ownerId = await methods.insertContractOwnerInfo(req, res, next, contractId, client);
+    var activityId = await methods.insertActivity(req, res, next, contractId, 'Δημιουργία Σύμβασης', client);
+
+    await client.query('COMMIT');
+  } catch (error) {
+    await client.query('ROLLBACK')
+    next(error);
+  }
+  finally {
+    client.release();
+  }
+
   getContractById(req, res, next, contractId);
 }
 
 async function updateContract(req, res, next) {
-  var contractId = await methods.updateContract(req, res, next);
+  const client = await pool.connect();
+  try {
+    await client.query('BEGIN');
+
+    var contractId = await methods.updateContract(req, res, next, client);
+    var activityId = await methods.insertActivity(req, res, next, contractId, 'Επεξεργασία Σύμβασης', client);
+    await client.query('COMMIT');
+  } catch (error) {
+    await client.query('ROLLBACK')
+    next(error);
+  }
+  finally {
+    client.release();
+  }
+
   getContractById(req, res, next, contractId);
 }
 

@@ -144,7 +144,7 @@ app.get('/errormessages', dbLogin.checkToken, dbParametric.getErrorMessages);
 
 app.post('/contractexists', dbLogin.checkToken, dbContract.contractExists);
 app.post('/contracts', dbLogin.checkToken, dbContract.getContracts);
-app.get('/searchcontracts', dbContract.searchContracts);
+app.post('/searchcontracts', dbLogin.checkToken, dbContract.searchContracts);
 app.post('/insertcontract', dbLogin.checkToken, dbContract.insertContract);
 app.post('/deletecontract', dbLogin.checkToken, dbContract.deleteContract);
 app.post('/updatecontract', dbLogin.checkToken, dbContract.updateContract);
