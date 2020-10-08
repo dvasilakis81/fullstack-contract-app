@@ -86,7 +86,7 @@ class ContractsPageBody extends Component {
 
   componentDidMount() {
     if (this.props.token && this.props.token.data) {
-      if (this.props.doRefresh === undefined) { 
+      if (this.props.doRefresh === undefined) {
 
         axios.get(getHostUrl() + "/agencies", { headers: { Authorization: "Bearer " + this.props.token.data.token } }).then(response => {
           store.dispatch({
@@ -107,7 +107,7 @@ class ContractsPageBody extends Component {
             type: "GET_CONTRACT_TYPES",
             payload: response
           });
-        });        
+        });
 
         axios.get(getHostUrl() + "/errormessages", { headers: { Authorization: "Bearer " + this.props.token.data.token } }).then(response => {
           store.dispatch({
@@ -118,7 +118,7 @@ class ContractsPageBody extends Component {
 
         var ddd = (this.props.token.data.token ? this.props.token.data.token : 'tokenData.token: undefined');
         var fff = (this.props.token.data ? ddd : 'tokenData: undefined');
-        
+
         if (this.props.isSearchMode)
           this.props.searchContracts(this.props.token.data, this.props.searchModeValue);
         else
@@ -211,9 +211,11 @@ class ContractsPageBody extends Component {
       let totalContacts = this.getTotalContacts(contracts)
       return (
         <div>
-          <div style={{ fontSize: "20px", textAlign: "center", verticalAlign: 'middle', fontWeight: "600", padding: "0px", }}>
-            <span style={{ marginLeft: "5px" }}>{this.props.token.data.user.ou}/{this.props.token.data.user.departmentNumber}</span>            
-          </div>
+          {this.props.token.data.user.departmentNumber ? <div style={{ fontSize: "20px", textAlign: "center", verticalAlign: 'middle', fontWeight: "600", padding: "0px", }}>
+            <span style={{ marginLeft: "5px" }}>
+              {this.props.token.data.user.ou}/{this.props.token.data.user.departmentNumber}
+            </span>
+          </div> : <></>}
           <div style={{ fontSize: "20px", textAlign: "center", verticalAlign: 'middle', fontWeight: "600", padding: "0px", }}>
             <span>{contracts.length}</span>
             <span style={{ marginLeft: "5px" }}>/</span>
@@ -263,7 +265,7 @@ class ContractsPageBody extends Component {
   getTemplate() {
 
     let isSearchMode = ((this.state.searchValue && this.state.searchValue.length > 2) || this.props.isSearchMode)
-    let contractsList = isSearchMode ? this.props.searchContractsList : this.props.contracts
+    let contractsList = isSearchMode ? this.props.searchContractsList : this.props.contracts;
     if (this.state.navigateToLogin) {
       resetData(store)
       return <Redirect push to={{
@@ -303,7 +305,7 @@ class ContractsPageBody extends Component {
               <div style={{ display: 'flex', flexFlow: 'row', flex: '1', overflowY: 'hidden', overflowX: 'hidden', flexWrap: 'wrap' }}>
                 {/* 1st column */}
                 <div style={{ height: '100%', display: 'flex', flexFlow: 'column', flex: '0.3', backgroundColor: '#fff' }}>
-                  <div style={{ display: 'flex', flexFlow: 'row', backgroundColor: '#fff'}}>
+                  <div style={{ display: 'flex', flexFlow: 'row', backgroundColor: '#fff' }}>
                     <div style={{ display: 'flex', flexFlow: 'column', flex: '1' }}>
                       {isSearchMode ? this.getSearchLabel(contractsList) : this.getContractsLabel(contractsList)}
                       {this.getSearchBar()}
@@ -342,7 +344,7 @@ class ContractsPageBody extends Component {
     var isSearchMode = (this.state.searchValue && this.state.searchValue.length > minCharsToSearch);
     let contractsList = isSearchMode ? this.props.searchContractsList : this.props.contracts
     if (contractsList && contractsList.tokenIsValid === false) {
-      console.log('Contracts dispatch RESET_ACTION')
+      console.log('Contracts dispatch RESET_ACTION');
       store.dispatch({ type: "RESET_ACTION", payload: null });
       return <Redirect push to="/login" />;
     } else

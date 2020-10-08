@@ -4,6 +4,12 @@ import { withStyles } from "@material-ui/core/styles";
 import Tooltip from '@material-ui/core/Tooltip';
 import { Typography } from '@material-ui/core';
 
+import DateFnsUtils from '@date-io/date-fns';
+import {
+  MuiPickersUtilsProvider,
+  KeyboardDatePicker
+} from '@material-ui/pickers';
+
 const StyledTooltip = withStyles({
   tooltip: {
     color: 'black',
@@ -63,7 +69,7 @@ const StyledTextField = props => {
           </React.Fragment>
         }>
         <TextField
-          select          
+          select
           disabled={isDisabled}
           required={isRequired}
           id={id}
@@ -101,24 +107,100 @@ const StyledTextField = props => {
   }
   else {
     if (tooltipTemplate) {
-      return <StyledTooltip
-        placement="top"
-        disableHoverListener={true}
-        title={
-          <React.Fragment>
-            <Typography
-              color="transparent"
-              style={{
-                background: "transparent",
-                padding: "0px",
-                margin: "0px",
-                transform: document.getElementById('root').style.transform
-              }}>
-              {tooltipTemplate}
-            </Typography>
-          </React.Fragment>
-        }>
-        <TextField
+      if (type === 'date') {
+        var w = props.partOfProtocol === true ? props.width : '100%';
+        return <StyledTooltip
+          placement="top"
+          disableHoverListener={true}
+          title={
+            <React.Fragment>
+              <Typography
+                color="transparent"
+                style={{
+                  background: "transparent",
+                  padding: "0px",
+                  margin: "0px",
+                  transform: document.getElementById('root').style.transform
+                }}>
+                {tooltipTemplate}
+              </Typography>
+            </React.Fragment>
+          }>
+          <MuiPickersUtilsProvider utils={DateFnsUtils}>
+            <KeyboardDatePicker
+              disableToolbar
+              variant="inline"
+              format="dd/MM/yyyy"
+              margin=""
+              id={id}
+              value={stateValue}
+              style={{ margin: '0px', padding: '0px', width: w, textAlignLast: 'center' }}
+              onChange={props.onChangeDate}
+              KeyboardButtonProps={{
+                'aria-label': 'change date',
+              }}
+            />
+          </MuiPickersUtilsProvider>
+        </StyledTooltip>
+      }
+      else {
+        return <StyledTooltip
+          placement="top"
+          disableHoverListener={true}
+          title={
+            <React.Fragment>
+              <Typography
+                color="transparent"
+                style={{
+                  background: "transparent",
+                  padding: "0px",
+                  margin: "0px",
+                  transform: document.getElementById('root').style.transform
+                }}>
+                {tooltipTemplate}
+              </Typography>
+            </React.Fragment>
+          }>
+          <TextField
+            multiline={multiline}
+            rows={3}
+            disabled={isDisabled}
+            required={isRequired}
+            type={type}
+            id={id}
+            value={stateValue}
+            variant='standard'
+            style={style}
+            onChange={onChange}
+            inputProps={inputProps}
+            InputProps={InputProps}
+            InputLabelProps={inputLabelProps}
+            size={size}
+          />
+        </StyledTooltip>
+      }
+    }
+    else {
+      if (type === 'date') {
+        var w = props.partOfProtocol === true ? props.width : '100%';
+        return <MuiPickersUtilsProvider utils={DateFnsUtils}>
+          <KeyboardDatePicker
+            disableToolbar
+            variant="inline"
+            format="dd/MM/yyyy"
+            margin=""
+            id={id}
+            value={stateValue}
+            style={{ margin: '0px', padding: '0px', width: w, textAlignLast: 'center' }}
+            onChange={props.onChangeDate}
+            KeyboardButtonProps={{
+              'aria-label': 'change date',
+            }}
+          />
+        </MuiPickersUtilsProvider>
+      }
+      else {
+        return <TextField
           multiline={multiline}
           rows={3}
           disabled={isDisabled}
@@ -134,25 +216,7 @@ const StyledTextField = props => {
           InputLabelProps={inputLabelProps}
           size={size}
         />
-      </StyledTooltip>
-    }
-    else {
-      return <TextField
-        multiline={multiline}
-        rows={3}
-        disabled={isDisabled}
-        required={isRequired}
-        type={type}
-        id={id}
-        value={stateValue}
-        variant='standard'
-        style={style}
-        onChange={onChange}
-        inputProps={inputProps}
-        InputProps={InputProps}
-        InputLabelProps={inputLabelProps}
-        size={size}
-      />
+      }
     }
   }
 };
