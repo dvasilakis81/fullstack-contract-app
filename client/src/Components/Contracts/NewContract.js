@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import InputAdornment from '@material-ui/core/InputAdornment';
 import { withStyles } from "@material-ui/core/styles";
 import axios from 'axios';
+import { findLocalIp } from '../../Helper/helpermethods';
 
 import {
 	getHostUrl, getDateFormatForDocument, getValidMaterialDateFormat,
@@ -26,6 +27,7 @@ import ProtocolInput from '../CustomControls/ProtocolInput';
 import MyTextField from '../CustomControls/MyTextField';
 
 import { getLawArticleTooltip } from './TooltipMethods';
+const internalIp = require('internal-ip');
 
 const styles = {
 	container: {
@@ -75,37 +77,41 @@ class NewContract extends Component {
 			variant: '',
 			submitButtonDisabled: false,
 			loginUserInfo: this.props.token.data.user,
-			contractStuff: this.props.location.state ? this.props.location.state.contract.contractusers : [],
-			AllUsers: this.props.location.state ? this.props.location.state.contract.AllUsers : false,
-			OwnerId: this.props.location.state ? this.props.location.state.contract.OwnerId : this.props.token.data.id,
-			ContractId: this.props.location.state ? this.props.location.state.contract.Id : undefined,
-			DirectionId: this.props.location.state ? this.props.location.state.contract.DirectionId : '-1',
-			DepartmentId: this.props.location.state ? this.props.location.state.contract.DepartmentId : '-1',
-			ContractTypeId: this.props.location.state ? this.props.location.state.contract.ContractTypeId : '-1',
-			LawArticle: this.props.location.state ? this.props.location.state.contract.LawArticle : '',
-			ConcessionaireName: this.props.location.state ? this.props.location.state.contract.ConcessionaireName : '',
-			ConcessionaireAFM: this.props.location.state ? this.props.location.state.contract.ConcessionaireAFM : '',
-			Title: this.props.location.state ? this.props.location.state.contract.Title : '',
-			Discreet: this.props.location.state ? this.props.location.state.contract.Discreet : '',
-			ProtocolNumber: this.props.location.state ? this.props.location.state.contract.ProtocolNumber : '',
-			ProtocolDate: this.props.location.state && this.props.location.state.contract.ProtocolDate ? getValidMaterialDateFormat(this.props.location.state.contract.ProtocolDate) : new Date(),
-			KAE: this.props.location.state ? this.props.location.state.contract.KAE : '',
-			Actor: this.props.location.state ? this.props.location.state.contract.Actor : '',
-			CodeDirection: this.props.location.state ? this.props.location.state.contract.CodeDirection : '',
-			AwardNumber: this.props.location.state ? this.props.location.state.contract.AwardNumber : '',
-			AwardDate: this.props.location.state && this.props.location.state.contract.AwardDate ? getValidMaterialDateFormat(this.props.location.state.contract.AwardDate) : new Date(),
-			AwardAda: this.props.location.state ? this.props.location.state.contract.AwardAda : '',
-			CpvCode: this.props.location.state ? this.props.location.state.contract.CpvCode : '',
-			CpvTitle: this.props.location.state ? this.props.location.state.contract.CpvTitle : '',
-			AmountPure: this.props.location.state ? Number(this.props.location.state.contract.AmountPure) : '',
-			AmountFpa: this.props.location.state ? Number(this.props.location.state.contract.AmountFpa) : '',
-			AmountTotal: this.props.location.state ? Number(this.props.location.state.contract.AmountTotal) : '',
-			Start: this.props.location.state && this.props.location.state.contract.Start ? getValidMaterialDateFormat(this.props.location.state.contract.Start) : new Date(),
-			End: this.props.location.state && this.props.location.state.contract.End ? getValidMaterialDateFormat(this.props.location.state.contract.End) : new Date(),
-			Discreet: this.props.location.state && this.props.location.state.contract.Discreet ? this.props.location.state.contract.Discreet : '',
-			NumberOfAccounts: this.props.location.state ? this.props.location.state.contract.NumberOfAccounts : '',
-			HasDownPayment: this.props.location.state ? this.props.location.state.contract.HasDownPayment : false,
-			FpaValue: getFpaValueFromReservations(this.props.token.data.user.reservations)
+			contractInfo: {
+				contractStuff: this.props.location.state ? this.props.location.state.contract.contractusers : [],
+				AllUsers: this.props.location.state ? this.props.location.state.contract.AllUsers : false,
+				OwnerId: this.props.location.state ? this.props.location.state.contract.OwnerId : this.props.token.data.id,
+				ContractId: this.props.location.state ? this.props.location.state.contract.Id : undefined,
+				DirectionId: this.props.location.state ? this.props.location.state.contract.DirectionId : '-1',
+				DepartmentId: this.props.location.state ? this.props.location.state.contract.DepartmentId : '-1',
+				ContractTypeId: this.props.location.state ? this.props.location.state.contract.ContractTypeId : '-1',
+				LawArticle: this.props.location.state ? this.props.location.state.contract.LawArticle : '',
+				ConcessionaireName: this.props.location.state ? this.props.location.state.contract.ConcessionaireName : '',
+				ConcessionaireAFM: this.props.location.state ? this.props.location.state.contract.ConcessionaireAFM : '',
+				Title: this.props.location.state ? this.props.location.state.contract.Title : '',
+				Discreet: this.props.location.state ? this.props.location.state.contract.Discreet : '',
+				ProtocolNumber: this.props.location.state ? this.props.location.state.contract.ProtocolNumber : '',
+				ProtocolDate: this.props.location.state && this.props.location.state.contract.ProtocolDate ? getValidMaterialDateFormat(this.props.location.state.contract.ProtocolDate) : new Date(),
+				KAE: this.props.location.state ? this.props.location.state.contract.KAE : '',
+				Actor: this.props.location.state ? this.props.location.state.contract.Actor : '',
+				CodeDirection: this.props.location.state ? this.props.location.state.contract.CodeDirection : '',
+				AwardNumber: this.props.location.state ? this.props.location.state.contract.AwardNumber : '',
+				AwardDate: this.props.location.state && this.props.location.state.contract.AwardDate ? getValidMaterialDateFormat(this.props.location.state.contract.AwardDate) : new Date(),
+				AwardAda: this.props.location.state ? this.props.location.state.contract.AwardAda : '',
+				CpvCode: this.props.location.state ? this.props.location.state.contract.CpvCode : '',
+				CpvTitle: this.props.location.state ? this.props.location.state.contract.CpvTitle : '',
+				AmountPure: this.props.location.state ? Number(this.props.location.state.contract.AmountPure) : '',
+				AmountFpa: this.props.location.state ? Number(this.props.location.state.contract.AmountFpa) : '',
+				AmountTotal: this.props.location.state ? Number(this.props.location.state.contract.AmountTotal) : '',
+				Start: this.props.location.state && this.props.location.state.contract.Start ? getValidMaterialDateFormat(this.props.location.state.contract.Start) : new Date(),
+				End: this.props.location.state && this.props.location.state.contract.End ? getValidMaterialDateFormat(this.props.location.state.contract.End) : new Date(),
+				Discreet: this.props.location.state && this.props.location.state.contract.Discreet ? this.props.location.state.contract.Discreet : '',
+				NumberOfAccounts: this.props.location.state ? this.props.location.state.contract.NumberOfAccounts : '',
+				HasDownPayment: this.props.location.state ? this.props.location.state.contract.HasDownPayment : false,
+				FpaValue: getFpaValueFromReservations(this.props.token.data.user.reservations),
+				AccountPer: this.props.location.state ? this.props.location.state.contract.AccountPer : '',
+				IpAddress: ''
+			},
 		}
 
 		this.setCheckboxValue = this.setCheckboxValue.bind(this);
@@ -114,7 +120,7 @@ class NewContract extends Component {
 		this.onChangeEnd = this.onChangeEnd.bind(this);
 		this.onChangeProtocolDate = this.onChangeProtocolDate.bind(this);
 		this.onChangeAwardDate = this.onChangeAwardDate.bind(this);
-		
+
 		this.handleSubmit = this.handleSubmit.bind(this);
 		this.autoCompleteBudget = this.autoCompleteBudget.bind(this);
 		this.handleClose = this.handleClose.bind(this, '');
@@ -124,6 +130,25 @@ class NewContract extends Component {
 		this.loadSelectAccountPer = this.loadSelectAccountPer.bind(this);
 	}
 
+	componentWillMount() {
+
+		//var os = require('os');
+		//var networkInterfaces = os.networkInterfaces();
+		//var arr = networkInterfaces['Local Area Connection 3'];
+		//var ip = arr[1].address
+
+		//var localip = require('os');
+		//console.log('localip: ', localip);
+
+		axios.get('http://api.ipify.org/?format=json').then(res => {
+			this.setState(prevState => ({
+				contractInfo: {
+					...prevState.contractInfo,
+					IpAddress: res.data && res.data.ip ? res.data.ip : ''
+				}
+			}))
+		})
+	}
 	handleContractStuff(e) {
 		this.setState({ contractStuff: this.getUserIds(e) });
 	};
@@ -166,11 +191,11 @@ class NewContract extends Component {
 		event.preventDefault();
 		this.setState({ submitButtonDisabled: true });
 
-		if (this.state.ContractId) {
+		if (this.state.contractInfo.ContractId) {
 			axios.post(getHostUrl() + '/updatecontract', this.state, { headers: { Authorization: 'Bearer ' + this.props.token.data.token } }).then(res => {
 				var msg = ''
 				if (this.state.ProtocolNumber)
-					msg = 'Η σύμβαση με πρωτόκολλο "' + this.state.ProtocolNumber + '/' + getDateFormatForDocument(this.state.ProtocolDate) + '" επεξεργάστηκε επιτυχώς!!!'
+					msg = 'Η σύμβαση με πρωτόκολλο "' + this.state.contractInfo.ProtocolNumber + '/' + getDateFormatForDocument(this.state.contractInfo.ProtocolDate) + '" επεξεργάστηκε επιτυχώς!!!'
 				else
 					msg = 'Η σύμβαση επεξεργάστηκε επιτυχώς!!!'
 				this.setState({ message: msg, openMessage: true, variant: 'success', submitButtonDisabled: false });
@@ -195,8 +220,8 @@ class NewContract extends Component {
 				var contractExists = res.data;
 				if (contractExists === true) {
 					var msg = ''
-					if (this.state.ProtocolNumber)
-						msg = 'Η σύμβαση με αριθμό πρωτοκόλλου ' + this.state.ProtocolNumber + ' ήδη υπάρχει';
+					if (this.state.contractInfo.ProtocolNumber)
+						msg = 'Η σύμβαση με αριθμό πρωτοκόλλου ' + this.state.contractInfo.ProtocolNumber + ' ήδη υπάρχει';
 					else
 						msg = 'Η σύμβαση ήδη υπάρχει!!!'
 					var msg =
@@ -206,7 +231,7 @@ class NewContract extends Component {
 					axios.post(getHostUrl() + '/insertcontract', this.state, { headers: { Authorization: 'Bearer ' + this.props.token.data.token } }).then(res => {
 						var msg = "";
 						if (res.data && res.data.ProtocolNumber)
-							msg = 'Η σύμβαση με πρωτόκολλο ' + this.state.ProtocolNumber + '/' + getDateFormatForDocument(this.state.ProtocolDate) + ' δημιουργήθηκε επιτυχώς!!!';
+							msg = 'Η σύμβαση με πρωτόκολλο ' + this.state.contractInfo.ProtocolNumber + '/' + getDateFormatForDocument(this.state.contractInfo.ProtocolDate) + ' δημιουργήθηκε επιτυχώς!!!';
 						else
 							msg = 'Η σύμβαση δημιουργήθηκε επιτυχώς!!!';
 
@@ -238,20 +263,28 @@ class NewContract extends Component {
 
 	autoCompleteBudget(event) {
 		event.preventDefault();
+		event.persist();
+
 		let fpaValue = getFpaValueFromReservations(this.props.token.data.user.reservations) / 100
 
-		if (this.state.AmountPure && Number(this.state.AmountPure) > 0) {
-			this.setState((state) => ({
-				AmountPure: Number(state.AmountPure).toFixed(2),
-				AmountFpa: (Number(state.AmountPure) * fpaValue).toFixed(2),
-				AmountTotal: (Number(state.AmountPure) + (Number(state.AmountPure) * fpaValue)).toFixed(2)
-			}));
-		} else if (this.state.AmountTotal && Number(this.state.AmountTotal) > 0) {
-			this.setState((state) => ({
-				AmountPure: (Number(state.AmountTotal) / (1 + fpaValue)).toFixed(2),
-				AmountFpa: (Number(state.AmountTotal) - (Number(state.AmountTotal) / (1 + fpaValue))).toFixed(2),
-				AmountTotal: Number(state.AmountTotal).toFixed(2)
-			}));
+		if (this.state.contractInfo.AmountPure && Number(this.state.contractInfo.AmountPure) > 0) {
+			this.setState(prevState => ({
+				contractInfo: {                   // object that we want to update
+					...prevState.contractInfo,    // keep all other key-value pairs
+					AmountPure: Number(prevState.contractInfo.AmountPure).toFixed(2),
+					AmountFpa: (Number(prevState.contractInfo.AmountPure) * fpaValue).toFixed(2),
+					AmountTotal: (Number(prevState.contractInfo.AmountPure) + (Number(prevState.contractInfo.AmountPure) * fpaValue)).toFixed(2)
+				}
+			}))
+		} else if (this.state.contractInfo.AmountTotal && Number(this.state.contractInfo.AmountTotal) > 0) {
+			this.setState(prevState => ({
+				contractInfo: {                   // object that we want to update
+					...prevState.contractInfo,    // keep all other key-value pairs
+					AmountPure: (Number(prevState.contractInfo.AmountTotal) / (1 + fpaValue)).toFixed(2),
+					AmountFpa: (Number(prevState.contractInfo.AmountTotal) - (Number(prevState.contractInfo.AmountTotal) / (1 + fpaValue))).toFixed(2),
+					AmountTotal: Number(prevState.contractInfo.AmountTotal).toFixed(2)
+				}
+			}))
 		}
 		else {
 			var errMsg = '"Είτε το Καθαρό Ποσό ή το Συνολικό Ποσό πρέπει να έχει κάποια τιμή!"\n';
@@ -270,51 +303,103 @@ class NewContract extends Component {
 		return months <= 0 ? 0 : months;
 	}
 	onChange(event) {
-		if (event.target.id === 'AccountPer') {			
+		event.persist();
+
+		if (event.target.id === 'AccountPer') {
 
 			var accountPer = event.target.value;
 			if (accountPer) {
-				var months = this.monthDiff(new Date(this.state.Start), new Date(this.state.End));
+				var months = this.monthDiff(new Date(this.state.contractInfo.Start), new Date(this.state.contractInfo.End));
 				var numOfAccounts = Math.round(months / Number(accountPer));
-				this.setState({ NumberOfAccounts: numOfAccounts });
+				this.setState(prevState => ({
+					contractInfo: {                   // object that we want to update
+						...prevState.contractInfo,    // keep all other key-value pairs
+						NumberOfAccounts: numOfAccounts    // update the value of specific key
+					}
+				}))
 			}
 		}
 
-		this.setState({ [event.target.id]: event.target.value });
+		//this.setState({ [event.target.id]: event.target.value });		
+
+		this.setState(prevState => ({
+			contractInfo: {                   // object that we want to update
+				...prevState.contractInfo,    // keep all other key-value pairs
+				[event.target.id]: event.target.value    // update the value of specific key				
+			}
+		}))
 	}
-	onChangeProtocolDate(date) {		
-		this.setState({ ProtocolDate: date });
+	onChangeProtocolDate(date) {
+
+		this.setState(prevState => ({
+			contractInfo: {                   // object that we want to update
+				...prevState.contractInfo,    // keep all other key-value pairs
+				ProtocolDate: date    // update the value of specific key				
+			}
+		}))
+		// this.setState({ ProtocolDate: date });
 	}
-	onChangeAwardDate(date) {		
-		this.setState({ AwardDate: date });
+	onChangeAwardDate(date) {
+		this.setState(prevState => ({
+			contractInfo: {                   // object that we want to update
+				...prevState.contractInfo,    // keep all other key-value pairs
+				AwardDate: date    // update the value of specific key				
+			}
+		}))
+		//this.setState({ AwardDate: date });
 	}
 	onChangeStart(date) {
 
 		var start = date;
-		var end = this.state.End;
-		var accountPer = this.state.AccountPer;
+		var end = this.state.contractInfo.End;
+		var accountPer = this.state.contractInfo.AccountPer;
 
 		if (start && end && accountPer) {
 			var months = this.monthDiff(new Date(start), new Date(end));
 			var numOfAccounts = Math.round(months / Number(accountPer));
-			this.setState({ NumberOfAccounts: numOfAccounts });
+
+			this.setState(prevState => ({
+				contractInfo: {                   // object that we want to update
+					...prevState.contractInfo,    // keep all other key-value pairs
+					NumberOfAccounts: numOfAccounts    // update the value of specific key
+				}
+			}))
+			//this.setState({ NumberOfAccounts: numOfAccounts });
 		}
 
-		this.setState({ Start: start });
+		// this.setState({ Start: start });
+		this.setState(prevState => ({
+			contractInfo: {                   // object that we want to update
+				...prevState.contractInfo,    // keep all other key-value pairs
+				Start: start    // update the value of specific key				
+			}
+		}))
 	}
 	onChangeEnd(date) {
 
-		var start = this.state.Start;
+		var start = this.state.contractInfo.Start;
 		var end = date;
-		var accountPer = this.state.AccountPer;
+		var accountPer = this.state.contractInfo.AccountPer;
 
 		if (start && end && accountPer) {
 			var months = this.monthDiff(new Date(start), new Date(end));
 			var numOfAccounts = Math.round(months / Number(accountPer));
+			this.setState(prevState => ({
+				contractInfo: {                   // object that we want to update
+					...prevState.contractInfo,    // keep all other key-value pairs
+					NumberOfAccounts: numOfAccounts    // update the value of specific key				
+				}
+			}))
 			this.setState({ NumberOfAccounts: numOfAccounts });
 		}
 
-		this.setState({ End: end });
+		this.setState(prevState => ({
+			contractInfo: {                   // object that we want to update
+				...prevState.contractInfo,    // keep all other key-value pairs
+				End: end    // update the value of specific key				
+			}
+		}))
+		//this.setState({ End: end });
 	}
 
 	handleClose = (event, reason) => {
@@ -338,7 +423,11 @@ class NewContract extends Component {
 		accountPer.push({ key: 12, value: "ανά 12-μηνο" });
 
 		ret = accountPer.map((data, index) => {
-			return <option key={index} value={data.key}>{data.value}</option>
+			if (this.state.contractInfo.AccountPer === data.key)
+				return <option key={data.key} value={data.key} selected>{data.value}</option>
+			else
+				return <option key={data.key} value={data.key}>{data.value}</option>
+
 		})
 
 		return ret;
@@ -349,6 +438,7 @@ class NewContract extends Component {
 
 		if (this.props.municipalityDirections) {
 			ret = this.props.municipalityDirections.map((data, index) => {
+
 				return <option key={index} value={data.DirectionId}>{data.DirectionName}</option>
 			})
 		}
@@ -407,8 +497,8 @@ class NewContract extends Component {
 	render() {
 		var divWidth = this.props.screenDimensions.width > this.props.screenDimensions.height ? '80%' : '100%'
 		var title = 'Δημιουργία Σύμβασης';
-		if (this.state.ContractId)
-			title = <div><span>Επεξεργασία Σύμβασης</span><br /><span style={{ color: 'gold' }}>{this.state.Discreet}</span></div>;
+		if (this.state.contractInfo.ContractId)
+			title = <div><span>Επεξεργασία Σύμβασης</span><br /><span style={{ color: 'gold' }}>{this.state.contractInfo.Discreet}</span></div>;
 
 		return (
 			<div>
@@ -427,53 +517,53 @@ class NewContract extends Component {
 											{this.getSelectUsersTemplate()}
 										</div> */}
 										<div style={styles.divRow}>
-										{/* style={{ margin: '0px', padding: '0px', width: w, textAlignLast: 'center' }} */}
-											<MyTextField title='Διεύθυνση' id='DirectionId' stateValue={this.state.DirectionId} values={this.loadSelectMunicipalityDirections()} InputProps={{ inputProps: { style: { textAlignLast: 'center' } } }} isRequired={true} isDisabled={false} onChange={this.onChange} select={true} width='50%' />
-											<MyTextField title='Τμήμα' id='DepartmentId' stateValue={this.state.DepartmentId} values={this.loadMunicipalityDirectionDepartments(this.state.DirectionId)} InputProps={{ inputProps: { style: { textAlignLast: 'center' } } }} isRequired={true} isDisabled={false} onChange={this.onChange} select={true} width='50%' />
+											{/* style={{ margin: '0px', padding: '0px', width: w, textAlignLast: 'center' }} */}
+											<MyTextField title='Διεύθυνση' id='DirectionId' stateValue={this.state.contractInfo.DirectionId} values={this.loadSelectMunicipalityDirections()} InputProps={{ inputProps: { style: { textAlignLast: 'center' } } }} isRequired={true} isDisabled={false} onChange={this.onChange} select={true} width='50%' />
+											<MyTextField title='Τμήμα' id='DepartmentId' stateValue={this.state.contractInfo.DepartmentId} values={this.loadMunicipalityDirectionDepartments(this.state.contractInfo.DirectionId)} InputProps={{ inputProps: { style: { textAlignLast: 'center' } } }} isRequired={true} isDisabled={false} onChange={this.onChange} select={true} width='50%' />
 										</div>
 										<div style={styles.divRow}>
-											<ProtocolInput title='Α.Π.' idn='ProtocolNumber' idd='ProtocolDate' protocolNumber={this.state.ProtocolNumber} protocolDate={this.state.ProtocolDate} onChange={this.onChange} onChangeDate={this.onChangeProtocolDate} tp1='text' tp2='date' width='33.33%' />
-											<MyTextField tp='date' title='Έναρξη Σύμβασης' id='Start' stateValue={this.state.Start} isRequired={true} isDisabled={false} onChangeDate={this.onChangeStart} inputProps={{ style: { textAlign: 'center' } }} width='33.33%' />
-											<MyTextField tp='date' title='Λήξη Σύμβασης' id='End' stateValue={this.state.End} isRequired={true} isDisabled={false} onChangeDate={this.onChangeEnd} inputProps={{ style: { textAlign: 'center' } }} width='33.33%' />
+											<ProtocolInput title='Α.Π.' idn='ProtocolNumber' idd='ProtocolDate' protocolNumber={this.state.contractInfo.ProtocolNumber} protocolDate={this.state.contractInfo.ProtocolDate} onChange={this.onChange} onChangeDate={this.onChangeProtocolDate} tp1='text' tp2='date' width='33.33%' />
+											<MyTextField tp='date' title='Έναρξη Σύμβασης' id='Start' stateValue={this.state.contractInfo.Start} isRequired={true} isDisabled={false} onChangeDate={this.onChangeStart} inputProps={{ style: { textAlign: 'center' } }} width='33.33%' />
+											<MyTextField tp='date' title='Λήξη Σύμβασης' id='End' stateValue={this.state.contractInfo.End} isRequired={true} isDisabled={false} onChangeDate={this.onChangeEnd} inputProps={{ style: { textAlign: 'center' } }} width='33.33%' />
 										</div>
 										<div style={styles.divRow}>
-											<MyTextField title='Τύπος' id='ContractTypeId' stateValue={this.state.ContractTypeId} values={this.loadContractTypes(this.state.ContractTypeId)} InputProps={{ inputProps: { style: { textAlignLast: 'center' } } }} isRequired={true} isDisabled={false} onChange={this.onChange} select={true} width='20%' />
-											{this.state.ContractTypeId.toString() === '2' ?
-												<MyTextField tm={getLawArticleTooltip(this.state)} title='Άρθρο Προγραμματικής' id='LawArticle' stateValue={this.state.LawArticle} isRequired={true} isDisabled={false} onChange={this.onChange} width='80%' />
+											<MyTextField title='Τύπος' id='ContractTypeId' stateValue={this.state.contractInfo.ContractTypeId} values={this.loadContractTypes(this.state.contractInfo.ContractTypeId)} InputProps={{ inputProps: { style: { textAlignLast: 'center' } } }} isRequired={true} isDisabled={false} onChange={this.onChange} select={true} width='20%' />
+											{this.state.contractInfo.ContractTypeId.toString() === '2' ?
+												<MyTextField tm={getLawArticleTooltip(this.state)} title='Άρθρο Προγραμματικής' id='LawArticle' stateValue={this.state.contractInfo.LawArticle} isRequired={true} isDisabled={false} onChange={this.onChange} width='80%' />
 												:
 												<></>}
 										</div>
 										<div style={styles.divRow}>
-											<MyTextField tp='text' title='K.A.E.' id='KAE' stateValue={this.state.KAE} isRequired={true} isDisabled={false} onChange={this.onChange} InputProps={{ inputProps: { maxLength: 20, style: { textAlign: 'center' } } }} width='20%' />
-											<MyTextField tp='text' title='Φ.' id='Actor' stateValue={this.state.Actor} isRequired={true} isDisabled={false} onChange={this.onChange} InputProps={{ inputProps: { maxLength: 5, style: { textAlign: 'center' } } }} width='20%' />
-											<MyTextField tp='text' title='Δ.' id='CodeDirection' stateValue={this.state.CodeDirection} isRequired={true} isDisabled={false} onChange={this.onChange} InputProps={{ inputProps: { maxLength: 5, style: { textAlign: 'center' } } }} width='20%' />
-											<ProtocolInput title='Α.Α.Κ. Α.Π.' idn='AwardNumber' idd='AwardDate' protocolNumber={this.state.AwardNumber} protocolDate={this.state.AwardDate} onChange={this.onChange} onChangeDate={this.onChangeAwardDate} tp1='text' tp2='date' width='20%' />
-											<MyTextField tp='text' title='Α.Α.Κ. ΑΔΑ' id='AwardAda' stateValue={this.state.AwardAda} isRequired={false} isDisabled={false} onChange={this.onChange} ΙnputProps={{ style: { textAlign: 'center' } }} width='20%' />
+											<MyTextField tp='text' title='K.A.E.' id='KAE' stateValue={this.state.contractInfo.KAE} isRequired={true} isDisabled={false} onChange={this.onChange} InputProps={{ inputProps: { maxLength: 20, style: { textAlign: 'center' } } }} width='20%' />
+											<MyTextField tp='text' title='Φ.' id='Actor' stateValue={this.state.contractInfo.Actor} isRequired={true} isDisabled={false} onChange={this.onChange} InputProps={{ inputProps: { maxLength: 5, style: { textAlign: 'center' } } }} width='20%' />
+											<MyTextField tp='text' title='Δ.' id='CodeDirection' stateValue={this.state.contractInfo.CodeDirection} isRequired={true} isDisabled={false} onChange={this.onChange} InputProps={{ inputProps: { maxLength: 5, style: { textAlign: 'center' } } }} width='20%' />
+											<ProtocolInput title='Α.Α.Κ. Α.Π.' idn='AwardNumber' idd='AwardDate' protocolNumber={this.state.contractInfo.AwardNumber} protocolDate={this.state.contractInfo.AwardDate} onChange={this.onChange} onChangeDate={this.onChangeAwardDate} tp1='text' tp2='date' width='20%' />
+											<MyTextField tp='text' title='Α.Α.Κ. ΑΔΑ' id='AwardAda' stateValue={this.state.contractInfo.AwardAda} isRequired={false} isDisabled={false} onChange={this.onChange} ΙnputProps={{ style: { textAlign: 'center' } }} width='20%' />
 										</div>
 										{
-											this.state.ContractTypeId.toString() === '1' ? <div style={styles.divRow}>
-												<MyTextField tp='text' title='CPV Κωδικός' id='CpvCode' stateValue={this.state.CpvCode} isRequired={false} isDisabled={false} onChange={this.onChange} InputProps={{ inputProps: { maxLength: 20, style: { textAlign: 'center' } } }} width='20%' />
-												<MyTextField tp='text' title='CPV Τίτλος' id='CpvTitle' stateValue={this.state.CpvTitle} isRequired={false} isDisabled={false} onChange={this.onChange} InputProps={{ inputProps: { maxLength: 355, style: { textAlign: 'center' } } }} width='80%' />
+											this.state.contractInfo.ContractTypeId.toString() === '1' ? <div style={styles.divRow}>
+												<MyTextField tp='text' title='CPV Κωδικός' id='CpvCode' stateValue={this.state.contractInfo.CpvCode} isRequired={false} isDisabled={false} onChange={this.onChange} InputProps={{ inputProps: { maxLength: 20, style: { textAlign: 'center' } } }} width='20%' />
+												<MyTextField tp='text' title='CPV Τίτλος' id='CpvTitle' stateValue={this.state.contractInfo.CpvTitle} isRequired={false} isDisabled={false} onChange={this.onChange} InputProps={{ inputProps: { maxLength: 355, style: { textAlign: 'center' } } }} width='80%' />
 											</div> : <></>
 										}
 										<div style={styles.divRow}>
-											<MyTextField tp='text' title='Όνομα Αναδόχου' id='ConcessionaireName' stateValue={this.state.ConcessionaireName} isRequired={true} isDisabled={false} onChange={this.onChange} InputProps={{ style: { textAlign: 'center' } }} width='80%' />
-											<MyTextField tp='text' title='Α.Φ.Μ. Αναδόχου' id='ConcessionaireAFM' stateValue={this.state.ConcessionaireAFM} isRequired={true} isDisabled={false} onChange={this.onChange} InputProps={{ style: { textAlign: 'center' } }} width='20%' />
+											<MyTextField tp='text' title='Όνομα Αναδόχου' id='ConcessionaireName' stateValue={this.state.contractInfo.ConcessionaireName} isRequired={true} isDisabled={false} onChange={this.onChange} InputProps={{ style: { textAlign: 'center' } }} width='80%' />
+											<MyTextField tp='text' title='Α.Φ.Μ. Αναδόχου' id='ConcessionaireAFM' stateValue={this.state.contractInfo.ConcessionaireAFM} isRequired={true} isDisabled={false} onChange={this.onChange} InputProps={{ style: { textAlign: 'center' } }} width='20%' />
 										</div>
 										<div style={styles.divRow}>
-											<MyTextField tp='text' title='Διακριτικός Τίτλος' id='Discreet' stateValue={this.state.Discreet} isRequired={false} isDisabled={false} onChange={this.onChange} InputProps={{ inputProps: { maxLength: 2000, style: { textAlign: 'center' } } }} multiline={true} width='100%' />
-											<MyTextField tp='text' title='Τίτλος' id='Title' stateValue={this.state.Title} isRequired={true} isDisabled={false} onChange={this.onChange} InputProps={{ inputProps: { maxLength: 2000, style: { textAlign: 'center' } } }} multiline={true} width='100%' />
+											<MyTextField tp='text' title='Διακριτικός Τίτλος' id='Discreet' stateValue={this.state.contractInfo.Discreet} isRequired={false} isDisabled={false} onChange={this.onChange} InputProps={{ inputProps: { maxLength: 2000, style: { textAlign: 'center' } } }} multiline={true} width='100%' />
+											<MyTextField tp='text' title='Τίτλος' id='Title' stateValue={this.state.contractInfo.Title} isRequired={true} isDisabled={false} onChange={this.onChange} InputProps={{ inputProps: { maxLength: 2000, style: { textAlign: 'center' } } }} multiline={true} width='100%' />
 										</div>
 										<div style={styles.divRow}>
-											<MyTextField tp='number' title='Καθαρό Ποσό' id='AmountPure' stateValue={this.state.AmountPure} isRequired={true} isDisabled={false} onChange={this.onChange} inputProps={{ style: { textAlign: "center" } }} InputProps={{ endAdornment: <InputAdornment position="end"><span style={{ fontWeight: 'bolder', marginRight: '10px' }}>€</span></InputAdornment> }} width='20%' />
-											<MyTextField tp='number' title={getFpaLabel(getFpaValueFromReservations(this.props.token.data.user.reservations))} id='AmountFpa' stateValue={this.state.AmountFpa} isRequired={true} isDisabled={false} onChange={this.onChange} inputProps={{ style: { textAlign: "center" } }} InputProps={{ endAdornment: <InputAdornment position="end"><span style={{ fontWeight: 'bolder', marginRight: '10px' }}>€</span></InputAdornment> }} width='20%' />
-											<MyTextField tp='number' title='Συνολικό Ποσό' id='AmountTotal' stateValue={this.state.AmountTotal} isRequired={true} isDisabled={false} onChange={this.onChange} inputProps={{ style: { textAlign: 'center' } }} InputProps={{ endAdornment: <InputAdornment position="end"><span style={{ fontWeight: 'bolder', marginRight: '10px' }}>€</span></InputAdornment> }} width='20%' />
+											<MyTextField tp='number' title='Καθαρό Ποσό' id='AmountPure' stateValue={this.state.contractInfo.AmountPure} isRequired={true} isDisabled={false} onChange={this.onChange} inputProps={{ style: { textAlign: "center" } }} InputProps={{ endAdornment: <InputAdornment position="end"><span style={{ fontWeight: 'bolder', marginRight: '10px' }}>€</span></InputAdornment> }} width='20%' />
+											<MyTextField tp='number' title={getFpaLabel(getFpaValueFromReservations(this.props.token.data.user.reservations))} id='AmountFpa' stateValue={this.state.contractInfo.AmountFpa} isRequired={true} isDisabled={false} onChange={this.onChange} inputProps={{ style: { textAlign: "center" } }} InputProps={{ endAdornment: <InputAdornment position="end"><span style={{ fontWeight: 'bolder', marginRight: '10px' }}>€</span></InputAdornment> }} width='20%' />
+											<MyTextField tp='number' title='Συνολικό Ποσό' id='AmountTotal' stateValue={this.state.contractInfo.AmountTotal} isRequired={true} isDisabled={false} onChange={this.onChange} inputProps={{ style: { textAlign: 'center' } }} InputProps={{ endAdornment: <InputAdornment position="end"><span style={{ fontWeight: 'bolder', marginRight: '10px' }}>€</span></InputAdornment> }} width='20%' />
 											{getButton('contained', 'small', null, styles.btnAuto, this.autoCompleteBudget, 'ΥΠΟΛΟΓΙΣΜΟΣ', null, false)}
 										</div>
 										<div style={styles.divRow}>
-											<MyTextField title='Λογαριασμός ανά' id='AccountPer' stateValue={this.state.AccountPer} values={this.loadSelectAccountPer()} InputProps={{ inputProps: { style: { textAlignLast: 'center' } } }} isRequired={true} isDisabled={false} onChange={this.onChange} select={true} width='20%' />
-											<MyTextField tp='number' title='# Παραδοτέων (Λογαριασμών)' id='NumberOfAccounts' stateValue={this.state.NumberOfAccounts} isRequired={true} isDisabled={false} onChange={this.onChange} InputProps={{ inputProps: { max: 100, min: 1, style: { textAlign: 'center' } } }} width='20%' />
-											{getCheckboxField('HasDownPayment', 'Eχει προκαταβολή (Αν ναι θα είναι ο 1ος λογαριασμός)', this.state.HasDownPayment, null, this.setCheckboxValue)}
+											<MyTextField title='Λογαριασμός ανά' id='AccountPer' stateValue={this.state.contractInfo.AccountPer} values={this.loadSelectAccountPer()} InputProps={{ inputProps: { style: { textAlignLast: 'center' } } }} isRequired={true} isDisabled={false} onChange={this.onChange} select={true} width='20%' />
+											<MyTextField tp='number' title='# Παραδοτέων (Λογαριασμών)' id='NumberOfAccounts' stateValue={this.state.contractInfo.NumberOfAccounts} isRequired={true} isDisabled={false} onChange={this.onChange} InputProps={{ inputProps: { max: 100, min: 1, style: { textAlign: 'center' } } }} width='20%' />
+											{getCheckboxField('HasDownPayment', 'Eχει προκαταβολή (Αν ναι θα είναι ο 1ος λογαριασμός)', this.state.contractInfo.HasDownPayment, null, this.setCheckboxValue)}
 										</div>
 									</div>
 								</form>

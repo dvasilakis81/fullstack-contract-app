@@ -174,7 +174,7 @@ class ItemDetail extends React.Component {
 										ci: contractId,
 										an: value.index,
 										ct: contractTypeId,
-										discreet:discreet,
+										discreet: discreet,
 										title: title,
 										exists: (value.color === 'lightGreen' ? true : false),
 										isDownpayment: (hasDownpayment && value.index === 1)
@@ -201,7 +201,7 @@ class ItemDetail extends React.Component {
 				Επεξεργασία Σύμβασης
 		</Button>)
 	}
-	
+
 	getDeleteAction(contractDetails) {
 		//#ff4500
 		if (this.props.token.data.id === contractDetails.OwnerId)
@@ -749,7 +749,7 @@ class ItemDetail extends React.Component {
 	render() {
 
 		let detailItem = null;
-		if (this.props.isSearchMode)
+		if (this.props.isSearchMode === true)
 			detailItem = this.props.contractDetailsSearchMode ? this.props.contractDetailsSearchMode : null;
 		else
 			detailItem = this.props.contractDetails ? this.props.contractDetails : this.props.item;

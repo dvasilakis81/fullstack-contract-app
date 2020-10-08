@@ -210,18 +210,11 @@ class ContractsPageBody extends Component {
     if (contracts) {
       let totalContacts = this.getTotalContacts(contracts)
       return (
-        <div>
-          {this.props.token.data.user.departmentNumber ? <div style={{ fontSize: "20px", textAlign: "center", verticalAlign: 'middle', fontWeight: "600", padding: "0px", }}>
-            <span style={{ marginLeft: "5px" }}>
-              {this.props.token.data.user.ou}/{this.props.token.data.user.departmentNumber}
-            </span>
-          </div> : <></>}
-          <div style={{ fontSize: "20px", textAlign: "center", verticalAlign: 'middle', fontWeight: "600", padding: "0px", }}>
-            <span>{contracts.length}</span>
-            <span style={{ marginLeft: "5px" }}>/</span>
-            <span style={{ marginLeft: "5px" }}>{totalContacts}</span>
-            <span style={{ marginLeft: "5px" }}>Συμβάσεις</span>
-          </div>
+        <div style={{ fontSize: "20px", textAlign: "center", verticalAlign: 'middle', fontWeight: "600", padding: "0px", }}>
+          <span>{contracts.length}</span>
+          <span style={{ marginLeft: "5px" }}>/</span>
+          <span style={{ marginLeft: "5px" }}>{totalContacts}</span>
+          <span style={{ marginLeft: "5px" }}>Συμβάσεις</span>
         </div>
       );
     }
@@ -307,8 +300,13 @@ class ContractsPageBody extends Component {
                 <div style={{ height: '100%', display: 'flex', flexFlow: 'column', flex: '0.3', backgroundColor: '#fff' }}>
                   <div style={{ display: 'flex', flexFlow: 'row', backgroundColor: '#fff' }}>
                     <div style={{ display: 'flex', flexFlow: 'column', flex: '1' }}>
-                      {isSearchMode ? this.getSearchLabel(contractsList) : this.getContractsLabel(contractsList)}
+                      {this.props.token.data.user.departmentNumber ? <div style={{ fontSize: "20px", textAlign: "center", verticalAlign: 'middle', fontWeight: "600", padding: "0px", }}>
+                        <span style={{ marginLeft: "5px" }}>
+                          {this.props.token.data.user.ou}/{this.props.token.data.user.departmentNumber}
+                        </span>
+                      </div> : <></>}                      
                       {this.getSearchBar()}
+                      {isSearchMode === true ? this.getSearchLabel(contractsList) : this.getContractsLabel(contractsList)}
                     </div>
                   </div>
                   <div style={{ display: 'flex', flexFlow: 'row', flex: '1', overflowY: 'auto', overflowX: 'hidden', margin: '0px', padding: '0px', }}>

@@ -17,8 +17,8 @@ export default function (state = {}, action, root) {
 				...state,
 				searchContractsPending: undefined,
 				searchContractsRejected: undefined,
-				searchContractsList: action.payload,
-				contractDetailsSearchMode: action.payload ? action.payload[0] : null
+				searchContractsList: action.payload.data,
+				contractDetailsSearchMode: action.payload.data ? action.payload.data[0] : null
 			};
 			break;
 		case 'SEARCH_CONTRACTS_REJECTED':

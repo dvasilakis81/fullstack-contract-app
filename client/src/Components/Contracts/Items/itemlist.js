@@ -51,7 +51,7 @@ class ItemList extends React.Component {
 
     const itemToRender = this.props.item["item"];
     let selectedItem = null;
-    if (this.props.isSearchMode)
+    if (this.props.isSearchMode === true)
       selectedItem = this.props.contractDetailsSearchMode ? this.props.contractDetailsSearchMode : this.props.defaultSelectedItem;
     else {
 
