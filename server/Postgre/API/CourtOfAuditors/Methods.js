@@ -1,11 +1,11 @@
-var pool = require('../../dbConfig').pool
+const db = require('../../dbConfig');
 var queries = require('./Queries');
 var contractMethods = require('../Contracts/ContractAPI');
 
 async function insert(req, res, next) {
 
   try {
-    const { rows } = await pool.query(queries.query_insert(req));
+    const { rows } = await db.query(queries.query_insert(req));
     contractMethods.getContractById(req, res, next);
   } catch (error) {
     next(error);
@@ -15,7 +15,7 @@ async function insert(req, res, next) {
 async function update(req, res, next) {
 
   try {
-    const { rows } = await pool.query(queries.query_update(req));
+    const { rows } = await db.query(queries.query_update(req));
     contractMethods.getContractById(req, res, next);
   } catch (error) {
     next(error);
@@ -25,7 +25,7 @@ async function update(req, res, next) {
 async function remove(req, res, next) {
 
   try {
-    await pool.query(queries.query_remove(req));
+    await db.query(queries.query_remove(req));
     contractMethods.getContractById(req, res, next);
   } catch (error) {
     next(error);
