@@ -159,13 +159,18 @@ export function getStringInLower(input) {
 export function getDateFormat(dateValue) {
   let ret = '';
 
-  if (dateValue) {
-    ret = Intl.DateTimeFormat('el-GR', {
-      year: 'numeric', month: 'short', day: 'numeric'
-    }).format(new Date(dateValue))
-  }
-  else
+  try {
+
+    if (dateValue) {
+      ret = Intl.DateTimeFormat('el-GR', {
+        year: 'numeric', month: 'short', day: 'numeric'
+      }).format(new Date(dateValue))
+    }
+    else
+      ret = '';
+  } catch (error) {
     ret = '';
+  }
 
   return ret;
 }
@@ -173,13 +178,18 @@ export function getDateFormat(dateValue) {
 export function getDateFormatForDocument(dateValue) {
   let ret = '';
 
-  if (dateValue) {
-    ret = Intl.DateTimeFormat('el-GR', {
-      day: 'numeric', month: 'numeric', year: 'numeric'
-    }).format(new Date(dateValue)).replace("/", "-").replace("/", "-")
-  }
-  else
+  try {
+    if (dateValue) {
+      ret = Intl.DateTimeFormat('el-GR', {
+        day: 'numeric', month: 'numeric', year: 'numeric'
+      }).format(new Date(dateValue)).replace("/", "-").replace("/", "-")
+    }
+    else
+      ret = '';
+
+  } catch (error) {
     ret = '';
+  }
 
   return ret;
 }
@@ -187,8 +197,12 @@ export function getDateFormatForDocument(dateValue) {
 export function extractYearFromDate(dateValue) {
   let ret = '';
 
-  if (dateValue)
-    ret = Intl.DateTimeFormat('el-GR', { year: 'numeric' }).format(new Date(dateValue))
+  try {
+    if (dateValue)
+      ret = Intl.DateTimeFormat('el-GR', { year: 'numeric' }).format(new Date(dateValue))
+  } catch (error) {
+    ret = '';
+  }
 
   return ret;
 }
@@ -196,11 +210,16 @@ export function extractYearFromDate(dateValue) {
 export function getDateFormatWithDash(dateValue) {
   let ret = '';
 
-  if (dateValue) {
-    ret = Intl.DateTimeFormat('el-GR', { year: 'numeric', month: 'long', day: 'numeric' }).format(new Date(dateValue)).replace("/", "-").replace("/", "-")
+  try {
+    if (dateValue) {
+      ret = Intl.DateTimeFormat('el-GR', { year: 'numeric', month: 'long', day: 'numeric' }).format(new Date(dateValue)).replace("/", "-").replace("/", "-")
+    }
+    else
+      ret = '';
   }
-  else
+  catch (error) {
     ret = '';
+  }
 
   return ret;
 }
@@ -208,8 +227,13 @@ export function getDateFormatWithDash(dateValue) {
 export function getDateFormatForMaterialUIComponent(dateValue) {
   let ret = '';
 
-  if (dateValue)
-    ret = dateFormat(dateValue, "yyyy-mm-dd");
+  try {
+    if (dateValue)
+      ret = dateFormat(dateValue, "yyyy-mm-dd");
+  }
+  catch (error) {
+    ret = '';
+  }
 
   return ret;
 }
@@ -217,8 +241,12 @@ export function getDateFormatForMaterialUIComponent(dateValue) {
 export function getDateTimeFormat(dateValue) {
   let ret = '';
 
-  if (dateValue)
-    ret = dateFormat(dateValue, "dd/mm/yyyy HH:mm");
+  try {
+    if (dateValue)
+      ret = dateFormat(dateValue, "dd/mm/yyyy HH:mm");
+  } catch (error) {
+    ret = '';
+  }
 
   return ret;
 }
@@ -453,7 +481,7 @@ export function findLocalIp() {
 
       if (!ips.some(e => e == ip))
         ips.push(ip);
-      
+
       console.log(" candidate: " + base.split(':')[1]);
       console.log(" component: " + component[componentId - 1]);
       console.log("  protocol: " + protocol);

@@ -118,8 +118,6 @@ class NewContract extends Component {
 		this.onChange = this.onChange.bind(this);
 		this.onChangeStart = this.onChangeStart.bind(this);
 		this.onChangeEnd = this.onChangeEnd.bind(this);
-		this.onChangeProtocolDate = this.onChangeProtocolDate.bind(this);
-		this.onChangeAwardDate = this.onChangeAwardDate.bind(this);
 
 		this.handleSubmit = this.handleSubmit.bind(this);
 		this.autoCompleteBudget = this.autoCompleteBudget.bind(this);
@@ -329,25 +327,7 @@ class NewContract extends Component {
 			}
 		}))
 	}
-	onChangeProtocolDate(date) {
 
-		this.setState(prevState => ({
-			contractInfo: {                   // object that we want to update
-				...prevState.contractInfo,    // keep all other key-value pairs
-				ProtocolDate: date    // update the value of specific key				
-			}
-		}))
-		// this.setState({ ProtocolDate: date });
-	}
-	onChangeAwardDate(date) {
-		this.setState(prevState => ({
-			contractInfo: {                   // object that we want to update
-				...prevState.contractInfo,    // keep all other key-value pairs
-				AwardDate: date    // update the value of specific key				
-			}
-		}))
-		//this.setState({ AwardDate: date });
-	}
 	onChangeStart(date) {
 
 		var start = date;
@@ -522,9 +502,9 @@ class NewContract extends Component {
 											<MyTextField title='Τμήμα' id='DepartmentId' stateValue={this.state.contractInfo.DepartmentId} values={this.loadMunicipalityDirectionDepartments(this.state.contractInfo.DirectionId)} InputProps={{ inputProps: { style: { textAlignLast: 'center' } } }} isRequired={true} isDisabled={false} onChange={this.onChange} select={true} width='50%' />
 										</div>
 										<div style={styles.divRow}>
-											<ProtocolInput title='Α.Π.' idn='ProtocolNumber' idd='ProtocolDate' protocolNumber={this.state.contractInfo.ProtocolNumber} protocolDate={this.state.contractInfo.ProtocolDate} onChange={this.onChange} onChangeDate={this.onChangeProtocolDate} tp1='text' tp2='date' width='33.33%' />
-											<MyTextField tp='date' title='Έναρξη Σύμβασης' id='Start' stateValue={this.state.contractInfo.Start} isRequired={true} isDisabled={false} onChangeDate={this.onChangeStart} inputProps={{ style: { textAlign: 'center' } }} width='33.33%' />
-											<MyTextField tp='date' title='Λήξη Σύμβασης' id='End' stateValue={this.state.contractInfo.End} isRequired={true} isDisabled={false} onChangeDate={this.onChangeEnd} inputProps={{ style: { textAlign: 'center' } }} width='33.33%' />
+											<ProtocolInput title='Α.Π.' idn='ProtocolNumber' idd='ProtocolDate' protocolNumber={this.state.contractInfo.ProtocolNumber} protocolDate={this.state.contractInfo.ProtocolDate} onChange={this.onChange} tp1='text' tp2='date' width='33.33%' />
+											<MyTextField tp='date' title='Έναρξη Σύμβασης' id='Start' stateValue={this.state.contractInfo.Start} isRequired={true} isDisabled={false} onChange={this.onChangeStart} inputProps={{ style: { textAlign: 'center' } }} width='33.33%' />
+											<MyTextField tp='date' title='Λήξη Σύμβασης' id='End' stateValue={this.state.contractInfo.End} isRequired={true} isDisabled={false} onChange={this.onChangeEnd} inputProps={{ style: { textAlign: 'center' } }} width='33.33%' />
 										</div>
 										<div style={styles.divRow}>
 											<MyTextField title='Τύπος' id='ContractTypeId' stateValue={this.state.contractInfo.ContractTypeId} values={this.loadContractTypes(this.state.contractInfo.ContractTypeId)} InputProps={{ inputProps: { style: { textAlignLast: 'center' } } }} isRequired={true} isDisabled={false} onChange={this.onChange} select={true} width='20%' />
@@ -537,7 +517,7 @@ class NewContract extends Component {
 											<MyTextField tp='text' title='K.A.E.' id='KAE' stateValue={this.state.contractInfo.KAE} isRequired={true} isDisabled={false} onChange={this.onChange} InputProps={{ inputProps: { maxLength: 20, style: { textAlign: 'center' } } }} width='20%' />
 											<MyTextField tp='text' title='Φ.' id='Actor' stateValue={this.state.contractInfo.Actor} isRequired={true} isDisabled={false} onChange={this.onChange} InputProps={{ inputProps: { maxLength: 5, style: { textAlign: 'center' } } }} width='20%' />
 											<MyTextField tp='text' title='Δ.' id='CodeDirection' stateValue={this.state.contractInfo.CodeDirection} isRequired={true} isDisabled={false} onChange={this.onChange} InputProps={{ inputProps: { maxLength: 5, style: { textAlign: 'center' } } }} width='20%' />
-											<ProtocolInput title='Α.Α.Κ. Α.Π.' idn='AwardNumber' idd='AwardDate' protocolNumber={this.state.contractInfo.AwardNumber} protocolDate={this.state.contractInfo.AwardDate} onChange={this.onChange} onChangeDate={this.onChangeAwardDate} tp1='text' tp2='date' width='20%' />
+											<ProtocolInput title='Α.Α.Κ. Α.Π.' idn='AwardNumber' idd='AwardDate' protocolNumber={this.state.contractInfo.AwardNumber} protocolDate={this.state.contractInfo.AwardDate} onChange={this.onChange} tp1='text' tp2='date' width='20%' />
 											<MyTextField tp='text' title='Α.Α.Κ. ΑΔΑ' id='AwardAda' stateValue={this.state.contractInfo.AwardAda} isRequired={false} isDisabled={false} onChange={this.onChange} ΙnputProps={{ style: { textAlign: 'center' } }} width='20%' />
 										</div>
 										{

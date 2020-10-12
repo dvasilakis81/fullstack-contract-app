@@ -64,11 +64,11 @@ export default function (state = {}, action, root) {
 			}
 			break;
 		case 'INSERT_CONTRACT':
-			let contractsList = null;
+			let contractsList = [];
 			if (state.contractsList && state.contractsList.length > 0)
 				contractsList = [action.payload, ...state.contractsList]
 			else
-				contractsList = action.payload
+				contractsList.push(action.payload);
 
 			state = {
 				...state,

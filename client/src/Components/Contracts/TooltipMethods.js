@@ -23,8 +23,8 @@ export function getLawArticleTooltip(state) {
   return (<>
     <div style={useStyles.tooltipTitle}>ΣΥΝΗΜΜΕΝΑ ΔΙΚΑΙΟΛΟΓΗΤΙΚΑ</div>
     <div style={useStyles.tooltip}>
-      <span style={useStyles.tooltip}>Τη με Α.Π. {state.ProtocolNumber}/{getDateFormatForDocument(state.ProtocolDate)} Προγραμματική Σύμβαση και ειδικότερα το άρθρο </span>
-      <span style={useStyles.tooltipIndicate}> {state.LawArticle ? state.LawArticle : 'π.χ. 5 “Πόροι – Χρηματοδότηση – Προϋπολογισμός” '}</span>
+      <span style={useStyles.tooltip}>Τη με Α.Π. {state.contractInfo.ProtocolNumber}/{getDateFormatForDocument(state.contractInfo.ProtocolDate)} Προγραμματική Σύμβαση και ειδικότερα το άρθρο </span>
+      <span style={useStyles.tooltipIndicate}> {state.contractInfo.LawArticle ? state.contractInfo.LawArticle : 'π.χ. 5 “Πόροι – Χρηματοδότηση – Προϋπολογισμός” '}</span>
       <span style={useStyles.tooltip}> αυτής.</span>
     </div>
   </>)

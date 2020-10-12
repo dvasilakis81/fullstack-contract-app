@@ -21,8 +21,7 @@ class MyAutocomplete extends Component {
     // var stateValue = props.stateValue;
     // var onChange = props.onChange;
     // var onInputChange = props.onInputChange;    
-    // var style = props.style;
-    console.log('this.props.inputValue: ' + this.props.inputValue);
+    // var style = props.style;   
 
     return (
 

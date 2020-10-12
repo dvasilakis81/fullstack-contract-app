@@ -27,6 +27,7 @@ import CourtOfAuditorsView from '../CourtOfAuditors/view';
 import AuthorDocumentedRequestView from '../AuthorDocumentedRequest/view';
 import SnippetPracticalView from '../SnippetPractical/view';
 import EconomicalCommiteeView from '../EconomicalCommitee/view';
+import ActivitiesView from '../Activities/view';
 
 import EditIcon from '@material-ui/icons/Edit';
 import DeleteIcon from '@material-ui/icons/Delete';
@@ -84,13 +85,14 @@ class ItemDetail extends React.Component {
 			variant: '',
 			openDeleteDialog: false,
 			openPopover: 0,
+			openContractActivities: 0,
 			windowWidth: window.innerWidth,
 			windowHeight: window.innerHeight
 		}
 
 		this.editNewContract = this.editNewContract.bind(this);
 		this.handleDeleteContract = this.handleDeleteContract.bind(this);
-		this.handleClickOpen = this.handleClickOpen.bind(this);
+		this.openDeleteDialogMethod = this.openDeleteDialogMethod.bind(this);
 		this.handleClose = this.handleClose.bind(this);
 		this.handlePopoverClose = this.handlePopoverClose.bind(this);
 	}
@@ -105,6 +107,7 @@ class ItemDetail extends React.Component {
 	editNewContract(e) {
 		this.setState({ navigateToEditContact: true });
 	}
+
 	handleDeleteContract(e) {
 
 		//axios.post(getHostUrl() + '/deletecontract', this.props.contractDetails, { headers: { Authorization: 'Bearer ' + this.props.token.data.token } }).then(res => {
@@ -125,12 +128,13 @@ class ItemDetail extends React.Component {
 		//}
 	}
 
-	handleClickOpen() {
+	openDeleteDialogMethod() {
 		this.setState({ openDeleteDialog: true });
 	}
+
 	handleClose() {
 		store.dispatch({ type: 'CLOSE_SNACKBAR', payload: false })
-		this.setState({ openDeleteDialog: false });
+		this.setState({ openDeleteDialog: false, openContractActivities: false });
 	}
 
 	getAccountColor(accountNumber, contractCreatedAccounts) {
@@ -204,15 +208,37 @@ class ItemDetail extends React.Component {
 
 	getDeleteAction(contractDetails) {
 		//#ff4500
+		// #FF7F7F
 		if (this.props.token.data.id === contractDetails.OwnerId)
 			return (<Button variant="contained"
 				style={{ margin: '5px', background: '#FF7F7F' }}
-				onClick={this.handleClickOpen}>
+				onClick={this.openDeleteDialogMethod}>
 				<DeleteIcon />
 				Διαγραφή Σύμβασης
 			</Button>)
 		else
 			return <></>
+	}
+	getActivityAction(contractDetails) {
+
+		return <div style={{ padding: '10px' }}>			
+			<span style={{ textAlign: 'center' }}>
+				<Button
+					variant='contained'					
+					style={{ margin: '5px', background: '#F3FCFF', color: '#000' }}
+					onClick={this.handlePopoverClick.bind(this, 200)}>
+					Δραστηριότητες
+				</Button>
+			</span>
+			<Popover
+				open={this.state.openPopover === 200 ? true : false}
+				onClose={this.handlePopoverClose}
+				anchorReference="anchorPosition"
+				anchorPosition={{ top: this.getPopoverTop(this.state.windowHeight), left: this.getPopoverLeft(this.state.windowWidth) }}
+				style={{ transform: document.getElementById('root').style.transform }}>
+				<ActivitiesView contractId={contractDetails.Id} data={contractDetails.activities} header='Δραστηριότητες' />
+			</Popover>
+		</div>		
 	}
 
 	getActionsTemplate(detailItem) {
@@ -221,6 +247,7 @@ class ItemDetail extends React.Component {
 			<Paper style={{ padding: '0px' }} square={true}>
 				{this.getEditAction()}
 				{this.getDeleteAction(detailItem)}
+				{/* {this.getActivityAction(detailItem)} */}
 				<Dialog
 					open={this.state.openDeleteDialog}
 					onClose={this.handleClose}
@@ -230,7 +257,7 @@ class ItemDetail extends React.Component {
 					<DialogContent>
 						<DialogContentText id="alert-dialog-description">
 							Θέλετε να διαγράψετε την σύμβαση <b>«{detailItem.Title}»</b> και τους λογαριασμούς που σχετίζονται με αυτή;
-            </DialogContentText>
+            			</DialogContentText>
 					</DialogContent>
 					<DialogActions>
 						<Button onClick={this.handleDeleteContract} color="primary">
