@@ -77,7 +77,7 @@ function getSignatureValues(accountId, req) {
 
 function query_update_signature1(req) {
   var sqlQuery = util.format('UPDATE "Ordering"."DocumentSignatory" ' +
-    'SET "SignatoryTitle"=%s,"SignatoryName"=%s' +
+    'SET "SignatoryTitle"=%s,"SignatoryName"=%s ' +
     'WHERE "AccountId"=%s AND "DocumentType"=1 AND "Type"=1',
     helper.addQuotes(req.body.SignType1),
     helper.addQuotes(req.body.SignName1),
@@ -88,7 +88,7 @@ function query_update_signature1(req) {
 
 function query_update_signature2(req) {
   var sqlQuery = util.format('UPDATE "Ordering"."DocumentSignatory" ' +
-    'SET "SignatoryTitle"=%s,"SignatoryName"=%s' +
+    'SET "SignatoryTitle"=%s,"SignatoryName"=%s ' +
     'WHERE "AccountId"=%s AND "DocumentType"=1 AND "Type"=2',
     helper.addQuotes(req.body.SignType2),
     helper.addQuotes(req.body.SignName2),
