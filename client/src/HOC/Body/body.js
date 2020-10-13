@@ -15,12 +15,12 @@ class Body extends Component {
 	}
 
 	componentDidMount() {
-		console.log('componentDidMount');
-		console.log('this.props.isLoginPage:' + this.props.isLoginPage)
+		//console.log('componentDidMount');
+		//console.log('this.props.isLoginPage:' + this.props.isLoginPage)
 		if (this.props.isLoginPage === undefined) {
 			var dtNow = new Date()
-			console.log('this.props.token:' + this.props.token)
-			console.log('this.props.token.data:' + this.props.token.data)
+			//console.log('this.props.token:' + this.props.token)
+			//console.log('this.props.token.data:' + this.props.token.data)
 
 			if (isTokenExpired(this.props.token) === true)
 				this.setState({ redirectToLogin: true });
@@ -28,8 +28,8 @@ class Body extends Component {
 			if (this.props.token && this.props.token.data) {
 				var dtTokeExpiresAt = new Date(this.props.token.data.expiresAt);
 				var dtDiffs = (dtTokeExpiresAt - dtNow)
-				console.log('Body: dtTokeExpiresAt:' + dtTokeExpiresAt)
-				console.log('Body: dtNow:' + dtNow)
+				// console.log('Body: dtTokeExpiresAt:' + dtTokeExpiresAt)
+				// console.log('Body: dtNow:' + dtNow)
 				// console.log('Body: dtDiffs:' + dtDiffs)
 				// var d = new Date(0); // The 0 there is the key, which sets the date to the epoch
 				// console.log('setUTCSeconds: ' + d.setUTCSeconds(dtTokeExpiresAt));

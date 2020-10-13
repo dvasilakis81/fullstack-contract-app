@@ -15,8 +15,13 @@ export function getContracts(tokenData, offset, limit) {
 }
 
 export function searchContracts(tokenData, filter) {
-  const request = axios.get(`${URL}/searchcontracts?filter=` + filter + '&loginuserid=' + tokenData.id, { headers: { Authorization: 'Bearer ' + tokenData.token } })
-    .then(response => response.data)
+  const request = axios.post(`${URL}/searchcontracts`, 
+  {
+    filter: filter,
+    data: tokenData
+  }, { headers: { Authorization: 'Bearer ' + tokenData.token } });
+  // const request = axios.post(`${URL}/searchcontracts?filter=` + filter + '&loginuserid=' + tokenData.id, { headers: { Authorization: 'Bearer ' + tokenData.token } })
+  //   .then(response => response.data)
   return {
     type: 'SEARCH_CONTRACTS',
     payload: request

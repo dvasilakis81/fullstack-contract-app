@@ -10,6 +10,13 @@
             "name": "Chrome",
             "url": "http://localhost:3000",
             "webRoot": "${workspaceFolder}"      
-          } 
+          },
+          // {
+          //   "name": "Launch localhost",
+          //   "type": "firefox",
+          //   "request": "launch",            
+          //   "url": "http://localhost:3000",
+          //   "webRoot": "${workspaceFolder}"      
+          // },
     ]
 }

@@ -42,7 +42,7 @@ const StyledTextField = props => {
   var type = props.tp;
   var id = props.id;
   var stateValue = props.stateValue;
-  var onChange = props.onChange;
+  var onChange = props.onChange;    
   var inputProps = props.inputProps ? props.inputProps : { style: { textAlign: 'center' } };
   var InputProps = props.InputProps ? props.InputProps : null;
   var multiline = props.multiline ? props.multiline : null;
@@ -126,7 +126,23 @@ const StyledTextField = props => {
               </Typography>
             </React.Fragment>
           }>
-          <MuiPickersUtilsProvider utils={DateFnsUtils}>
+          <TextField
+            multiline={multiline}
+            rows={3}
+            disabled={isDisabled}
+            required={isRequired}
+            type={type}
+            id={id}
+            value={stateValue}
+            variant='standard'
+            style={style}
+            onChange={onChange}
+            inputProps={inputProps}
+            InputProps={InputProps}
+            InputLabelProps={inputLabelProps}
+            size={size}
+          />
+          {/* <MuiPickersUtilsProvider utils={DateFnsUtils}>
             <KeyboardDatePicker
               disableToolbar
               variant="inline"
@@ -140,7 +156,7 @@ const StyledTextField = props => {
                 'aria-label': 'change date',
               }}
             />
-          </MuiPickersUtilsProvider>
+          </MuiPickersUtilsProvider> */}
         </StyledTooltip>
       }
       else {
@@ -183,21 +199,37 @@ const StyledTextField = props => {
     else {
       if (type === 'date') {
         var w = props.partOfProtocol === true ? props.width : '100%';
-        return <MuiPickersUtilsProvider utils={DateFnsUtils}>
-          <KeyboardDatePicker
-            disableToolbar
-            variant="inline"
-            format="dd/MM/yyyy"
-            margin=""
+        // return <MuiPickersUtilsProvider utils={DateFnsUtils}>
+        //   <KeyboardDatePicker
+        //     disableToolbar
+        //     variant="inline"
+        //     format="dd/MM/yyyy"
+        //     margin=""
+        //     id={id}
+        //     value={stateValue}
+        //     style={{ margin: '0px', padding: '0px', width: w, textAlignLast: 'center' }}
+        //     onChange={props.onChangeDate}
+        //     KeyboardButtonProps={{
+        //       'aria-label': 'change date',
+        //     }}
+        //   />
+        // </MuiPickersUtilsProvider>
+        return <TextField
+            multiline={multiline}
+            rows={3}
+            disabled={isDisabled}
+            required={isRequired}
+            type={type}
             id={id}
             value={stateValue}
-            style={{ margin: '0px', padding: '0px', width: w, textAlignLast: 'center' }}
-            onChange={props.onChangeDate}
-            KeyboardButtonProps={{
-              'aria-label': 'change date',
-            }}
+            variant='standard'
+            style={style}
+            onChange={onChange}
+            inputProps={inputProps}
+            InputProps={InputProps}
+            InputLabelProps={inputLabelProps}
+            size={size}
           />
-        </MuiPickersUtilsProvider>
       }
       else {
         return <TextField

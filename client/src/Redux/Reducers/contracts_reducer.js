@@ -17,8 +17,8 @@ export default function (state = {}, action, root) {
 				...state,
 				searchContractsPending: undefined,
 				searchContractsRejected: undefined,
-				searchContractsList: action.payload,
-				contractDetailsSearchMode: action.payload ? action.payload[0] : null
+				searchContractsList: action.payload.data,
+				contractDetailsSearchMode: action.payload.data ? action.payload.data[0] : null
 			};
 			break;
 		case 'SEARCH_CONTRACTS_REJECTED':
@@ -64,11 +64,11 @@ export default function (state = {}, action, root) {
 			}
 			break;
 		case 'INSERT_CONTRACT':
-			let contractsList = null;
+			let contractsList = [];
 			if (state.contractsList && state.contractsList.length > 0)
 				contractsList = [action.payload, ...state.contractsList]
 			else
-				contractsList = action.payload
+				contractsList.push(action.payload);
 
 			state = {
 				...state,

@@ -18,7 +18,7 @@ const useStyles = {
   }
 };
 
-export function getLawArticleTooltip( state, contractDetails) {
+export function getLawArticleTooltip(state, contractDetails) {
   //1.	Τη με Α.Π. 260100/17-10-2018 Προγραμματική Σύμβαση και ειδικότερα το άρθρο 5 “Πόροι – Χρηματοδότηση – Προϋπολογισμός” αυτής.
   return (<>
     <div style={useStyles.tooltipTitle}>ΣΥΝΗΜΜΕΝΑ ΔΙΚΑΙΟΛΟΓΗΤΙΚΑ</div>
@@ -220,21 +220,25 @@ export function getInvoiceTooltipTemplate(state, conc, ind) {
   //8.	Πρωτότυπο & φωτ/φο του με αριθμ. ΤΥΠΒ022942/29-3-2019 Τιμολογίου Παροχής Υπηρεσιών της COSMOS BUSINESS SYSTEMS Α.Ε.Β.Ε.
   //Λογαριασμός
   // 8.	Το με Α.Π. 260342/18-10-2018 διαβιβαστικό έγγραφο, με το οποίο μας διαβιβάστηκε το υπ’ αριθ. 5/17-10-2018 Τιμολόγιο της Δ.Α.Ε.Μ. Α.Ε στις 01-01-2019. 
+  try {
+    return (<>
+      {/* Το με Α.Π. 260342/18-10-2018 διαβιβαστικό έγγραφο, με το οποίο μας διαβιβάστηκε το υπ’ αριθ. 5/17-10-2018 Τιμολόγιο της Δ.Α.Ε.Μ. Α.Ε. */}
+      <div style={useStyles.tooltipTitle}>ΣΥΝΗΜΜΕΝΑ ΔΙΚΑΙΟΛΟΓΗΤΙΚΑ</div>
+      <span style={useStyles.tooltip}>To με Α.Π. </span>
+      <span style={style3}>{state.InvoiceDeliveredDateProtocolNumber ? state.InvoiceDeliveredDateProtocolNumber : '____'}</span>
+      <span style={useStyles.tooltip}>/</span>
+      <span style={style4}>{state.InvoiceDeliveredDateProtocolDate ? getDateFormatForDocument(state.InvoiceDeliveredDateProtocolDate) : '__-__-____'}</span>
+      <span style={useStyles.tooltip}> διαβιβαστικό έγγραφο, με το οποίο μας διαβιβάστηκε το υπ’ αριθ. </span>
+      <span style={style1}>{state.InvoiceNumber ? state.InvoiceNumber : '____'}</span>
+      <span style={useStyles.tooltip}>/</span>
+      <span style={style2}>{state.InvoiceDate ? state.InvoiceDate : '__-__-____'}</span>
+      <span style={useStyles.tooltip}> Τιμολόγιο της {conc} στης </span>
+      <span style={style5}>{state.InvoiceDeliveredDate ? state.InvoiceDeliveredDate : '__-__-____'}</span>
+    </>)
+  } catch (error) {
+    return <div>error</div>
+  }
 
-  return (<>
-    {/* Το με Α.Π. 260342/18-10-2018 διαβιβαστικό έγγραφο, με το οποίο μας διαβιβάστηκε το υπ’ αριθ. 5/17-10-2018 Τιμολόγιο της Δ.Α.Ε.Μ. Α.Ε. */}
-    <div style={useStyles.tooltipTitle}>ΣΥΝΗΜΜΕΝΑ ΔΙΚΑΙΟΛΟΓΗΤΙΚΑ</div>
-    <span style={useStyles.tooltip}>To με Α.Π. </span>
-    <span style={style3}>{state.InvoiceDeliveredDateProtocolNumber ? state.InvoiceDeliveredDateProtocolNumber : '____'}</span>
-    <span style={useStyles.tooltip}>/</span>
-    <span style={style4}>{state.InvoiceDeliveredDateProtocolDate ? getDateFormatForDocument(state.InvoiceDeliveredDateProtocolDate) : '__-__-____'}</span>
-    <span style={useStyles.tooltip}> διαβιβαστικό έγγραφο, με το οποίο μας διαβιβάστηκε το υπ’ αριθ. </span>
-    <span style={style1}>{state.InvoiceNumber ? state.InvoiceNumber : '____'}</span>
-    <span style={useStyles.tooltip}>/</span>
-    <span style={style2}>{state.InvoiceDate ? state.InvoiceDate : '__-__-____'}</span>
-    <span style={useStyles.tooltip}> Τιμολόγιο της {conc} στης </span>
-    <span style={style5}>{state.InvoiceDeliveredDate ? state.InvoiceDeliveredDate : '__-__-____'}</span>
-  </>)
 }
 
 // *** _____________________ ***

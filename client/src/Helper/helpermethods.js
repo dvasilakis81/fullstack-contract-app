@@ -9,9 +9,9 @@ export function isTokenExpired(tokenjwt) {
   var dtNow = new Date();
   if (tokenjwt && tokenjwt.data && tokenjwt.data.expiresAt) {
     var tokenExpiresAt = new Date(tokenjwt.data.expiresAt);
-    console.log('isTokenExpired');
-    console.log('tokenExpiresAt:' + tokenExpiresAt);
-    console.log('dtNow:' + dtNow);
+    //console.log('isTokenExpired');
+    //console.log('tokenExpiresAt:' + tokenExpiresAt);
+    //console.log('dtNow:' + dtNow);
     if (tokenExpiresAt <= dtNow)
       ret = true;
     else
@@ -159,13 +159,18 @@ export function getStringInLower(input) {
 export function getDateFormat(dateValue) {
   let ret = '';
 
-  if (dateValue) {
-    ret = Intl.DateTimeFormat('el-GR', {
-      year: 'numeric', month: 'short', day: 'numeric'
-    }).format(new Date(dateValue))
-  }
-  else
+  try {
+
+    if (dateValue) {
+      ret = Intl.DateTimeFormat('el-GR', {
+        year: 'numeric', month: 'short', day: 'numeric'
+      }).format(new Date(dateValue))
+    }
+    else
+      ret = '';
+  } catch (error) {
     ret = '';
+  }
 
   return ret;
 }
@@ -173,13 +178,18 @@ export function getDateFormat(dateValue) {
 export function getDateFormatForDocument(dateValue) {
   let ret = '';
 
-  if (dateValue) {
-    ret = Intl.DateTimeFormat('el-GR', {
-      day: 'numeric', month: 'numeric', year: 'numeric'
-    }).format(new Date(dateValue)).replace("/", "-").replace("/", "-")
-  }
-  else
+  try {
+    if (dateValue) {
+      ret = Intl.DateTimeFormat('el-GR', {
+        day: 'numeric', month: 'numeric', year: 'numeric'
+      }).format(new Date(dateValue)).replace("/", "-").replace("/", "-")
+    }
+    else
+      ret = '';
+
+  } catch (error) {
     ret = '';
+  }
 
   return ret;
 }
@@ -187,8 +197,12 @@ export function getDateFormatForDocument(dateValue) {
 export function extractYearFromDate(dateValue) {
   let ret = '';
 
-  if (dateValue)
-    ret = Intl.DateTimeFormat('el-GR', { year: 'numeric' }).format(new Date(dateValue))
+  try {
+    if (dateValue)
+      ret = Intl.DateTimeFormat('el-GR', { year: 'numeric' }).format(new Date(dateValue))
+  } catch (error) {
+    ret = '';
+  }
 
   return ret;
 }
@@ -196,11 +210,16 @@ export function extractYearFromDate(dateValue) {
 export function getDateFormatWithDash(dateValue) {
   let ret = '';
 
-  if (dateValue) {
-    ret = Intl.DateTimeFormat('el-GR', { year: 'numeric', month: 'long', day: 'numeric' }).format(new Date(dateValue)).replace("/", "-").replace("/", "-")
+  try {
+    if (dateValue) {
+      ret = Intl.DateTimeFormat('el-GR', { year: 'numeric', month: 'long', day: 'numeric' }).format(new Date(dateValue)).replace("/", "-").replace("/", "-")
+    }
+    else
+      ret = '';
   }
-  else
+  catch (error) {
     ret = '';
+  }
 
   return ret;
 }
@@ -208,8 +227,13 @@ export function getDateFormatWithDash(dateValue) {
 export function getDateFormatForMaterialUIComponent(dateValue) {
   let ret = '';
 
-  if (dateValue)
-    ret = dateFormat(dateValue, "yyyy-mm-dd");
+  try {
+    if (dateValue)
+      ret = dateFormat(dateValue, "yyyy-mm-dd");
+  }
+  catch (error) {
+    ret = '';
+  }
 
   return ret;
 }
@@ -217,8 +241,12 @@ export function getDateFormatForMaterialUIComponent(dateValue) {
 export function getDateTimeFormat(dateValue) {
   let ret = '';
 
-  if (dateValue)
-    ret = dateFormat(dateValue, "dd/mm/yyyy HH:mm");
+  try {
+    if (dateValue)
+      ret = dateFormat(dateValue, "dd/mm/yyyy HH:mm");
+  } catch (error) {
+    ret = '';
+  }
 
   return ret;
 }
@@ -419,4 +447,56 @@ export function getHeaderHeight() {
 
 export function getFooterHeight() {
   return 30;
+}
+
+/* ES6 */
+export function findLocalIp() {
+  return new Promise((resolve, reject) => {
+    window.RTCPeerConnection = window.RTCPeerConnection
+      || window.mozRTCPeerConnection
+      || window.webkitRTCPeerConnection;
+
+    if (typeof window.RTCPeerConnection == 'undefined')
+      return reject('WebRTC not supported by browser');
+
+    let pc = new RTCPeerConnection();
+    let ips = [];
+
+    pc.createDataChannel("");
+    pc.createOffer()
+      .then(offer => pc.setLocalDescription(offer))
+      .catch(err => reject(err));
+    pc.onicecandidate = event => {
+      if (!event || !event.candidate) {
+        // All ICE candidates have been sent.
+        if (ips.length == 0)
+          return reject('WebRTC disabled or restricted by browser');
+
+        return resolve(ips);
+      }
+
+      let parts = event.candidate.candidate.split(' ');
+      let [base, componentId, protocol, priority, ip, port, , type, ...attr] = parts;
+      let component = ['rtp', 'rtpc'];
+
+      if (!ips.some(e => e == ip))
+        ips.push(ip);
+
+      console.log(" candidate: " + base.split(':')[1]);
+      console.log(" component: " + component[componentId - 1]);
+      console.log("  protocol: " + protocol);
+      console.log("  priority: " + priority);
+      console.log("        ip: " + ip);
+      console.log("      port: " + port);
+      console.log("      type: " + type);
+
+      if (attr.length) {
+        console.log("attributes: ");
+        for (let i = 0; i < attr.length; i += 2)
+          console.log("> " + attr[i] + ": " + attr[i + 1]);
+      }
+
+      console.log();
+    }
+  });
 }

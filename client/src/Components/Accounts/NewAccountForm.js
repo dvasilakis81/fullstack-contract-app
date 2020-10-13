@@ -45,8 +45,6 @@ import {
 	getMayorDecisionProtocolTooltip, getMonitoringCommitteePracticalTooltip, getMonitoringCommitteeTooltipTemplate
 } from './ΤooltipMethods';
 
-import Header from '../Header/header'
-
 import { bindActionCreators } from 'redux';
 import { createAccount, updateAccount } from '../../Redux/Actions';
 import { withStyles } from "@material-ui/core/styles";
@@ -130,7 +128,7 @@ class NewAccountForm extends Component {
 			FirstAccountProtocolNumber: this.props.location.state.FirstAccountProtocolNumber,
 			FirstAccountProtocolDate: this.props.location.state.FirstAccountProtocolDate,
 			WorkConfirmationDate: this.props.location.state.WorkConfirmationDate,
-			DeliveryGoodsDate: this.props.location.state.DeliveryGoodsDate,			
+			DeliveryGoodsDate: this.props.location.state.DeliveryGoodsDate,
 			InvoiceNumber: this.props.location.state.InvoiceNumber,
 			InvoiceDate: this.props.location.state.InvoiceDate,
 			InvoiceDeliveredDate: this.props.location.state.InvoiceDeliveredDate,
@@ -157,23 +155,9 @@ class NewAccountForm extends Component {
 			accountReservations: this.props.location.accountReservations ? this.props.location.accountReservations : this.props.token.data.user.reservations
 		}
 
-		
+
 		this.onChange = this.onChange.bind(this);
 
-		this.onChangeDocumentDate = this.onChangeDocumentDate.bind(this);
-		this.onChangeWorkConfirmationDate = this.onChangeWorkConfirmationDate.bind(this);
-		this.onChangeDeliveryGoodsDate = this.onChangeDeliveryGoodsDate.bind(this);
-		this.onChangeStart = this.onChangeStart.bind(this);
-		this.onChangeEnd = this.onChangeEnd.bind(this);
-		this.onChangeProtocolDate = this.onChangeProtocolDate.bind(this);
-		this.onChangeFirstAccountProtocolDate = this.onChangeFirstAccountProtocolDate.bind(this);
-		this.onChangeInvoiceDate = this.onChangeInvoiceDate.bind(this);
-		this.onChangeInvoiceDeliveredDate = this.onChangeInvoiceDeliveredDate.bind(this);
-		this.onChangeInvoiceDeliveredDateProtocolDate = this.onChangeInvoiceDeliveredDateProtocolDate.bind(this);
-		this.onChangeMayorDecisionForMembersProtocolDate = this.onChangeMayorDecisionForMembersProtocolDate.bind(this);
-		this.onChangeTransmissionDocumentProtocolDate = this.onChangeTransmissionDocumentProtocolDate.bind(this);
-		this.onChangePracticalDate = this.onChangePracticalDate.bind(this);
-	
 		this.setCheckboxValue = this.setCheckboxValue.bind(this);
 		this.onAutocompleteChange = this.onAutocompleteChange.bind(this);
 		this.onAutocompleteInputChange = this.onAutocompleteInputChange.bind(this);
@@ -204,51 +188,8 @@ class NewAccountForm extends Component {
 				console.log(msg);
 			});
 		}
-	}
-
-	onChangeDocumentDate(date) {
-		this.setState({ DocumentDate: date });
-	}
-	onChangeWorkConfirmationDate(date) {
-		this.setState({ WorkConfirmationDate: date });
-	}
-	onChangeDeliveryGoodsDate(date) {
-		this.setState({ DeliveryGoodsDate: date });
-	}
-	onDocumentDateChange(date) {
-		this.setState({ DocumentDate: date });
-	}
-	onChangeStart(date) {
-		this.setState({ Start: date });
-	}
-	onChangeEnd(date) {
-		this.setState({ End: date });
-	}
-	onChangeProtocolDate(date) {
-		this.setState({ ProtocolDate: date });
-	}
-	onChangeFirstAccountProtocolDate(date) {
-		this.setState({ FirstAccountProtocolDate: date });
-	}
-	onChangeInvoiceDate(date) {
-		this.setState({ InvoiceDate: date });
-	}
-	onChangeInvoiceDeliveredDate(date) {
-		this.setState({ InvoiceDeliveredDate: date });
-	}
-	onChangeInvoiceDeliveredDateProtocolDate(date) {
-		this.setState({ InvoiceDeliveredDateProtocolDate: date });
-	}
-	onChangeMayorDecisionForMembersProtocolDate(date) {
-		this.setState({ MayorDecisionForMembersProtocolDate: date });
-	}
-	onChangeTransmissionDocumentProtocolDate(date) {
-		this.setState({ TransmissionDocumentProtocolDate: date });
-	}
-	onChangePracticalDate(date) {
-		this.setState({ PracticalDate: date });
-	}
-
+	}		
+	
 	handleSubmit(e) {
 		e.preventDefault();
 
@@ -290,10 +231,8 @@ class NewAccountForm extends Component {
 
 	onAutocompleteChange(e, v, r) {
 
-		if (e) {
-			console.log('onChange: e:' + e + ' v:' + v)
+		if (e)
 			this.setState({ [e.target.id]: v });
-		}
 	}
 	clearAutocomplete(targetId) {
 		this.setState({ [targetId]: '' });
@@ -409,8 +348,7 @@ class NewAccountForm extends Component {
 						idd='FirstAccountProtocolDate'
 						protocolNumber={this.state.FirstAccountProtocolNumber}
 						protocolDate={this.state.FirstAccountProtocolDate}
-						onChange={this.onChange}
-						onChangeDate={this.onChangeFirstAccountProtocolDate}
+						onChange={this.onChange}						
 						tp1='text'
 						tp2='date' />
 					{getButton('contained', 'small', null, useStyles.btnAuto, this.autoCompleteFirstAccountProtocolNumber, 'ΥΠΟΛΟΓΙΣΜΟΣ', null, false)}
@@ -423,7 +361,7 @@ class NewAccountForm extends Component {
 		if (accountId) {
 			return (
 				<div style={useStyles.divRowFlex}>
-					<ProtocolInput tm1={getAccountProtocolTooltip(this.state.ProtocolNumber, this.state.ProtocolDate, 1)} tm2={getAccountProtocolTooltip(this.state.ProtocolNumber, this.state.ProtocolDate, 2)} title='Α.Π. Λογαριασμού' isRequired={false} idn='ProtocolNumber' idd='ProtocolDate' protocolNumber={this.state.ProtocolNumber} protocolDate={this.state.ProtocolDate} onChange={this.onChange} onChange={this.onChangeProtocolDate} tp1='text' tp2='date' isRequired={false} />
+					<ProtocolInput tm1={getAccountProtocolTooltip(this.state.ProtocolNumber, this.state.ProtocolDate, 1)} tm2={getAccountProtocolTooltip(this.state.ProtocolNumber, this.state.ProtocolDate, 2)} title='Α.Π. Λογαριασμού' isRequired={false} idn='ProtocolNumber' idd='ProtocolDate' protocolNumber={this.state.ProtocolNumber} protocolDate={this.state.ProtocolDate} onChange={this.onChange} onChange={this.onChange} tp1='text' tp2='date' isRequired={false} />
 				</div>)
 		}
 	}
@@ -520,19 +458,19 @@ class NewAccountForm extends Component {
 
 	getWorkConfirmationDate() {
 		if (this.state.IsDownpayment === false)
-			return <MyTextField tp='date' title='Ημ. Βεβαίωσης Έργου' id='WorkConfirmationDate' stateValue={this.state.WorkConfirmationDate} isRequired={true} isDisabled={false} onChangeDate={this.onChangeWorkConfirmationDate} inputProps={{ style: { textAlign: 'center' } }} isRequired={false} />
+			return <MyTextField tp='date' title='Ημ. Βεβαίωσης Έργου' id='WorkConfirmationDate' stateValue={this.state.WorkConfirmationDate} isRequired={true} isDisabled={false} onChange={this.onChange} inputProps={{ style: { textAlign: 'center' } }} isRequired={false} />
 	}
 
 	getDeliveryGoodsDate() {
 		if (this.state.IsDownpayment === false)
-			return <MyTextField tp='date' title='Ημ. οριστικής παραλαβής αγαθών/υπηρεσιων' id='DeliveryGoodsDate' stateValue={this.state.DeliveryGoodsDate} isRequired={true} isDisabled={false} onChangeDate={this.onChangeDeliveryGoodsDate} inputProps={{ style: { textAlign: 'center' } }} width='20%' isRequired={false} />
+			return <MyTextField tp='date' title='Ημ. οριστικής παραλαβής αγαθών/υπηρεσιων' id='DeliveryGoodsDate' stateValue={this.state.DeliveryGoodsDate} isRequired={true} isDisabled={false} onChange={this.onChange} inputProps={{ style: { textAlign: 'center' } }} width='20%' isRequired={false} />
 	}
 
 	getDocumentsInfo() {
 		return <>
 			<header style={useStyles.category}>Στοιχεία Εγγράφων</header>
 			<div style={useStyles.divRowFlex}>
-				<MyTextField tm={getDocumentDateTooltipTemplate(this.state)} tp='date' title='Ημερομηνία Εγγράφων' id='DocumentDate' stateValue={this.state.DocumentDate} isRequired={true} isDisabled={false} onChangeDate={this.onChangeDocumentDate} />
+				<MyTextField tm={getDocumentDateTooltipTemplate(this.state)} tp='date' title='Ημερομηνία Εγγράφων' id='DocumentDate' stateValue={this.state.DocumentDate} isRequired={true} isDisabled={false} onChange={this.onChange} />
 			</div>
 			{this.getCC()}
 			{/* {this.getCC1()}
@@ -552,8 +490,8 @@ class NewAccountForm extends Component {
 			{this.addProtocolInfo(this.state.AccountId, this.state.AccountNumber)}
 			{this.addFirstAccountProtocolInfo()}
 			<div style={useStyles.divRowFlex}>
-				<MyTextField tm={getAccountStartDateTooltipTemplate(this.state)} tp='date' title='Έναρξη Λογαριασμού' id='Start' stateValue={this.state.Start} isRequired={false} isDisabled={false} onChangeDate={this.onChangeStart} />
-				<MyTextField tm={getAccountStartDateTooltipTemplate(this.state)} tp='date' title='Λήξη Λογαριασμού' id='End' stateValue={this.state.End} isRequired={false} isDisabled={false} onChangeDate={this.onChangeEnd} />
+				<MyTextField tm={getAccountStartDateTooltipTemplate(this.state)} tp='date' title='Έναρξη Λογαριασμού' id='Start' stateValue={this.state.Start} isRequired={false} isDisabled={false} onChange={this.onChange} />
+				<MyTextField tm={getAccountStartDateTooltipTemplate(this.state)} tp='date' title='Λήξη Λογαριασμού' id='End' stateValue={this.state.End} isRequired={false} isDisabled={false} onChange={this.onChange} />
 			</div>
 			<div style={useStyles.divRowFlex}>
 				<MyTextField tp='number' title='Καθαρό Ποσό' id='AmountPure' stateValue={this.state.AmountPure} isRequired={true} isDisabled={false} onChange={this.onChange} inputProps={{ style: { textAlign: "center" } }} InputProps={{ endAdornment: <InputAdornment position="end"><span style={{ fontWeight: 'bolder', marginRight: '10px' }}>€</span></InputAdornment> }} />
@@ -576,9 +514,17 @@ class NewAccountForm extends Component {
 		return <>
 			< header style={useStyles.category} > Στοιχεία Τιμολογίου</header>
 			<div style={useStyles.divRowFlex}>
-				<MyTextField tm={getInvoiceTooltipTemplate(this.state, contractDetails.ConcessionaireName, 5)} tp='date' title='Ημ/νία Παραλαβής Τιμολογίου' id='InvoiceDeliveredDate' stateValue={this.state.InvoiceDeliveredDate} isRequired={false} isDisabled={false} onChangeDate={this.onChangeInvoiceDeliveredDate} inputProps={{ style: { textAlign: 'center' } }} isRequired={false} />
+				{/* <MyTextField tm={getInvoiceTooltipTemplate(this.state, contractDetails.ConcessionaireName, 5)} tp='date' title='Ημ/νία Παραλαβής Τιμολογίου' id='InvoiceDeliveredDate' stateValue={this.state.InvoiceDeliveredDate} isRequired={false} isDisabled={false} onChangeDate={this.onChangeInvoiceDeliveredDate} inputProps={{ style: { textAlign: 'center' } }} isRequired={false} />
 				<ProtocolInput tm1={getInvoiceTooltipTemplate(this.state, contractDetails.ConcessionaireName, 3)} tm2={getInvoiceTooltipTemplate(this.state, contractDetails.ConcessionaireName, 4)} title='Α.Π. Ημ/νίας Παραλαβής Τιμολογίου' idn='InvoiceDeliveredDateProtocolNumber' idd='InvoiceDeliveredDateProtocolDate' protocolNumber={this.state.InvoiceDeliveredDateProtocolNumber} protocolDate={this.state.InvoiceDeliveredDateProtocolDate} onChange={this.onChange} onChangeDate={this.onChangeInvoiceDeliveredDateProtocolDate} tp1='text' tp2='date' isRequired={false} />
-				<ProtocolInput tm1={getInvoiceTooltipTemplate(this.state, contractDetails.ConcessionaireName, 1)} tm2={getInvoiceTooltipTemplate(this.state, contractDetails.ConcessionaireName, 2)} title='Α.Π. Τιμολογίου' idn='InvoiceNumber' idd='InvoiceDate' protocolNumber={this.state.InvoiceNumber} protocolDate={this.state.InvoiceDate} onChange={this.onChange} onChangeDate={this.onChangeInvoiceDate} protocolDate={this.state.InvoiceDate} tp1='text' tp2='date' isRequired={true} />
+				<ProtocolInput tm1={getInvoiceTooltipTemplate(this.state, contractDetails.ConcessionaireName, 1)} tm2={getInvoiceTooltipTemplate(this.state, contractDetails.ConcessionaireName, 2)} title='Α.Π. Τιμολογίου' idn='InvoiceNumber' idd='InvoiceDate' protocolNumber={this.state.InvoiceNumber} protocolDate={this.state.InvoiceDate} onChange={this.onChange} onChangeDate={this.onChangeInvoiceDate} protocolDate={this.state.InvoiceDate} tp1='text' tp2='date' isRequired={true} /> */}
+
+				<MyTextField tm={getInvoiceTooltipTemplate(this.state, contractDetails.ConcessionaireName, 5)} tp='date' title='Ημ/νία Παραλαβής Τιμολογίου' id='InvoiceDeliveredDate' stateValue={this.state.InvoiceDeliveredDate} isRequired={false} isDisabled={false} onChange={this.onChange} inputProps={{ style: { textAlign: 'center' } }} isRequired={false} />
+				<ProtocolInput tm1={getInvoiceTooltipTemplate(this.state, contractDetails.ConcessionaireName, 3)} tm2={getInvoiceTooltipTemplate(this.state, contractDetails.ConcessionaireName, 4)} title='Α.Π. Ημ/νίας Παραλαβής Τιμολογίου' idn='InvoiceDeliveredDateProtocolNumber' idd='InvoiceDeliveredDateProtocolDate' protocolNumber={this.state.InvoiceDeliveredDateProtocolNumber} protocolDate={this.state.InvoiceDeliveredDateProtocolDate} onChange={this.onChange} tp1='text' tp2='date' isRequired={false} />
+				<ProtocolInput tm1={getInvoiceTooltipTemplate(this.state, contractDetails.ConcessionaireName, 1)} tm2={getInvoiceTooltipTemplate(this.state, contractDetails.ConcessionaireName, 2)} title='Α.Π. Τιμολογίου' idn='InvoiceNumber' idd='InvoiceDate' protocolNumber={this.state.InvoiceNumber} protocolDate={this.state.InvoiceDate} onChange={this.onChange} protocolDate={this.state.InvoiceDate} tp1='text' tp2='date' isRequired={true} />
+
+				{/* <MyTextField tp='date' title='Ημ/νία Παραλαβής Τιμολογίου' id='InvoiceDeliveredDate' stateValue={this.state.InvoiceDeliveredDate} isRequired={false} isDisabled={false} onChangeDate={this.onChangeInvoiceDeliveredDate} inputProps={{ style: { textAlign: 'center' } }} isRequired={false} />
+				<ProtocolInput title='Α.Π. Ημ/νίας Παραλαβής Τιμολογίου' idn='InvoiceDeliveredDateProtocolNumber' idd='InvoiceDeliveredDateProtocolDate' protocolNumber={this.state.InvoiceDeliveredDateProtocolNumber} protocolDate={this.state.InvoiceDeliveredDateProtocolDate} onChange={this.onChange} onChangeDate={this.onChangeInvoiceDeliveredDateProtocolDate} tp1='text' tp2='date' isRequired={false} />
+				<ProtocolInput title='Α.Π. Τιμολογίου' idn='InvoiceNumber' idd='InvoiceDate' protocolNumber={this.state.InvoiceNumber} protocolDate={this.state.InvoiceDate} onChange={this.onChange} onChangeDate={this.onChangeInvoiceDate} protocolDate={this.state.InvoiceDate} tp1='text' tp2='date' isRequired={true} /> */}
 			</div>
 		</>
 	}
@@ -665,11 +611,15 @@ class NewAccountForm extends Component {
 
 		for (let i = 0; i < this.props.token.data.user.users.length; i++) {
 			const user = this.props.token.data.user.users[i];
-			ret.push(user.cn);
+			if (user.cn)
+				ret.push(user.cn);
 		}
 
-		ret.push(this.props.token.data.user.supervisorName);
-		ret.push(this.props.token.data.user.directorName);
+		if (this.props.token.data.user.supervisorName)
+			ret.push(this.props.token.data.user.supervisorName);
+
+		if (this.props.token.data.user.directorName)
+			ret.push(this.props.token.data.user.directorName);
 
 		return ret;
 	}
@@ -735,9 +685,9 @@ class NewAccountForm extends Component {
 			{this.state.HasMonitoringCommittee === true ?
 				<div>
 					<div style={useStyles.divRowFlex}>
-						<ProtocolInput tm1={getMayorDecisionProtocolTooltip(this.state, 1)} tm2={getMayorDecisionProtocolTooltip(this.state, 2)} title='Α.Π. Απόφασης Δημάρχου' idn='MayorDecisionForMembersProtocolNumber' idd='MayorDecisionForMembersProtocolDate' protocolNumber={this.state.MayorDecisionForMembersProtocolNumber} protocolDate={this.state.MayorDecisionForMembersProtocolDate} onChange={this.onChange} onChangeDate={this.onChangeMayorDecisionForMembersProtocolDate} tp1='text' tp2='date' />
-						<MyTextField tm={getMonitoringCommitteePracticalTooltip(this.state, this.state.AccountNumber, 1)} tp='date' title='Ημ. Πρακτικού Συνεδρίασης' id='PracticalDate' stateValue={this.state.PracticalDate} isRequired={true} isDisabled={false} onChangeDate={this.onChangePracticalDate} style={{ width: 'auto' }} />
-						<ProtocolInput tm1={getMonitoringCommitteeTooltipTemplate(this.state, contractDetails, this.state.AccountNumber, 1)} tm2={getMonitoringCommitteeTooltipTemplate(this.state, contractDetails, this.state.AccountNumber, 2)} title='Α.Π. διαβιβαστικού εγγράφου' idn='TransmissionDocumentProtocolNumber' idd='TransmissionDocumentProtocolDate' protocolNumber={this.state.TransmissionDocumentProtocolNumber} protocolDate={this.state.TransmissionDocumentProtocolDate} onChange={this.onChange} onChangeDate={this.onChangeTransmissionDocumentProtocolDate} tp1='text' tp2='date' />
+						<ProtocolInput tm1={getMayorDecisionProtocolTooltip(this.state, 1)} tm2={getMayorDecisionProtocolTooltip(this.state, 2)} title='Α.Π. Απόφασης Δημάρχου' idn='MayorDecisionForMembersProtocolNumber' idd='MayorDecisionForMembersProtocolDate' protocolNumber={this.state.MayorDecisionForMembersProtocolNumber} protocolDate={this.state.MayorDecisionForMembersProtocolDate} onChange={this.onChange} onChange={this.onChange} tp1='text' tp2='date' />
+						<MyTextField tm={getMonitoringCommitteePracticalTooltip(this.state, this.state.AccountNumber, 1)} tp='date' title='Ημ. Πρακτικού Συνεδρίασης' id='PracticalDate' stateValue={this.state.PracticalDate} isRequired={true} isDisabled={false} onChange={this.onChange} style={{ width: 'auto' }} />
+						<ProtocolInput tm1={getMonitoringCommitteeTooltipTemplate(this.state, contractDetails, this.state.AccountNumber, 1)} tm2={getMonitoringCommitteeTooltipTemplate(this.state, contractDetails, this.state.AccountNumber, 2)} title='Α.Π. διαβιβαστικού εγγράφου' idn='TransmissionDocumentProtocolNumber' idd='TransmissionDocumentProtocolDate' protocolNumber={this.state.TransmissionDocumentProtocolNumber} protocolDate={this.state.TransmissionDocumentProtocolDate} onChange={this.onChange} tp1='text' tp2='date' />
 						<MyTextField tm={getMonitoringCommitteeTooltipTemplate(this.state, contractDetails.ConcessionaireName, this.state.AccountNumber, 3)} tp='text' title='Χρονικός ορίζοντας των περιεχομένων του παραδοτέου του φυσικού αντικειμένου' id='GivenPhysicalObjectContentTime' stateValue={this.state.GivenPhysicalObjectContentTime} isRequired={true} isDisabled={false} onChange={this.onChange} width='700px' />
 					</div>
 				</div> : <></>}
@@ -765,7 +715,7 @@ class NewAccountForm extends Component {
 								{this.getMonitoringCommiteeInfo()}
 								{this.getSignaturesForAccount()}
 								{this.getSignaturesForTransmission()}
-							</form >
+							</form>
 							<MySnackbar state={this.state} duration={10000} handleClose={this.handleClose} vertical='bottom' horizontal='right' useScreenDimensions={true} />
 						</div>
 					</div>
