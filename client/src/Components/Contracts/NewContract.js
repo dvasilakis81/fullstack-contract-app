@@ -256,7 +256,7 @@ class NewContract extends Component {
 	}
 
 	componentDidMount() {
-		store.dispatch({ type: 'DO_REFRESH', payload: false })
+		store.dispatch({ type: 'DO_REFRESH', payload: false });
 	}
 
 	autoCompleteBudget(event) {
@@ -328,9 +328,9 @@ class NewContract extends Component {
 		}))
 	}
 
-	onChangeStart(date) {
+	onChangeStart(e) {
 
-		var start = date;
+		var start = e.target.value;
 		var end = this.state.contractInfo.End;
 		var accountPer = this.state.contractInfo.AccountPer;
 
@@ -355,10 +355,10 @@ class NewContract extends Component {
 			}
 		}))
 	}
-	onChangeEnd(date) {
+	onChangeEnd(e) {
 
 		var start = this.state.contractInfo.Start;
-		var end = date;
+		var end = e.target.value;
 		var accountPer = this.state.contractInfo.AccountPer;
 
 		if (start && end && accountPer) {
@@ -518,7 +518,7 @@ class NewContract extends Component {
 											<MyTextField tp='text' title='Φ.' id='Actor' stateValue={this.state.contractInfo.Actor} isRequired={true} isDisabled={false} onChange={this.onChange} InputProps={{ inputProps: { maxLength: 5, style: { textAlign: 'center' } } }} width='20%' />
 											<MyTextField tp='text' title='Δ.' id='CodeDirection' stateValue={this.state.contractInfo.CodeDirection} isRequired={true} isDisabled={false} onChange={this.onChange} InputProps={{ inputProps: { maxLength: 5, style: { textAlign: 'center' } } }} width='20%' />
 											<ProtocolInput title='Α.Α.Κ. Α.Π.' idn='AwardNumber' idd='AwardDate' protocolNumber={this.state.contractInfo.AwardNumber} protocolDate={this.state.contractInfo.AwardDate} onChange={this.onChange} tp1='text' tp2='date' width='20%' />
-											<MyTextField tp='text' title='Α.Α.Κ. ΑΔΑ' id='AwardAda' stateValue={this.state.contractInfo.AwardAda} isRequired={false} isDisabled={false} onChange={this.onChange} ΙnputProps={{ style: { textAlign: 'center' } }} width='20%' />
+											<MyTextField tp='text' title='Α.Α.Κ. ΑΔΑ' id='AwardAda' stateValue={this.state.contractInfo.AwardAda} isRequired={false} isDisabled={false} onChange={this.onChange} ΙnputProps={{ inputProps: {maxLength: 20, style: { textAlign: 'center' }} }} width='20%' />
 										</div>
 										{
 											this.state.contractInfo.ContractTypeId.toString() === '1' ? <div style={styles.divRow}>
