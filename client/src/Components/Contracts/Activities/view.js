@@ -12,11 +12,9 @@ import { getDateFormatForDocument, getServerErrorResponseMessage } from '../../.
 import { getSubmitButton } from '../../MaterialObjects/materialobjects';
 import { bindActionCreators } from 'redux';
 import { processContractInfo } from '../../../Redux/Actions';
-
-import { getCourtOfAuditorsTooltip } from './tooltip';
 import ProtocolInput from '../../CustomControls/ProtocolInput';
 import MyTextField from '../../CustomControls/MyTextField';
-import { getCopiesPhrase } from '../TooltipMethods';
+import store from '../../../Redux/Store/store';
 
 const styles = {
   paperContractMonetaryInfoFrame: {
@@ -47,12 +45,12 @@ const styles = {
   }
 };
 
-class AwardView extends Component {
+class ActivitiesView extends Component {
   constructor(props) {
     super(props);
 
     this.state = {
-      loginUserId: this.props.token.data.id,
+      loginUserInfo: this.props.token.data.user,
       contractId: this.props.contractDetails.Id,
       submitButtonDisabled: false,
       addNewItem: false,
@@ -65,7 +63,10 @@ class AwardView extends Component {
       Id: this.props.Id ? this.props.Id : '',
       ProtocolNumber: '',
       ProtocolDate: '',
-      orderNo: 0
+      ADA: '',
+      orderNo: 0,
+      NoPrototype: 1,
+      NoPhotocopy: 1
     }
 
     this.onChange = this.onChange.bind(this);
@@ -74,26 +75,29 @@ class AwardView extends Component {
   }
 
   handleClose(event, reason) {
-    this.setState({ message: '', openMessage: false, submitButtonDisabled: false });
+    this.setState({ message: '', openMessage: false, submitButtonDisabled: false, insertContractInfoPending: false });
   }
 
   onChange(event) {
     this.setState({ [event.target.id]: event.target.value });
   }
 
-  openEditAward(index, award) {
+  openEdit(index, item) {
     this.setState({
-      Id: award.Id,
-      ProtocolNumber: award.ProtocolNumber,
-      ProtocolDate: award.ProtocolDate,
+      Id: item.Id,
+      ProtocolNumber: item.ProtocolNumber,
+      ProtocolDate: item.ProtocolDate,
+      ADA: item.ADA,
       editItem: true,
-      orderNo: index + 1
+      orderNo: index + 1,
+      NoPrototype: item.NoPrototype,
+      NoPhotocopy: item.NoPhotocopy
     })
   }
 
-  openDeleteAward(index, award) {
+  openDelete(index, item) {
     this.setState({
-      Id: award.Id,
+      Id: item.Id,
       orderNo: index + 1,
       deleteItem: true
     })
@@ -103,7 +107,10 @@ class AwardView extends Component {
     this.setState({
       ProtocolNumber: '',
       ProtocolDate: '',
-      orderNo: 0
+      ADA: '',
+      orderNo: 0,
+      NoPrototype: 0,
+      NoPhotocopy: 2
     });
   }
   resetMsgInfo() {
@@ -121,56 +128,54 @@ class AwardView extends Component {
     this.setState({ submitButtonDisabled: true });
 
     if (this.state.addNewItem === true) {
-      this.props.processContractInfo(this.state, this.props.token.data.token, 'insertaward').then(res => {
-        var msg = 'H απόφαση κατακύρωσης δημιουργήθηκε επιτυχώς!!!'
+      this.props.processContractInfo(this.state, this.props.token.data.token, 'insertauthordocumentedrequest').then(res => {
+        var msg = 'To Τεκμηριωμένο Αίτημα του Διατάκτη δημιουργήθηκε επιτυχώς!!!';
         this.setState({ openMessage: true, message: msg, msgColor: 'lightGreen', msgPadding: '10px', submitButtonDisabled: false, addNewItem: false, editItem: false });
         this.resetState();
         this.resetMsgInfo();
       }).catch(error => {
-        var msg = 'Αποτυχία δημιουργίας απόφασης κατακύρωσης!\n' + error;
+        store.dispatch({ type: 'SET_CONTRACTINFO_PENDING', payload: false });
+        var msg = 'Αποτυχία δημιουργίας!\n' + error;
         this.setState({ openMessage: true, message: <><div>{msg}</div><div>{getServerErrorResponseMessage(error)}</div></>, variant: 'error', msgColor: 'red', msgPadding: '10px', submitButtonDisabled: false });
       })
     } else if (this.state.editItem === true) {
-      this.props.processContractInfo(this.state, this.props.token.data.token, 'updateaward').then(res => {
-        var msg = 'H απόφαση κατακύρωσης επεξεργάστηκε επιτυχώς!!!'
+      this.props.processContractInfo(this.state, this.props.token.data.token, 'updateauthordocumentedrequest').then(res => {
+        var msg = 'To Τεκμηριωμένο Αίτημα του Διατάκτη επεξεργάστηκε επιτυχώς!!!';
         this.setState({ openMessage: true, message: msg, msgColor: 'lightGreen', msgPadding: '10px', submitButtonDisabled: false, addNewItem: false, editItem: false });
         this.resetState();
         this.resetMsgInfo();
       }).catch(error => {
-        var msg = 'Αποτυχία δημιουργίας απόφασης κατακύρωσης!!\n' + error;
+        store.dispatch({ type: 'SET_CONTRACTINFO_PENDING', payload: false });
+        var msg = 'Αποτυχία δημιουργίας !!\n' + error;
         this.setState({ message: <><div>{msg}</div><div>{getServerErrorResponseMessage(error)}</div></>, openMessage: true, msgColor: 'red', msgPadding: '10px', submitButtonDisabled: false });
       })
     }
   }
 
-  requestDeleteAward() {
+  requestDelete() {
     this.setState({ submitButtonDisabled: true });
 
-    this.props.processContractInfo(this.state, this.props.token.data.token, 'deleteaward').then(res => {
+    this.props.processContractInfo(this.state, this.props.token.data.token, 'deleteauthordocumentedrequest').then(res => {
       var msg = 'Η διαγραφή έγινε επιτυχώς!!!'
-      this.setState({ openMessage: true, message: msg, variant: 'success', msgPadding: '10px', submitButtonDisabled: false, addNewItem: false, editItem: false, deleteItem: false });
+      this.setState({ openMessage: true, message: msg, variant: 'success', msgColor: 'lightGreen', msgPadding: '10px', submitButtonDisabled: false, addNewItem: false, editItem: false, deleteItem: false });
       this.resetState();
       this.resetMsgInfo();
     }).catch(error => {
       var msg = 'Αποτυχία διαγραφής!!\n' + error;
-      this.setState({ openMessage: true, message: <><div>{msg}</div><div>{getServerErrorResponseMessage(error)}</div></>, variant: 'error', msgPadding: '0px', submitButtonDisabled: false });
+      this.setState({ openMessage: true, message: <><div>{msg}</div><div>{getServerErrorResponseMessage(error)}</div></>, variant: 'error', msgColor: 'red', msgPadding: '0px', submitButtonDisabled: false });
     })
   }
 
-  awardItemForm() {
+  itemForm() {
 
     if (this.state.addNewItem === true || this.state.editItem === true) {
       return <div style={{ display: 'flex', flexFlow: 'column', height: 'auto', background: '#C0C0C0', color: 'black', justifyContent: 'center', padding: '20px' }}>
         <form style={{ padding: '10px', backgroundColor: '#fff' }} autoComplete="off" onSubmit={this.handleSubmit}>
-          <div style={{ textAlign: 'center', fontSize: '22px', fontWeight: 800, paddingBottom: '10px' }}>{this.state.addNewItem === true ? 'Εισαγωγή' : 'Επεξεργασία'} στοιχείων {this.state.orderNo}ου αριθμού απόφασης κατακύρωσης</div>
-          <div style={{ display: 'flex', flexFlow: 'row', height: 'auto', justifyContent: 'left', padding: '10px' }}>
-            {this.renderAwardInput()}
-          </div>
+          <div style={{ textAlign: 'center', fontSize: '22px', fontWeight: 800, paddingBottom: '10px' }}>{this.state.addNewItem === true ? 'Εισαγωγή' : 'Επεξεργασία'} στοιχείων {this.state.orderNo}ου Ελεγκτικού Συνεδρίου</div>          
           <div style={{ display: 'flex', flexFlow: 'row', height: 'auto', justifyContent: 'center', padding: '10px' }}>
             <LoadingOverlay
               active={this.props.insertContractInfoPending === true}
               spinner
-              text='Αναμονή για δημιουργία απόφασης κατακύρωσης ...'
               styles={{
                 overlay: (base) => ({
                   ...base,
@@ -195,12 +200,11 @@ class AwardView extends Component {
       </div>
     } else if (this.state.deleteItem === true) {
       return <div style={{ display: 'flex', flexFlow: 'column', height: 'auto', backgroundColor: '#fff', background: '#33C1FF', color: 'black', justifyContent: 'center', padding: '20px' }}>
-        <div style={{ textAlign: 'center', fontSize: '22px', fontWeight: 800, paddingBottom: '10px' }}>Διαγραφή {this.state.orderNo}ης απόφασης κατακύρωσης</div>
+        <div style={{ textAlign: 'center', fontSize: '22px', fontWeight: 800, paddingBottom: '10px' }}>Διαγραφή {this.state.orderNo}ου Τεκμηριωμένου Αιτήματος του Διατάκτη</div>
         <div style={{ display: 'flex', flexFlow: 'row', height: 'auto', backgroundColor: '#33C1FF', justifyContent: 'center', padding: '10px' }}>
           <LoadingOverlay
             active={this.props.deleteContractInfoPending === true}
             spinner
-            text='Αναμονή για διαγραφή απόφασης κατακύρωσης ...'
             styles={{
               overlay: (base) => ({
                 ...base,
@@ -208,7 +212,7 @@ class AwardView extends Component {
                 textAlign: 'middle'
               })
             }}>
-            <Button disabled={this.state.submitButtonDisabled} variant='contained' color='primary' style={{ fontSize: '18px', textAlign: 'center', padding: '5px', margin: '5px' }} onClick={() => { this.requestDeleteAward() }}>
+            <Button disabled={this.state.submitButtonDisabled} variant='contained' color='primary' style={{ fontSize: '18px', textAlign: 'center', padding: '5px', margin: '5px' }} onClick={() => { this.requestDelete() }}>
               ΝΑΙ
             </Button>
             <Button disabled={this.state.submitButtonDisabled} variant='contained' color='secondary' style={{ fontSize: '18px', textAlign: 'center', padding: '5px', margin: '5px' }} onClick={() => { this.setState({ deleteItem: false }) }}>
@@ -226,32 +230,23 @@ class AwardView extends Component {
       disabled={this.state.addNewItem === true || this.state.deleteItem === true}
       size='medium'
       color='inherit'
-      onClick={() => { this.openEditAward(index, item) }} style={{ textAlign: 'center', padding: '0px', justifyContent: 'end' }}>
+      onClick={() => { this.openEdit(index, item) }} style={{ textAlign: 'center', padding: '0px', justifyContent: 'end' }}>
       <SettingsIcon />
     </IconButton>
   }
   renderDeleteOption(index, item) {
     return <IconButton
       disabled={this.state.addNewItem === true || this.state.editItem === true}
-      size="medium" color={index < this.props.contractDetails.award.length - 1 ? "disabled" : "inherit"}
+      size="medium" color={index < this.props.contractDetails.authordocumentedrequest.length - 1 ? "disabled" : "inherit"}
       onClick={() => {
-        if (index.toString() === (this.props.contractDetails.award.length - 1).toString())
-          this.openDeleteAward(index, item)
+        if (index.toString() === (this.props.contractDetails.authordocumentedrequest.length - 1).toString())
+          this.openDelete(index, item)
       }}
       style={{ textAlign: 'top', padding: '10px', justifyContent: 'end' }}>
       <DeleteIcon />
     </IconButton>
   }
-  renderAwardInput() {
-
-    return (
-      <div style={{ display: 'flex', flexDirection: 'row', margin: '5px', flexWrap: 'wrap', justifyContent: 'flex-start' }}>
-        <ProtocolInput tm1={getAwardTooltip(this.state, 1)} tm2={getAwardTooltip(this.state, 2)} title='Αρ. Πράξης' idn='ProtocolNumber' idd='ProtocolYear' protocolNumber={this.state.ProtocolNumber} protocolDate={this.state.ProtocolYear} onChange={this.onChange} tp1='text' tp2='text' />
-        <MyTextField tm={getAwardTooltip(this.state, 3)} tp='text' title='Κλιμάκιο' label='' variant='outlined' id='ScaleNumber' stateValue={this.state.ScaleNumber} isRequired={true} isDisabled={false} onChange={this.onChange} />
-        <ProtocolInput tm1={getAwardTooltip(this.state, 4)} tm2={getAwardTooltip(this.state, 5)} title='Α.Π.Δ.Α.' idn='APDANumber' idd='APDADate' protocolNumber={this.state.APDANumber} protocolDate={this.state.APDADate} onChange={this.onChange} tp1='text' tp2='date' />
-      </div>
-    )
-  }  
+  
   renderServerResponse() {
 
     return <div style={{ display: 'flex', flexFlow: 'row', height: 'auto', background: this.state.msgColor, justifyContent: 'center', padding: this.msgPadding }}>
@@ -259,8 +254,40 @@ class AwardView extends Component {
     </div>
   }
 
+  getTransmissionItemInfo(index, item) {
+    var rContent = <>
+      <span>Πρωτότυπο και φωτοαντίγραφο του  υπ' αριθ. </span>
+      <span>{item.ProtocolNumber}/{item.ProtocolDate ? getDateFormatForDocument(item.ProtocolDate) : item.ProtocolDate}</span>
+      {item.ADA ? <span> (ΑΔΑ: {item.ADA}) </span> : <></>}
+      <span> Τεκμηριωμένου Αιτήματος του Διατάκτη.</span>
+    </>;
+
+
+    return <>
+      <span style={{ fontWeight: "bold" }}>Διαβιβαστικό (ΣΥΝΗΜΜΕΝΑ ΔΙΚΑΙΟΛΟΓΗΤΙΚΑ)</span>
+      <br />
+      {rContent}
+    </>
+  }
+
+  getAccountItemInfo(index, item) {
+
+    var rContent = <>
+      <span>Tο με Α.Π. {item.ProtocolNumber}/{item.ProtocolDate}</span>
+      {item.ADA ? <span> (ΑΔΑ: {item.ADA}) </span> : <></>}
+      <span> Τεκμηριωμένο Αίτημα του Διατάκτη.</span>
+    </>
+
+    return <>
+      <br />
+      <span style={{ fontWeight: "bold" }}>Λογαριασμός (ΣΥΝΗΜΜΕΝΑ ΔΙΚΑΙΟΛΟΓΗΤΙΚΑ)</span>
+      <br />
+      {rContent}
+    </>
+  }
+
   render() {
-    var length = this.props.contractDetails.award ? this.props.contractDetails.award.length : 0
+    var length = this.props.contractDetails.authordocumentedrequest ? this.props.contractDetails.authordocumentedrequest.length : 0
     return (
 
       <ContractsPopup
@@ -268,17 +295,19 @@ class AwardView extends Component {
         openMessage={this.state.openMessage}
         message={this.state.message}
         variant={this.state.variant}>
-        {this.renderServerResponse()}
+        {/* {this.renderServerResponse()}
         <div style={{ display: 'flex', flexFlow: 'row', flex: '1', overflowY: 'scroll', overflowX: 'auto', flexWrap: 'wrap' }}>
           <div style={{ display: 'flex', flexFlow: 'column', flex: '1', backgroundColor: '#fff' }}>
             {
-              this.props.contractDetails.award ? this.props.contractDetails.award.map((item, index) => {
+              this.props.contractDetails.authordocumentedrequest ? this.props.contractDetails.authordocumentedrequest.map((item, index) => {
                 return (<Grid item key={index}>
                   <Paper style={styles.paperMoreContractInfo} square={true}>
                     <Typography>
                       <div style={{ display: 'flex', flexFlow: 'row', fontSize: '18px', flexWrap: 'nowrap' }}>
                         <span style={{ flex: '1' }}>
-                          <b>{index + 1}ο Ελεγκτικό Συνέδριο</b> με αρ. {item.ProtocolNumber}/{item.ProtocolYear} Πράξης του {item.ScaleNumber} Κλιμακίου του Ελεγκτικού Συνεδρίου (Α.Π.Δ.Α. {item.APDA_ProtocolNumber}/{getDateFormatForDocument(item.APDA_ProtocolDate)})
+                          <span style={{ background: 'black', color: 'white', textAlign: 'center', marginRight: '10px' }}><b>{index + 1}.</b></span>
+                          {this.getTransmissionItemInfo(index, item)}
+                          {this.getAccountItemInfo(index, item)}
                         </span>
                         {this.renderEditOption(index, item)}
                         {this.renderDeleteOption(index, item)}
@@ -290,7 +319,7 @@ class AwardView extends Component {
             }
           </div>
         </div>
-        {this.awardItemForm(length)}
+        {this.itemForm(length)}
         <div style={{ display: 'flex', flexFlow: 'row', height: 'auto', backgroundColor: '#fff', background: 'white', justifyContent: 'center' }}>
           <Button
             width='100%'
@@ -299,7 +328,7 @@ class AwardView extends Component {
             onClick={() => { this.setState({ addNewItem: true, orderNo: length + 1 }) }}>
             ΠΡΟΣΘΗΚΗ
           </Button>
-        </div>
+        </div> */}
       </ContractsPopup >
     )
   }
@@ -325,4 +354,4 @@ function mapDispatchToProps(dispatch) {
   return bindActionCreators({ processContractInfo }, dispatch)
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(AwardView)
+export default connect(mapStateToProps, mapDispatchToProps)(ActivitiesView)

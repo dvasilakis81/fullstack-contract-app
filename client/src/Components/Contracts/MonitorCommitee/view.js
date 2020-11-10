@@ -16,6 +16,7 @@ import { processContractInfo } from '../../../Redux/Actions';
 import { getMonitoringCommitteeTooltip } from './tooltip';
 import ProtocolInput from '../../CustomControls/ProtocolInput';
 import MyTextField from '../../CustomControls/MyTextField';
+import { getCopiesPhrase } from '../TooltipMethods';
 
 const styles = {
   paperContractMonetaryInfoFrame: {

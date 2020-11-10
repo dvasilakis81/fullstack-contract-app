@@ -291,8 +291,17 @@ class NewContract extends Component {
 	}
 
 	setCheckboxValue(e) {
-		this.setState({ [e.target.id]: e.target.checked });
+		e.persist();
+		
+		this.setState(prevState => ({
+			contractInfo: {
+				...prevState.contractInfo,
+				HasDownPayment: e.target.checked ? e.target.checked : false
+			}
+		})
+		)
 	}
+
 	monthDiff(d1, d2) {
 		var months;
 		months = (d2.getFullYear() - d1.getFullYear()) * 12;
@@ -518,7 +527,7 @@ class NewContract extends Component {
 											<MyTextField tp='text' title='Φ.' id='Actor' stateValue={this.state.contractInfo.Actor} isRequired={true} isDisabled={false} onChange={this.onChange} InputProps={{ inputProps: { maxLength: 5, style: { textAlign: 'center' } } }} width='20%' />
 											<MyTextField tp='text' title='Δ.' id='CodeDirection' stateValue={this.state.contractInfo.CodeDirection} isRequired={true} isDisabled={false} onChange={this.onChange} InputProps={{ inputProps: { maxLength: 5, style: { textAlign: 'center' } } }} width='20%' />
 											<ProtocolInput title='Α.Α.Κ. Α.Π.' idn='AwardNumber' idd='AwardDate' protocolNumber={this.state.contractInfo.AwardNumber} protocolDate={this.state.contractInfo.AwardDate} onChange={this.onChange} tp1='text' tp2='date' width='20%' />
-											<MyTextField tp='text' title='Α.Α.Κ. ΑΔΑ' id='AwardAda' stateValue={this.state.contractInfo.AwardAda} isRequired={false} isDisabled={false} onChange={this.onChange} ΙnputProps={{ inputProps: {maxLength: 20, style: { textAlign: 'center' }} }} width='20%' />
+											<MyTextField tp='text' title='Α.Α.Κ. ΑΔΑ' id='AwardAda' stateValue={this.state.contractInfo.AwardAda} isRequired={false} isDisabled={false} onChange={this.onChange} ΙnputProps={{ inputProps: { maxLength: 20, style: { textAlign: 'center' } } }} width='20%' />
 										</div>
 										{
 											this.state.contractInfo.ContractTypeId.toString() === '1' ? <div style={styles.divRow}>

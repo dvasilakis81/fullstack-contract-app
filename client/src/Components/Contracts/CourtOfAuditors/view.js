@@ -8,7 +8,7 @@ import DeleteIcon from '@material-ui/icons/Delete';
 import LoadingOverlay from 'react-loading-overlay'
 import Icon from '@material-ui/core/Icon';
 
-import { getDateFormatForDocument, getServerErrorResponseMessage } from '../../../Helper/helpermethods';
+import { getDateFormatForDocument, getServerErrorResponseMessage, extractYearFromDate } from '../../../Helper/helpermethods';
 import { getSubmitButton } from '../../MaterialObjects/materialobjects';
 import { bindActionCreators } from 'redux';
 import { processContractInfo } from '../../../Redux/Actions';
@@ -63,9 +63,10 @@ class CourtOfAuditorsView extends Component {
       message: '',
       msgColor: '',
       msgPadding: '0px',
-      Id: this.props.Id ? this.props.Id : '',
+      Id: this.props.Id || '',
+      NumberAction: '',
       ProtocolNumber: '',
-      ProtocolYear: '',
+      ProtocolDAte: '',
       ScaleNumber: '',
       ContentAccount: '',
       APDANumber: '',
@@ -91,8 +92,9 @@ class CourtOfAuditorsView extends Component {
   openEditCourtOfAuditors(index, courtOfAuditors) {
     this.setState({
       Id: courtOfAuditors.Id,
+      NumberAction: courtOfAuditors.NumberAction,
       ProtocolNumber: courtOfAuditors.ProtocolNumber,
-      ProtocolYear: courtOfAuditors.ProtocolYear,
+      ProtocolDate: courtOfAuditors.ProtocolDate,
       ScaleNumber: courtOfAuditors.ScaleNumber,
       ContentAccount: courtOfAuditors.ContentAccount,
       APDANumber: courtOfAuditors.APDA_ProtocolNumber,
@@ -115,7 +117,8 @@ class CourtOfAuditorsView extends Component {
   resetState() {
     this.setState({
       ProtocolNumber: '',
-      ProtocolYear: '',
+      ProtocolDate: '',
+      NumberAction: '',      
       ScaleNumber: '',
       ContentAccount: '',
       APDANumber: '',
@@ -272,12 +275,13 @@ class CourtOfAuditorsView extends Component {
           <MyTextField tm={getCourtOfAuditorsTooltip(this.state, 7)} tp='number' title='# φωτοαντίγραφα' label='' id='NoPhotocopy' stateValue={this.state.NoPhotocopy} isRequired={true} isDisabled={false} onChange={this.onChange} style={{ width: '100%' }} inputProps={{ style: { textAlign: 'center' } }} width='50%' />
         </div>
         <div style={{ display: 'flex', flexDirection: 'row', margin: '5px', flexWrap: 'nowrap', justifyContent: 'flex-start' }}>
-          <ProtocolInput tm1={getCourtOfAuditorsTooltip(this.state, 1)} tm2={getCourtOfAuditorsTooltip(this.state, 2)} title='Αρ. Πράξης' idn='ProtocolNumber' idd='ProtocolYear' protocolNumber={this.state.ProtocolNumber} protocolDate={this.state.ProtocolYear} onChange={this.onChange} tp1='text' tp2='text' width='50%' />
-          <MyTextField tm={getCourtOfAuditorsTooltip(this.state, 3)} tp='text' title='Κλιμάκιο' label='' variant='outlined' id='ScaleNumber' stateValue={this.state.ScaleNumber} isRequired={true} isDisabled={false} onChange={this.onChange} width='50%' />
+          <MyTextField tm={getCourtOfAuditorsTooltip(this.state, 3)} tp='text' title='Αρ. Πράξης' label='' variant='outlined' id='NumberAction' stateValue={this.state.NumberAction} isRequired={true} isDisabled={false} onChange={this.onChange} multiline={false} width='20%' />
+          <ProtocolInput tm1={getCourtOfAuditorsTooltip(this.state, 1)} tm2={getCourtOfAuditorsTooltip(this.state, 2)} title='Α.Π.' idn='ProtocolNumber' idd='ProtocolDate' protocolNumber={this.state.ProtocolNumber} protocolDate={this.state.ProtocolDate} onChange={this.onChange} tp1='text' tp2='date' width='50%' />
+          <MyTextField tm={getCourtOfAuditorsTooltip(this.state, 4)} tp='text' title='Κλιμάκιο' label='' variant='outlined' id='ScaleNumber' stateValue={this.state.ScaleNumber} isRequired={true} isDisabled={false} onChange={this.onChange} width='20%' />
         </div>
         <div style={{ display: 'flex', flexDirection: 'row', margin: '5px', flexWrap: 'nowrap', justifyContent: 'flex-start' }}>
-          <MyTextField tm={getCourtOfAuditorsTooltip(this.state, 4)} tp='text' title='Περιεχόμενο (Λογαριασμός)' label='' variant='outlined' id='ContentAccount' stateValue={this.state.ContentAccount} isRequired={false} isDisabled={false} onChange={this.onChange} multiline={true} width='50%' />
-          <ProtocolInput tm1={getCourtOfAuditorsTooltip(this.state, 5)} tm2={getCourtOfAuditorsTooltip(this.state, 6)} title='Α.Π.Δ.Α.' idn='APDANumber' idd='APDADate' protocolNumber={this.state.APDANumber} protocolDate={this.state.APDADate} onChange={this.onChange} tp1='text' tp2='date' width='50%' />
+          <MyTextField tm={getCourtOfAuditorsTooltip(this.state, 5)} tp='text' title='Περιεχόμενο (Λογαριασμός)' label='' variant='outlined' id='ContentAccount' stateValue={this.state.ContentAccount} isRequired={false} isDisabled={false} onChange={this.onChange} multiline={true} width='50%' />
+          <ProtocolInput tm1={getCourtOfAuditorsTooltip(this.state, 6)} tm2={getCourtOfAuditorsTooltip(this.state, 7)} title='Α.Π.Δ.Α.' idn='APDANumber' idd='APDADate' protocolNumber={this.state.APDANumber} protocolDate={this.state.APDADate} onChange={this.onChange} tp1='text' tp2='date' width='50%' />
         </div>
       </>
     )
@@ -293,7 +297,11 @@ class CourtOfAuditorsView extends Component {
     var rContent = <>
       <span>{getCopiesPhrase(item.NoPrototype, item.NoPhotocopy)} </span>
       <span>της Κοινοποίησης της με αρ. </span>
-      <span>{item.ProtocolNumber}/{item.ProtocolDate ? getDateFormatForDocument(item.ProtocolYear) : item.ProtocolYear}</span>
+      <span>{item.ProtocolNumber || ''}</span>
+      <span>{item.ProtocolNumber ? '/' : ''}</span>
+      <span>{item.ProtocolDate || ''}</span>
+      <span>{item.ProtocolNumber ? ' της ' : ''}</span>
+      <span>{item.NumberAction}/{extractYearFromDate(item.ProtocolDate)}</span>
       <span> Πράξης του {item.ScaleNumber} Κλιμακίου του Ελεγκτικού Συνεδρίου </span>
       {
         item.APDA_ProtocolNumber ?
@@ -312,7 +320,21 @@ class CourtOfAuditorsView extends Component {
   }
 
   getAccountItemInfo(index, item) {
-    var rContent = <span>Τη με αρ. {item.ProtocolNumber}/{item.ProtocolYear} Πράξη του {item.ScaleNumber} Κλιμακίου του Ελεγκτικού Συνεδρίου {item.ContentAccount}.</span>;
+    var rContent = <>
+    <span>Τη με αρ. </span>
+    <span>{item.ProtocolNumber || ''}</span>
+    <span>{item.ProtocolNumber ? '/' : ''}</span>
+    <span>{item.ProtocolDate || ''}</span>
+    <span>{item.ProtocolNumber ? ' της ' : ''}</span>
+    <span>{item.NumberAction}/{extractYearFromDate(item.ProtocolDate)}</span>
+    <span> Πράξης του {item.ScaleNumber} Κλιμακίου του Ελεγκτικού Συνεδρίου </span>
+    {
+      item.APDA_ProtocolNumber ?
+        <span> (Α.Π.Δ.Α. {item.APDA_ProtocolNumber}/{item.APDA_ProtocolDate})</span>
+        :
+        <></>
+    }
+    </>
 
     return <>
       <br />
