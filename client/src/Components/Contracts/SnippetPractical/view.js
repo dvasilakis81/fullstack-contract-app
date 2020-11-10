@@ -17,6 +17,7 @@ import { getTooltipTemplate } from './tooltip';
 import ProtocolInput from '../../CustomControls/ProtocolInput';
 import MyTextField from '../../CustomControls/MyTextField';
 import store from '../../../Redux/Store/store'
+import { getCopiesPhrase } from '../TooltipMethods';
 
 const styles = {
   paperContractMonetaryInfoFrame: {

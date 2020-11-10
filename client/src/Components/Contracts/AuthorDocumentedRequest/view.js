@@ -17,6 +17,7 @@ import { getTooltip } from './tooltip';
 import ProtocolInput from '../../CustomControls/ProtocolInput';
 import MyTextField from '../../CustomControls/MyTextField';
 import store from '../../../Redux/Store/store';
+import { getCopiesPhrase } from '../TooltipMethods';
 
 const styles = {
   paperContractMonetaryInfoFrame: {
@@ -131,6 +132,8 @@ class AuthorDocumentedRequestView extends Component {
 
     if (this.state.addNewItem === true) {
       this.props.processContractInfo(this.state, this.props.token.data.token, 'insertauthordocumentedrequest').then(res => {
+        console.log("Response from new author documented request " + res);
+
         var msg = 'To Τεκμηριωμένο Αίτημα του Διατάκτη δημιουργήθηκε επιτυχώς!!!';
         this.setState({ openMessage: true, message: msg, msgColor: 'lightGreen', msgPadding: '10px', submitButtonDisabled: false, addNewItem: false, editItem: false });
         this.resetState();
@@ -140,8 +143,10 @@ class AuthorDocumentedRequestView extends Component {
         var msg = 'Αποτυχία δημιουργίας!\n' + error;
         this.setState({ openMessage: true, message: <><div>{msg}</div><div>{getServerErrorResponseMessage(error)}</div></>, variant: 'error', msgColor: 'red', msgPadding: '10px', submitButtonDisabled: false });
       })
-    } else if (this.state.editItem === true) {
+    } else if (this.state.editItem === true) {      
+
       this.props.processContractInfo(this.state, this.props.token.data.token, 'updateauthordocumentedrequest').then(res => {
+        console.log("Response from update author documented request " + res);
         var msg = 'To Τεκμηριωμένο Αίτημα του Διατάκτη επεξεργάστηκε επιτυχώς!!!';
         this.setState({ openMessage: true, message: msg, msgColor: 'lightGreen', msgPadding: '10px', submitButtonDisabled: false, addNewItem: false, editItem: false });
         this.resetState();
@@ -158,6 +163,8 @@ class AuthorDocumentedRequestView extends Component {
     this.setState({ submitButtonDisabled: true });
 
     this.props.processContractInfo(this.state, this.props.token.data.token, 'deleteauthordocumentedrequest').then(res => {
+      console.log("Response from delete author documented request " + res);
+
       var msg = 'Η διαγραφή έγινε επιτυχώς!!!'
       this.setState({ openMessage: true, message: msg, variant: 'success', msgColor: 'lightGreen', msgPadding: '10px', submitButtonDisabled: false, addNewItem: false, editItem: false, deleteItem: false });
       this.resetState();
@@ -274,8 +281,9 @@ class AuthorDocumentedRequestView extends Component {
   }
 
   getTransmissionItemInfo(index, item) {
+    var copiesPhrase = <>{getCopiesPhrase(item.NoPrototype, item.NoPhotocopy)}</>
     var rContent = <>
-      <span>Πρωτότυπο και φωτοαντίγραφο του  υπ' αριθ. </span>
+      <span>{copiesPhrase} του  υπ' αριθ. </span>
       <span>{item.ProtocolNumber}/{item.ProtocolDate ? getDateFormatForDocument(item.ProtocolDate) : item.ProtocolDate}</span>
       {item.ADA ? <span> (ΑΔΑ: {item.ADA}) </span> : <></>}
       <span> Τεκμηριωμένου Αιτήματος του Διατάκτη.</span>

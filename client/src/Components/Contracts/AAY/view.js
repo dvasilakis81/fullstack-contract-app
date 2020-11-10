@@ -17,6 +17,7 @@ import { getSuggestAYTooltipTemplate, getAayTooltipTemplate, getAayOverthrowTool
 import ProtocolInput from '../../CustomControls/ProtocolInput';
 import MyTextField from '../../CustomControls/MyTextField';
 import store from '../../../Redux/Store/store';
+import { getCopiesPhrase } from '../TooltipMethods';
 
 const styles = {
   paperContractMonetaryInfoFrame: {
@@ -117,8 +118,8 @@ class AayView extends Component {
 
   resetState() {
     this.setState({
-      addNewItem: false, 
-      editItem: false, 
+      addNewItem: false,
+      editItem: false,
       deleteItem: false,
       AayValue: '',
       ProtocolNumber: '',
@@ -183,13 +184,13 @@ class AayView extends Component {
   getAayTypes() {
     var ret;
 
-    var aayTypes = [];  
+    var aayTypes = [];
     aayTypes.push('Πρόταση Ανάληψης Υποχρέωσης');
     aayTypes.push('Απόφαση Ανάληψης Υποχρέωσης');
     aayTypes.push('Απόφαση Ανάληψης Υποχρέωσης (διάφορα έξοδα ΠΟΕ)');
     aayTypes.push('Απόφαση Ανατροπής Ανάληψης Υποχρέωσης');
 
-    ret = aayTypes.map((data, index) => {      
+    ret = aayTypes.map((data, index) => {
       return <option key={index} value={index} selected={index == 0}>{data}</option>
     })
 
@@ -343,10 +344,11 @@ class AayView extends Component {
 
     var rContent = <></>;
     var lContent = <></>;
+    var copiesPhrase = <>{getCopiesPhrase(item.NoPrototype, item.NoPhotocopy)}</>
     if (item.Type == 0) {
-         rContent = <span>Πρωτότυπο και φωτοαντίγραφο της με αριθμ. {item.ProtocolNumber}/{item.ProtocolDate ? getDateFormatForDocument(item.ProtocolDate) : item.ProtocolDate} Πρότασης Ανάληψης Υποχρέωσης.</span>
+      rContent = <span>{copiesPhrase} της με αριθμ. {item.ProtocolNumber}/{item.ProtocolDate ? getDateFormatForDocument(item.ProtocolDate) : item.ProtocolDate} Πρότασης Ανάληψης Υποχρέωσης.</span>
     } else if (item.Type == 1 || item.Type == 2) {
-      rContent = <span>Πρωτότυπο και φωτοαντίγραφο της με αριθμ. {item.Value}/{item.ProtocolNumber}/{item.ProtocolDate ? getDateFormatForDocument(item.ProtocolDate) : item.ProtocolDate}  {item.EadNumber ? 'ΕΑΔ ' + item.EadNumber : ''} </span>
+      rContent = <span>{copiesPhrase} της με αριθμ. {item.Value}/{item.ProtocolNumber}/{item.ProtocolDate ? getDateFormatForDocument(item.ProtocolDate) : item.ProtocolDate}  {item.EadNumber ? 'ΕΑΔ ' + item.EadNumber : ''} </span>
       var ada = <></>
       if (item.ADA)
         ada = <><span>(ΑΔΑ: </span><b><u>{item.ADA}</u></b><span>) </span></>
@@ -355,7 +357,7 @@ class AayView extends Component {
       else
         lContent = <span>Απόφασης Ανάληψης Υποχρέωσης. (διάφορα έξοδα ΠΟΕ)</span>
     } else if (item.Type == 3) {
-      rContent = <span>Πρωτότυπο και φωτοαντίγραφο της υπ΄ αριθμ. {item.ProtocolNumber}/{item.ProtocolDate ? getDateFormatForDocument(item.ProtocolDate) : item.ProtocolDate} ΕΑΔ {item.EadNumber} </span>
+      rContent = <span>{copiesPhrase} της υπ΄ αριθμ. {item.ProtocolNumber}/{item.ProtocolDate ? getDateFormatForDocument(item.ProtocolDate) : item.ProtocolDate} ΕΑΔ {item.EadNumber} </span>
       var ada = <></>
       if (item.ADA)
         ada = <><span>(ΑΔΑ: </span><b><u>{item.ADA}</u></b><span>) </span></>
@@ -377,7 +379,7 @@ class AayView extends Component {
     var rContent = <></>;
     var lContent = <></>;
     if (item.Type == 0) {
-         rContent = <span>Τη με Α.Π. {item.ProtocolNumber}/{item.ProtocolDate ? getDateFormatForDocument(item.ProtocolDate) : item.ProtocolDate} Πρότασης Ανάληψης Υποχρέωσης.</span>
+      rContent = <span>Τη με Α.Π. {item.ProtocolNumber}/{item.ProtocolDate ? getDateFormatForDocument(item.ProtocolDate) : item.ProtocolDate} Πρότασης Ανάληψης Υποχρέωσης.</span>
     } else if (item.Type == 1 || item.Type == 2) {
       var rContent = <span>Tη με αρ. {item.Value}/{item.ProtocolNumber}/{item.ProtocolDate} </span>;
       var ada = <></>
