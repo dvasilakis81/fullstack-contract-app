@@ -144,11 +144,31 @@ function getAttachmentCourtOfAuditors(body) {
 	if (body.CourtOfAuditors) {
 		for (let index = 0; index < body.CourtOfAuditors.length; index++) {
 			const element = body.CourtOfAuditors[index];
-			var rText = util.format('Τη με αρ. %s/%s Πράξη του %s Κλιμακίου του Ελεγκτικού Συνεδρίου %s.',
+
+			var rText = '';
+			if (element.ProtocolNumber) {
+				rText = util.format('%s της Κοινοποίησης της με αρ. %s/%s της Πράξης του %s/%s Κλιμακίου του Ελεγκτικού Συνεδρίου.',
+					helper.getCopiesPhrase(element),
+					element.ProtocolNumber,
+					element.ProtocolDate,
+					element.NumberAction,
+					helper.extractYearFromDate(element.ProtocolDate),
+					element.ScaleNumber)
+			} else {
+				rText = util.format('%s της Κοινοποίησης της με αρ. %s/%s Πράξης του %s Κλιμακίου του Ελεγκτικού Συνεδρίου.',
+					helper.getCopiesPhrase(element),
+					element.NumberAction,
+					helper.extractYearFromDate(element.ProtocolDate),
+					element.ScaleNumber)
+			}
+
+			var rText = util.format('Τη με Α.Π. %s/%s και αρ. %s/%s Πράξη του %s Κλιμακίου του Ελεγκτικού Συνεδρίου %s.',
 				element.ProtocolNumber,
-				element.ProtocolYear,
+				element.ProtocolDate,
+				element.NumberAction,
+				helper.extractYearFromDate(element.ProtocolDate),
 				element.ScaleNumber,
-				element.ContentAccount ? element.ContentAccount : '')
+				element.ContentAccount || '');
 
 			ret += '<w:p>' +
 				'<w:pPr>' +
@@ -254,7 +274,7 @@ function getAttachmentInvoice(body) {
 				body.Contract[0].Concessionaire[0].Name,
 				body.Account[0].Invoice[0].DeliveredDate)
 		} else {
-			
+
 			rText = util.format('Το με αριθμ. %s/%s Τιμολόγιο Παροχής Υπηρεσιών της %s.',
 				body.Account[0].Invoice[0].ProtocolNumber,
 				body.Account[0].Invoice[0].ProtocolDate,
@@ -542,7 +562,7 @@ function getAttachmentsXmlValue(body) {
 		getAttachmentDecisionBoard(body) +
 		getAttachmentDecisionCoordinatorDecentrilizedAdministration(body) +
 		getAttachmentCourtOfAuditors(body) +
-		getAttachmentsInOrder(body) +		
+		getAttachmentsInOrder(body) +
 		getAttachmentsForMonitoringCommittee(body)
 }
 

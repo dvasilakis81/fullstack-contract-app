@@ -164,7 +164,7 @@ function getExpiresAt(token, jwt, secretKey) {
 }
 
 function getLectical(number, startWithCapital) {
-  var ret = '';  
+  var ret = '';
 
   if (number == 1)
     ret = (startWithCapital === true ? 'Ένα (1)' : 'ένα (1)');
@@ -184,21 +184,25 @@ function getLectical(number, startWithCapital) {
     ret = (startWithCapital === true ? 'Οκτώ (8)' : 'οκτώ (8)');
   else if (number == 9)
     ret = (startWithCapital === true ? 'Εννιά (9)' : 'εννιά (9)');
-  
+
   return ret;
 }
 
 function getCopiesPhrase(element) {
   var ret = '';
 
-  if (element.NoPrototype > 0)
-    ret = getLectical(element.NoPrototype, true) + (element.NoPrototype == 1 ? ' πρωτότυπo' : ' πρωτότυπα');
+  if (element.NoPrototype === 1)
+    ret = 'Πρωτότυπo ';
+  else if (element.NoPrototype > 1)
+    ret = getLectical(element.NoPrototype, true) + ' πρωτότυπα';
 
   if (ret)
     ret += ' και ';
 
-  if (element.NoPhotocopy > 0)
-    ret += getLectical(element.NoPhotocopy, (ret ? false : true)) + (element.NoPhotocopy == 1 ? ' φωτοαντίγραφo' : ' φωτοαντίγραφα');
+  if (element.NoPhotocopy === 1)
+    ret += ret ? 'φωτοαντίγραφo ' : 'Φωτοαντίγραφo ';
+  else if (element.NoPhotocopy > 0)
+    ret += getLectical(element.NoPhotocopy, (ret ? false : true)) + ' φωτοαντίγραφα';
 
   return ret;
 }

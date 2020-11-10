@@ -4,20 +4,20 @@ const helper = require('../../../HelperMethods/helpermethods')
 function query_insert(req) {
   var contractId = req.body.contractId;
 
-  var sqlQuery = 'INSERT INTO "Ordering"."DecisionCoordinatorDecentrilizedAdministration"("ContractId","ProtocolNumber","ProtocolDate","ADA", "OrderNo", "DecisionBoardProtocol", "APDA_ProtocolNumber", "APDA_ProtocolDate" , "ActionTransmission", "ActionAccount") VALUES ';
+  var sqlQuery = 'INSERT INTO "Ordering"."DecisionCoordinatorDecentrilizedAdministration"("ContractId","ProtocolNumber","ProtocolDate","ADA", "OrderNo", "DecisionBoardProtocol", "APDA_ProtocolNumber", "APDA_ProtocolDate" , "ActionTransmission", "ActionAccount", "NoPrototype", "NoPhotocopy") VALUES ';
   sqlQuery += util.format('(%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)',
     helper.addQuotes(contractId),
     helper.addQuotes(req.body.ProtocolNumber),
     helper.addQuotes(req.body.ProtocolDate),
-    helper.addQuotes(req.body.ADA ? req.body.ADA : ''),
+    helper.addQuotes(req.body.ADA || ''),
     helper.addQuotes(req.body.orderNo),
     helper.addQuotes(req.body.DecisionBoardProtocol),
     helper.addQuotes(req.body.APDA_ProtocolNumber),
     helper.addQuotes(req.body.APDA_ProtocolDate),
     helper.addQuotes(req.body.ActionTransmission),
     helper.addQuotes(req.body.ActionAccount),
-    helper.addQuotes(req.body.NoPrototype),
-    helper.addQuotes(req.body.NoPhotocopy));
+    req.body.NoPrototype,
+    req.body.NoPhotocopy);
 
   return sqlQuery
 }
@@ -38,8 +38,8 @@ function query_update(req) {
     helper.addQuotes(req.body.APDA_ProtocolDate),
     helper.addQuotes(req.body.ActionTransmission),
     helper.addQuotes(req.body.ActionAccount),
-    helper.addQuotes(req.body.NoPrototype),
-    helper.addQuotes(req.body.NoPhotocopy),
+    req.body.NoPrototype,
+    req.body.NoPhotocopy,
     helper.addQuotes(req.body.Id),
     contractId);
 

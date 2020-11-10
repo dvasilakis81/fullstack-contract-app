@@ -71,10 +71,10 @@ module.exports = {
         aay_pdt: AAY && AAY.ProtocolDate ? AAY.ProtocolDate : '',
         aay_ead_n: AAY && AAY.EadNumber ? AAY.EadNumber : '',
         aay_ada: AAY && AAY.ADA ? AAY.ADA : '',
-        sign_title: body.Signature[0].SignatoryTitle,
-        kaa: (body.Signature[0].Kaa || ''),
-        sign_name: body.Signature[0].SignatoryName.toLowerCase().includes("κακριδ") ? '' : body.Signature[0].SignatoryName,
-        sign_sv: body.Signature[0].SignatoryName.toLowerCase().includes("κακριδ") ? body.Signature[0].SignatoryName : '',
+        sign_title: body.Signature && body.Signature.length > 0 && body.Signature[0] ? body.Signature[0].SignatoryTitle : '',
+        kaa: (body.Signature && body.Signature.length > 0 && body.Signature[0] && body.Signature[0].Kaa ? body.Signature[0].Kaa : ''),
+        sign_name: body.Signature && body.Signature.length > 0 && body.Signature[0] && body.Signature[0].SignatoryName.toLowerCase().includes("κακριδ") ? '' : body.Signature[0].SignatoryName,
+        sign_sv: body.Signature && body.Signature.length > 0 && body.Signature[0] && body.Signature[0].SignatoryName.toLowerCase().includes("κακριδ") ? body.Signature[0].SignatoryName : '',
         ft_pn: body.Account[0].FirstAccountProtocol || '',
         t_e_s: body.Contract[0].TitleStartExpense
       }
@@ -144,11 +144,11 @@ module.exports = {
         kaa: body.Signature[0].Kaa,
         writer_title: body.Signature[0].WriterTitle,
         writer: body.Signature[0].WriterName,
-        foremanDepartment_title: body.Signature[0].ForemanDepartmentTitle,
-        foremanDepartment: body.Signature[0].ForemanDepartmentName,
-        foremanDirection_title: body.Signature[0].ForemanDirectionTitle,
-        foremanDirection: body.Signature[0].ForemanDirectionName.toLowerCase().includes("κακριδ") ? '' : body.Signature[0].ForemanDirectionName,
-        foremanDirection2: body.Signature[0].ForemanDirectionName.toLowerCase().includes("κακριδ") ? body.Signature[0].ForemanDirectionName : ''
+        foremanDepartment_title: body.Signature && body.Signature.length > 0 && body.Signature[0] ? body.Signature[0].ForemanDepartmentTitle : '',
+        foremanDepartment: body.Signature && body.Signature.length > 0 && body.Signature[0] ? body.Signature[0].ForemanDepartmentName : '',
+        foremanDirection_title: body.Signature && body.Signature.length > 0 && body.Signature[0] ? body.Signature[0].ForemanDirectionTitle : '',
+        foremanDirection: body.Signature && body.Signature.length > 0 && body.Signature[0] && body.Signature[0].ForemanDirectionName.toLowerCase().includes("κακριδ") ? '' : body.Signature[0].ForemanDirectionName,
+        foremanDirection2: body.Signature && body.Signature.length > 0 && body.Signature[0] && body.Signature[0].ForemanDirectionName.toLowerCase().includes("κακριδ") ? body.Signature[0].ForemanDirectionName : ''
       }
     }
 

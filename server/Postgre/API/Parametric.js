@@ -18,8 +18,7 @@ const getDirections = (request, response, next) => {
       next(error);
       helper.consoleLog("Failed to get directions: \n" + error.message);
     }
-    else {
-      helper.consoleLog(new Date().toLocaleString() + " Directions requested");
+    else {      
       response.status(200).json(results.rows);
     }
   })
@@ -50,10 +49,8 @@ const getAgencies = (request, response, next) => {
   pool.query('SELECT * FROM "Ordering"."Agencies" as ag ORDER BY ag."Name"', (error, results) => {
     if (error)
       next(error);
-    else {
-      helper.consoleLog(new Date().toLocaleString() + ": Agencies requested");
-      response.status(200).json(results.rows)
-    }
+    else       
+      response.status(200).json(results.rows);    
   })
 }
 
@@ -73,10 +70,8 @@ const getSignatoryTypes = (request, response, next) => {
   pool.query('SELECT * FROM "Ordering"."SignatoryType"', (error, results) => {
     if (error)
       next(error);
-    else {
-      helper.consoleLog(new Date().toLocaleString() + ": Signatory requested");
-      response.status(200).json(results.rows)
-    }
+    else       
+      response.status(200).json(results.rows);    
   })
 }
 
@@ -84,10 +79,8 @@ const getErrorMessages = (request, response, next) => {
   pool.query('SELECT * FROM "Ordering"."LogError"', (error, results) => {
     if (error)
       next(error);
-    else {
-      helper.consoleLog(new Date().toLocaleString() + ": Errors requested");
-      response.status(200).json(results.rows)
-    }
+    else      
+      response.status(200).json(results.rows);    
   })
 }
 
@@ -99,10 +92,8 @@ const getUsers = (request, response, next) => {
   pool.query(sqlQuery, (error, results) => {
     if (error)
       next(error);
-    else {
-      helper.consoleLog(new Date().toLocaleString() + ": Users requested");
-      response.status(200).json(results.rows)
-    }
+    else      
+      response.status(200).json(results.rows);    
   })
 }
 
@@ -112,10 +103,8 @@ const getUserRoles = (request, response, next) => {
   pool.query(sqlQuery, (error, results) => {
     if (error)
       next(error);
-    else {
-      helper.consoleLog(new Date().toLocaleString() + ": User Roles requested");
-      response.status(200).json(results.rows)
-    }
+    else       
+      response.status(200).json(results.rows);    
   })
 }
 

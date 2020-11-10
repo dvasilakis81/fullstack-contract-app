@@ -11,8 +11,8 @@ function query_insert(req) {
     helper.addQuotes(req.body.ProtocolDate),
     helper.addQuotes(req.body.ADA),
     helper.addQuotes(req.body.orderNo),
-    helper.addQuotes(req.body.NoPrototype),
-    helper.addQuotes(req.body.NoPhotocopy));  
+    req.body.NoPrototype,
+    req.body.NoPhotocopy);  
 
   return sqlQuery
 }
@@ -26,8 +26,8 @@ function query_update(req) {
     helper.addQuotes(req.body.ProtocolNumber),
     helper.addQuotes(req.body.ProtocolDate),
     helper.addQuotes(req.body.ADA),
-    helper.addQuotes(req.body.NoPrototype),
-    helper.addQuotes(req.body.NoPhotocopy),
+    req.body.NoPrototype,
+    req.body.NoPhotocopy,
     Number(contractId));
 
   return sqlQuery;

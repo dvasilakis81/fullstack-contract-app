@@ -1,5 +1,5 @@
-Message: column "undefined" does not exist
-Stack: error: column "undefined" does not exist
+Message: current transaction is aborted, commands ignored until end of transaction block
+Stack: error: current transaction is aborted, commands ignored until end of transaction block
     at Parser.parseErrorMessage (/home/d.vasilakis/Ordering_Development/node_modules/pg-protocol/dist/parser.js:241:15)
     at Parser.handlePacket (/home/d.vasilakis/Ordering_Development/node_modules/pg-protocol/dist/parser.js:89:29)
     at Parser.parse (/home/d.vasilakis/Ordering_Development/node_modules/pg-protocol/dist/parser.js:41:38)
