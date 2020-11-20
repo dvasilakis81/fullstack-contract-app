@@ -71,12 +71,14 @@ function authenticateDN(request, response, next, user, password) {
           next(error);
         else {
 
-          if (user.uid === 'd.vasilakis' || user.uid === 's.partasidis') {
-            if (user.departmentNumber) {
-            } else {
-              user.departmentNumber = 'Τμήμα Τεχνολογίας, Πληροφορικής και Επικοινωνιών';
-            }
-          }
+           if (user.uid === 'd.vasilakis') {
+             if (user.departmentNumber) {
+             } else {
+               user.departmentNumber = 'Τμήμα Τεχνολογίας, Πληροφορικής και Επικοινωνιών';
+               //user.uid = 'demo';
+               //user.departmentNumber = 'Dummy';
+             }
+           }
           searchForSupervisor(request, response, next, user);
           //searchForDirectionInfo(request, response, next, user);
           //searchForPeopleThatBelongsToTheSameDirection(request, response, next, user.ou);
@@ -270,7 +272,7 @@ function  searchForPeople(req, res, next) {
     //filter: '(uid=g.papazogloy)',
     //filter: '(uid=a.tsiatsiamis)',
     //filter: '(uid=k.bakoyannis)',
-    filter: '(uid=i.chatzieustratiou)',
+    filter: '(uid=g.moraitis)',
     // scope: 'sub',
     // //attributes: ['sn']
     // attributes: ['*']
@@ -310,6 +312,8 @@ function  searchForPeople(req, res, next) {
 }
 
 function checkToken(req, res, next) {
+
+  helper.consoleLog(' checkToken -- url: ' + req.url);
   let token = req.headers['x-access-token'] || req.headers['authorization']; // Express headers are auto converted to lowercase
   if (token) {
     if (token.startsWith('Bearer '))

@@ -152,11 +152,22 @@ function getAttachmentCourtOfAuditors(body) {
 	if (body.CourtOfAuditors) {
 		for (let index = 0; index < body.CourtOfAuditors.length; index++) {
 			const element = body.CourtOfAuditors[index];
-			var rText = util.format('%s της Κοινοποίησης της με αρ. %s/%s Πράξης του %s Κλιμακίου του Ελεγκτικού Συνεδρίου',
-				helper.getCopiesPhrase(element),
-				element.ProtocolNumber,
-				element.ProtocolYear,
-				element.ScaleNumber)
+			var rText = '';
+			if (element.ProtocolNumber) {
+				rText = util.format('%s της Κοινοποίησης της με αρ. %s/%s της Πράξης του %s/%s Κλιμακίου του Ελεγκτικού Συνεδρίου',
+					helper.getCopiesPhrase(element),
+					element.ProtocolNumber,
+					element.ProtocolDate,
+					element.NumberAction,
+					helper.extractYearFromDate(element.ProtocolDate),
+					element.ScaleNumber)
+			} else {
+				rText = util.format('%s της Κοινοποίησης της με αρ. %s/%s Πράξης του %s Κλιμακίου του Ελεγκτικού Συνεδρίου',
+					helper.getCopiesPhrase(element),
+					element.NumberAction,
+					helper.extractYearFromDate(element.ProtocolDate),
+					element.ScaleNumber)
+			}
 
 			if (element.APDA_ProtocolNumber)
 				rText += util.format('(Α.Π.Δ.Α. %s/%s)', element.APDA_ProtocolNumber, element.APDA_ProtocolDate);
@@ -351,7 +362,7 @@ function getAuthorDocumentedRequest(body, protocolDate) {
 			helper.getCopiesPhrase(element),
 			element.ProtocolNumber,
 			element.ProtocolDate);
-		var lText = ' Τεκμηριωμένου Αιτήματος του Διατάκτη';
+		var lText = ' Τεκμηριωμένου Αιτήματος του Διατάκτη.';
 		ret += '<w:p>' +
 			'<w:pPr>' +
 			'<w:numPr>' +

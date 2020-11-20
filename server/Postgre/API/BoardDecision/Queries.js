@@ -13,8 +13,8 @@ function query_insert(req) {
     helper.addQuotes(req.body.ContentAccount),
     helper.addQuotes(req.body.ADA ? req.body.ADA : ''),    
     helper.addQuotes(orderNo),
-    helper.addQuotes(req.body.NoPrototype),
-    helper.addQuotes(req.body.NoPhotocopy));
+    req.body.NoPrototype,
+    req.body.NoPhotocopy);
 
   return sqlQuery;
 }
@@ -31,8 +31,8 @@ function query_update(req) {
     helper.addQuotes(req.body.ContentTransmission),
     helper.addQuotes(req.body.ContentAccount),
     helper.addQuotes(req.body.ADA),
-    helper.addQuotes(req.body.NoPrototype),
-    helper.addQuotes(req.body.NoPhotocopy),
+    req.body.NoPrototype,
+    req.body.NoPhotocopy,
     helper.addQuotes(req.body.Id),
     contractId);
 

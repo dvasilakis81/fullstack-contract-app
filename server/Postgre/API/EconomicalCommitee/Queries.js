@@ -13,8 +13,8 @@ function query_insert(req) {
     helper.addQuotes(req.body.Content),
     helper.addQuotes(req.body.ADA),
     helper.addQuotes(req.body.OrderNo),
-    helper.addQuotes(req.body.NoPrototype),
-    helper.addQuotes(req.body.NoPhotocopy));
+    req.body.NoPrototype,
+    req.body.NoPhotocopy);
 
   return sqlQuery
 }
@@ -30,8 +30,8 @@ function query_update(req) {
     helper.addQuotes(req.body.Content),
     helper.addQuotes(req.body.ADA),
     helper.addQuotes(req.body.OrderNo),
-    helper.addQuotes(req.body.NoPrototype),
-    helper.addQuotes(req.body.NoPhotocopy),
+    req.body.NoPrototype,
+    req.body.NoPhotocopy,
     Number(contractId));
 
   return sqlQuery;
