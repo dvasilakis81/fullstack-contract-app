@@ -31,11 +31,11 @@ export function getTooltip(state, ind) {
   return (<>
     <div style={useStyles.tooltipTitle}>ΣΥΝΗΜΜΕΝΑ ΔΙΚΑΙΟΛΟΓΗΤΙΚΑ (Έγγραφο διαβιβαστικού)</div>
     <div>
-      <span style={style4}>{getCopiesPhrase(state.NoPrototype, state.NoPhotocopy)} </span>
-      <span style={style1}>{state.ProtocolNumber ? state.ProtocolNumber : '___'}</span>
+      <span style={style4}>{getCopiesPhrase(state.itemInfo.NoPrototype, state.itemInfo.NoPhotocopy)} </span>
+      <span style={style1}>{state.itemInfo.ProtocolNumber ? state.itemInfo.ProtocolNumber : '___'}</span>
       <span style={useStyles.tooltip}>/</span>
-      <span style={style2}>{state.ProtocolDate ? state.ProtocolDate : '____'}</span>
-      <span style={useStyles.tooltip}> (ΑΔΑ {state.ADA ? state.ADA : '______'})</span>
+      <span style={style2}>{state.itemInfo.ProtocolDate || '____'}</span>
+      <span style={style3}> (ΑΔΑ {state.itemInfo.ADA || '______'})</span>
       <span style={useStyles.tooltip}> Τεκμηριωμένου Αιτήματος του Διατάκτη. </span>
       
     </div>
@@ -43,10 +43,10 @@ export function getTooltip(state, ind) {
     <div style={useStyles.tooltipTitle}>ΣΥΝΗΜΜΕΝΑ ΔΙΚΑΙΟΛΟΓΗΤΙΚΑ (Έγγραφο λογαριασμού)</div>
     <div>
       <span style={useStyles.tooltip}>Το με Α.Π. </span>
-      <span style={style1}>{state.ProtocolNumber ? state.ProtocolNumber : '___'}</span>
+      <span style={style1}>{state.itemInfo.ProtocolNumber || '___'}</span>
       <span style={useStyles.tooltip}>/</span>
-      <span style={style2}>{state.ProtocolDate ? state.ProtocolDate : '____'}</span>
-      <span style ={useStyles.tooltip}> (ΑΔΑ {state.ADA ? state.ADA : '______'})</span>
+      <span style={style2}>{state.itemInfo.ProtocolDate || '____'}</span>
+      <span style ={style3}> (ΑΔΑ {state.itemInfo.ADA || '______'})</span>
       <span style={useStyles.tooltip}> Τεκμηριωμένου Αιτήματος του Διατάκτη. </span>
     </div>
   </>)

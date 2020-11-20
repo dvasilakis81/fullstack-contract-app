@@ -391,9 +391,9 @@ class AayView extends Component {
         lContent = <span>Απόφασης Ανάληψης Υποχρέωσης. (διάφορα έξοδα ΠΟΕ)</span>
     } else if (item.Type == 3) {
       rContent = <span>Την υπ΄ αριθμ. {item.ProtocolNumber}/{item.ProtocolDate ? getDateFormatForDocument(item.ProtocolDate) : item.ProtocolDate}</span>
-      var ada = <></>
+      var adaTemplate = <></>
       if (item.ADA)
-        ada = <><span>(ΑΔΑ: </span><b><u>{item.ADA}</u></b><span>) </span></>
+        adaTemplate = <><span>(ΑΔΑ: </span><b><u>{item.ADA}</u></b><span>) </span></>
 
       lContent = <span><b>ΑΠΟΦΑΣΗΣ ΑΝΑΤΡΟΠΗΣ ΑΝΑΛΗΨΗΣ ΥΠΟΧΡΕΩΣΗΣ</b> (παρ.2 άρθρο 4 ΠΔ 80/2016), της {item.Overthrow} Α.Α.Υ. </span>
     }
@@ -403,7 +403,7 @@ class AayView extends Component {
       <span style={{ fontWeight: "bold" }}>Λογαριασμός (ΣΥΝΗΜΜΕΝΑ ΔΙΚΑΙΟΛΟΓΗΤΙΚΑ)</span>
       <br />
       {rContent}
-      {ada}
+      {adaTemplate}
       {lContent}
     </>
   }

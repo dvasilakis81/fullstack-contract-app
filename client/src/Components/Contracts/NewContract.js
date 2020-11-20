@@ -77,6 +77,7 @@ class NewContract extends Component {
 			variant: '',
 			submitButtonDisabled: false,
 			loginUserInfo: this.props.token.data.user,
+			activityType: 'EditContract',
 			contractInfo: {
 				contractStuff: this.props.location.state ? this.props.location.state.contract.contractusers : [],
 				AllUsers: this.props.location.state ? this.props.location.state.contract.AllUsers : false,
@@ -292,14 +293,13 @@ class NewContract extends Component {
 
 	setCheckboxValue(e) {
 		e.persist();
-		
+
 		this.setState(prevState => ({
 			contractInfo: {
 				...prevState.contractInfo,
 				HasDownPayment: e.target.checked ? e.target.checked : false
 			}
-		})
-		)
+		}))
 	}
 
 	monthDiff(d1, d2) {
@@ -332,7 +332,7 @@ class NewContract extends Component {
 		this.setState(prevState => ({
 			contractInfo: {                   // object that we want to update
 				...prevState.contractInfo,    // keep all other key-value pairs
-				[event.target.id]: event.target.value    // update the value of specific key				
+				[event.target.id]: event.target.value    // update the value of specific key
 			}
 		}))
 	}
@@ -348,19 +348,17 @@ class NewContract extends Component {
 			var numOfAccounts = Math.round(months / Number(accountPer));
 
 			this.setState(prevState => ({
-				contractInfo: {                   // object that we want to update
-					...prevState.contractInfo,    // keep all other key-value pairs
-					NumberOfAccounts: numOfAccounts    // update the value of specific key
+				contractInfo: {
+					...prevState.contractInfo,
+					NumberOfAccounts: numOfAccounts
 				}
-			}))
-			//this.setState({ NumberOfAccounts: numOfAccounts });
+			}))			
 		}
-
-		// this.setState({ Start: start });
+		
 		this.setState(prevState => ({
-			contractInfo: {                   // object that we want to update
-				...prevState.contractInfo,    // keep all other key-value pairs
-				Start: start    // update the value of specific key				
+			contractInfo: {
+				...prevState.contractInfo,
+				Start: start
 			}
 		}))
 	}
