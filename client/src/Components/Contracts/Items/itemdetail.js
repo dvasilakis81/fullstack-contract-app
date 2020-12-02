@@ -645,8 +645,8 @@ class ItemDetail extends React.Component {
 											<Grid item>
 												<Paper style={styles.paperMoreContractInfo} square={true}>
 													<Typography>
-														<b>Διεύθυνση</b> {contractInfo.direction ? contractInfo.direction[0].DirectionName : ''}
-														<span style={{ marginLeft: '5px' }}><b>Τμήμα</b> {contractInfo.department ? contractInfo.department[0].DepartmentName : ''}</span>
+														<b>Διεύθυνση</b> {contractInfo.Direction}
+														<span style={{ marginLeft: '5px' }}><b>Τμήμα</b> {contractInfo.Department}</span>
 													</Typography>
 												</Paper>
 											</Grid>

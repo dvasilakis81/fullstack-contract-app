@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import ContractsPopup from '../../../HOC/Contracts/ContractsPopup';
+import { withStyles } from "@material-ui/core/styles";
 import IconButton from '@material-ui/core/IconButton';
 import SettingsIcon from '@material-ui/icons/Settings';
 import DeleteIcon from '@material-ui/icons/Delete';
@@ -17,6 +18,7 @@ import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import ExpansionPanel from '@material-ui/core/ExpansionPanel';
 import ExpansionPanelSummary from '@material-ui/core/ExpansionPanelSummary';
 import ExpansionPanelDetails from '@material-ui/core/ExpansionPanelDetails';
+import MyTextField from '../../CustomControls/MyTextField';
 
 const styles = {
 
@@ -43,10 +45,49 @@ const styles = {
   },
   paperMoreContractInfo: {
     padding: '10px',
-    background: 'white'
-    // background: '#fffef3'
+    background: '#fff',
+    width: '100%'
+  },
+  paperActiveContractInfo: {
+    padding: '10px',
+    background: '#b8d5dc'
+  },
+  noActiveExpansionSummary: {
+    margin: '0px',
+    padding: '0px',
+    background: '#FFFFFF'
+  },
+  activeExpansionSummary: {
+    margin: '0px',
+    padding: '0px',
+    background: '#b8d5dc'
   }
 };
+
+const summaryStyles = {
+  root: {
+    minHeight: 7 * 4,
+    "&$expanded": {
+      minHeight: 7 * 4
+    }
+  },
+  content: {
+    margin: "4px 0",
+    "&$expanded": {
+      margin: "4px 0"
+    },
+    color: 'blue'
+  },
+  expandIcon: {
+    padding: 3
+  },
+  expanded: {}
+};
+
+const CompactExpansionPanelSummary = withStyles(summaryStyles)(
+  ExpansionPanelSummary
+);
+CompactExpansionPanelSummary.muiName = "ExpansionPanelSummary";
 
 class ActivitiesView extends Component {
   constructor(props) {
@@ -55,7 +96,14 @@ class ActivitiesView extends Component {
     this.state = {
       loginUserInfo: this.props.token.data.user,
       contractId: this.props.contractDetails.Id,
+      filterKey: 1,
+      filterValues: [{ key: 1, value: 'Επεξεργασία Σύμβασης' }, { key: 2, value: 'Τεκμηριωμένο Αίτημα του Διατάκτη' }]
     }
+    this.onChange = this.onChange.bind(this);
+  }
+
+  onChange(event) {
+    this.setState({ [event.target.id]: event.target.value });
   }
 
   getContractUserTemplate(OwnerName, color) {
@@ -90,37 +138,25 @@ class ActivitiesView extends Component {
       return <></>
   }
   getDirectionAndDepartmentTemplate(item) {
-    var directionName = '';
-    var departmentName = '';
-    if (this.props.municipalityDirections) {
-      var i;
-      for (i = 0; i < this.props.municipalityDirections.length; i++) {
-        if (this.props.municipalityDirections[i].DirectionId == item.DirectionId) {
-          directionName = this.props.municipalityDirections[i].DirectionName;
-          for (var j = 0; j < this.props.municipalityDirections[i].department.length; j++) {
-            if (this.props.municipalityDirections[i].department[j].DepartmentId == item.DepartmentId)
-              departmentName = this.props.municipalityDirections[i].department[j].DepartmentName;
-          }
-        }
-      }
+    var directionName = item.Direction;
+    var departmentName = item.Department;
 
-      return <>
-        <Grid item>
-          <Paper style={styles.paperMoreContractInfo} square={true}>
-            <Typography>
-              <span><b>Διεύθυνση</b> {directionName || ''}</span>
-            </Typography>
-          </Paper>
-        </Grid>
-        <Grid item>
-          <Paper style={styles.paperMoreContractInfo} square={true}>
-            <Typography>
-              <span><b>Τμήμα</b> {departmentName || ''}</span>
-            </Typography>
-          </Paper>
-        </Grid>
-      </>
-    }
+    return <>
+      <Grid item>
+        <Paper style={styles.paperMoreContractInfo} square={true}>
+          <Typography>
+            <span><b>Διεύθυνση</b> {directionName || ''}</span>
+          </Typography>
+        </Paper>
+      </Grid>
+      <Grid item>
+        <Paper style={styles.paperMoreContractInfo} square={true}>
+          <Typography>
+            <span><b>Τμήμα</b> {departmentName || ''}</span>
+          </Typography>
+        </Paper>
+      </Grid>
+    </>
   }
 
   getDifferences(item, items, index) {
@@ -136,24 +172,15 @@ class ActivitiesView extends Component {
 
     if (itemToCompare) {
       if (item.Type === 'EditContract') {
-        var directionName = '';
-        var departmentName = '';
-
-        //if (this.props.municipalityDirections) {
-        // var i;
-        // for (i = 0; i < this.props.municipalityDirections.length; i++) {
-        //   if (this.props.municipalityDirections[i].DirectionId == item.DirectionId) {
-        //     directionName = this.props.municipalityDirections[i].DirectionName;
-        //     for (var j = 0; j < this.props.municipalityDirections[i].department.length; j++) {
-        //       if (this.props.municipalityDirections[i].department[j].DepartmentId == item.DepartmentId)
-        //         departmentName = this.props.municipalityDirections[i].department[j].DepartmentName;
-        //     }
-        //   }
-        // }
 
         var itemInfo = JSON.parse(item.Info);
         var itemToCompareInfo = JSON.parse(itemToCompare.Info);
+
+        console.log('itemInfo.Direction: ' + itemInfo.Direction);
+        console.log('itemToCompareInfo.Direction: ' + itemToCompareInfo.Direction);
         ret = <>
+          <div>{itemInfo.Direction !== itemToCompareInfo.Direction ? 'Αλλαγή διεύθυνσης από ' + itemToCompareInfo.Direction + ' σε ' + itemInfo.Direction : ''}</div>
+          <div>{itemInfo.Department !== itemToCompareInfo.Department ? 'Αλλαγή τμήματος από ' + itemToCompareInfo.Department + ' σε ' + itemInfo.Department : ''}</div>
           <div>{itemInfo.ProtocolNumber !== itemToCompareInfo.ProtocolNumber ? 'Αλλαγή Α.Π. σύμβασης από ' + itemToCompareInfo.ProtocolNumber + '/' + itemToCompareInfo.ProtocolDate + ' σε ' + itemInfo.ProtocolNumber + '/' + itemToCompareInfo.ProtocolDate : ''}</div>
           <div>{itemInfo.ProtocolDate !== itemToCompareInfo.ProtocolDate ? 'Αλλαγή Α.Α.Κ. από ' + itemToCompareInfo.ProtocolDate + '/' + itemToCompareInfo.ProtocolDate + ' σε ' + itemInfo.ProtocolDate + '/' + itemToCompareInfo.ProtocolDate : ''}</div>
           <div>{itemInfo.Title !== itemToCompareInfo.Title ? 'Αλλαγή τίτλου από ' + itemToCompareInfo.Title + ' σε ' + itemInfo.Title : ''}</div>
@@ -161,9 +188,9 @@ class ActivitiesView extends Component {
           <div>{itemInfo.ConcessionaireAFM !== itemToCompareInfo.ConcessionaireAFM ? 'Αλλαγή Α.Φ.Μ. αναδόχου από ' + itemToCompareInfo.ConcessionaireAFM + ' σε ' + itemInfo.ConcessionaireAFM : ''}</div>
           <div>{itemInfo.Start !== itemToCompareInfo.Start ? 'Αλλαγή ημερομηνίας έναρξης από ' + itemToCompareInfo.Start + ' σε ' + itemInfo.Start : ''}</div>
           <div>{itemInfo.End !== itemToCompareInfo.End ? 'Αλλαγή ημερομηνίας λήξης από ' + itemToCompareInfo.End + ' σε ' + itemInfo.End : ''}</div>
-          <div>{itemInfo.AmountPure !== itemToCompareInfo.AmountPure ? 'Αλλαγή καθαρού ποσού, από  ' + itemToCompareInfo.AmountPure + ' σε ' + itemInfo.AmountPure : ''}</div>
-          <div>{itemInfo.AmountFpa !== itemToCompareInfo.AmountFpa ? 'Αλλαγή Φ.Π.Α. από  ' + itemToCompareInfo.AmountFpa + ' σε ' + itemInfo.AmountFpa : ''}</div>
-          <div>{itemInfo.AmountTotal !== itemToCompareInfo.AmountTotal ? 'Αλλαγή τελικού ποσού από  ' + itemToCompareInfo.AmountTotal + ' σε ' + itemInfo.AmountTotal : ''}</div>
+          <div>{itemInfo.AmountPure !== itemToCompareInfo.AmountPure ? 'Αλλαγή καθαρού ποσού, από  ' + itemToCompareInfo.AmountPure + '€ σε ' + itemInfo.AmountPure + '€' : ''}</div>
+          <div>{itemInfo.AmountFpa !== itemToCompareInfo.AmountFpa ? 'Αλλαγή Φ.Π.Α. από  ' + itemToCompareInfo.AmountFpa + '€ σε ' + itemInfo.AmountFpa : '€'}</div>
+          <div>{itemInfo.AmountTotal !== itemToCompareInfo.AmountTotal ? 'Αλλαγή τελικού ποσού από  ' + itemToCompareInfo.AmountTotal + '€ σε ' + itemInfo.AmountTotal : '€'}</div>
           <div>{itemInfo.LawArticle !== itemToCompareInfo.LawArticle ? 'Αλλαγή άρθρου προγραμματικής από  ' + itemToCompareInfo.LawArticle + ' σε ' + itemInfo.LawArticle : ''}</div>
           <div>{(itemInfo.CpvTitle || '') !== (itemToCompareInfo.CpvTitle || '') ? 'Αλλαγή CPV τίτλου από  ' + itemToCompareInfo.CpvTitle + ' σε ' + itemInfo.CpvTitle : ''}</div>
           <div>{(itemInfo.CpvCode || '') !== (itemToCompareInfo.CpvCode || '') ? 'Αλλαγή CPV κωδικού από  ' + itemToCompareInfo.CpvCode + ' σε ' + itemInfo.CpvCode : ''}</div>
@@ -284,6 +311,51 @@ class ActivitiesView extends Component {
     }
   }
 
+  getItemBgStyle(item) {
+    var style = styles.paperContractInfo;
+    if (item.IsActive === true)
+      style = styles.paperActiveContractInfo;
+    return style;
+  }
+
+  loadCategories() {
+    var ret;
+
+    // let ret = filterValues.map((data, index) => {
+    //   if (this.state.contractInfo.AccountPer === data.key)
+    //     return <option key={data.key} value={data.key} selected>{data.value}</option>
+    //   else
+    //     return <option key={data.key} value={data.key}>{data.value}</option>
+
+    // })
+
+    ret = this.state.filterValues.map((data, index) => {
+
+      if (this.state.filter === data.value)
+        return <option key={data.key} value={data.key} selected>{data.value}</option>
+      else
+        return <option key={data.key} value={data.key}>{data.value}</option>
+
+    })
+
+    return ret;
+  }
+  getItemExpansionBgColor(item) {
+    var style = styles.noActiveExpansionSummary;
+    if (item.IsActive === true)
+      style = styles.activeExpansionSummary;
+    return style;
+  }
+  getKeyFromAction(action) {
+    var ret = 1;
+
+    if (action === 'Επεξεργασία Σύμβασης')
+      ret = 1;
+    else if (action.indexOf('Διατάκτη') >= 0)
+      ret = 2;
+
+    return ret;
+  }
   render() {
     var length = this.props.contractDetails.authordocumentedrequest ? this.props.contractDetails.authordocumentedrequest.length : 0;
 
@@ -295,50 +367,48 @@ class ActivitiesView extends Component {
         message={this.state.message}
         variant={this.state.variant}>
 
-        <div style={{ display: 'flex', flexFlow: 'row', flex: '1', overflowY: 'scroll', overflowX: 'auto', flexWrap: 'wrap' }}>
+        <div style={{ display: 'flex', flexFlow: 'column', flex: '1', overflowY: 'scroll', overflowX: 'auto', flexWrap: 'nowrap', alignContent: 'center' }}>
+          <div style={{ backgroundColor: '#fff', height: 'auto'}}>
+            <MyTextField title='Επιλέξτε κατηγορία' id='filterKey' stateValue={this.state.filterKey} values={this.loadCategories()} InputProps={{ inputProps: { style: { textAlignLast: 'center' } } }} isRequired={true} isDisabled={false} onChange={this.onChange} select={true} width='80%' />
+          </div>
           <div style={{ display: 'flex', flexFlow: 'column', flex: '1', backgroundColor: '#fff' }}>
             {
               this.props.contractDetails.activities ? this.props.contractDetails.activities.map((item, index) => {
-                return (<Grid item key={index}>
-                  <Paper style={styles.paperMoreContractInfo} square={true}>
-                    <Typography>
-                      <div>
-                        <span style={{ background: 'white', color: 'black', textAlign: 'left', marginRight: '10px' }}><b>{index + 1}.</b></span>
-                        <span style={{ fontWeight: 'normal', width: 'auto', marginRight: '5px' }}>{item.Action}</span>
-                        <span style={{ fontWeight: 'normal', width: 'auto', marginRight: '5px' }}> από τον χρήστη <i>{item.Username}</i> στης {getDateFormatForActivities(item.Created)}</span>
-                      </div>
-                      {/* <div style={{ display: 'flex', flex: '1', flexFlow: 'row', fontSize: '18px', flexWrap: 'nowrap' }}>
-                          <div style={{ fontWeight: 'bold', width: '200px', float: 'left' }}>Ποιός</div>
-                          <div style={{ fontWeight: 'bold', width: '200px', float: 'left' }}>Τί</div>
-                          <div style={{ fontWeight: 'bold', width: '200px', float: 'left' }}>Πότε</div>
+                if (this.state.filterKey == this.getKeyFromAction(item.Action)) {
+                  return (<Grid item key={index}>
+                    <Paper style={this.getItemBgStyle(item)} square={true}>
+                      <Typography>
+                        <div>
+                          <span style={{ color: 'black', textAlign: 'left', marginRight: '10px' }}><b>{index + 1}.</b></span>
+                          <span style={{ fontWeight: 'normal', width: 'auto', marginRight: '5px' }}>{item.Action}</span>
+                          <span style={{ fontWeight: 'normal', width: 'auto', marginRight: '5px' }}> από τον χρήστη <i>{item.Username}</i> στης {getDateFormatForActivities(item.Created)}</span>
                         </div>
-                        <div style={{ display: 'flex', flex: '1', flexFlow: 'row', fontSize: '18px', flexWrap: 'nowrap' }}>
-                          <div style={{ fontWeight: 'normal', width: '200px', float: 'left' }}>{item.Username}</div>
-                          <div style={{ fontWeight: 'normal', width: '200px', float: 'left' }}>{item.Action}</div>
-                          <div style={{ fontWeight: 'normal', width: '200px', float: 'left' }}>{getDateFormatForActivities(item.Created)}</div>
-                        </div> */}
-                      <div style={{ display: 'flex', flex: '1', flexFlow: 'column', fontSize: '18px', flexWrap: 'nowrap' }}>
-                        <ExpansionPanel style={{ padding: '0px', margin: '0px', background: '#FFFFFF' }}>
-                          <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />} >
-                            <Button style={{ fontWeight: 'normal' }} variant='text' color='primary'>Προβολή Στοιχειών</Button>
-                          </ExpansionPanelSummary>
-                          <ExpansionPanelDetails>
-                            <div>{this.getItemInfoTemplate(item)}</div>
-                          </ExpansionPanelDetails>
-                        </ExpansionPanel>
-                        <ExpansionPanel style={{ padding: '0px', margin: '0px', background: '#FFFFFF' }}>
-                          <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
-                            <Button style={{ fontWeight: 'normal' }} variant='text' color='primary'>Διαφορές</Button>
-                          </ExpansionPanelSummary>
-                          <ExpansionPanelDetails>
-                            <div>{this.getDifferences(item, this.props.contractDetails.activities, index)}</div>
-                          </ExpansionPanelDetails>
-                        </ExpansionPanel>
-                      </div>
-
-                    </Typography>
-                  </Paper>
-                </Grid>)
+                        <div style={{ display: 'flex', flex: '1', flexFlow: 'column', fontSize: '18px', flexWrap: 'nowrap' }}>
+                          <ExpansionPanel style={this.getItemExpansionBgColor(item)}>
+                            <CompactExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
+                              <Typography>Προβολή Στοιχειών</Typography>
+                            </CompactExpansionPanelSummary>
+                            <ExpansionPanelDetails>
+                              <div>{this.getItemInfoTemplate(item)}</div>
+                            </ExpansionPanelDetails>
+                          </ExpansionPanel>
+                          <ExpansionPanel style={this.getItemExpansionBgColor(item)}>
+                            <CompactExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
+                              <Typography>Διαφορές</Typography>
+                            </CompactExpansionPanelSummary>
+                            <ExpansionPanelDetails>
+                              <Paper style={styles.paperMoreContractInfo} square={true}>
+                                <Typography>
+                                  {this.getDifferences(item, this.props.contractDetails.activities, index)}
+                                </Typography>
+                              </Paper>
+                            </ExpansionPanelDetails>
+                          </ExpansionPanel>
+                        </div>
+                      </Typography>
+                    </Paper>
+                  </Grid>)
+                }
               }) : <></>
             }
           </div>
@@ -363,4 +433,4 @@ function mapDispatchToProps(dispatch) {
   // return bindActionCreators({ processContractInfo }, dispatch)
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(ActivitiesView)
+export default connect(mapStateToProps, mapDispatchToProps)(withStyles(styles)(ActivitiesView))

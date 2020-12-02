@@ -25,6 +25,7 @@ import Body from '../../HOC/Body/body'
 
 import ProtocolInput from '../CustomControls/ProtocolInput';
 import MyTextField from '../CustomControls/MyTextField';
+import MyAutocomplete from '../CustomControls/MyAutocomplete';
 
 import { getLawArticleTooltip } from './TooltipMethods';
 const internalIp = require('internal-ip');
@@ -83,8 +84,8 @@ class NewContract extends Component {
 				AllUsers: this.props.location.state ? this.props.location.state.contract.AllUsers : false,
 				OwnerId: this.props.location.state ? this.props.location.state.contract.OwnerId : this.props.token.data.id,
 				ContractId: this.props.location.state ? this.props.location.state.contract.Id : undefined,
-				DirectionId: this.props.location.state ? this.props.location.state.contract.DirectionId : '-1',
-				DepartmentId: this.props.location.state ? this.props.location.state.contract.DepartmentId : '-1',
+				Direction: this.props.location.state ? this.props.location.state.contract.Direction : '',
+				Department: this.props.location.state ? this.props.location.state.contract.Department : '',
 				ContractTypeId: this.props.location.state ? this.props.location.state.contract.ContractTypeId : '-1',
 				LawArticle: this.props.location.state ? this.props.location.state.contract.LawArticle : '',
 				ConcessionaireName: this.props.location.state ? this.props.location.state.contract.ConcessionaireName : '',
@@ -115,6 +116,9 @@ class NewContract extends Component {
 			},
 		}
 
+		this.onAutocompleteChange = this.onAutocompleteChange.bind(this);
+		this.onAutocompleteInputChange = this.onAutocompleteInputChange.bind(this);
+		this.clearAutocomplete = this.clearAutocomplete.bind(this);
 		this.setCheckboxValue = this.setCheckboxValue.bind(this);
 		this.onChange = this.onChange.bind(this);
 		this.onChangeStart = this.onChangeStart.bind(this);
@@ -352,9 +356,9 @@ class NewContract extends Component {
 					...prevState.contractInfo,
 					NumberOfAccounts: numOfAccounts
 				}
-			}))			
+			}))
 		}
-		
+
 		this.setState(prevState => ({
 			contractInfo: {
 				...prevState.contractInfo,
@@ -420,35 +424,35 @@ class NewContract extends Component {
 		return ret;
 	}
 
-	loadSelectMunicipalityDirections() {
-		let ret = '';
+	// loadSelectMunicipalityDirections() {
+	// 	let ret = '';
 
-		if (this.props.municipalityDirections) {
-			ret = this.props.municipalityDirections.map((data, index) => {
+	// 	if (this.props.municipalityDirections) {
+	// 		ret = this.props.municipalityDirections.map((data, index) => {
 
-				return <option key={index} value={data.DirectionId}>{data.DirectionName}</option>
-			})
-		}
+	// 			return <option key={index} value={data.DirectionId}>{data.DirectionName}</option>
+	// 		})
+	// 	}
 
-		return ret;
-	}
-	loadMunicipalityDirectionDepartments(DirectionId) {
-		let ret = '';
+	// 	return ret;
+	// }
+	// loadMunicipalityDirectionDepartments(DirectionId) {
+	// 	let ret = '';
 
-		if (this.props.municipalityDirections) {
-			this.props.municipalityDirections.forEach(function (element) {
-				if (element.DirectionId.toString() === DirectionId.toString()) {
-					if (element.department != null) {
-						ret = element.department.map((data, index) => {
-							return <option key={index} value={data.DepartmentId}>{data.DepartmentName}</option>
-						})
-					}
-				}
-			})
-		}
+	// 	if (this.props.municipalityDirections) {
+	// 		this.props.municipalityDirections.forEach(function (element) {
+	// 			if (element.Direction.toString() === Direction.toString()) {
+	// 				if (element.department != null) {
+	// 					ret = element.department.map((data, index) => {
+	// 						return <option key={index} value={data.DepartmentId}>{data.DepartmentName}</option>
+	// 					})
+	// 				}
+	// 			}
+	// 		})
+	// 	}
 
-		return ret;
-	}
+	// 	return ret;
+	// }
 	loadContractTypes() {
 		let ret = '';
 		let contractTypes = [
@@ -481,6 +485,78 @@ class NewContract extends Component {
 	// 	}
 	// }
 
+	onAutocompleteChange(e, v, r) {
+
+		if (e) {
+			var targetId = e.target.id;
+			if (e.target.id.indexOf('-') > 0)
+				targetId = e.target.id.substring(0, e.target.id.indexOf('-'))
+
+			if (targetId === 'Direction')
+				this.setState(prevState => ({
+					contractInfo: {
+						...prevState.contractInfo,
+						[targetId]: v,
+						Department: ''
+					}
+				}))
+			else
+				this.setState(prevState => ({
+					contractInfo: {
+						...prevState.contractInfo,
+						[targetId]: v						
+					}
+				}))
+		}
+	}
+	clearAutocomplete(targetId) {
+		this.setState(prevState => ({
+			contractInfo: {
+				...prevState.contractInfo,
+				[targetId]: ''
+			}
+		}))
+	}
+	onAutocompleteInputChange(e, v, r) {
+		if (r === 'clear') {
+		} else if (e) {
+
+			var targetId = e.target.id;
+			if (e.target.id.indexOf('-') > 0)
+				targetId = e.target.id.substring(0, e.target.id.indexOf('-'))
+
+			this.setState(prevState => ({
+				contractInfo: {
+					...prevState.contractInfo,
+					[targetId]: v
+				}
+			}))
+		}
+	}
+
+	getDirections() {
+		var ret = [];
+
+		var i = 0;
+		for (i = 0; i < this.props.municipalityDirections.length; i++)
+			ret.push(this.props.municipalityDirections[i].DirectionName)
+
+		return ret;
+	}
+	getDepartments(direction) {
+		var ret = [];
+
+		var i, j = 0;
+		for (i = 0; i < this.props.municipalityDirections.length; i++) {
+			if (this.props.municipalityDirections[i].DirectionName === direction) {
+				for (j = 0; j < this.props.municipalityDirections[i].department.length; j++)
+					ret.push(this.props.municipalityDirections[i].department[j].DepartmentName);
+				break;
+			}
+		}
+
+		return ret;
+	}
 	render() {
 		var divWidth = this.props.screenDimensions.width > this.props.screenDimensions.height ? '80%' : '100%'
 		var title = 'Δημιουργία Σύμβασης';
@@ -505,8 +581,28 @@ class NewContract extends Component {
 										</div> */}
 										<div style={styles.divRow}>
 											{/* style={{ margin: '0px', padding: '0px', width: w, textAlignLast: 'center' }} */}
-											<MyTextField title='Διεύθυνση' id='DirectionId' stateValue={this.state.contractInfo.DirectionId} values={this.loadSelectMunicipalityDirections()} InputProps={{ inputProps: { style: { textAlignLast: 'center' } } }} isRequired={true} isDisabled={false} onChange={this.onChange} select={true} width='50%' />
-											<MyTextField title='Τμήμα' id='DepartmentId' stateValue={this.state.contractInfo.DepartmentId} values={this.loadMunicipalityDirectionDepartments(this.state.contractInfo.DirectionId)} InputProps={{ inputProps: { style: { textAlignLast: 'center' } } }} isRequired={true} isDisabled={false} onChange={this.onChange} select={true} width='50%' />
+											<MyAutocomplete
+												id='Direction'
+												title='Διεύθυνση'
+												options={this.getDirections()}
+												onChange={this.onAutocompleteChange}
+												onInputChange={this.onAutocompleteInputChange}
+												clearAutocomplete={this.clearAutocomplete}
+												inputValue={this.state.contractInfo.Direction}
+												width='50%'
+											/>
+											<MyAutocomplete
+												id='Department'
+												title='Τμήμα'
+												options={this.getDepartments(this.state.contractInfo.Direction)}
+												onChange={this.onAutocompleteChange}
+												onInputChange={this.onAutocompleteInputChange}
+												clearAutocomplete={this.clearAutocomplete}
+												inputValue={this.state.contractInfo.Department}
+												width='50%'
+											/>
+											{/* <MyTextField title='Διεύθυνση' id='DirectionId' stateValue={this.state.contractInfo.DirectionId} values={this.loadSelectMunicipalityDirections()} InputProps={{ inputProps: { style: { textAlignLast: 'center' } } }} isRequired={true} isDisabled={false} onChange={this.onChange} select={true} width='50%' />
+											<MyTextField title='Τμήμα' id='DepartmentId' stateValue={this.state.contractInfo.DepartmentId} values={this.loadMunicipalityDirectionDepartments(this.state.contractInfo.DirectionId)} InputProps={{ inputProps: { style: { textAlignLast: 'center' } } }} isRequired={true} isDisabled={false} onChange={this.onChange} select={true} width='50%' /> */}
 										</div>
 										<div style={styles.divRow}>
 											<ProtocolInput title='Α.Π.' idn='ProtocolNumber' idd='ProtocolDate' protocolNumber={this.state.contractInfo.ProtocolNumber} protocolDate={this.state.contractInfo.ProtocolDate} onChange={this.onChange} tp1='text' tp2='date' width='33.33%' />
