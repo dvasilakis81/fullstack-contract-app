@@ -175,6 +175,34 @@ export function getDateFormat(dateValue) {
   return ret;
 }
 
+export function getNullString(value){
+  var ret;
+  
+  if (value === null || value === undefined)
+   ret = '';
+
+   return ret;
+}
+
+export function getDateFormatForActivities(dateValue) {
+  let ret = '';
+
+  try {
+    if (dateValue) {
+      ret = Intl.DateTimeFormat('el-GR', {
+        day: 'numeric', month: 'long', year: 'numeric', hour: 'numeric', minute: 'numeric', second: 'numeric'
+      }).format(new Date(dateValue)).replace("/", "-").replace("/", "-")
+    }
+    else
+      ret = '';
+
+  } catch (error) {
+    ret = '';
+  }
+
+  return ret;
+}
+
 export function getDateFormatForDocument(dateValue) {
   let ret = '';
 

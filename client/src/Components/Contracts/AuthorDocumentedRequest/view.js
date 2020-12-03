@@ -54,6 +54,7 @@ class AuthorDocumentedRequestView extends Component {
 
     this.state = {
       loginUserInfo: this.props.token.data.user,
+      activityType: 'AuthorDocumentRequest',
       contractId: this.props.contractDetails.Id,
       submitButtonDisabled: false,
       addNewItem: false,
@@ -63,13 +64,16 @@ class AuthorDocumentedRequestView extends Component {
       message: '',
       msgColor: '',
       msgPadding: '0px',
-      Id: this.props.Id ? this.props.Id : '',
-      ProtocolNumber: '',
-      ProtocolDate: '',
-      ADA: '',
-      orderNo: 0,
-      NoPrototype: 1,
-      NoPhotocopy: 1
+      IpAddress: '',
+      itemInfo: {
+        Id: this.props.Id ? this.props.Id : '',
+        ProtocolNumber: '',
+        ProtocolDate: '',
+        ADA: '',
+        orderNo: 0,
+        NoPrototype: 1,
+        NoPhotocopy: 1
+      }
     }
 
     this.onChange = this.onChange.bind(this);
@@ -81,41 +85,60 @@ class AuthorDocumentedRequestView extends Component {
     this.setState({ message: '', openMessage: false, submitButtonDisabled: false, insertContractInfoPending: false });
   }
 
-  onChange(event) {
-    this.setState({ [event.target.id]: event.target.value });
+  onChange(e) {
+    e.persist();
+
+    this.setState(prevState => ({
+      itemInfo: {                   // object that we want to update
+        ...prevState.itemInfo,          // keep all other key-value pairs
+        [e.target.id]: e.target.value   // update the value of specific key
+      }
+    }))
   }
 
   openEdit(index, item) {
-    this.setState({
-      Id: item.Id,
-      ProtocolNumber: item.ProtocolNumber,
-      ProtocolDate: item.ProtocolDate,
-      ADA: item.ADA,
+
+    this.setState(prevState => ({
       editItem: true,
-      orderNo: index + 1,
-      NoPrototype: item.NoPrototype,
-      NoPhotocopy: item.NoPhotocopy
-    })
+      itemInfo: {
+        ...prevState.itemInfo,
+        Id: item.Id,
+        ProtocolNumber: item.ProtocolNumber,
+        ProtocolDate: item.ProtocolDate,
+        ADA: item.ADA,        
+        orderNo: index + 1,
+        NoPrototype: item.NoPrototype,
+        NoPhotocopy: item.NoPhotocopy
+      }
+    }))    
   }
 
-  openDelete(index, item) {
-    this.setState({
-      Id: item.Id,
-      orderNo: index + 1,
-      deleteItem: true
-    })
+  openDelete(index, item) { 
+
+    this.setState(prevState => ({
+      deleteItem: true,
+      itemInfo: {
+        ...prevState.itemInfo,
+        Id: item.Id,
+        orderNo: index + 1
+      }
+    }))
   }
 
   resetState() {
-    this.setState({
-      ProtocolNumber: '',
-      ProtocolDate: '',
-      ADA: '',
-      orderNo: 0,
-      NoPrototype: 0,
-      NoPhotocopy: 2
-    });
+    this.setState(prevState => ({
+      itemInfo: {
+        ...prevState.itemInfo,
+        ProtocolNumber: '',
+        ProtocolDate: '',
+        ADA: '',
+        orderNo: 0,
+        NoPrototype: 0,
+        NoPhotocopy: 2
+      }
+    }))
   }
+
   resetMsgInfo() {
     setTimeout(function () {
       this.setState({
@@ -142,8 +165,9 @@ class AuthorDocumentedRequestView extends Component {
         store.dispatch({ type: 'SET_CONTRACTINFO_PENDING', payload: false });
         var msg = 'Αποτυχία δημιουργίας!\n' + error;
         this.setState({ openMessage: true, message: <><div>{msg}</div><div>{getServerErrorResponseMessage(error)}</div></>, variant: 'error', msgColor: 'red', msgPadding: '10px', submitButtonDisabled: false });
+        this.resetMsgInfo();
       })
-    } else if (this.state.editItem === true) {      
+    } else if (this.state.editItem === true) {
 
       this.props.processContractInfo(this.state, this.props.token.data.token, 'updateauthordocumentedrequest').then(res => {
         console.log("Response from update author documented request " + res);
@@ -155,6 +179,7 @@ class AuthorDocumentedRequestView extends Component {
         store.dispatch({ type: 'SET_CONTRACTINFO_PENDING', payload: false });
         var msg = 'Αποτυχία δημιουργίας !!\n' + error;
         this.setState({ message: <><div>{msg}</div><div>{getServerErrorResponseMessage(error)}</div></>, openMessage: true, msgColor: 'red', msgPadding: '10px', submitButtonDisabled: false });
+        this.resetMsgInfo();
       })
     }
   }
@@ -172,6 +197,7 @@ class AuthorDocumentedRequestView extends Component {
     }).catch(error => {
       var msg = 'Αποτυχία διαγραφής!!\n' + error;
       this.setState({ openMessage: true, message: <><div>{msg}</div><div>{getServerErrorResponseMessage(error)}</div></>, variant: 'error', msgColor: 'red', msgPadding: '0px', submitButtonDisabled: false });
+      this.resetMsgInfo();
     })
   }
 
@@ -180,7 +206,7 @@ class AuthorDocumentedRequestView extends Component {
     if (this.state.addNewItem === true || this.state.editItem === true) {
       return <div style={{ display: 'flex', flexFlow: 'column', height: 'auto', background: '#C0C0C0', color: 'black', justifyContent: 'center', padding: '20px' }}>
         <form style={{ padding: '10px', backgroundColor: '#fff' }} autoComplete="off" onSubmit={this.handleSubmit}>
-          <div style={{ textAlign: 'center', fontSize: '22px', fontWeight: 800, paddingBottom: '10px' }}>{this.state.addNewItem === true ? 'Εισαγωγή' : 'Επεξεργασία'} στοιχείων {this.state.orderNo}ου Ελεγκτικού Συνεδρίου</div>
+          <div style={{ textAlign: 'center', fontSize: '22px', fontWeight: 800, paddingBottom: '10px' }}>{this.state.addNewItem === true ? 'Εισαγωγή' : 'Επεξεργασία'} στοιχείων {this.state.itemInfo.orderNo}ου Ελεγκτικού Συνεδρίου</div>
           <div style={{ display: 'flex', flexFlow: 'column', height: 'auto', justifyContent: 'left', padding: '10px' }}>
             {this.renderItemInput()}
           </div>
@@ -212,7 +238,7 @@ class AuthorDocumentedRequestView extends Component {
       </div>
     } else if (this.state.deleteItem === true) {
       return <div style={{ display: 'flex', flexFlow: 'column', height: 'auto', backgroundColor: '#fff', background: '#33C1FF', color: 'black', justifyContent: 'center', padding: '20px' }}>
-        <div style={{ textAlign: 'center', fontSize: '22px', fontWeight: 800, paddingBottom: '10px' }}>Διαγραφή {this.state.orderNo}ου Τεκμηριωμένου Αιτήματος του Διατάκτη</div>
+        <div style={{ textAlign: 'center', fontSize: '22px', fontWeight: 800, paddingBottom: '10px' }}>Διαγραφή {this.state.itemInfo.orderNo}ου Τεκμηριωμένου Αιτήματος του Διατάκτη</div>
         <div style={{ display: 'flex', flexFlow: 'row', height: 'auto', backgroundColor: '#33C1FF', justifyContent: 'center', padding: '10px' }}>
           <LoadingOverlay
             active={this.props.deleteContractInfoPending === true}
@@ -262,13 +288,13 @@ class AuthorDocumentedRequestView extends Component {
 
     return (
       <><div style={{ display: 'flex', flexFlow: 'row', height: 'auto', justifyContent: 'left', padding: '10px' }}>
-        <MyTextField tm={getTooltip(this.state, 4)} tp='number' title='# πρωτότυπα' label='' id='NoPrototype' stateValue={this.state.NoPrototype} isRequired={true} isDisabled={false} onChange={this.onChange} style={{ width: '100%' }} inputProps={{ style: { textAlign: 'center' } }} width='50%' />
-        <MyTextField tm={getTooltip(this.state, 4)} tp='number' title='# φωτοαντίγραφα' label='' id='NoPhotocopy' stateValue={this.state.NoPhotocopy} isRequired={true} isDisabled={false} onChange={this.onChange} style={{ width: '100%' }} inputProps={{ style: { textAlign: 'center' } }} width='50%' />
+        <MyTextField tm={getTooltip(this.state, 4)} tp='number' title='# πρωτότυπα' label='' id='NoPrototype' stateValue={this.state.itemInfo.NoPrototype} isRequired={true} isDisabled={false} onChange={this.onChange} style={{ width: '100%' }} inputProps={{ style: { textAlign: 'center' } }} width='50%' />
+        <MyTextField tm={getTooltip(this.state, 4)} tp='number' title='# φωτοαντίγραφα' label='' id='NoPhotocopy' stateValue={this.state.itemInfo.NoPhotocopy} isRequired={true} isDisabled={false} onChange={this.onChange} style={{ width: '100%' }} inputProps={{ style: { textAlign: 'center' } }} width='50%' />
       </div>
 
         <div style={{ display: 'flex', flexDirection: 'row', margin: '5px', flexWrap: 'nowrap', justifyContent: 'flex-start' }}>
-          <ProtocolInput tm1={getTooltip(this.state, 1)} tm2={getTooltip(this.state, 2)} title='Αρ. Πράξης' idn='ProtocolNumber' idd='ProtocolDate' protocolNumber={this.state.ProtocolNumber} protocolDate={this.state.ProtocolDate} onChange={this.onChange} tp1='text' tp2='date' width='50%' />
-          <MyTextField tm={getTooltip(this.state, 3)} tp='text' title='ΑΔΑ' label='' variant='outlined' id='ADA' stateValue={this.state.ADA} isRequired={false} isDisabled={false} onChange={this.onChange} width='50%' />
+          <ProtocolInput tm1={getTooltip(this.state, 1)} tm2={getTooltip(this.state, 2)} title='Αρ. Πράξης' idn='ProtocolNumber' idd='ProtocolDate' protocolNumber={this.state.itemInfo.ProtocolNumber} protocolDate={this.state.itemInfo.ProtocolDate} onChange={this.onChange} tp1='text' tp2='date' width='50%' />
+          <MyTextField tm={getTooltip(this.state, 3)} tp='text' title='ΑΔΑ' label='' variant='outlined' id='ADA' stateValue={this.state.itemInfo.ADA} isRequired={false} isDisabled={false} onChange={this.onChange} width='50%' />
         </div>
       </>
     )

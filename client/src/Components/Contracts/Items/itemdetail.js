@@ -90,6 +90,7 @@ class ItemDetail extends React.Component {
 			windowHeight: window.innerHeight
 		}
 
+		this.viewActivities = this.viewActivities.bind(this);
 		this.editNewContract = this.editNewContract.bind(this);
 		this.handleDeleteContract = this.handleDeleteContract.bind(this);
 		this.openDeleteDialogMethod = this.openDeleteDialogMethod.bind(this);
@@ -104,6 +105,10 @@ class ItemDetail extends React.Component {
 		this.setState({ openPopover: 0 });
 	}
 
+	
+	viewActivities(e) {
+		this.setState({ openActivities: e });
+	}
 	editNewContract(e) {
 		this.setState({ navigateToEditContact: true });
 	}
@@ -193,7 +198,7 @@ class ItemDetail extends React.Component {
 				}
 			</Fragment>
 		)
-	}
+	}	
 
 	getEditAction() {
 		//#17d3cd
@@ -221,10 +226,10 @@ class ItemDetail extends React.Component {
 	}
 	getActivityAction(contractDetails) {
 
-		return <div style={{ padding: '10px' }}>			
+		return <>
 			<span style={{ textAlign: 'center' }}>
 				<Button
-					variant='contained'					
+					variant='contained'
 					style={{ margin: '5px', background: '#F3FCFF', color: '#000' }}
 					onClick={this.handlePopoverClick.bind(this, 200)}>
 					Δραστηριότητες
@@ -238,16 +243,16 @@ class ItemDetail extends React.Component {
 				style={{ transform: document.getElementById('root').style.transform }}>
 				<ActivitiesView contractId={contractDetails.Id} data={contractDetails.activities} header='Δραστηριότητες' />
 			</Popover>
-		</div>		
+		</>
 	}
 
 	getActionsTemplate(detailItem) {
 
 		return (<Grid item>
 			<Paper style={{ padding: '0px' }} square={true}>
+			    {this.getActivityAction(detailItem)}
 				{this.getEditAction()}
-				{this.getDeleteAction(detailItem)}
-				{/* {this.getActivityAction(detailItem)} */}
+				{this.getDeleteAction(detailItem)}				
 				<Dialog
 					open={this.state.openDeleteDialog}
 					onClose={this.handleClose}
@@ -640,8 +645,8 @@ class ItemDetail extends React.Component {
 											<Grid item>
 												<Paper style={styles.paperMoreContractInfo} square={true}>
 													<Typography>
-														<b>Διεύθυνση</b> {contractInfo.direction ? contractInfo.direction[0].DirectionName : ''}
-														<span style={{ marginLeft: '5px' }}><b>Τμήμα</b> {contractInfo.department ? contractInfo.department[0].DepartmentName : ''}</span>
+														<b>Διεύθυνση</b> {contractInfo.Direction}
+														<span style={{ marginLeft: '5px' }}><b>Τμήμα</b> {contractInfo.Department}</span>
 													</Typography>
 												</Paper>
 											</Grid>
