@@ -5,7 +5,7 @@ function query_insert(req) {
   var contractId = req.body.contractId;
 
   var sqlQuery = util.format('INSERT INTO "Ordering"."EconomicalCommitee"("ContractId","ProtocolNumber","ProtocolDate","Content","ADA","OrderNo", "NoPrototype", "NoPhotocopy") ' +
-    'VALUES(%s,%s,%s,%s,%s,%s) ' +
+    'VALUES(%s,%s,%s,%s,%s,%s,%s,%s) ' +
     'RETURNING "Id" ',
     helper.addQuotes(contractId),
     helper.addQuotes(req.body.ProtocolNumber),

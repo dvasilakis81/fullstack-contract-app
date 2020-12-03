@@ -79,9 +79,8 @@ function authenticateDN(request, response, next, user, password) {
                //user.departmentNumber = 'Dummy';
              }
            }
-          searchForSupervisor(request, response, next, user);
-          //searchForDirectionInfo(request, response, next, user);
-          //searchForPeopleThatBelongsToTheSameDirection(request, response, next, user.ou);
+           
+           searchForSupervisor(request, response, next, user);
         }
       })
     }
@@ -219,7 +218,7 @@ function searchForPeopleThatBelongsToTheSameDirection(re, res, next, user) {
     filter: '(objectClass=*)',
     //filter: '(&(uid=2)(sn=John))',// and search
     //filter: '(|(uid=2)(sn=John)(cn=Smith))', // or search
-    //filter: '(uid=d.vasilakis)',
+    //filter: '(uid=a.stefos)',
     filter: '(departmentNumber=' + user.departmentNumber + ')',
     scope: 'sub',
     //attributes: ['sn']

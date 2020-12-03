@@ -7,12 +7,12 @@ function query_insert(req) {
     'VALUES(%s,%s,%s,%s,%s,%s,%s) ' +
     'RETURNING "Id" ',
     helper.addQuotes(contractId),
-    helper.addQuotes(req.body.ProtocolNumber),
-    helper.addQuotes(req.body.ProtocolDate),
-    helper.addQuotes(req.body.ADA),
-    helper.addQuotes(req.body.orderNo),
-    req.body.NoPrototype,
-    req.body.NoPhotocopy);  
+    helper.addQuotes(req.body.itemInfo.ProtocolNumber),
+    helper.addQuotes(req.body.itemInfo.ProtocolDate),
+    helper.addQuotes(req.body.itemInfo.ADA),
+    helper.addQuotes(req.body.itemInfo.orderNo),
+    req.body.itemInfo.NoPrototype,
+    req.body.itemInfo.NoPhotocopy);
 
   return sqlQuery
 }
@@ -23,18 +23,18 @@ function query_update(req) {
   var sqlQuery = util.format('UPDATE "Ordering"."AuthorDocumentedRequest" ' +
     'SET "ProtocolNumber"=%s,"ProtocolDate"=%s,"ADA"=%s,"NoPrototype"=%s,"NoPhotocopy"=%s  ' +
     'WHERE "ContractId"=%s',
-    helper.addQuotes(req.body.ProtocolNumber),
-    helper.addQuotes(req.body.ProtocolDate),
-    helper.addQuotes(req.body.ADA),
-    req.body.NoPrototype,
-    req.body.NoPhotocopy,
+    helper.addQuotes(req.body.itemInfo.ProtocolNumber),
+    helper.addQuotes(req.body.itemInfo.ProtocolDate),
+    helper.addQuotes(req.body.itemInfo.ADA),
+    req.body.itemInfo.NoPrototype,
+    req.body.itemInfo.NoPhotocopy,
     Number(contractId));
 
   return sqlQuery;
 }
 
 function query_remove(req) {
-  var Id = req.body.Id;
+  var Id = req.body.itemInfo.Id;
   var contractId = req.body.contractId;
   var sqlQuery = util.format('DELETE FROM "Ordering"."AuthorDocumentedRequest" WHERE "Id"=%s AND "ContractId"=%s', Id, contractId);
   return sqlQuery;

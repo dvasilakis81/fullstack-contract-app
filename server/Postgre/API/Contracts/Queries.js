@@ -5,42 +5,42 @@ function query_insertcontract(req) {
   var contractInfo = req.body.contractInfo;
 
   var sqlQuery = util.format('INSERT INTO "Ordering"."Contract"("ContractTypeId", "Title",  "ProtocolNumber",  "ProtocolDate",  "KAE",  "Actor", ' +
-  ' "CodeDirection", "AwardNumber", "AwardDate", "AwardAda", "CpvCode", "CpvTitle", "AmountPure", "AmountFpa", "AmountTotal",  ' +
-  ' "Balance", "Start", "End", "NumberOfAccounts", "DirectionId", "DepartmentId", "DateCreated", "DateModified", "ConcessionaireName", "ConcessionaireAFM", "HasDownPayment", "FpaValue", "OwnerId", "AllUsers", "LawArticle","Discreet","AccountPer")  ' +
-  ' VALUES(%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s) ' +
-  ' RETURNING *',
-  helper.addQuotes(contractInfo.ContractTypeId),
-  helper.addQuotes(contractInfo.Title),
-  helper.addQuotes(contractInfo.ProtocolNumber),
-  helper.addQuotes(contractInfo.ProtocolDate),
-  helper.addQuotes(contractInfo.KAE),
-  helper.addQuotes(contractInfo.Actor),
-  helper.addQuotes(contractInfo.CodeDirection),
-  helper.addQuotes(contractInfo.AwardNumber),
-  helper.addQuotes(contractInfo.AwardDate),
-  helper.addQuotes(contractInfo.AwardAda),
-  helper.addQuotes(contractInfo.CpvCode),
-  helper.addQuotes(contractInfo.CpvTitle),
-  helper.addQuotes(contractInfo.AmountPure),
-  helper.addQuotes(contractInfo.AmountFpa),
-  helper.addQuotes(contractInfo.AmountTotal),
-  helper.addQuotes(contractInfo.Balance),
-  helper.addQuotes(contractInfo.Start),
-  helper.addQuotes(contractInfo.End),
-  helper.addQuotes(contractInfo.NumberOfAccounts),
-  helper.addQuotes(contractInfo.DirectionId),
-  helper.addQuotes(contractInfo.DepartmentId),
-  helper.addQuotes(new Date().toLocaleString()),
-  helper.addQuotes(new Date().toLocaleString()),
-  helper.addQuotes(contractInfo.ConcessionaireName),
-  helper.addQuotes(contractInfo.ConcessionaireAFM),
-  contractInfo.HasDownPayment,
-  helper.addQuotes(contractInfo.FpaValue),
-  helper.addQuotes(contractInfo.OwnerId),
-  contractInfo.AllUsers,
-  helper.addQuotes(contractInfo.LawArticle),
-  helper.addQuotes(contractInfo.Discreet),
-  helper.addQuotes(contractInfo.AccountPer));
+    ' "CodeDirection", "AwardNumber", "AwardDate", "AwardAda", "CpvCode", "CpvTitle", "AmountPure", "AmountFpa", "AmountTotal",  ' +
+    ' "Balance", "Start", "End", "NumberOfAccounts", "Direction", "Department", "DateCreated", "DateModified", "ConcessionaireName", "ConcessionaireAFM", "HasDownPayment", "FpaValue", "OwnerId", "AllUsers", "LawArticle","Discreet","AccountPer")  ' +
+    ' VALUES(%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s) ' +
+    ' RETURNING *',
+    helper.addQuotes(contractInfo.ContractTypeId),
+    helper.addQuotes(contractInfo.Title || ''),
+    helper.addQuotes(contractInfo.ProtocolNumber),
+    helper.addQuotes(contractInfo.ProtocolDate),
+    helper.addQuotes(contractInfo.KAE),
+    helper.addQuotes(contractInfo.Actor),
+    helper.addQuotes(contractInfo.CodeDirection),
+    helper.addQuotes(contractInfo.AwardNumber),
+    helper.addQuotes(contractInfo.AwardDate),
+    helper.addQuotes(contractInfo.AwardAda || ''),
+    helper.addQuotes(contractInfo.CpvCode || ''),
+    helper.addQuotes(contractInfo.CpvTitle || ''),
+    helper.addQuotes(contractInfo.AmountPure),
+    helper.addQuotes(contractInfo.AmountFpa),
+    helper.addQuotes(contractInfo.AmountTotal),
+    helper.addQuotes(contractInfo.Balance),
+    helper.addQuotes(contractInfo.Start),
+    helper.addQuotes(contractInfo.End),
+    helper.addQuotes(contractInfo.NumberOfAccounts),
+    helper.addQuotes(contractInfo.Direction),
+    helper.addQuotes(contractInfo.Department),
+    helper.addQuotes(new Date().toLocaleString()),
+    helper.addQuotes(new Date().toLocaleString()),
+    helper.addQuotes(contractInfo.ConcessionaireName || ''),
+    helper.addQuotes(contractInfo.ConcessionaireAFM || ''),
+    contractInfo.HasDownPayment,
+    helper.addQuotes(contractInfo.FpaValue),
+    helper.addQuotes(contractInfo.OwnerId),
+    contractInfo.AllUsers,
+    helper.addQuotes(contractInfo.LawArticle || ''),
+    helper.addQuotes(contractInfo.Discreet || ''),
+    helper.addQuotes(contractInfo.AccountPer));
 
   return sqlQuery;
 }
@@ -57,24 +57,6 @@ function query_insertcontractowner(req, contractId) {
     helper.addQuotes(owner.cn),
     helper.addQuotes(owner.supervisor),
     helper.addQuotes(owner.director));
-  sqlQuery += ' RETURNING * ';
-
-  return sqlQuery;
-}
-
-function query_insertactivity(req, contractId, action) {
-  var loginUserInfo = req.body.loginUserInfo;
-  var contractInfo = req.body.contractInfo;
-
-  var sqlQuery = 'INSERT INTO "Ordering"."Activities"("ContractId", "AccountId", "IpAddress", "Username", "Action", "Info", "Created")  VALUES ';
-  sqlQuery += util.format('(%s,%s,%s,%s,%s,%s,%s)',
-    helper.addQuotes(contractId),
-    helper.addQuotes(null),
-    helper.addQuotes(contractInfo.IpAddress),
-    helper.addQuotes(loginUserInfo.uid),
-    helper.addQuotes(action),
-    helper.addQuotes(JSON.stringify(contractInfo)),
-    helper.addQuotes(new Date().toLocaleString()));
   sqlQuery += ' RETURNING * ';
 
   return sqlQuery;
@@ -127,8 +109,9 @@ function getSelectFromClauses(loginUserInfo) {
     '(SELECT json_agg(ContractOwner) FROM (SELECT * FROM "Ordering"."ContractOwner" as co WHERE c."Id" = co."ContractId") ContractOwner) AS ContractOwner, ' +
     '(SELECT json_agg(Account) FROM (SELECT acct."Number",acct."Start",acct."End",acct."AmountPure", acct."AmountFpa", acct."AmountTotal" FROM "Ordering"."Account" as acct WHERE c."Id" = acct."ContractId" ORDER BY acct."Number") Account) AS CreatedAccounts, ' +
     '(SELECT json_agg(ContractType) FROM (SELECT * FROM "Ordering"."ContractType" as ct WHERE c."ContractTypeId" = ct."ContractTypeId") ContractType) AS ContractType, ' +
-    '(SELECT json_agg(Direction) FROM (SELECT * FROM "Ordering"."Direction" as dir WHERE c."DirectionId" = dir."DirectionId") Direction) AS Direction, ' +
-    '(SELECT json_agg(Department) FROM (SELECT * FROM "Ordering"."Department" as dep WHERE c."DepartmentId" = dep."DepartmentId") Department) AS Department, ' +
+    // '(SELECT json_agg(Direction) FROM (SELECT * FROM "Ordering"."Direction" as dir WHERE c."DirectionId" = dir."DirectionId") Direction) AS Direction, ' +
+    // '(SELECT json_agg(Department) FROM (SELECT * FROM "Ordering"."Department" as dep WHERE c."DepartmentId" = dep."DepartmentId") Department) AS Department, ' +
+    '(SELECT json_agg(Activities) FROM (SELECT * FROM "Ordering"."Activities" as dp WHERE dp."ContractId" = c."Id" ORDER BY dp."Created" DESC) Activities) AS Activities, ' +
     '(SELECT json_agg(DecisionBoard) FROM (SELECT * FROM "Ordering"."DecisionBoard" as dp WHERE dp."ContractId" = c."Id" ORDER BY dp."OrderNo") DecisionBoard) AS DecisionBoard, ' +
     '(SELECT json_agg(DecisionCoordinatorDecentrilizedAdministration) FROM (SELECT * FROM "Ordering"."DecisionCoordinatorDecentrilizedAdministration" as dp WHERE dp."ContractId" = c."Id" ORDER BY dp."OrderNo") DecisionCoordinatorDecentrilizedAdministration) AS DecisionCoordinatorDecentrilizedAdministration, ' +
     '(SELECT json_agg(CourtOfAuditors) FROM (SELECT * FROM "Ordering"."CourtOfAuditors" as dp WHERE dp."ContractId" = c."Id" ORDER BY dp."OrderNo") CourtOfAuditors) AS CourtOfAuditors, ' +
@@ -184,12 +167,12 @@ function query_updatecontract(req) {
   var sqlQuery = util.format('UPDATE "Ordering"."Contract" ' +
     'SET "ContractTypeId"=%s,"Title"=%s,"ProtocolNumber"=%s,"ProtocolDate"=%s,"KAE"=%s,"Actor"=%s,' +
     '"CodeDirection"=%s,"AwardNumber"=%s,"AwardDate"=%s,"AwardAda"=%s,"CpvCode"=%s,"CpvTitle"=%s,"AmountPure"=%s,"AmountFpa"=%s,"AmountTotal"=%s,' +
-    '"Balance"=%s,"Start"=%s,"End"=%s,"NumberOfAccounts"=%s,"DirectionId"=%s,' +
-    '"DepartmentId"=%s,"DateModified"=%s,"ConcessionaireName"=%s,"ConcessionaireAFM"=%s,"HasDownPayment"=%s,"FpaValue"=%s, "AllUsers"=%s,"LawArticle"=%s,"Discreet"=%s,"AccountPer"=%s ' +
+    '"Balance"=%s,"Start"=%s,"End"=%s,"NumberOfAccounts"=%s,"Direction"=%s,"Department"=%s,"DateModified"=%s,"ConcessionaireName"=%s,' +
+    '"ConcessionaireAFM"=%s,"HasDownPayment"=%s,"FpaValue"=%s, "AllUsers"=%s,"LawArticle"=%s,"Discreet"=%s,"AccountPer"=%s ' +
     'WHERE "Id"=%s ' +
     'RETURNING * ',
     helper.addQuotes(contractInfo.ContractTypeId),
-    helper.addQuotes(contractInfo.Title),
+    helper.addQuotes(contractInfo.Title || ''),
     helper.addQuotes(contractInfo.ProtocolNumber),
     helper.addQuotes(contractInfo.ProtocolDate),
     helper.addQuotes(contractInfo.KAE),
@@ -198,8 +181,8 @@ function query_updatecontract(req) {
     helper.addQuotes(contractInfo.AwardNumber),
     helper.addQuotes(contractInfo.AwardDate),
     helper.addQuotes(contractInfo.AwardAda),
-    helper.addQuotes(contractInfo.CpvCode),
-    helper.addQuotes(contractInfo.CpvTitle),
+    helper.addQuotes(contractInfo.CpvCode || ''),
+    helper.addQuotes(contractInfo.CpvTitle || ''),
     helper.addQuotes(contractInfo.AmountPure),
     helper.addQuotes(contractInfo.AmountFpa),
     helper.addQuotes(contractInfo.AmountTotal),
@@ -207,16 +190,16 @@ function query_updatecontract(req) {
     helper.addQuotes(contractInfo.Start),
     helper.addQuotes(contractInfo.End),
     helper.addQuotes(contractInfo.NumberOfAccounts),
-    helper.addQuotes(contractInfo.DirectionId),
-    helper.addQuotes(contractInfo.DepartmentId),
+    helper.addQuotes(contractInfo.Direction),
+    helper.addQuotes(contractInfo.Department),
     helper.addQuotes(new Date().toLocaleString()),
-    helper.addQuotes(contractInfo.ConcessionaireName),
-    helper.addQuotes(contractInfo.ConcessionaireAFM),
+    helper.addQuotes(contractInfo.ConcessionaireName || ''),
+    helper.addQuotes(contractInfo.ConcessionaireAFM || ''),
     contractInfo.HasDownPayment,
     helper.addQuotes(contractInfo.FpaValue),
     contractInfo.AllUsers,
-    helper.addQuotes(contractInfo.LawArticle),
-    helper.addQuotes(contractInfo.Discreet),
+    helper.addQuotes(contractInfo.LawArticle || ''),
+    helper.addQuotes(contractInfo.Discreet || ''),
     helper.addQuotes(contractInfo.AccountPer),
     contractInfo.ContractId);
 
@@ -236,6 +219,5 @@ module.exports = {
   query_insertcontract,
   query_insertcontractowner,
   query_updatecontract,
-  query_deletecontract,
-  query_insertactivity
+  query_deletecontract
 }

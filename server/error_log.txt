@@ -1,11 +1,12 @@
-Message: current transaction is aborted, commands ignored until end of transaction block
-Stack: error: current transaction is aborted, commands ignored until end of transaction block
-    at Parser.parseErrorMessage (/home/d.vasilakis/Ordering_Development/node_modules/pg-protocol/dist/parser.js:241:15)
-    at Parser.handlePacket (/home/d.vasilakis/Ordering_Development/node_modules/pg-protocol/dist/parser.js:89:29)
-    at Parser.parse (/home/d.vasilakis/Ordering_Development/node_modules/pg-protocol/dist/parser.js:41:38)
-    at Socket.<anonymous> (/home/d.vasilakis/Ordering_Development/node_modules/pg-protocol/dist/index.js:8:42)
-    at Socket.emit (events.js:315:20)
-    at addChunk (_stream_readable.js:302:12)
-    at readableAddChunk (_stream_readable.js:278:9)
-    at Socket.Readable.push (_stream_readable.js:217:10)
-    at TCP.onStreamRead (internal/stream_base_commons.js:186:23)
+Message: common.setArrayWithProtocolDates is not a function
+Stack: TypeError: common.setArrayWithProtocolDates is not a function
+    at getAttachmentsInOrder (/home/d.vasilakis/Ordering_Production/server/WORD/rawXml/accountAttachments.js:537:26)
+    at Object.getAttachmentsXmlValue (/home/d.vasilakis/Ordering_Production/server/WORD/rawXml/accountAttachments.js:531:3)
+    at Object.setDataForAccountDocument (/home/d.vasilakis/Ordering_Production/server/InputData/InputData.js:88:49)
+    at /home/d.vasilakis/Ordering_Production/server/app.js:53:29
+    at Layer.handle [as handle_request] (/home/d.vasilakis/Ordering_Production/node_modules/express/lib/router/layer.js:95:5)
+    at next (/home/d.vasilakis/Ordering_Production/node_modules/express/lib/router/route.js:137:13)
+    at /home/d.vasilakis/Ordering_Production/server/Postgre/API/LoginLDAP.js:332:9
+    at /home/d.vasilakis/Ordering_Production/node_modules/jsonwebtoken/verify.js:223:12
+    at getSecret (/home/d.vasilakis/Ordering_Production/node_modules/jsonwebtoken/verify.js:90:14)
+    at Object.module.exports [as verify] (/home/d.vasilakis/Ordering_Production/node_modules/jsonwebtoken/verify.js:94:10)

@@ -124,7 +124,7 @@ function query_update_signature4(req) {
 module.exports = {
   query_get,
   query_insert,
-  query_update,
+  query_update,  
   query_update_signature1,
   query_update_signature2,
   query_update_signature3,

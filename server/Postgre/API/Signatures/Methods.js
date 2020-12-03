@@ -26,7 +26,7 @@ async function updateSignatures(req, res, next, client) {
 async function updateSignature1(req, res, next, client) {
 
   try {
-    const { rows } = await client.query(queries.query_update_signature1(req));
+    const { rows } = await client.query(queries.query_update_signature1(req)); 
     return rows;
   } catch (e) {
     throw e;

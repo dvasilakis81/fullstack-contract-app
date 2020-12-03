@@ -3,60 +3,7 @@ const util = require('util');
 const common = require('./common');
 const align = 'both';
 
-function addArrayItem(inputDates, item, label) {
-	if (item) {
-		for (let index = 0; index < item.length; index++) {
-			var protocolDate = item[index].ProtocolDate;
 
-			var row = 0;
-			if (inputDates && inputDates.length > 0) {
-				for (let j = 0; j < inputDates.length; j++) {
-					if (new Date(protocolDate) > new Date(inputDates[j][1]))
-						row += 1;
-				}
-			}
-
-			inputDates.splice(row, 0, [label, protocolDate]);
-		}
-	}
-}
-function setArrayWithProtocolDates(body) {
-	var inputDates = [];
-
-	addArrayItem(inputDates, body.AAY, 'AAY');
-	addArrayItem(inputDates, body.Account[0].Invoice, 'Invoice');
-	addArrayItem(inputDates, body.WorkConfirmationDate, 'WorkConfirmationDate');
-	addArrayItem(inputDates, body.DeliveryGoodsDate, 'DeliveryGoodsDate');
-	addArrayItem(inputDates, body.ADR, 'ADR');
-	addArrayItem(inputDates, body.SnippetPractical, 'SnippetPractical');
-	addArrayItem(inputDates, body.EconomicalCommittee, 'EconomicalCommittee');
-
-	return inputDates;
-}
-function getAttachmentsInOrder(body) {
-	var ret = '';
-	var inputDates = setArrayWithProtocolDates(body);
-
-	for (let index = 0; index < inputDates.length; index++) {
-		const element = inputDates[index];
-		if (element[0] === 'AAY')
-			ret += getAttachmentAAY(body, element[1]);
-		else if (element[0] === 'Invoice')
-			ret += getAttachmentInvoice(body, element[1]);
-		else if (element[0] === 'WorkConfirmationDate')
-			ret += getAttachmentWorkConfirmationDate(body, element[1]);
-		else if (element[0] === 'DeliveryGoodsDate')
-			ret += getAttachmentDeliveryGoodsDate(body, element[1]);
-		else if (element[0] === 'ADR')
-			ret += getAuthorDocumentedRequest(body, element[1]);
-		else if (element[0] === 'SnippetPractical')
-			ret += getSnippetPracticalAttachment(body, element[1]);
-		else if (element[0] === 'EconomicalCommittee')
-			ret += getAttachmentsForEconomicalCommittee(body, element[1]);
-	}
-
-	return ret;
-}
 function getAttachment1(body) {
 
 	// gdpr first --> Πρωτότυπο και φωτοαντίγραφο της με Α.Π. 260100/17-10-2018 Προγραμματικής Σύμβασης
@@ -623,7 +570,30 @@ function getAttachmentsXmlValue(body) {
 
 	return ret;
 }
-
+function getAttachmentsInOrder(body) {
+	var ret = '';
+	var inputDates = common.setArrayWithProtocolDates(body);
+  
+	for (let index = 0; index < inputDates.length; index++) {
+	  const element = inputDates[index];
+	  if (element[0] === 'AAY')
+		ret += getAttachmentAAY(body, element[1]);
+	  else if (element[0] === 'Invoice')
+		ret += getAttachmentInvoice(body, element[1]);
+	  else if (element[0] === 'WorkConfirmationDate')
+		ret += getAttachmentWorkConfirmationDate(body, element[1]);
+	  else if (element[0] === 'DeliveryGoodsDate')
+		ret += getAttachmentDeliveryGoodsDate(body, element[1]);
+	  else if (element[0] === 'ADR')
+		ret += getAuthorDocumentedRequest(body, element[1]);
+	  else if (element[0] === 'SnippetPractical')
+		ret += getSnippetPracticalAttachment(body, element[1]);
+	  else if (element[0] === 'EconomicalCommittee')
+		ret += getAttachmentsForEconomicalCommittee(body, element[1]);
+	}
+  
+	return ret;
+  }
 module.exports = {
 	getAttachmentsXmlValue
 }

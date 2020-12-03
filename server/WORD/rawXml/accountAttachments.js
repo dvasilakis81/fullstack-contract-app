@@ -20,41 +20,7 @@ function addArrayItem(inputDates, item, label) {
 		}
 	}
 }
-function setArrayWithProtocolDates(body) {
-	var inputDates = [];
 
-	addArrayItem(inputDates, body.AAY, 'AAY');
-	addArrayItem(inputDates, body.Account[0].Invoice, 'Invoice');
-	addArrayItem(inputDates, body.WorkConfirmationDate, 'WorkConfirmationDate');
-	addArrayItem(inputDates, body.DeliveryGoodsDate, 'DeliveryGoodsDate');
-	addArrayItem(inputDates, body.ADR, 'ADR');
-	addArrayItem(inputDates, body.SnippetPractical, 'SnippetPractical');
-	addArrayItem(inputDates, body.EconomicalCommittee, 'EconomicalCommittee');
-
-	return inputDates;
-}
-function getAttachmentsInOrder(body) {
-	var ret = '';
-	var inputDates = setArrayWithProtocolDates(body);
-
-	for (let index = 0; index < inputDates.length; index++) {
-		const element = inputDates[index];
-		if (element[0] === 'AAY')
-			ret += getAttachmentAAY(body, element[1]);
-		else if (element[0] === 'Invoice')
-			ret += getAttachmentInvoice(body, element[1]);
-		else if (element[0] === 'WorkConfirmationDate')
-			ret += getAttachmentWorkConfirmationDate(body, element[1]);
-		else if (element[0] === 'DeliveryGoodsDate')
-			ret += getAttachmentDeliveryGoodsDate(body, element[1]);
-		else if (element[0] === 'ADR')
-			ret += getAuthorDocumentedRequest(body, element[1]);
-		else if (element[0] === 'EconomicalCommittee')
-			ret += getAttachmentsForEconomicalCommittee(body, element[1]);
-	}
-
-	return ret;
-}
 function getAttachment1(body) {
 
 	var contractProtocolNumber = body.Contract[0].Protocol[0].Number
@@ -566,6 +532,30 @@ function getAttachmentsXmlValue(body) {
 		getAttachmentsForMonitoringCommittee(body)
 }
 
+function getAttachmentsInOrder(body) {
+	var ret = '';
+	var inputDates = common.setArrayWithProtocolDates(body);
+  
+	for (let index = 0; index < inputDates.length; index++) {
+	  const element = inputDates[index];
+	  if (element[0] === 'AAY')
+		ret += getAttachmentAAY(body, element[1]);
+	  else if (element[0] === 'Invoice')
+		ret += getAttachmentInvoice(body, element[1]);
+	  else if (element[0] === 'WorkConfirmationDate')
+		ret += getAttachmentWorkConfirmationDate(body, element[1]);
+	  else if (element[0] === 'DeliveryGoodsDate')
+		ret += getAttachmentDeliveryGoodsDate(body, element[1]);
+	  else if (element[0] === 'ADR')
+		ret += getAuthorDocumentedRequest(body, element[1]);
+	  else if (element[0] === 'SnippetPractical')
+		ret += getSnippetPracticalAttachment(body, element[1]);
+	  else if (element[0] === 'EconomicalCommittee')
+		ret += getAttachmentsForEconomicalCommittee(body, element[1]);
+	}
+  
+	return ret;
+  }
 module.exports = {
 	getAttachmentsXmlValue
 }
