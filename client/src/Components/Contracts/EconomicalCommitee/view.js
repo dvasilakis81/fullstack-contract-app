@@ -64,7 +64,7 @@ class EconomicalCommiteeView extends Component {
       message: '',
       msgPadding: '0px',
       variant: '',
-      Id: this.props.Id ? this.props.Id : '',
+      Id: this.props.Id || '',
       ProtocolNumber: '',
       ProtocolDate: '',
       Content: '',
@@ -88,7 +88,7 @@ class EconomicalCommiteeView extends Component {
 
   openEdit(index, economicalCommitee) {
     this.setState({
-      Id: economicalCommitee.ContractId,
+      Id: economicalCommitee.Id,
       ProtocolNumber: economicalCommitee.ProtocolNumber,
       ProtocolDate: economicalCommitee.ProtocolDate,
       Content: economicalCommitee.Content,
@@ -102,7 +102,7 @@ class EconomicalCommiteeView extends Component {
 
   openDelete(index, economicalCommitee) {
     this.setState({
-      Id: economicalCommitee.ContractId,
+      Id: economicalCommitee.Id,
       ProtocolNumber: economicalCommitee.ProtocolNumber,
       ProtocolDate: economicalCommitee.ProtocolDate,
       Content: economicalCommitee.Content,

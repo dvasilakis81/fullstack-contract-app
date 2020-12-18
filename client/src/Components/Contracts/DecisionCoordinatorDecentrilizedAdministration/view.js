@@ -186,7 +186,7 @@ class DecisionCoordinatorDecentrilizedAdministrationView extends Component {
 
     if (this.props.contractDetails.decisionboard) {
       ret = this.props.contractDetails.decisionboard.map((data, index) => {
-        if (data) {
+        if (data && data.ProtocolNumber && data.ProtocolDate) {
           var stringValue = data.ProtocolNumber.toString() + '/' + data.ProtocolDate.toString();
           return <option key={index} value={stringValue}  selected={stateValue == stringValue ? true : false}>{stringValue}</option>
         }
