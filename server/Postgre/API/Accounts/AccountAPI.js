@@ -52,8 +52,8 @@ async function insertAccount(req, res, next) {
         res.status(408).json('Ο λογαριασμός δεν μπόρεσε να δημιουργηθεί');
       }
     } catch (error) {
-      await client.query('ROLLBACK')
       next(error);
+      await client.query('ROLLBACK');      
     } finally {
       client.release();
     }

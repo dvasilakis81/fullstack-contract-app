@@ -61,11 +61,7 @@ async function insertContractOwnerInfo(req, res, next, contractId, client) {
   const { rows } = await client.query(queries.query_insertcontractowner(req, contractId));
   return rows[0].Id;
 }
-async function insertActivity(req, res, next, contractId, activityType, client) {
 
-  const { rows } = await client.query(queries.query_insertactivity(req, contractId, activityType));
-  return rows[0].Id;
-}
 async function updateContract(req, res, next, client) {
 
   try {
@@ -95,6 +91,5 @@ module.exports = {
   insertContractOwnerInfo,
   deleteContract,
   contractExists,
-  updateContract,
-  insertActivity
+  updateContract  
 }

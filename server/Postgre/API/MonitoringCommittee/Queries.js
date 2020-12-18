@@ -5,27 +5,29 @@ function query_get(accountId) {
   return util.format('SELECT * FROM "Ordering"."MonitoringCommittee" as mc Where mc."AccountId"=%s', helper.addQuotes(accountId))
 }
 
-function query_insert(req) {
-  return util.format('INSERT INTO "Ordering"."MonitoringCommittee"("AccountId","MayorDecisionForMembersProtocolNumber","MayorDecisionForMembersProtocolDate","PracticalDate","TransmissionDocumentProtocolNumber","TransmissionDocumentProtocolDate","GivenPhysicalObjectContentTime") ' +
-    'VALUES(%s,%s,%s,%s,%s,%s,%s) ' +
+function query_insert(req, accountId) {
+  var ret =   util.format('INSERT INTO "Ordering"."MonitoringCommittee"("AccountId","MayorDecisionProtocolNumber","MayorDecisionProtocolDate","PracticalDate","DocumentProtocolNumber","DocumentProtocolDate","GivenPhysicalObjectContentTime") ' +
+    'VALUES(%s,%s,%s,%s,%s,%s,%s) ',
     helper.addQuotes(accountId),
-    helper.addQuotes(req.body.MayorDecisionForMembersProtocolNumber),
-    helper.addQuotes(req.body.MayorDecisionForMembersProtocolDate),
+    helper.addQuotes(req.body.MayorDecisionProtocolNumber),
+    helper.addQuotes(req.body.MayorDecisionProtocolDate),
     helper.addQuotes(req.body.PracticalDate),
-    helper.addQuotes(req.body.TransmissionDocumentProtocolNumber),
-    helper.addQuotes(req.body.TransmissionDocumentProtocolDate),
+    helper.addQuotes(req.body.DocumentProtocolNumber),
+    helper.addQuotes(req.body.DocumentProtocolDate),
     helper.addQuotes(req.body.GivenPhysicalObjectContentTime))
+
+    return ret;
 }
 
 function query_update(req) {
   return util.format('UPDATE "Ordering"."MonitoringCommittee" ' +
-    'SET "MayorDecisionForMembersProtocolNumber"=%s,"MayorDecisionForMembersProtocolDate"=%s,"PracticalDate"=%s,"TransmissionDocumentProtocolNumber"=%s,"TransmissionDocumentProtocolDate"=%s,"GivenPhysicalObjectContentTime"=%s ' +
+    'SET "MayorDecisionProtocolNumber"=%s,"MayorDecisionProtocolDate"=%s,"PracticalDate"=%s,"DocumentProtocolNumber"=%s,"DocumentProtocolDate"=%s,"GivenPhysicalObjectContentTime"=%s ' +
     'WHERE "AccountId"=%s',
-    helper.addQuotes(req.body.MayorDecisionForMembersProtocolNumber),
-    helper.addQuotes(req.body.MayorDecisionForMembersProtocolDate),
+    helper.addQuotes(req.body.MayorDecisionProtocolNumber),
+    helper.addQuotes(req.body.MayorDecisionProtocolDate),
     helper.addQuotes(req.body.PracticalDate),
-    helper.addQuotes(req.body.TransmissionDocumentProtocolNumber),
-    helper.addQuotes(req.body.TransmissionDocumentProtocolDate),
+    helper.addQuotes(req.body.DocumentProtocolNumber),
+    helper.addQuotes(req.body.DocumentProtocolDate),
     helper.addQuotes(req.body.GivenPhysicalObjectContentTime),
     Number(req.body.AccountId));
 }

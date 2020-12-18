@@ -1,4 +1,6 @@
 const methods = require('./Methods');
+const activityAPI = require('../Activities/Methods');
+
 const { restart } = require('nodemon');
 var pool = require('../../dbConfig').pool;
 
@@ -14,6 +16,7 @@ async function getContractById(req, res, next, contractId) {
 }
 
 async function getContractTypes(req, res, next) {
+  
   var contractType = await methods.getContractTypes(req, res, next);
   res.status(200).json(contractType);
 }
@@ -37,12 +40,12 @@ async function insertContract(req, res, next) {
 
     var contractId = await methods.insertInfoToContractTable(req, res, next, client);
     var ownerId = await methods.insertContractOwnerInfo(req, res, next, contractId, client);
-    var activityId = await methods.insertActivity(req, res, next, contractId, 'Δημιουργία Σύμβασης', client);
+    var activityId = await activityAPI.insertActivity(req, res, next, contractId, 'Δημιουργία Σύμβασης', client);
 
     await client.query('COMMIT');
   } catch (error) {
-    await client.query('ROLLBACK')
     next(error);
+    await client.query('ROLLBACK');    
   }
   finally {
     client.release();
@@ -57,11 +60,11 @@ async function updateContract(req, res, next) {
     await client.query('BEGIN');
 
     var contractId = await methods.updateContract(req, res, next, client);
-    var activityId = await methods.insertActivity(req, res, next, contractId, 'Επεξεργασία Σύμβασης', client);
+    await activityAPI.insertActivity(req, res, next, contractId, 'Επεξεργασία Σύμβασης', client);
     await client.query('COMMIT');
   } catch (error) {
-    await client.query('ROLLBACK')
     next(error);
+    await client.query('ROLLBACK');    
   }
   finally {
     client.release();
@@ -72,7 +75,21 @@ async function updateContract(req, res, next) {
 
 async function deleteContract(req, res, next) {
 
-  var contractId = await methods.deleteContract(req, res, next);
+  const client = await pool.connect();
+
+  try {
+    await client.query('BEGIN');
+    var contractId = await methods.deleteContract(req, res, next);
+    await activityAPI.insertActivity(req, res, next, contractId, 'Διαγραφή Σύμβασης', client);
+    await client.query('COMMIT');
+  } catch (error) {
+    next(error);
+    await client.query('ROLLBACK');    
+  }
+  finally {
+    client.release();
+  }
+
   res.status(200).json(contractId);
 }
 

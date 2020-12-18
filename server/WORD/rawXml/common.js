@@ -3,8 +3,46 @@ const util = require('util');
 
 const fontSize = 22
 const fontFamily = 'Arial'
-module.exports = {
 
+function addArrayItem(inputDates, item, label) {
+	if (item) {
+		var length = 1;
+		if (Array.isArray(item) === true)
+			length = item.length;
+		for (let index = 0; index < length; index++) {
+			var protocolDate = item;
+			if (item[index].ProtocolDate)
+				protocolDate = item[index].ProtocolDate;
+
+			if (protocolDate) {
+				var row = 0;
+				if (inputDates && inputDates.length > 0) {
+					for (let j = 0; j < inputDates.length; j++) {
+						if (new Date(protocolDate) > new Date(inputDates[j][1]))
+							row += 1;
+					}
+				}
+
+				inputDates.splice(row, 0, [label, protocolDate]);
+			}
+		}
+	}
+}
+function setArrayWithProtocolDates(body) {
+  var inputDates = [];
+
+  addArrayItem(inputDates, body.AAY, 'AAY');
+  addArrayItem(inputDates, body.Account[0].Invoice, 'Invoice');
+  addArrayItem(inputDates, body.WorkConfirmationDate, 'WorkConfirmationDate');
+  addArrayItem(inputDates, body.DeliveryGoodsDate, 'DeliveryGoodsDate');
+  addArrayItem(inputDates, body.ADR, 'ADR');
+  addArrayItem(inputDates, body.SnippetPractical, 'SnippetPractical');
+  addArrayItem(inputDates, body.EconomicalCommittee, 'EconomicalCommittee');
+
+  return inputDates;
+}
+module.exports = {
+  setArrayWithProtocolDates,
   getSuperscriptTag: function (isSuperscript) {
     var ret = '';
     if (isSuperscript === true)
