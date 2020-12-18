@@ -128,8 +128,7 @@ class NewContract extends Component {
 		this.autoCompleteBudget = this.autoCompleteBudget.bind(this);
 		this.handleClose = this.handleClose.bind(this, '');
 		this.handleContractStuff = this.handleContractStuff.bind(this);
-		this.selectAllStuff = this.selectAllStuff.bind(this);
-		this.getSelectedUsers = this.getSelectedUsers.bind(this);
+		this.selectAllStuff = this.selectAllStuff.bind(this);		
 		this.loadSelectAccountPer = this.loadSelectAccountPer.bind(this);
 	}
 
@@ -170,25 +169,7 @@ class NewContract extends Component {
 		}
 
 		return userIds;
-	}
-	getSelectedUsers() {
-		let users = [];
-
-		if (this.props.users && this.state.contractStuff) {
-			for (let i = 0; i < this.props.users.length; i++) {
-				let user = this.props.users[i];
-				for (let j = 0; j < this.state.contractStuff.length; j++) {
-					const userHasPermission = this.state.contractStuff[j];
-					if (userHasPermission.UserId.toString() === user.Id.toString()) {
-						users.push(user)
-						break;
-					}
-				}
-			}
-		}
-
-		return users;
-	}
+	}	
 
 	handleSubmit(event) {
 		event.preventDefault();
@@ -469,21 +450,7 @@ class NewContract extends Component {
 		//}
 
 		return ret;
-	}
-
-	// getSelectUsersTemplate() {
-
-	// 	if (this.props.token && this.props.token.data) {
-	// 		if (this.props.token.data.id.toString() === this.state.OwnerId.toString()) {
-	// 			return <SelectContractStuff
-	// 				handleContractStuff={this.handleContractStuff}
-	// 				usersHavingAccessToContract={this.state.contractStuff}
-	// 				selectAllStuff={this.selectAllStuff}
-	// 				isAllStuffChecked={this.state.AllUsers}
-	// 				selectedUsers={this.getSelectedUsers()} />
-	// 		}
-	// 	}
-	// }
+	}	
 
 	onAutocompleteChange(e, v, r) {
 
@@ -611,7 +578,7 @@ class NewContract extends Component {
 										</div>
 										<div style={styles.divRow}>
 											<MyTextField title='Τύπος' id='ContractTypeId' stateValue={this.state.contractInfo.ContractTypeId} values={this.loadContractTypes(this.state.contractInfo.ContractTypeId)} InputProps={{ inputProps: { style: { textAlignLast: 'center' } } }} isRequired={true} isDisabled={false} onChange={this.onChange} select={true} width='20%' />
-											{this.state.contractInfo.ContractTypeId.toString() === '2' ?
+											{this.state.contractInfo.ContractTypeId && this.state.contractInfo.ContractTypeId.toString() === '2' ?
 												<MyTextField tm={getLawArticleTooltip(this.state)} title='Άρθρο Προγραμματικής' id='LawArticle' stateValue={this.state.contractInfo.LawArticle} isRequired={true} isDisabled={false} onChange={this.onChange} width='80%' />
 												:
 												<></>}
