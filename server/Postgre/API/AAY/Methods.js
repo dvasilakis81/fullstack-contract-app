@@ -26,7 +26,7 @@ async function remove(req, res, next) {
 
   try {
     await pool.query(queries.query_remove(req));
-    contractMethods.getContractById(req, res, next, contractId);
+    contractMethods.getContractById(req, res, next);
   } catch (error) {
     next(error);
   }

@@ -1,12 +1,12 @@
-Message: common.setArrayWithProtocolDates is not a function
-Stack: TypeError: common.setArrayWithProtocolDates is not a function
-    at getAttachmentsInOrder (/home/d.vasilakis/Ordering_Production/server/WORD/rawXml/accountAttachments.js:537:26)
-    at Object.getAttachmentsXmlValue (/home/d.vasilakis/Ordering_Production/server/WORD/rawXml/accountAttachments.js:531:3)
-    at Object.setDataForAccountDocument (/home/d.vasilakis/Ordering_Production/server/InputData/InputData.js:88:49)
-    at /home/d.vasilakis/Ordering_Production/server/app.js:53:29
-    at Layer.handle [as handle_request] (/home/d.vasilakis/Ordering_Production/node_modules/express/lib/router/layer.js:95:5)
-    at next (/home/d.vasilakis/Ordering_Production/node_modules/express/lib/router/route.js:137:13)
-    at /home/d.vasilakis/Ordering_Production/server/Postgre/API/LoginLDAP.js:332:9
-    at /home/d.vasilakis/Ordering_Production/node_modules/jsonwebtoken/verify.js:223:12
-    at getSecret (/home/d.vasilakis/Ordering_Production/node_modules/jsonwebtoken/verify.js:90:14)
-    at Object.module.exports [as verify] (/home/d.vasilakis/Ordering_Production/node_modules/jsonwebtoken/verify.js:94:10)
+Message: res is not defined
+Stack: ReferenceError: res is not defined
+    at login (/home/d.vasilakis/Ordering_Development/server/Postgre/API/LoginLDAP.js:51:5)
+    at Layer.handle [as handle_request] (/home/d.vasilakis/Ordering_Development/node_modules/express/lib/router/layer.js:95:5)
+    at next (/home/d.vasilakis/Ordering_Development/node_modules/express/lib/router/route.js:137:13)
+    at Route.dispatch (/home/d.vasilakis/Ordering_Development/node_modules/express/lib/router/route.js:112:3)
+    at Layer.handle [as handle_request] (/home/d.vasilakis/Ordering_Development/node_modules/express/lib/router/layer.js:95:5)
+    at /home/d.vasilakis/Ordering_Development/node_modules/express/lib/router/index.js:281:22
+    at Function.process_params (/home/d.vasilakis/Ordering_Development/node_modules/express/lib/router/index.js:335:12)
+    at next (/home/d.vasilakis/Ordering_Development/node_modules/express/lib/router/index.js:275:10)
+    at urlencodedParser (/home/d.vasilakis/Ordering_Development/node_modules/body-parser/lib/types/urlencoded.js:91:7)
+    at Layer.handle [as handle_request] (/home/d.vasilakis/Ordering_Development/node_modules/express/lib/router/layer.js:95:5)
