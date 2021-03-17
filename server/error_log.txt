@@ -1,12 +1,12 @@
-Message: res is not defined
-Stack: ReferenceError: res is not defined
-    at login (/home/d.vasilakis/Ordering_Development/server/Postgre/API/LoginLDAP.js:51:5)
+Message: Cannot read property 'uid' of undefined
+Stack: TypeError: Cannot read property 'uid' of undefined
+    at getWhere (/home/d.vasilakis/Ordering_Development/server/Postgre/API/Contracts/Queries.js:96:36)
+    at getQueryTotalContractsByUser (/home/d.vasilakis/Ordering_Development/server/Postgre/API/Contracts/Queries.js:91:91)
+    at getSelectFromClauses (/home/d.vasilakis/Ordering_Development/server/Postgre/API/Contracts/Queries.js:108:5)
+    at Object.query_getcontracts (/home/d.vasilakis/Ordering_Development/server/Postgre/API/Contracts/Queries.js:72:16)
+    at Object.getContracts (/home/d.vasilakis/Ordering_Development/server/Postgre/API/Contracts/Methods.js:8:45)
+    at getContracts (/home/d.vasilakis/Ordering_Development/server/Postgre/API/Contracts/ContractAPI.js:8:33)
     at Layer.handle [as handle_request] (/home/d.vasilakis/Ordering_Development/node_modules/express/lib/router/layer.js:95:5)
     at next (/home/d.vasilakis/Ordering_Development/node_modules/express/lib/router/route.js:137:13)
     at Route.dispatch (/home/d.vasilakis/Ordering_Development/node_modules/express/lib/router/route.js:112:3)
-    at Layer.handle [as handle_request] (/home/d.vasilakis/Ordering_Development/node_modules/express/lib/router/layer.js:95:5)
-    at /home/d.vasilakis/Ordering_Development/node_modules/express/lib/router/index.js:281:22
-    at Function.process_params (/home/d.vasilakis/Ordering_Development/node_modules/express/lib/router/index.js:335:12)
-    at next (/home/d.vasilakis/Ordering_Development/node_modules/express/lib/router/index.js:275:10)
-    at urlencodedParser (/home/d.vasilakis/Ordering_Development/node_modules/body-parser/lib/types/urlencoded.js:91:7)
     at Layer.handle [as handle_request] (/home/d.vasilakis/Ordering_Development/node_modules/express/lib/router/layer.js:95:5)
