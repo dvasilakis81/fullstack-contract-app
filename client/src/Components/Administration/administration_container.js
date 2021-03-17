@@ -127,8 +127,8 @@ class AdministrationContainer extends Component {
     ret.push('Υπογράφοντες')
     if (this.props.token.data.role === 1)
       ret.push('Τύπος Υπογραφώντων')
-    if (this.props.token.data.role === 1)
-      ret.push('Σφάλματα')
+    //if (this.props.token.data.role === 1)
+    ret.push('Σφάλματα')
 
 
     return ret;

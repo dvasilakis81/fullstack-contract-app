@@ -105,7 +105,7 @@ class ItemDetail extends React.Component {
 		this.setState({ openPopover: 0 });
 	}
 
-	
+
 	viewActivities(e) {
 		this.setState({ openActivities: e });
 	}
@@ -198,7 +198,7 @@ class ItemDetail extends React.Component {
 				}
 			</Fragment>
 		)
-	}	
+	}
 
 	getEditAction() {
 		//#17d3cd
@@ -250,9 +250,9 @@ class ItemDetail extends React.Component {
 
 		return (<Grid item>
 			<Paper style={{ padding: '0px' }} square={true}>
-			    {this.getActivityAction(detailItem)}
+				{this.getActivityAction(detailItem)}
 				{this.getEditAction()}
-				{this.getDeleteAction(detailItem)}				
+				{this.getDeleteAction(detailItem)}
 				<Dialog
 					open={this.state.openDeleteDialog}
 					onClose={this.handleClose}
@@ -672,6 +672,13 @@ class ItemDetail extends React.Component {
 											<Grid item>
 												<Paper style={styles.paperMoreContractInfo} square={true}>
 													<Typography>
+														<b>Α.Π.</b> {contractInfo.ProtocolNumber}/{getDateFormatForDocument(contractInfo.ProtocolDate)}
+													</Typography>
+												</Paper>
+											</Grid>
+											<Grid item>
+												<Paper style={styles.paperMoreContractInfo} square={true}>
+													<Typography>
 														<b>Έναρξη</b> {getDateFormat(contractInfo.Start)}
 														<span style={{ marginLeft: '10px' }}></span>
 														<b>Λήξη</b> {getDateFormat(contractInfo.End)}
@@ -692,27 +699,7 @@ class ItemDetail extends React.Component {
 													</Typography>
 												</Paper>
 											</Grid>
-											{this.getCPVTemplate(contractInfo)}
-											<Grid>
-												<Paper style={styles.paperMoreContractInfo} square={true}>
-													<Typography div style={{ display: 'flex', flexDirection: 'column', flexWrap: 'wrap', justifyContent: 'flex-start', alignContent: 'space-between', width: '100%' }}>
-														{this.getAttachmentTemplate(contractInfo, contractInfo.decisionboard, 1)}
-														{this.getAttachmentTemplate(contractInfo, contractInfo.decisioncoordinatordecentrilizedadministration, 2)}
-														{this.getAttachmentTemplate(contractInfo, contractInfo.courtofauditors, 3)}
-														{this.getAttachmentTemplate(contractInfo, contractInfo.authordocumentedrequest, 4)}
-														{this.getAttachmentTemplate(contractInfo, contractInfo.snippetpractical, 5)}
-														{this.getAttachmentTemplate(contractInfo, contractInfo.aay, 6)}
-														{this.getAttachmentTemplate(contractInfo, contractInfo.economicalcommitee, 7)}
-													</Typography>
-												</Paper>
-											</Grid>
-											<Grid item>
-												<Paper style={styles.paperMoreContractInfo} square={true}>
-													<Typography>
-														<b>Α.Π.</b> {contractInfo.ProtocolNumber}/{getDateFormatForDocument(contractInfo.ProtocolDate)}
-													</Typography>
-												</Paper>
-											</Grid>
+											{this.getCPVTemplate(contractInfo)}											
 											<Grid item>
 												<Paper style={styles.paperMoreContractInfo} square={true}>
 													<Typography>
@@ -726,6 +713,37 @@ class ItemDetail extends React.Component {
 							</Typography>
 						</Paper>
 					</Grid>
+					<Grid item>
+						<Paper style={styles.paperContractInfo} square={true}>
+							<Typography>
+								<ExpansionPanel style={{ padding: '0px', margin: '0px', background: '#FFFDE8' }}>
+									<ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
+										<Typography>
+											<div style={{ color: 'black', fontWeight: 'normal', width: 'auto', paddingLeft: '3px', padding: '3px', marginLeft: '5px', marginRight: '5px', textAlign: 'center', borderRadius: '10px' }}>
+												<span><b>Συνημμένα</b></span>
+												<span style={{ verticalAlign: 'top', marginLeft: '5px' }}><InfoIcon /></span>
+											</div>
+										</Typography>
+									</ExpansionPanelSummary>
+									<ExpansionPanelDetails>
+										<Grid>
+											<Paper style={styles.paperMoreContractInfo} square={true}>
+												<Typography div style={{ display: 'flex', flexDirection: 'column', flexWrap: 'wrap', justifyContent: 'flex-start', alignContent: 'space-between', width: '100%' }}>
+													{this.getAttachmentTemplate(contractInfo, contractInfo.decisionboard, 1)}
+													{this.getAttachmentTemplate(contractInfo, contractInfo.decisioncoordinatordecentrilizedadministration, 2)}
+													{this.getAttachmentTemplate(contractInfo, contractInfo.courtofauditors, 3)}
+													{this.getAttachmentTemplate(contractInfo, contractInfo.authordocumentedrequest, 4)}
+													{this.getAttachmentTemplate(contractInfo, contractInfo.snippetpractical, 5)}
+													{this.getAttachmentTemplate(contractInfo, contractInfo.aay, 6)}
+													{this.getAttachmentTemplate(contractInfo, contractInfo.economicalcommitee, 7)}
+												</Typography>
+											</Paper>
+										</Grid>										
+									</ExpansionPanelDetails>
+								</ExpansionPanel>
+							</Typography>
+						</Paper>
+				</Grid>
 				</Grid>
 			</Scrollbars >)
 	}
@@ -737,8 +755,8 @@ class ItemDetail extends React.Component {
 			var numberOfCreatedAccounts = detailItem.createdaccounts ? detailItem.createdaccounts.length : 0;
 			var numberOfNoCreatedAccounts = detailItem.createdaccounts ? (detailItem.NumberOfAccounts - detailItem.createdaccounts.length) : detailItem.NumberOfAccounts;
 			if (numberOfCreatedAccounts === 0) {
-				greenMessage = ''
-				blueMessage = 'Κανένας λογαριασμός δεν έχει δημιουργηθεί'
+				greenMessage = '';
+				blueMessage = 'Κανένας λογαριασμός δεν έχει δημιουργηθεί';
 			}
 			else if (numberOfCreatedAccounts === 1) {
 				greenMessage = '1 λογαριασμός έχει δημιουργηθεί';
