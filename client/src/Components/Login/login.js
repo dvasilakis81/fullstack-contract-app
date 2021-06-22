@@ -69,15 +69,16 @@ class Login extends Component {
       this.setState({ loginsuccess: false, message: 'Εισάγετε κωδικό!', openMessage: true, variant: 'info' });
     else {
       this.props.login(this.state.username, this.state.password).then(response => {
-        // console.log('response.value.data.token: ' + response.value.data.token)       
+         console.log('response.value.token: ' + response.value.token);
 
-        if (response.value.data.token)
+        if (response.value.token)
           this.setState({ loginsuccess: true });
         else          
-          this.setState({ loginsuccess: false, message: response.value.data, openMessage: true, variant: 'error' });
+          this.setState({ loginsuccess: false, message: response.value, openMessage: true, variant: 'error' });
         
       }).catch(error => {
         var msg = 'Αποτυχία σύνδεσης στον διακομιστή!';
+        console.log('error: ' + error);
         this.setState({ message: <><div>{msg}</div><div>{getServerErrorResponseMessage(error)}</div></>, openMessage: true, variant: 'error' });
       })
     }

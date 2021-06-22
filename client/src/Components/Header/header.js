@@ -72,8 +72,8 @@ class Header extends React.Component {
   renderMenu() {
     return <Menu
       style={{
-        width: this.props.screenDimensions.width,
-        height: this.props.screenDimensions.height,
+        width: this.props.screenDimensions ? this.props.screenDimensions.width : 1000,
+        height: this.props.screenDimensions ? this.props.screenDimensions.height : 1000,
         textAlign: 'middle',
         horizontal: 'center'
       }}
@@ -127,7 +127,7 @@ class Header extends React.Component {
                 <AccountCircle />
               </IconButton>
               <div>
-                {this.props.token && this.props.token.data && this.props.token.data.user ? this.props.token.data.user.cn : ''}
+                {this.props.token && this.props.token.user ? this.props.token.user.cn : ''}
               </div>
             </div>
           </Toolbar>
@@ -154,14 +154,14 @@ class Header extends React.Component {
 
   getAdministrationAction(showAdministrationOption) {
     var accessToAdmin = false;
-    if (this.props.token && this.props.token.data && this.props.token.data.user) {
-      if (this.props.token.data.user.uid == 'd.vasilakis')
+    if (this.props.token && this.props.token.user) {
+      if (this.props.token.user.uid == 'd.vasilakis')
         accessToAdmin = true;
     }
 
     //if (showAdministrationOption) {
     if (accessToAdmin === true) {
-      if (this.props.token && this.props.token.data) {
+      if (this.props.token) {
         return (
           <div onClick={this.gotoAdministration} style={{ textAlign: 'center', padding: '10px' }} >
             <IconButton
@@ -186,7 +186,7 @@ class Header extends React.Component {
   getNewContractAction(showNewContractOption) {
 
     if (showNewContractOption === true) {
-      if (this.props.token && this.props.token.data)
+      if (this.props.token)
         return <div onClick={this.createNewContract} style={{ textAlign: 'center', padding: '10px' }} >
           <IconButton
             className='edgeStart'

@@ -15,7 +15,7 @@ class AccountContainer extends Component {
   }
 
   componentDidMount() {
-    this.props.getAccount(this.props.token.data.token, this.props.contractId, this.props.accountNumber)
+    this.props.getAccount(this.props.token.token, this.props.contractId, this.props.accountNumber)
   }
 
   getAccountTemplate() {
@@ -58,9 +58,9 @@ class AccountContainer extends Component {
               SignType3: 'Η ΠΡΟΪΣΤΑΜΕΝΗ ΔΙΕΥΘΥΝΣΗΣ',
               SignType4: 'Η ΠΡΟΪΣΤΑΜΕΝΗ ΔΙΕΥΘΥΝΣΗΣ',
               SignName1: '',
-              SignName2: this.props.token.data.user.supervisorName,
-              SignName3: this.props.token.data.user.directorName,
-              SignName4: this.props.token.data.user.directorName,
+              SignName2: this.props.token.user.supervisorName,
+              SignName3: this.props.token.user.directorName,
+              SignName4: this.props.token.user.directorName,
               AbsenseOfDirector1: false,
               AbsenseOfDirector2: false,
               HasSecondDecisionDS: false,

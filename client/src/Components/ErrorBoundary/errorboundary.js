@@ -15,7 +15,7 @@ class ErrorBoundary extends React.Component {
     this.state = {
       error: null,      
       msgResponseLogClientError: '',
-      username: this.props.token && this.props.token.data ? this.props.token.data.username : '',
+      username: this.props.token ? this.props.token.username : '',
       navigateToLogin: false
     };
 

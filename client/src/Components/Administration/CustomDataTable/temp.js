@@ -137,7 +137,7 @@ class AdministrationContainer extends Component {
   updateItem() {
     let selectedItem = this.props.selectedParametric;
     if (selectedItem === 'Χρήστες') {
-      axios.post(getHostUrl() + '/updateuser', this.state, { headers: { Authorization: 'Bearer ' + this.props.token.data.token } }).then(res => {
+      axios.post(getHostUrl() + '/updateuser', this.state, { headers: { Authorization: 'Bearer ' + this.props.token.token } }).then(res => {
         var msg = 'Η επεξεργασία του χρήστη ' + this.state.username + ' δημιουργήθηκε επιτυχώς!!!'
         this.setState({ message: msg, openMessage: true, bgColorMessage: successBgColor, fgColorMessage: successFgColor, submitButtonDisabled: false });
         this.setState({ editRowId: '', username: '', roleid: '' });
@@ -263,7 +263,7 @@ class AdministrationContainer extends Component {
             new Promise(resolve => {
               setTimeout(() => {
                 if (selectedItem === 'Χρήστες') {
-                  axios.post(getHostUrl() + '/updateuser', newData, { headers: { Authorization: 'Bearer ' + this.props.token.data.token } }).then(res => {
+                  axios.post(getHostUrl() + '/updateuser', newData, { headers: { Authorization: 'Bearer ' + this.props.token.token } }).then(res => {
                     var msg = 'Η επεξεργασία του χρήστη ' + this.state.username + ' δημιουργήθηκε επιτυχώς!!!'
                     this.setState({ message: msg, openMessage: true, bgColorMessage: 'green', fgColorMessage: 'white', submitButtonDisabled: false });
                     this.setState({ editRowId: '', username: '', roleid: '' });

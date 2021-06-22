@@ -52,7 +52,7 @@ class AwardView extends Component {
     super(props);
 
     this.state = {
-      loginUserId: this.props.token.data.id,
+      loginUserId: this.props.token.id,
       contractId: this.props.contractDetails.Id,
       submitButtonDisabled: false,
       addNewItem: false,
@@ -121,7 +121,7 @@ class AwardView extends Component {
     this.setState({ submitButtonDisabled: true });
 
     if (this.state.addNewItem === true) {
-      this.props.processContractInfo(this.state, this.props.token.data.token, 'insertaward').then(res => {
+      this.props.processContractInfo(this.state, this.props.token.token, 'insertaward').then(res => {
         var msg = 'H απόφαση κατακύρωσης δημιουργήθηκε επιτυχώς!!!'
         this.setState({ openMessage: true, message: msg, msgColor: 'lightGreen', msgPadding: '10px', submitButtonDisabled: false, addNewItem: false, editItem: false });
         this.resetState();
@@ -131,7 +131,7 @@ class AwardView extends Component {
         this.setState({ openMessage: true, message: <><div>{msg}</div><div>{getServerErrorResponseMessage(error)}</div></>, variant: 'error', msgColor: 'red', msgPadding: '10px', submitButtonDisabled: false });
       })
     } else if (this.state.editItem === true) {
-      this.props.processContractInfo(this.state, this.props.token.data.token, 'updateaward').then(res => {
+      this.props.processContractInfo(this.state, this.props.token.token, 'updateaward').then(res => {
         var msg = 'H απόφαση κατακύρωσης επεξεργάστηκε επιτυχώς!!!'
         this.setState({ openMessage: true, message: msg, msgColor: 'lightGreen', msgPadding: '10px', submitButtonDisabled: false, addNewItem: false, editItem: false });
         this.resetState();
@@ -146,7 +146,7 @@ class AwardView extends Component {
   requestDeleteAward() {
     this.setState({ submitButtonDisabled: true });
 
-    this.props.processContractInfo(this.state, this.props.token.data.token, 'deleteaward').then(res => {
+    this.props.processContractInfo(this.state, this.props.token.token, 'deleteaward').then(res => {
       var msg = 'Η διαγραφή έγινε επιτυχώς!!!'
       this.setState({ openMessage: true, message: msg, variant: 'success', msgPadding: '10px', submitButtonDisabled: false, addNewItem: false, editItem: false, deleteItem: false });
       this.resetState();

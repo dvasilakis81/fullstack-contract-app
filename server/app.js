@@ -1,4 +1,3 @@
-
 var createError = require('http-errors');
 var express = require('express');
 var path = require('path');
@@ -15,30 +14,30 @@ const util = require('util');
 // var docxTemplatorRouter = require('./routes/docxtemplator');
 var bodyParser = require("body-parser");
 var cors = require('cors');
-var helmet = require('helmet')
+var helmet = require('helmet');
 var app = express();
 
-var dbContract = require('./Postgre/API/Contracts/ContractAPI')
-var dbAccount = require('./Postgre/API/Accounts/AccountAPI')
-var dbError = require('./Postgre/API/Error/Error')
-//var dbLogin = require('./Postgre/API/Login')
-var dbLogin = require('./Postgre/API/LoginLDAP')
-var dbParametric = require('./Postgre/API/Parametric')
-var dbAay = require('./Postgre/API/AAY/Methods')
-var dbBoardDecision = require('./Postgre/API/BoardDecision/Methods')
-var dbDecisionCoordinatorDecentrilizedAdministration = require('./Postgre/API/DecisionCoordinatorDecentrilizedAdministration/Methods')
-var dbCourtOfAuditors = require('./Postgre/API/CourtOfAuditors/Methods')
-var dbAuthorDocumentedRequest = require('./Postgre/API/AuthorDocumentedRequest/Methods')
-var dbSnippetPractical = require('./Postgre/API/SnippetPractical/Methods')
-var dbEconomicalCommitee = require('./Postgre/API/EconomicalCommitee/Methods')
-var dbCC = require('./Postgre/API/CC/Methods')
-var dbUserReservations = require('./Postgre/API/Reservations/User/Methods')
-var dbAccountReservations = require('./Postgre/API/Reservations/Account/API')
+var dbContract = require('./Postgre/API/Contracts/ContractAPI');
+var dbAccount = require('./Postgre/API/Accounts/AccountAPI');
+var dbError = require('./Postgre/API/Error/Error');
+var dbLogin = require('./Postgre/API/Login')
+//var dbLogin = require('./Postgre/API/LoginLDAP');
+var dbParametric = require('./Postgre/API/Parametric');
+var dbAay = require('./Postgre/API/AAY/Methods');
+var dbBoardDecision = require('./Postgre/API/BoardDecision/Methods');
+var dbDecisionCoordinatorDecentrilizedAdministration = require('./Postgre/API/DecisionCoordinatorDecentrilizedAdministration/Methods');
+var dbCourtOfAuditors = require('./Postgre/API/CourtOfAuditors/Methods');
+var dbAuthorDocumentedRequest = require('./Postgre/API/AuthorDocumentedRequest/Methods');
+var dbSnippetPractical = require('./Postgre/API/SnippetPractical/Methods');
+var dbEconomicalCommitee = require('./Postgre/API/EconomicalCommitee/Methods');
+var dbCC = require('./Postgre/API/CC/Methods');
+var dbUserReservations = require('./Postgre/API/Reservations/User/Methods');
+var dbAccountReservations = require('./Postgre/API/Reservations/Account/API');
 
 var helper = require('./HelperMethods/helpermethods');
 
 const ENV = process.env.NODE_ENV;
-app.use(helmet())
+app.use(helmet());
 app.use(cors());
 app.use(express.static(path.join(__dirname, "./WORD/templates")));
 app.use(bodyParser.json());
@@ -188,22 +187,22 @@ app.use(cookieParser());
 
 console.log('ENVIROMENT: ' + ENV)
 console.log('__dirname: ' + __dirname)
-//if (ENV === 'production') {
-console.log('ENVIROMENT: ' + ENV)
-app.use(express.static(path.join(__dirname, '../client/build')))
-app.use((req, res) => {
-  console.log('Redirect to index.html')
-  res.setHeader("Expires", new Date(Date.now() - 2592000000).toUTCString());
-  res.sendFile(path.join(__dirname, '../client/build/index.html'));
-})
-app.all('/*', function (req, res, next) {
-  console.log('Accessing all urls except all above ...')
-  res.setHeader("Expires", new Date(Date.now() - 2592000000).toUTCString());
-  res.sendFile(path.join(__dirname, '../client/build/index.html'));
-})
-//}
-//else
-// app.use(express.static(path.join(__dirname, 'public')));
+if (ENV === 'production') {
+  console.log('ENVIROMENT: ' + ENV)
+  app.use(express.static(path.join(__dirname, '../client/build')))
+  app.use((req, res) => {
+    console.log('Redirect to index.html')
+    res.setHeader("Expires", new Date(Date.now() - 2592000000).toUTCString());
+    res.sendFile(path.join(__dirname, '../client/build/index.html'));
+  })
+  app.all('/*', function (req, res, next) {
+    console.log('Accessing all urls except all above ...')
+    res.setHeader("Expires", new Date(Date.now() - 2592000000).toUTCString());
+    res.sendFile(path.join(__dirname, '../client/build/index.html'));
+  })
+}
+else
+  app.use(express.static(path.join(__dirname, 'public')));
 
 // app.use('/', indexRouter);
 // app.use('/users', usersRouter);

@@ -94,7 +94,7 @@ class ActivitiesView extends Component {
     super(props);
 
     this.state = {
-      loginUserInfo: this.props.token.data.user,
+      loginUserInfo: this.props.token.user,
       contractId: this.props.contractDetails.Id,
       filterKey: 1,
       filterValues: [{ key: 1, value: 'Επεξεργασία Σύμβασης' }, { key: 2, value: 'Τεκμηριωμένο Αίτημα του Διατάκτη' }]

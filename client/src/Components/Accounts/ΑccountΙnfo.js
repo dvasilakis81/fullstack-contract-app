@@ -190,7 +190,7 @@ class AccountInfo extends React.Component {
 		var dataToPost = createTransmissionDocument(contractDetails, accountDetails, paidAmount)
 
 		var config = {
-			headers: { 'Content-Type': 'application/json;charset=utf-8', Authorization: 'Bearer ' + this.props.token.data.token },
+			headers: { 'Content-Type': 'application/json;charset=utf-8', Authorization: 'Bearer ' + this.props.token.token },
 			responseType: 'arraybuffer'
 		};
 
@@ -216,7 +216,7 @@ class AccountInfo extends React.Component {
 
 		var dataToPost = createAccountDocument(contractInfo, accountInfo, paidAmount, this.props.reservations)
 		var config = {
-			headers: { 'Content-Type': 'application/json;charset=utf-8', Authorization: 'Bearer ' + this.props.token.data.token },
+			headers: { 'Content-Type': 'application/json;charset=utf-8', Authorization: 'Bearer ' + this.props.token.token },
 			responseType: 'arraybuffer'
 		};
 
@@ -238,14 +238,14 @@ class AccountInfo extends React.Component {
 		this.setState({ syncButtonDisabled: true });
 		var contractDetails = this.props.isSearchMode ? this.props.contractDetailsSearchMode : this.props.contractDetails;
 		var dataToPost = {
-			loginUserInfo: this.props.token.data.user,
+			loginUserInfo: this.props.token.user,
 			ContractId: contractDetails.Id,
 			AccountInfo: this.props.account,
-			userreservations: this.props.token.data.user.reservations
+			userreservations: this.props.token.user.reservations
 		};
 
 		var config = {
-			headers: { 'Content-Type': 'application/json;charset=utf-8', Authorization: 'Bearer ' + this.props.token.data.token }
+			headers: { 'Content-Type': 'application/json;charset=utf-8', Authorization: 'Bearer ' + this.props.token.token }
 		};
 		this.props.syncAccountReservations(dataToPost, config);
 	}
@@ -919,8 +919,8 @@ class AccountInfo extends React.Component {
 		var ret = true;
 
 		var userReservations;
-		if (this.props.token && this.props.token.data)
-			userReservations = this.props.token.data.user.reservations;
+		if (this.props.token && this.props.token.user)
+			userReservations = this.props.token.user.reservations;
 
 		var accountReservations;
 		if (this.props.account) {

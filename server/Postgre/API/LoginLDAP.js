@@ -372,378 +372,379 @@ function checkToken(req, res, next) {
 module.exports = {
   login,
   checkToken
-}var ldap = require('ldapjs');
-var jwt = require('jsonwebtoken');
-var util = require('util');
-var helper = require('../../HelperMethods/helpermethods')
-var secretKey = process.env.API_SECRET || 'athens_2019';
-const pool = require('../dbConfig').pool
-const reservationsMethods = require('./Reservations/User/Methods')
-
-var client = ldap.createClient({
-  url: 'ldaps://10.1.24.17:636',
-  tlsOptions: { rejectUnauthorized: false },
-  bindDn: 'uid=prog.simvaseis,ou=app_accounts,dc=cityofathens,dc=gr',
-  bindCredentials: 'VkLqQzYsNSE5v3x'
-});
-
-async function setupDummyUser(req, res, next) {
-  var user = {
-    uid: 'p.skafidas',
-    sn: 'ΣΚΑΦΙΔΑΣ',
-    cn: 'ΠΑΝΑΓΙΩΤΗΣ ΣΚΑΦΙΔΑΣ',
-    givenName: 'ΠΑΝΑΓΙΩΤΗΣ',
-    director: 'g.papazogloy',
-    directorName: 'ΓΡΑΜΜΑΤΙΚΗ ΠΑΠΑΖΟΓΛΟΥ',
-    supervisor: 'o.vasoglou',
-    supervisorName: 'ΟΛΓΑ ΒΑΣΟΓΛΟΥ',
-    departmentNumber: 'Τμήμα Τεχνολογίας, Πληροφορικής και Επικοινωνιών',
-    ou: 'Δ/ΝΣΗ ΣΤΡΑΤΗΓ. ΣΧΕΔ., ΑΝΘΕΚΤΙΚΟΤΗΤΑΣ, ΚΑΙΝΟΤΟΜΙΑΣ & ΤΕΚΜΗΡ.'
-  }
-
-  const userReservations = await reservationsMethods.getUserReservations(user.uid, next);
-  if (userReservations && userReservations.length > 0)
-    user.reservations = userReservations;
-  else {
-    const reservations = await reservationsMethods.getReservations(req, next);
-    await reservationsMethods.initializeUserReservations(reservations, user.uid, next);
-    user.reservations = await reservationsMethods.getUserReservations(user.uid, next);
-  }
-
-  searchForPeopleThatBelongsToTheSameDirection(req, res, next, user);
 }
+// var ldap = require('ldapjs');
+// var jwt = require('jsonwebtoken');
+// var util = require('util');
+// var helper = require('../../HelperMethods/helpermethods')
+// var secretKey = process.env.API_SECRET || 'athens_2019';
+// const pool = require('../dbConfig').pool
+// const reservationsMethods = require('./Reservations/User/Methods')
 
-async function login(request, response, next) {
-  const username = request.query.u;
-  const password = request.query.p;
+// var client = ldap.createClient({
+//   url: 'ldaps://10.1.24.17:636',
+//   tlsOptions: { rejectUnauthorized: false },
+//   bindDn: 'uid=prog.simvaseis,ou=app_accounts,dc=cityofathens,dc=gr',
+//   bindCredentials: 'VkLqQzYsNSE5v3x'
+// });
 
-  //searchForPeople(request, response, next);
-  if (username === 'p.skafidas' && password === 'demo')
-    await setupDummyUser(request, response, next);
-  else
-    searchLoginUser(request, response, next, username, password);
-}
+// async function setupDummyUser(req, res, next) {
+//   var user = {
+//     uid: 'p.skafidas',
+//     sn: 'ΣΚΑΦΙΔΑΣ',
+//     cn: 'ΠΑΝΑΓΙΩΤΗΣ ΣΚΑΦΙΔΑΣ',
+//     givenName: 'ΠΑΝΑΓΙΩΤΗΣ',
+//     director: 'g.papazogloy',
+//     directorName: 'ΓΡΑΜΜΑΤΙΚΗ ΠΑΠΑΖΟΓΛΟΥ',
+//     supervisor: 'o.vasoglou',
+//     supervisorName: 'ΟΛΓΑ ΒΑΣΟΓΛΟΥ',
+//     departmentNumber: 'Τμήμα Τεχνολογίας, Πληροφορικής και Επικοινωνιών',
+//     ou: 'Δ/ΝΣΗ ΣΤΡΑΤΗΓ. ΣΧΕΔ., ΑΝΘΕΚΤΙΚΟΤΗΤΑΣ, ΚΑΙΝΟΤΟΜΙΑΣ & ΤΕΚΜΗΡ.'
+//   }
 
-function searchLoginUser(request, response, next, username, password) {
-  var ret = false;
-  var loginUser = [];
-  var opts = {
-    filter: '(objectClass=*)',
-    filter: '(uid=' + username + ')',
-    scope: 'sub',
-    attributes: ['*']
-  };
+//   const userReservations = await reservationsMethods.getUserReservations(user.uid, next);
+//   if (userReservations && userReservations.length > 0)
+//     user.reservations = userReservations;
+//   else {
+//     const reservations = await reservationsMethods.getReservations(req, next);
+//     await reservationsMethods.initializeUserReservations(reservations, user.uid, next);
+//     user.reservations = await reservationsMethods.getUserReservations(user.uid, next);
+//   }
 
-  var queryOEY = 'ou=OEY,dc=cityofathens,dc=gr';
-  client.search(queryOEY, opts, function (err, res) {
-    if (err)
-      console.log("Error in search " + err)
-    else {
-      res.on('searchEntry', function (entry) {
-        loginUser.push(entry.object);
-        authenticateDN(request, response, next, entry.object, password);
-      });
-      res.on('searchReference', function (referral) {
-        console.log('referral: ' + referral.uris.join());
-      });
-      res.on('error', function (err) {
-        console.error('error: ' + err.message);
-        response.send('error: ' + err.message);
-      });
-      res.on('end', function (result) {
-        console.log('status: ' + result.status);
-        if (loginUser && loginUser.length === 0)
-          response.send('Λάθος όνομα χρήστη!');
-      });
-    }
-  });
+//   searchForPeopleThatBelongsToTheSameDirection(req, res, next, user);
+// }
 
-  return ret;
-}
+// async function login(request, response, next) {
+//   const username = request.query.u;
+//   const password = request.query.p;
 
-function authenticateDN(request, response, next, user, password) {
+//   //searchForPeople(request, response, next);
+//   if (username === 'p.skafidas' && password === 'demo')
+//     await setupDummyUser(request, response, next);
+//   else
+//     searchLoginUser(request, response, next, username, password);
+// }
 
-  /*bind use for authentication*/
-  client.bind(user.dn, password, function (err) {
-    if (err)
-      response.send("Λάθος κωδικός!");
-    else {
-      var sqlQuery = util.format('SELECT * FROM "Ordering"."UserReservations" as ur WHERE ur."UserId"=%s ORDER BY ur."Order" ASC ', helper.addQuotes(user.uid));
-      pool.query(sqlQuery, (error, results) => {
-        if (error)
-          next(error);
-        else {
+// function searchLoginUser(request, response, next, username, password) {
+//   var ret = false;
+//   var loginUser = [];
+//   var opts = {
+//     filter: '(objectClass=*)',
+//     filter: '(uid=' + username + ')',
+//     scope: 'sub',
+//     attributes: ['*']
+//   };
 
-          if (user.uid === 'd.vasilakis') {
-            if (user.departmentNumber) {
-            } else {
-              user.departmentNumber = 'Τμήμα Τεχνολογίας, Πληροφορικής και Επικοινωνιών';
-              //user.uid = 'demo';
-              //user.departmentNumber = 'Dummy';
-            }
-          }
+//   var queryOEY = 'ou=OEY,dc=cityofathens,dc=gr';
+//   client.search(queryOEY, opts, function (err, res) {
+//     if (err)
+//       console.log("Error in search " + err)
+//     else {
+//       res.on('searchEntry', function (entry) {
+//         loginUser.push(entry.object);
+//         authenticateDN(request, response, next, entry.object, password);
+//       });
+//       res.on('searchReference', function (referral) {
+//         console.log('referral: ' + referral.uris.join());
+//       });
+//       res.on('error', function (err) {
+//         console.error('error: ' + err.message);
+//         response.send('error: ' + err.message);
+//       });
+//       res.on('end', function (result) {
+//         console.log('status: ' + result.status);
+//         if (loginUser && loginUser.length === 0)
+//           response.send('Λάθος όνομα χρήστη!');
+//       });
+//     }
+//   });
 
-          searchForSupervisor(request, response, next, user);
-        }
-      })
-    }
-  });
-}
+//   return ret;
+// }
 
-function searchForDirectionInfo(request, response, next, user) {
+// function authenticateDN(request, response, next, user, password) {
 
-  var opts = {
-    // filter: '(ou=' + user.ou + ')',
-    filter: "(objectclass=organizationalUnit)",
-    // filter: 'ou=Δ.ΓΕΝΙΚΟΣ ΓΡΑΜΜΑΤΕΑΣ,ou=ΟΕΥ,ou=ΠΡΟΣΩΠΑ,ou=OEY,dc=cityofathens,dc=gr',
-    scope: 'sub',
-    attributes: ['*']
-  };
+//   /*bind use for authentication*/
+//   client.bind(user.dn, password, function (err) {
+//     if (err)
+//       response.send("Λάθος κωδικός!");
+//     else {
+//       var sqlQuery = util.format('SELECT * FROM "Ordering"."UserReservations" as ur WHERE ur."UserId"=%s ORDER BY ur."Order" ASC ', helper.addQuotes(user.uid));
+//       pool.query(sqlQuery, (error, results) => {
+//         if (error)
+//           next(error);
+//         else {
 
-  var results = [];
-  var queryOEY = 'ou=OEY,dc=cityofathens,dc=gr';
-  //var queryOEY = 'ou=ΟΕΥ,ou=ΠΡΟΣΩΠΑ,ou=OEY,dc=cityofathens,dc=gr';
+//           if (user.uid === 'd.vasilakis') {
+//             if (user.departmentNumber) {
+//             } else {
+//               user.departmentNumber = 'Τμήμα Τεχνολογίας, Πληροφορικής και Επικοινωνιών';
+//               //user.uid = 'demo';
+//               //user.departmentNumber = 'Dummy';
+//             }
+//           }
 
-  client.search(queryOEY, opts, function (err, res) {
-    if (err)
-      console.log("Error in search " + err);
-    else {
-      res.on('searchEntry', function (entry) {
-        results.push(entry.object);
-      });
-      res.on('searchReference', function (referral) {
-        console.log('referral: ' + referral.uris.join());
-      });
-      res.on('error', function (err) {
-        console.error('error: ' + err.message);
-        response.send('error: ' + err.message);
-      });
-      res.on('end', function (result) {
-        console.log('status: ' + result.status);
-        if (results && results.length > 0) {
-          user.supervisor = results[0].uid;
-          user.supervisorName = results[0].uid;
-        }
-        searchForDirector(request, response, next, user);
-      });
-    }
-  });
-}
+//           searchForSupervisor(request, response, next, user);
+//         }
+//       })
+//     }
+//   });
+// }
 
-function searchForSupervisor(request, response, next, user) {
+// function searchForDirectionInfo(request, response, next, user) {
 
-  var opts = {
-    // filter: '(objectClass=*)',
-    filter: '(&(ou=' + user.ou + ')(departmentNumber=' + user.departmentNumber + ')(|(personalTitle=ΠΡΟΙΣΤΑΜΕΝΟΣ)(personalTitle=ΠΡΟΙΣΤΑΜΕΝH)))',
-    scope: 'sub',
-    attributes: ['*']
-  };
+//   var opts = {
+//     // filter: '(ou=' + user.ou + ')',
+//     filter: "(objectclass=organizationalUnit)",
+//     // filter: 'ou=Δ.ΓΕΝΙΚΟΣ ΓΡΑΜΜΑΤΕΑΣ,ou=ΟΕΥ,ou=ΠΡΟΣΩΠΑ,ou=OEY,dc=cityofathens,dc=gr',
+//     scope: 'sub',
+//     attributes: ['*']
+//   };
 
-  var results = [];
-  var queryOEY = 'ou=OEY,dc=cityofathens,dc=gr';
-  client.search(queryOEY, opts, function (err, res) {
-    if (err)
-      console.log("Error in search " + err);
-    else {
-      res.on('searchEntry', function (entry) {
-        results.push(entry.object);
-      });
-      res.on('searchReference', function (referral) {
-        console.log('referral: ' + referral.uris.join());
-      });
-      res.on('error', function (err) {
-        console.error('error: ' + err.message);
-        response.send('error: ' + err.message);
-      });
-      res.on('end', function (result) {
-        console.log('status: ' + result.status);
-        if (results && results.length > 0) {
-          user.supervisor = results[0].uid;
-          user.supervisorName = results[0].cn;
-        }
-        searchForDirector(request, response, next, user);
-      });
-    }
-  });
-}
+//   var results = [];
+//   var queryOEY = 'ou=OEY,dc=cityofathens,dc=gr';
+//   //var queryOEY = 'ou=ΟΕΥ,ou=ΠΡΟΣΩΠΑ,ou=OEY,dc=cityofathens,dc=gr';
 
-function searchForDirector(req, res, next, user) {
+//   client.search(queryOEY, opts, function (err, res) {
+//     if (err)
+//       console.log("Error in search " + err);
+//     else {
+//       res.on('searchEntry', function (entry) {
+//         results.push(entry.object);
+//       });
+//       res.on('searchReference', function (referral) {
+//         console.log('referral: ' + referral.uris.join());
+//       });
+//       res.on('error', function (err) {
+//         console.error('error: ' + err.message);
+//         response.send('error: ' + err.message);
+//       });
+//       res.on('end', function (result) {
+//         console.log('status: ' + result.status);
+//         if (results && results.length > 0) {
+//           user.supervisor = results[0].uid;
+//           user.supervisorName = results[0].uid;
+//         }
+//         searchForDirector(request, response, next, user);
+//       });
+//     }
+//   });
+// }
 
-  var opts = {
-    filter: '(objectClass=*)',
-    filter: '(&(ou=' + user.ou + ')(|(personalTitle=ΔΙΕΥΘΥΝΤΗΣ)(personalTitle=ΔΙΕΥΘΥΝΤΡΙΑ)))',
-    scope: 'sub',
-    attributes: ['*']
-  };
+// function searchForSupervisor(request, response, next, user) {
 
-  var results = [];
-  var queryOEY = 'ou=OEY,dc=cityofathens,dc=gr';
-  client.search(queryOEY, opts, function (err, searchresult) {
-    if (err)
-      console.log("Error in search " + err);
-    else {
-      searchresult.on('searchEntry', function (entry) {
-        results.push(entry.object);
-      });
-      searchresult.on('searchReference', function (referral) {
-        console.log('referral: ' + referral.uris.join());
-      });
-      searchresult.on('error', function (err) {
-        console.error('error: ' + err.message);
-        searchresult.send('error: ' + err.message);
-      });
-      searchresult.on('end', async function (result) {
+//   var opts = {
+//     // filter: '(objectClass=*)',
+//     filter: '(&(ou=' + user.ou + ')(departmentNumber=' + user.departmentNumber + ')(|(personalTitle=ΠΡΟΙΣΤΑΜΕΝΟΣ)(personalTitle=ΠΡΟΙΣΤΑΜΕΝH)))',
+//     scope: 'sub',
+//     attributes: ['*']
+//   };
 
-        //setup user reservations
-        const userReservations = await reservationsMethods.getUserReservations(user.uid, next);
-        if (userReservations && userReservations.length > 0)
-          user.reservations = userReservations;
-        else {
-          const reservations = await reservationsMethods.getReservations(req, next);
-          await reservationsMethods.initializeUserReservations(reservations, user.uid, next);
-          user.reservations = await reservationsMethods.getUserReservations(user.uid, next);
-        }
+//   var results = [];
+//   var queryOEY = 'ou=OEY,dc=cityofathens,dc=gr';
+//   client.search(queryOEY, opts, function (err, res) {
+//     if (err)
+//       console.log("Error in search " + err);
+//     else {
+//       res.on('searchEntry', function (entry) {
+//         results.push(entry.object);
+//       });
+//       res.on('searchReference', function (referral) {
+//         console.log('referral: ' + referral.uris.join());
+//       });
+//       res.on('error', function (err) {
+//         console.error('error: ' + err.message);
+//         response.send('error: ' + err.message);
+//       });
+//       res.on('end', function (result) {
+//         console.log('status: ' + result.status);
+//         if (results && results.length > 0) {
+//           user.supervisor = results[0].uid;
+//           user.supervisorName = results[0].cn;
+//         }
+//         searchForDirector(request, response, next, user);
+//       });
+//     }
+//   });
+// }
 
-        if (results && results.length > 0) {
-          user.director = results[0].uid;
-          user.directorName = results[0].cn;
-        }
+// function searchForDirector(req, res, next, user) {
 
-        searchForPeopleThatBelongsToTheSameDirection(req, res, next, user);
-      });
-    }
-  });
-}
+//   var opts = {
+//     filter: '(objectClass=*)',
+//     filter: '(&(ou=' + user.ou + ')(|(personalTitle=ΔΙΕΥΘΥΝΤΗΣ)(personalTitle=ΔΙΕΥΘΥΝΤΡΙΑ)))',
+//     scope: 'sub',
+//     attributes: ['*']
+//   };
 
-function searchForPeopleThatBelongsToTheSameDirection(re, res, next, user) {
-  var opts = {
-    filter: '(objectClass=*)',
-    //filter: '(&(uid=2)(sn=John))',// and search
-    //filter: '(|(uid=2)(sn=John)(cn=Smith))', // or search
-    //filter: '(uid=a.stefos)',
-    filter: '(departmentNumber=' + user.departmentNumber + ')',
-    scope: 'sub',
-    //attributes: ['sn']
-    attributes: ['*']
-  };
-  var results = [];
-  var queryOEY = 'ou=OEY,dc=cityofathens,dc=gr';
-  // var queryGroups = 'cn=delme,ou=groups,ou=OEY,dc=cityofathens,dc=gr';
+//   var results = [];
+//   var queryOEY = 'ou=OEY,dc=cityofathens,dc=gr';
+//   client.search(queryOEY, opts, function (err, searchresult) {
+//     if (err)
+//       console.log("Error in search " + err);
+//     else {
+//       searchresult.on('searchEntry', function (entry) {
+//         results.push(entry.object);
+//       });
+//       searchresult.on('searchReference', function (referral) {
+//         console.log('referral: ' + referral.uris.join());
+//       });
+//       searchresult.on('error', function (err) {
+//         console.error('error: ' + err.message);
+//         searchresult.send('error: ' + err.message);
+//       });
+//       searchresult.on('end', async function (result) {
 
-  client.search(queryOEY, opts, function (err, searchresult) {
-    if (err)
-      console.log("Error in search " + err);
-    else {
-      searchresult.on('searchEntry', function (entry) {
-        results.push(entry.object);
-      });
-      searchresult.on('searchReference', function (referral) {
-        console.log('referral: ' + referral.uris.join());
-      });
-      searchresult.on('error', function (err) {
-        searchresult.send('error: ' + err.message);
-      });
-      searchresult.on('end', function (result) {
+//         //setup user reservations
+//         const userReservations = await reservationsMethods.getUserReservations(user.uid, next);
+//         if (userReservations && userReservations.length > 0)
+//           user.reservations = userReservations;
+//         else {
+//           const reservations = await reservationsMethods.getReservations(req, next);
+//           await reservationsMethods.initializeUserReservations(reservations, user.uid, next);
+//           user.reservations = await reservationsMethods.getUserReservations(user.uid, next);
+//         }
 
-        user.users = results;
-        //user.ou = 'ΓΕΝΙΚΟΣ ΓΡΑΜΜΑΤΕΑΣ';
-        let token = jwt.sign({ username: user.uid }, secretKey, { expiresIn: ('8h') });
-        res.status(200).json({
-          success: true,
-          id: user.uid,
-          user: user,
-          token: token,
-          expiresAt: helper.getExpiresAt(token, jwt, secretKey)
-        });
-      });
-    }
-  });
-}
+//         if (results && results.length > 0) {
+//           user.director = results[0].uid;
+//           user.directorName = results[0].cn;
+//         }
 
-function searchForPeople(req, res, next) {
-  var opts = {
-    // filter: '(objectClass=*)',
-    //filter: 'uid=v.priovolos',
-    scope: 'sub',
-    attributes: ['*'],
-    //filter: '(|(personalTitle=ΔΙΕΥΘΥΝΤΗΣ)(personalTitle=ΔΙΕΥΘΥΝΤΡΙΑ))',
-    // filter: '(objectClass=*)',
-    // //filter: '(&(uid=2)(sn=John))',// and search
-    // //filter: '(|(uid=2)(sn=John)(cn=Smith))', // or search
-    //filter: '(uid=g.papazogloy)',
-    //filter: '(uid=a.tsiatsiamis)',
-    //filter: '(uid=k.bakoyannis)',
-    filter: '(uid=g.moraitis)',
-    // scope: 'sub',
-    // //attributes: ['sn']
-    // attributes: ['*']
-  };
-  var results = [];
-  var query = 'dc=cityofathens,dc=gr';
+//         searchForPeopleThatBelongsToTheSameDirection(req, res, next, user);
+//       });
+//     }
+//   });
+// }
 
-  // var queryOEY = 'ou=OEY,dc=cityofathens,dc=gr';
-  // var queryGroups = 'cn=delme,ou=groups,ou=OEY,dc=cityofathens,dc=gr';
-  client.search(query, opts, function (err, searchresult) {
-    if (err)
-      console.log("Error in search " + err);
-    else {
-      searchresult.on('searchEntry', function (entry) {
-        results.push(entry.object);
-      });
-      searchresult.on('searchReference', function (referral) {
-        console.log('referral: ' + referral.uris.join());
-      });
-      searchresult.on('error', function (err) {
-        searchresult.send('error: ' + err.message);
-      });
-      searchresult.on('end', function (result) {
+// function searchForPeopleThatBelongsToTheSameDirection(re, res, next, user) {
+//   var opts = {
+//     filter: '(objectClass=*)',
+//     //filter: '(&(uid=2)(sn=John))',// and search
+//     //filter: '(|(uid=2)(sn=John)(cn=Smith))', // or search
+//     //filter: '(uid=a.stefos)',
+//     filter: '(departmentNumber=' + user.departmentNumber + ')',
+//     scope: 'sub',
+//     //attributes: ['sn']
+//     attributes: ['*']
+//   };
+//   var results = [];
+//   var queryOEY = 'ou=OEY,dc=cityofathens,dc=gr';
+//   // var queryGroups = 'cn=delme,ou=groups,ou=OEY,dc=cityofathens,dc=gr';
 
-        user.users = results;
-        let token = jwt.sign({ username: user.uid }, secretKey, { expiresIn: ('8h') });
-        res.status(200).json({
-          success: true,
-          id: user.uid,
-          user: user,
-          token: token,
-          expiresAt: helper.getExpiresAt(token, jwt, secretKey)
-        });
-      });
-    }
-  });
-}
+//   client.search(queryOEY, opts, function (err, searchresult) {
+//     if (err)
+//       console.log("Error in search " + err);
+//     else {
+//       searchresult.on('searchEntry', function (entry) {
+//         results.push(entry.object);
+//       });
+//       searchresult.on('searchReference', function (referral) {
+//         console.log('referral: ' + referral.uris.join());
+//       });
+//       searchresult.on('error', function (err) {
+//         searchresult.send('error: ' + err.message);
+//       });
+//       searchresult.on('end', function (result) {
 
-function checkToken(req, res, next) {
+//         user.users = results;
+//         //user.ou = 'ΓΕΝΙΚΟΣ ΓΡΑΜΜΑΤΕΑΣ';
+//         let token = jwt.sign({ username: user.uid }, secretKey, { expiresIn: ('8h') });
+//         res.status(200).json({
+//           success: true,
+//           id: user.uid,
+//           user: user,
+//           token: token,
+//           expiresAt: helper.getExpiresAt(token, jwt, secretKey)
+//         });
+//       });
+//     }
+//   });
+// }
 
-  helper.consoleLog(' checkToken -- url: ' + req.url);
-  let token = req.headers['x-access-token'] || req.headers['authorization']; // Express headers are auto converted to lowercase
-  if (token) {
-    if (token.startsWith('Bearer '))
-      token = token.slice(7, token.length);
+// function searchForPeople(req, res, next) {
+//   var opts = {
+//     // filter: '(objectClass=*)',
+//     //filter: 'uid=v.priovolos',
+//     scope: 'sub',
+//     attributes: ['*'],
+//     //filter: '(|(personalTitle=ΔΙΕΥΘΥΝΤΗΣ)(personalTitle=ΔΙΕΥΘΥΝΤΡΙΑ))',
+//     // filter: '(objectClass=*)',
+//     // //filter: '(&(uid=2)(sn=John))',// and search
+//     // //filter: '(|(uid=2)(sn=John)(cn=Smith))', // or search
+//     //filter: '(uid=g.papazogloy)',
+//     //filter: '(uid=a.tsiatsiamis)',
+//     //filter: '(uid=k.bakoyannis)',
+//     filter: '(uid=g.moraitis)',
+//     // scope: 'sub',
+//     // //attributes: ['sn']
+//     // attributes: ['*']
+//   };
+//   var results = [];
+//   var query = 'dc=cityofathens,dc=gr';
 
-    jwt.verify(token, secretKey, (err, decoded) => {
-      if (err) {
-        return res.status(200).json({
-          tokenIsValid: false,
-          message: 'Token is not valid',
-          error: err.message,
-          expiresAt: err.expiredAt
-        });
-      } else {
-        //const d = new Date(0);
-        //d.setUTCSeconds(decoded.exp);
-        next();
-      }
-    });
-  } else {
-    console.log("CHECKTOKEN\nprotocol:" + req.protocol + "\nhostname: " + req.hostname + "\npath: " + req.path + "\noriginalUrl: " + req.originalUrl);
-    return res.status(200).json({
-      tokenIsValid: false,
-      message: 'Auth token is not supplied'
-    });
-  }
-};
+//   // var queryOEY = 'ou=OEY,dc=cityofathens,dc=gr';
+//   // var queryGroups = 'cn=delme,ou=groups,ou=OEY,dc=cityofathens,dc=gr';
+//   client.search(query, opts, function (err, searchresult) {
+//     if (err)
+//       console.log("Error in search " + err);
+//     else {
+//       searchresult.on('searchEntry', function (entry) {
+//         results.push(entry.object);
+//       });
+//       searchresult.on('searchReference', function (referral) {
+//         console.log('referral: ' + referral.uris.join());
+//       });
+//       searchresult.on('error', function (err) {
+//         searchresult.send('error: ' + err.message);
+//       });
+//       searchresult.on('end', function (result) {
 
-module.exports = {
-  login,
-  checkToken
-}
+//         user.users = results;
+//         let token = jwt.sign({ username: user.uid }, secretKey, { expiresIn: ('8h') });
+//         res.status(200).json({
+//           success: true,
+//           id: user.uid,
+//           user: user,
+//           token: token,
+//           expiresAt: helper.getExpiresAt(token, jwt, secretKey)
+//         });
+//       });
+//     }
+//   });
+// }
+
+// function checkToken(req, res, next) {
+
+//   helper.consoleLog(' checkToken -- url: ' + req.url);
+//   let token = req.headers['x-access-token'] || req.headers['authorization']; // Express headers are auto converted to lowercase
+//   if (token) {
+//     if (token.startsWith('Bearer '))
+//       token = token.slice(7, token.length);
+
+//     jwt.verify(token, secretKey, (err, decoded) => {
+//       if (err) {
+//         return res.status(200).json({
+//           tokenIsValid: false,
+//           message: 'Token is not valid',
+//           error: err.message,
+//           expiresAt: err.expiredAt
+//         });
+//       } else {
+//         //const d = new Date(0);
+//         //d.setUTCSeconds(decoded.exp);
+//         next();
+//       }
+//     });
+//   } else {
+//     console.log("CHECKTOKEN\nprotocol:" + req.protocol + "\nhostname: " + req.hostname + "\npath: " + req.path + "\noriginalUrl: " + req.originalUrl);
+//     return res.status(200).json({
+//       tokenIsValid: false,
+//       message: 'Auth token is not supplied'
+//     });
+//   }
+// };
+
+// module.exports = {
+//   login,
+//   checkToken
+// }

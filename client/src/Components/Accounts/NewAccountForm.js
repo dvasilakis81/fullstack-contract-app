@@ -104,7 +104,7 @@ class NewAccountForm extends Component {
 		super(props);
 
 		this.state = {
-			loginUserInfo: this.props.token.data.user,
+			loginUserInfo: this.props.token.user,
 			openMessage: false,
 			message: '',
 			variant: '',
@@ -152,7 +152,7 @@ class NewAccountForm extends Component {
 			PracticalDate: this.props.location.state.MonitoringCommittee ? this.props.location.state.MonitoringCommittee[0].PracticalDate : '',
 			GivenPhysicalObjectContentTime: this.props.location.state.MonitoringCommittee ? this.props.location.state.MonitoringCommittee[0].GivenPhysicalObjectContentTime : '',
 			cc: this.props.location.state.cc ? this.props.location.state.cc : [],
-			accountReservations: this.props.location.accountReservations ? this.props.location.accountReservations : this.props.token.data.user.reservations
+			accountReservations: this.props.location.accountReservations ? this.props.location.accountReservations : this.props.token.user.reservations
 		}
 
 
@@ -180,7 +180,7 @@ class NewAccountForm extends Component {
 
 		}
 		else {
-			axios.post(getHostUrl() + '/getccfrompreviousaccount', this.state, { headers: { Authorization: 'Bearer ' + this.props.token.data.token } }).then(res => {
+			axios.post(getHostUrl() + '/getccfrompreviousaccount', this.state, { headers: { Authorization: 'Bearer ' + this.props.token.token } }).then(res => {
 				//var msg = 'Η σύμβαση με πρωτόκολλο "' + this.state.ProtocolNumber + '/' + getDateFormatForDocument(this.state.ProtocolDate) + '" επεξεργάστηκε επιτυχώς!!!'
 				this.setState({ cc: res.data });
 			}).catch(error => {
@@ -195,7 +195,7 @@ class NewAccountForm extends Component {
 
 		this.setState({ submitButtonDisabled: true });
 		if (this.state.AccountId) {
-			this.props.updateAccount(this.state, this.props.token.data.token).then(res => {
+			this.props.updateAccount(this.state, this.props.token.token).then(res => {
 				this.setState({ message: 'Ο λογαριασμός επεξεργάστηκε επιτυχώς!!!', openMessage: true, variant: 'success', submitButtonDisabled: false });
 				this.props.history.goBack();
 			}).catch(error => {
@@ -203,7 +203,7 @@ class NewAccountForm extends Component {
 			});
 		}
 		else {
-			this.props.createAccount(this.state, this.props.token.data.token).then(res => {
+			this.props.createAccount(this.state, this.props.token.token).then(res => {
 				this.setState({ AccountId: res.value.data[0].Id, message: 'Ο λογαριασμός δημιουργήθηκε επιτυχώς!!!', openMessage: true, variant: 'success', submitButtonDisabled: false });
 
 				var snackbarInfo = {}
@@ -282,7 +282,7 @@ class NewAccountForm extends Component {
 	autoCompleteFirstAccountProtocolNumber(e) {
 		e.preventDefault();
 
-		axios.get(getHostUrl() + '/getfirstaccountprotocolinfo?ci=' + this.state.ContractId, { headers: { Authorization: 'Bearer ' + this.props.token.data.token } }).then(res => {
+		axios.get(getHostUrl() + '/getfirstaccountprotocolinfo?ci=' + this.state.ContractId, { headers: { Authorization: 'Bearer ' + this.props.token.token } }).then(res => {
 			var firstAccountExists = res.data && res.data[0] ? true : false;
 			var firstAccountHasProtocol = false
 			if (firstAccountExists === true)
@@ -609,17 +609,17 @@ class NewAccountForm extends Component {
 	getNameFromUsers() {
 		var ret = [];
 
-		for (let i = 0; i < this.props.token.data.user.users.length; i++) {
-			const user = this.props.token.data.user.users[i];
+		for (let i = 0; i < this.props.token.user.users.length; i++) {
+			const user = this.props.token.user.users[i];
 			if (user.cn)
 				ret.push(user.cn);
 		}
 
-		if (this.props.token.data.user.supervisorName)
-			ret.push(this.props.token.data.user.supervisorName);
+		if (this.props.token.user.supervisorName)
+			ret.push(this.props.token.user.supervisorName);
 
-		if (this.props.token.data.user.directorName)
-			ret.push(this.props.token.data.user.directorName);
+		if (this.props.token.user.directorName)
+			ret.push(this.props.token.user.directorName);
 
 		return ret;
 	}

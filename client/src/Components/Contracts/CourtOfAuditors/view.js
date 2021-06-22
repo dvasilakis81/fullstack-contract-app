@@ -53,7 +53,7 @@ class CourtOfAuditorsView extends Component {
     super(props);
 
     this.state = {
-      loginUserInfo: this.props.token.data.user,
+      loginUserInfo: this.props.token.user,
       contractId: this.props.contractDetails.Id,
       submitButtonDisabled: false,
       addNewItem: false,
@@ -143,7 +143,7 @@ class CourtOfAuditorsView extends Component {
     this.setState({ submitButtonDisabled: true });
 
     if (this.state.addNewItem === true) {
-      this.props.processContractInfo(this.state, this.props.token.data.token, 'insertcourtofauditors').then(res => {
+      this.props.processContractInfo(this.state, this.props.token.token, 'insertcourtofauditors').then(res => {
         var msg = 'To Ελεγκτικό Συνέδριο δημιουργήθηκε επιτυχώς!!!'
         this.setState({ openMessage: true, message: msg, msgColor: 'lightGreen', msgPadding: '10px', submitButtonDisabled: false, addNewItem: false, editItem: false });
         this.resetState();
@@ -154,7 +154,7 @@ class CourtOfAuditorsView extends Component {
         this.setState({ openMessage: true, message: <><div>{msg}</div><div>{getServerErrorResponseMessage(error)}</div></>, variant: 'error', msgColor: 'red', msgPadding: '10px', submitButtonDisabled: false });
       })
     } else if (this.state.editItem === true) {
-      this.props.processContractInfo(this.state, this.props.token.data.token, 'updatecourtofauditors').then(res => {
+      this.props.processContractInfo(this.state, this.props.token.token, 'updatecourtofauditors').then(res => {
         var msg = 'Το Ελεγκτικό Συνέδριο επεξεργάστηκε επιτυχώς!!!'
         this.setState({ openMessage: true, message: msg, msgColor: 'lightGreen', msgPadding: '10px', submitButtonDisabled: false, addNewItem: false, editItem: false });
         this.resetState();
@@ -170,7 +170,7 @@ class CourtOfAuditorsView extends Component {
   requestDeleteCourtOfAuditors() {
     this.setState({ submitButtonDisabled: true });
 
-    this.props.processContractInfo(this.state, this.props.token.data.token, 'deletecourtofauditors').then(res => {
+    this.props.processContractInfo(this.state, this.props.token.token, 'deletecourtofauditors').then(res => {
       var msg = 'Η διαγραφή έγινε επιτυχώς!!!'
       this.setState({ openMessage: true, message: msg, variant: 'success', msgPadding: '10px', submitButtonDisabled: false, addNewItem: false, editItem: false, deleteItem: false });
       this.resetState();

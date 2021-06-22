@@ -53,7 +53,7 @@ class SnippetPracticalView extends Component {
     super(props);
 
     this.state = {
-      loginUserInfo: this.props.token.data.user,
+      loginUserInfo: this.props.token.user,
       contractId: this.props.contractDetails.Id,      
       submitButtonDisabled: false,
       addNewItem: false,
@@ -125,7 +125,7 @@ class SnippetPracticalView extends Component {
     this.setState({ submitButtonDisabled: true });
 
     if (this.state.addNewItem === true) {
-      this.props.processContractInfo(this.state, this.props.token.data.token, 'insertsnippetpractical').then(res => {
+      this.props.processContractInfo(this.state, this.props.token.token, 'insertsnippetpractical').then(res => {
         var msg = 'To Απόσπασμα Πρακτικου με πρωτόκολλο "' + this.state.ProtocolNumber + '/' + getDateFormatForDocument(this.state.ProtocolDate) + '" δημιουργήθηκε επιτυχώς!!!'
         this.setState({ openMessage: true, message: msg, variant: 'success', msgPadding: '10px', submitButtonDisabled: false, addNewItem: false, editItem: false });
         this.resetState();
@@ -136,7 +136,7 @@ class SnippetPracticalView extends Component {
         this.setState({ openMessage: true, message: <><div>{msg}</div><div>{getServerErrorResponseMessage(error)}</div></>, variant: 'error', msgPadding: '10px', submitButtonDisabled: false });
       })
     } else if (this.state.editItem === true) {
-      this.props.processContractInfo(this.state, this.props.token.data.token, 'updatesnippetpractical').then(res => {
+      this.props.processContractInfo(this.state, this.props.token.token, 'updatesnippetpractical').then(res => {
         var msg = 'To Απόσπασμα Πρακτικού με πρωτόκολλο "' + this.state.ProtocolNumber + '/' + getDateFormatForDocument(this.state.ProtocolDate) + '" επεξεργάστηκε επιτυχώς!!!'
         this.setState({ message: msg, openMessage: true, variant: 'success', msgPadding: '10px', submitButtonDisabled: false, addNewItem: false, editItem: false });
         this.resetState();
@@ -152,7 +152,7 @@ class SnippetPracticalView extends Component {
   requestDelete() {
     this.setState({ submitButtonDisabled: true });
 
-    this.props.processContractInfo(this.state, this.props.token.data.token, 'deletesnippetpractical').then(res => {
+    this.props.processContractInfo(this.state, this.props.token.token, 'deletesnippetpractical').then(res => {
       var msg = 'Το Απόσπασμα Πρακτικού με πρωτόκολλο "' + this.state.ProtocolNumber + '/' + getDateFormatForDocument(this.state.ProtocolDate) + '" διεγράφει επιτυχώς!!!'
       this.setState({ openMessage: true, message: msg, variant: 'success', msgPadding: '10px', submitButtonDisabled: false, addNewItem: false, editItem: false, deleteItem: false });
       this.resetState();
