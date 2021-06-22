@@ -19,14 +19,12 @@ class Body extends Component {
 		//console.log('this.props.isLoginPage:' + this.props.isLoginPage)
 		if (this.props.isLoginPage === undefined) {
 			var dtNow = new Date()
-			//console.log('this.props.token:' + this.props.token)
-			//console.log('this.props.token.data:' + this.props.token.data)
 
 			if (isTokenExpired(this.props.token) === true)
 				this.setState({ redirectToLogin: true });
 		
-			if (this.props.token && this.props.token.data) {
-				var dtTokeExpiresAt = new Date(this.props.token.data.expiresAt);
+			if (this.props.token) {
+				var dtTokeExpiresAt = new Date(this.props.token.expiresAt);
 				var dtDiffs = (dtTokeExpiresAt - dtNow)
 				// console.log('Body: dtTokeExpiresAt:' + dtTokeExpiresAt)
 				// console.log('Body: dtNow:' + dtNow)

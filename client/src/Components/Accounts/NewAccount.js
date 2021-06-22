@@ -28,8 +28,8 @@ class NewAccount extends Component {
   componentDidMount() {
 
     var dtNow = new Date()
-    if (this.props.token && this.props.token.data) {
-      var dtTokeExpiresAt = new Date(this.props.token.data.expiresAt);
+    if (this.props.token) {
+      var dtTokeExpiresAt = new Date(this.props.token.expiresAt);
       var dtDiffs = (dtTokeExpiresAt - dtNow)
       if (Math.abs(dtDiffs) <= 0)
         this.setState({ redirectToLogin: true });

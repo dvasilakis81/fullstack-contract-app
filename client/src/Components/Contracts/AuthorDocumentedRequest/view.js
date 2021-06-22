@@ -53,7 +53,7 @@ class AuthorDocumentedRequestView extends Component {
     super(props);
 
     this.state = {
-      loginUserInfo: this.props.token.data.user,
+      loginUserInfo: this.props.token.user,
       activityType: 'AuthorDocumentRequest',
       contractId: this.props.contractDetails.Id,
       submitButtonDisabled: false,
@@ -154,7 +154,7 @@ class AuthorDocumentedRequestView extends Component {
     this.setState({ submitButtonDisabled: true });
 
     if (this.state.addNewItem === true) {
-      this.props.processContractInfo(this.state, this.props.token.data.token, 'insertauthordocumentedrequest').then(res => {
+      this.props.processContractInfo(this.state, this.props.token.token, 'insertauthordocumentedrequest').then(res => {
         console.log("Response from new author documented request " + res);
 
         var msg = 'To Τεκμηριωμένο Αίτημα του Διατάκτη δημιουργήθηκε επιτυχώς!!!';
@@ -169,7 +169,7 @@ class AuthorDocumentedRequestView extends Component {
       })
     } else if (this.state.editItem === true) {
 
-      this.props.processContractInfo(this.state, this.props.token.data.token, 'updateauthordocumentedrequest').then(res => {
+      this.props.processContractInfo(this.state, this.props.token.token, 'updateauthordocumentedrequest').then(res => {
         console.log("Response from update author documented request " + res);
         var msg = 'To Τεκμηριωμένο Αίτημα του Διατάκτη επεξεργάστηκε επιτυχώς!!!';
         this.setState({ openMessage: true, message: msg, msgColor: 'lightGreen', msgPadding: '10px', submitButtonDisabled: false, addNewItem: false, editItem: false });
@@ -187,7 +187,7 @@ class AuthorDocumentedRequestView extends Component {
   requestDelete() {
     this.setState({ submitButtonDisabled: true });
 
-    this.props.processContractInfo(this.state, this.props.token.data.token, 'deleteauthordocumentedrequest').then(res => {
+    this.props.processContractInfo(this.state, this.props.token.token, 'deleteauthordocumentedrequest').then(res => {
       console.log("Response from delete author documented request " + res);
 
       var msg = 'Η διαγραφή έγινε επιτυχώς!!!'

@@ -53,7 +53,7 @@ class DecisionCoordinatorDecentrilizedAdministrationView extends Component {
     super(props);
 
     this.state = {
-      loginUserInfo: this.props.token.data.user,
+      loginUserInfo: this.props.token.user,
       contractId: this.props.contractDetails.Id,
       submitButtonDisabled: false,
       addNewItem: false,
@@ -142,7 +142,7 @@ class DecisionCoordinatorDecentrilizedAdministrationView extends Component {
     this.setState({ submitButtonDisabled: true });
 
     if (this.state.addNewItem === true) {
-      this.props.processContractInfo(this.state, this.props.token.data.token, 'insertdecisioncoordinatordecentrilizedadministration').then(res => {
+      this.props.processContractInfo(this.state, this.props.token.token, 'insertdecisioncoordinatordecentrilizedadministration').then(res => {
         var msg = 'Η Απόφαση Αποκεντρωμένης με πρωτόκολλο "' + this.state.ProtocolNumber + '/' + getDateFormatForDocument(this.state.ProtocolDate) + '" δημιουργήθηκε επιτυχώς!!!'
         this.setState({ openMessage: true, message: msg, msgColor: 'lightGreen', msgPadding: '10px', submitButtonDisabled: false });
         this.resetState();
@@ -153,7 +153,7 @@ class DecisionCoordinatorDecentrilizedAdministrationView extends Component {
         this.setState({ openMessage: true, message: <><div>{msg}</div><div>{getServerErrorResponseMessage(error)}</div></>, variant: 'error', msgColor: 'red', msgPadding: '10px', submitButtonDisabled: false });
       })
     } else if (this.state.editItem === true) {
-      this.props.processContractInfo(this.state, this.props.token.data.token, 'updatedecisioncoordinatordecentrilizedadministration').then(res => {
+      this.props.processContractInfo(this.state, this.props.token.token, 'updatedecisioncoordinatordecentrilizedadministration').then(res => {
         var msg = 'Η Απόφαση Αποκεντρωμένης με πρωτόκολλο "' + this.state.ProtocolNumber + '/' + getDateFormatForDocument(this.state.ProtocolDate) + '" επεξεργάστηκε επιτυχώς!!!'
         store.dispatch({ type: 'SET_CONTRACTINFO_PENDING', payload: false });
         this.setState({ message: msg, openMessage: true, msgColor: 'lightGreen', msgPadding: '10px', submitButtonDisabled: false });
@@ -170,7 +170,7 @@ class DecisionCoordinatorDecentrilizedAdministrationView extends Component {
   requestDeleteDecisionCoordinatorDecentrilizedAdministration() {
     this.setState({ submitButtonDisabled: true });
 
-    this.props.processContractInfo(this.state, this.props.token.data.token, 'deletedecisioncoordinatordecentrilizedadministration').then(res => {
+    this.props.processContractInfo(this.state, this.props.token.token, 'deletedecisioncoordinatordecentrilizedadministration').then(res => {
       var msg = 'Η διαγραφή έγινε επιτυχώς!!!'
       this.setState({ openMessage: true, message: msg, variant: 'success', msgPadding: '10px', submitButtonDisabled: false });
       this.resetState();

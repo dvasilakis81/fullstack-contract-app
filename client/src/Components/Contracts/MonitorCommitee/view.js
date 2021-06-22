@@ -125,7 +125,7 @@ class MonitoringCommitteeView extends Component {
     this.setState({ submitButtonDisabled: true });
 
     if (this.state.addNewItem === true) {
-      this.props.processContractInfo(this.state, this.props.token.data.token, 'insertMonitoringCommittee').then(res => {
+      this.props.processContractInfo(this.state, this.props.token.token, 'insertMonitoringCommittee').then(res => {
         var msg = 'Τα στοιχεία έχουν καταχωρηθεί επιτυχώς!!!'
         this.setState({ openMessage: true, message: msg, msgColor: 'lightGreen', msgPadding: '10px', submitButtonDisabled: false, addNewItem: false, editItem: false });
         this.resetMsgInfo();
@@ -135,7 +135,7 @@ class MonitoringCommitteeView extends Component {
         this.resetMsgInfo();
       })
     } else if (this.state.editItem === true) {
-      this.props.processContractInfo(this.state, this.props.token.data.token, 'updateMonitoringCommittee').then(res => {
+      this.props.processContractInfo(this.state, this.props.token.token, 'updateMonitoringCommittee').then(res => {
         var msg = 'Η επεξεργασία των στοιχείων έγινε επιτυχώς!!!'
         this.setState({ message: msg, openMessage: true, msgColor: 'lightGreen', msgPadding: '10px', submitButtonDisabled: false, addNewItem: false, editItem: false });
         this.resetMsgInfo();
@@ -150,7 +150,7 @@ class MonitoringCommitteeView extends Component {
   requestDeleteMonitoringCommittee() {
     this.setState({ submitButtonDisabled: true });
 
-    this.props.processContractInfo(this.state, this.props.token.data.token, 'deleteMonitoringCommittee').then(res => {
+    this.props.processContractInfo(this.state, this.props.token.token, 'deleteMonitoringCommittee').then(res => {
       var msg = 'Η διαγραφή των στοιχείων της Επιτροπής Παρακολούθησης έγινε επιτυχώς!!!'
       this.setState({ openMessage: true, message: msg, variant: 'success', msgPadding: '10px', submitButtonDisabled: false, addNewItem: false, editItem: false, deleteItem: false });
       setTimeout(function () {

@@ -116,16 +116,16 @@ class AdministrationContainer extends Component {
 
   getParametricArray() {
     var ret = [];
-    if (this.props.token.data.role === 1)
+    if (this.props.token.role === 1)
       ret.push('Χρήστες')
-    if (this.props.token.data.role === 1)
+    if (this.props.token.role === 1)
       ret.push('Τύπος Σύμβασης')
     ret.push('Δημόσιοι Φορείς')
     ret.push('Διευθύνσεις')
     ret.push('Τμήματα')
     ret.push('Κρατήσεις')
     ret.push('Υπογράφοντες')
-    if (this.props.token.data.role === 1)
+    if (this.props.token.role === 1)
       ret.push('Τύπος Υπογραφώντων')
     //if (this.props.token.data.role === 1)
     ret.push('Σφάλματα')
@@ -755,7 +755,7 @@ class AdministrationContainer extends Component {
     }
 
     if (doRequest) {
-      axios.post(getHostUrl() + '/' + methodName, newData, { headers: { Authorization: 'Bearer ' + this.props.token.data.token } }).then(res => {
+      axios.post(getHostUrl() + '/' + methodName, newData, { headers: { Authorization: 'Bearer ' + this.props.token.token } }).then(res => {
         if (res && res.data && res.data.tokenIsValid === undefined) {
           var msg = 'Η δημιουργία ' + addTypeLabel + ' "' + newDataName + '" έγινε επιτυχώς!!!'
           this.setState({ message: msg, openMessage: true, variant: 'success', submitButtonDisabled: false });
@@ -850,7 +850,7 @@ class AdministrationContainer extends Component {
     }
 
     if (doRequest) {
-      axios.post(getHostUrl() + '/' + methodName, newData, { headers: { Authorization: 'Bearer ' + this.props.token.data.token } }).then(res => {
+      axios.post(getHostUrl() + '/' + methodName, newData, { headers: { Authorization: 'Bearer ' + this.props.token.token } }).then(res => {
         if (res && res.data && res.data.tokenIsValid === undefined) {
           var msg = 'Η επεξεργασία ' + addTypeLabel + ' "' + newDataName + '" έγινε επιτυχώς!!!'
           this.setState({ message: msg, openMessage: true, variant: 'success', submitButtonDisabled: false });
@@ -937,7 +937,7 @@ class AdministrationContainer extends Component {
       addTypeLabel = 'του μηνύματος'
     }
 
-    axios.post(getHostUrl() + '/' + methodName, oldData, { headers: { Authorization: 'Bearer ' + this.props.token.data.token } }).then(res => {
+    axios.post(getHostUrl() + '/' + methodName, oldData, { headers: { Authorization: 'Bearer ' + this.props.token.token } }).then(res => {
       if (res && res.data && res.data.tokenIsValid === undefined) {
         var msg = 'Η διαγραφή ' + addTypeLabel + ' "' + newDataName + '" έγινε επιτυχώς!!!'
         this.setState({ message: msg, openMessage: true, variant: 'success', submitButtonDisabled: false });

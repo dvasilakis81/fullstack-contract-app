@@ -79,7 +79,7 @@ class ReservationsContainer extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      userId: this.props.token.data.token.id,
+      userId: this.props.token.token.id,
       openMessage: false,
       message: '',
       variant: '',
@@ -175,8 +175,8 @@ class ReservationsContainer extends Component {
 
     ];
 
-    if (this.props.token && this.props.token.data && this.props.token.data.user.reservations) {
-      this.props.token.data.user.reservations.forEach(x => {
+    if (this.props.token && this.props.token.user.reservations) {
+      this.props.token.user.reservations.forEach(x => {
         data.push({ 'Id': x.Id, 'Name': x.Name, 'Percentage': x.Percentage ? parseFloat(x.Percentage) : '', 'Stamp': x.Stamp ? parseFloat(x.Stamp) : '', 'StampOGA': x.StampOGA ? parseFloat(x.StampOGA) : '', 'IsReservation': x.IsReservation === true ? 'Ναι' : 'Όχι', 'Order': x.Order });
       });
     }
@@ -305,8 +305,8 @@ class ReservationsContainer extends Component {
     var addTypeLabel = 'της Κράτησης'
     newData.IsReservation = (newData.IsReservation === 'Ναι' ? true : false);
     if (doRequest) {
-      newData.UserId = this.props.token.data.user.uid;
-      axios.post(getHostUrl() + '/' + methodName, newData, { headers: { Authorization: 'Bearer ' + this.props.token.data.token } }).then(res => {
+      newData.UserId = this.props.token.user.uid;
+      axios.post(getHostUrl() + '/' + methodName, newData, { headers: { Authorization: 'Bearer ' + this.props.token.token } }).then(res => {
         if (res && res.data && res.data.tokenIsValid === undefined) {
           var msg = 'Η δημιουργία ' + addTypeLabel + ' "' + newDataName + '" έγινε επιτυχώς!!!'
           this.setState({ message: msg, openMessage: true, variant: 'success', submitButtonDisabled: false });
@@ -343,9 +343,9 @@ class ReservationsContainer extends Component {
     var addTypeLabel = 'της Κράτησης'
 
     if (doRequest) {
-      newData.UserId = this.props.token.data.user.uid;
+      newData.UserId = this.props.token.user.uid;
       newData.IsReservation = (newData.IsReservation === 'Ναι' ? true : false);
-      axios.post(getHostUrl() + '/' + methodName, newData, { headers: { Authorization: 'Bearer ' + this.props.token.data.token } }).then(res => {
+      axios.post(getHostUrl() + '/' + methodName, newData, { headers: { Authorization: 'Bearer ' + this.props.token.token } }).then(res => {
         if (res && res.data && res.data.tokenIsValid === undefined) {
           this.updateUserReservations(res.data);
           var msg = 'Η επεξεργασία ' + addTypeLabel + ' "' + newDataName + '" έγινε επιτυχώς!!!';
@@ -387,8 +387,8 @@ class ReservationsContainer extends Component {
     var newDataName = oldData.Name
     var addTypeLabel = 'της Κράτησης'
 
-    oldData.UserId = this.props.token.data.user.uid;
-    axios.post(getHostUrl() + '/' + methodName, oldData, { headers: { Authorization: 'Bearer ' + this.props.token.data.token } }).then(res => {
+    oldData.UserId = this.props.token.user.uid;
+    axios.post(getHostUrl() + '/' + methodName, oldData, { headers: { Authorization: 'Bearer ' + this.props.token.token } }).then(res => {
       if (res && res.data && res.data.tokenIsValid === undefined) {
         this.removeReservation(res.data);
         var msg = 'Η διαγραφή ' + addTypeLabel + ' "' + newDataName + '" έγινε επιτυχώς!!!'
@@ -411,13 +411,13 @@ class ReservationsContainer extends Component {
   };
 
   addToUserReservations(data) {
-    var tokenReservations = this.props.token.data ? this.props.token.data.user.reservations : undefined;
+    var tokenReservations = this.props.token ? this.props.token.user.reservations : undefined;
     if (tokenReservations)
       tokenReservations.push(data);
   }
 
   updateUserReservations(data) {
-    var tokenReservations = this.props.token.data ? this.props.token.data.user.reservations : undefined;
+    var tokenReservations = this.props.token ? this.props.token.user.reservations : undefined;
     if (tokenReservations) {
       for (let index = 0; index < tokenReservations.length; index++) {
         const element = tokenReservations[index];
@@ -436,7 +436,7 @@ class ReservationsContainer extends Component {
   }
 
   removeReservation(deletedReservation) {
-    var tokenReservations = this.props.token.data ? this.props.token.data.user.reservations : undefined;
+    var tokenReservations = this.props.token ? this.props.token.user.reservations : undefined;
     var reservations = [];
     if (tokenReservations) {
       for (let index = 0; index < tokenReservations.length; index++) {
@@ -448,7 +448,7 @@ class ReservationsContainer extends Component {
       }
     }
 
-    this.props.token.data.user.reservations = reservations
+    this.props.token.user.reservations = reservations
   }
 
   render() {

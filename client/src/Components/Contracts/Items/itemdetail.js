@@ -5,7 +5,7 @@ import { Redirect } from "react-router-dom";
 import NumberFormat from 'react-number-format';
 import { Link } from 'react-router-dom';
 
-import { List, ListItem, Grid, Paper, Typography, Button } from '@material-ui/core';
+import { Box, List, ListItem, Grid, Paper, Typography, Button } from '@material-ui/core';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
@@ -32,6 +32,7 @@ import ActivitiesView from '../Activities/view';
 import EditIcon from '@material-ui/icons/Edit';
 import DeleteIcon from '@material-ui/icons/Delete';
 import InfoIcon from '@material-ui/icons/Info';
+import AttachFileIcon from '@material-ui/icons/AttachFile';
 
 import ExpansionPanel from '@material-ui/core/ExpansionPanel';
 import ExpansionPanelSummary from '@material-ui/core/ExpansionPanelSummary';
@@ -115,8 +116,8 @@ class ItemDetail extends React.Component {
 
 	handleDeleteContract(e) {
 
-		//axios.post(getHostUrl() + '/deletecontract', this.props.contractDetails, { headers: { Authorization: 'Bearer ' + this.props.token.data.token } }).then(res => {
-		this.props.deleteContract(this.props.contractDetails, this.props.token.data.token);
+		//axios.post(getHostUrl() + '/deletecontract', this.props.contractDetails, { headers: { Authorization: 'Bearer ' + this.props.token.token } }).then(res => {
+		this.props.deleteContract(this.props.contractDetails, this.props.token.token);
 		this.setState({ openDeleteDialog: false });
 		// .then(res => {
 		// 	if (res && res.data && res.data.tokenIsValid === undefined) {
@@ -214,7 +215,7 @@ class ItemDetail extends React.Component {
 	getDeleteAction(contractDetails) {
 		//#ff4500
 		// #FF7F7F
-		if (this.props.token.data.id === contractDetails.OwnerId)
+		if (this.props.token.id === contractDetails.OwnerId)
 			return (<Button variant="contained"
 				style={{ margin: '5px', background: '#FF7F7F' }}
 				onClick={this.openDeleteDialogMethod}>
@@ -547,17 +548,15 @@ class ItemDetail extends React.Component {
 	}
 	getAttachmentTemplate(contractInfo, values, type) {
 
-		return <div style={{ padding: '10px' }}>
+		return <Box display="flex" flexDirection="column" margin={2}>
 			{this.getAttachmentTitle(type)}
-			<span style={{ textAlign: 'center' }}>
-				<Button
-					variant='contained'
-					size='small'
-					style={{ margin: '5px', background: '#F3FCFF', color: '#000' }}
-					onClick={this.handlePopoverClick.bind(this, type)}>
-					Προβολή ({values ? values.length : 'Δεν έχει'})
-				</Button>
-			</span>
+			<Button
+				variant='contained'
+				size='small'
+				style={{ margin: '5px', background: '#F3FCFF', color: '#000', textAlign: 'center', width: 'auto' }}
+				onClick={this.handlePopoverClick.bind(this, type)}>
+				Προβολή ({values ? values.length : 'Δεν έχει'})
+			</Button>
 			<Popover
 				open={this.state.openPopover === type ? true : false}
 				onClose={this.handlePopoverClose}
@@ -566,7 +565,7 @@ class ItemDetail extends React.Component {
 				style={{ transform: document.getElementById('root').style.transform }}>
 				{this.getAttachmentView(contractInfo, type)}
 			</Popover>
-		</div>
+		</Box>
 	}
 	getLawArticle(contractInfo) {
 		let ret = '';
@@ -699,7 +698,7 @@ class ItemDetail extends React.Component {
 													</Typography>
 												</Paper>
 											</Grid>
-											{this.getCPVTemplate(contractInfo)}											
+											{this.getCPVTemplate(contractInfo)}
 											<Grid item>
 												<Paper style={styles.paperMoreContractInfo} square={true}>
 													<Typography>
@@ -721,29 +720,33 @@ class ItemDetail extends React.Component {
 										<Typography>
 											<div style={{ color: 'black', fontWeight: 'normal', width: 'auto', paddingLeft: '3px', padding: '3px', marginLeft: '5px', marginRight: '5px', textAlign: 'center', borderRadius: '10px' }}>
 												<span><b>Συνημμένα</b></span>
-												<span style={{ verticalAlign: 'top', marginLeft: '5px' }}><InfoIcon /></span>
+												<span style={{ verticalAlign: 'top', marginLeft: '5px' }}><AttachFileIcon /></span>
 											</div>
 										</Typography>
 									</ExpansionPanelSummary>
 									<ExpansionPanelDetails>
 										<Grid>
-											<Paper style={styles.paperMoreContractInfo} square={true}>
-												<Typography div style={{ display: 'flex', flexDirection: 'column', flexWrap: 'wrap', justifyContent: 'flex-start', alignContent: 'space-between', width: '100%' }}>
-													{this.getAttachmentTemplate(contractInfo, contractInfo.decisionboard, 1)}
-													{this.getAttachmentTemplate(contractInfo, contractInfo.decisioncoordinatordecentrilizedadministration, 2)}
-													{this.getAttachmentTemplate(contractInfo, contractInfo.courtofauditors, 3)}
-													{this.getAttachmentTemplate(contractInfo, contractInfo.authordocumentedrequest, 4)}
-													{this.getAttachmentTemplate(contractInfo, contractInfo.snippetpractical, 5)}
-													{this.getAttachmentTemplate(contractInfo, contractInfo.aay, 6)}
-													{this.getAttachmentTemplate(contractInfo, contractInfo.economicalcommitee, 7)}
-												</Typography>
-											</Paper>
-										</Grid>										
+
+											{/* <Paper style={styles.paperMoreContractInfo} square={true}> */}
+											{/* <Typography div style={{ display: 'flex', flexDirection: 'column', flexWrap: 'wrap', justifyContent: 'flex-start', alignContent: 'space-between', width: '100%' }}> */}
+											{/* <Typography> */}
+											<Box display="flex" justifyContent="flex-start" flexWrap="wrap">
+												{this.getAttachmentTemplate(contractInfo, contractInfo.decisionboard, 1)}
+												{this.getAttachmentTemplate(contractInfo, contractInfo.decisioncoordinatordecentrilizedadministration, 2)}
+												{this.getAttachmentTemplate(contractInfo, contractInfo.courtofauditors, 3)}
+												{this.getAttachmentTemplate(contractInfo, contractInfo.authordocumentedrequest, 4)}
+												{this.getAttachmentTemplate(contractInfo, contractInfo.snippetpractical, 5)}
+												{this.getAttachmentTemplate(contractInfo, contractInfo.aay, 6)}
+												{this.getAttachmentTemplate(contractInfo, contractInfo.economicalcommitee, 7)}
+											</Box>
+											{/* </Typography> */}
+											{/* </Paper> */}
+										</Grid>
 									</ExpansionPanelDetails>
 								</ExpansionPanel>
 							</Typography>
 						</Paper>
-				</Grid>
+					</Grid>
 				</Grid>
 			</Scrollbars >)
 	}

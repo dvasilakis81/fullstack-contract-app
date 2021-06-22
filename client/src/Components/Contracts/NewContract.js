@@ -77,12 +77,12 @@ class NewContract extends Component {
 			message: '',
 			variant: '',
 			submitButtonDisabled: false,
-			loginUserInfo: this.props.token.data.user,
+			loginUserInfo: this.props.token.user,
 			activityType: 'EditContract',
 			contractInfo: {
 				contractStuff: this.props.location.state ? this.props.location.state.contract.contractusers : [],
 				AllUsers: this.props.location.state ? this.props.location.state.contract.AllUsers : false,
-				OwnerId: this.props.location.state ? this.props.location.state.contract.OwnerId : this.props.token.data.id,
+				OwnerId: this.props.location.state ? this.props.location.state.contract.OwnerId : this.props.token.id,
 				ContractId: this.props.location.state ? this.props.location.state.contract.Id : undefined,
 				Direction: this.props.location.state ? this.props.location.state.contract.Direction : '',
 				Department: this.props.location.state ? this.props.location.state.contract.Department : '',
@@ -110,7 +110,7 @@ class NewContract extends Component {
 				Discreet: this.props.location.state && this.props.location.state.contract.Discreet ? this.props.location.state.contract.Discreet : '',
 				NumberOfAccounts: this.props.location.state ? this.props.location.state.contract.NumberOfAccounts : '',
 				HasDownPayment: this.props.location.state ? this.props.location.state.contract.HasDownPayment : false,
-				FpaValue: getFpaValueFromReservations(this.props.token.data.user.reservations),
+				FpaValue: getFpaValueFromReservations(this.props.token.user.reservations),
 				AccountPer: this.props.location.state ? this.props.location.state.contract.AccountPer : '',
 				IpAddress: ''
 			},
@@ -176,7 +176,7 @@ class NewContract extends Component {
 		this.setState({ submitButtonDisabled: true });
 
 		if (this.state.contractInfo.ContractId) {
-			axios.post(getHostUrl() + '/updatecontract', this.state, { headers: { Authorization: 'Bearer ' + this.props.token.data.token } }).then(res => {
+			axios.post(getHostUrl() + '/updatecontract', this.state, { headers: { Authorization: 'Bearer ' + this.props.token.token } }).then(res => {
 				var msg = ''
 				if (this.state.ProtocolNumber)
 					msg = 'Η σύμβαση με πρωτόκολλο "' + this.state.contractInfo.ProtocolNumber + '/' + getDateFormatForDocument(this.state.contractInfo.ProtocolDate) + '" επεξεργάστηκε επιτυχώς!!!'
@@ -200,7 +200,7 @@ class NewContract extends Component {
 		}
 		else {
 
-			axios.post(getHostUrl() + '/contractexists', this.state, { headers: { Authorization: 'Bearer ' + this.props.token.data.token } }).then(res => {
+			axios.post(getHostUrl() + '/contractexists', this.state, { headers: { Authorization: 'Bearer ' + this.props.token.token } }).then(res => {
 				var contractExists = res.data;
 				if (contractExists === true) {
 					var msg = ''
@@ -212,7 +212,7 @@ class NewContract extends Component {
 						this.setState({ message: msg, openMessage: true, variant: 'info', submitButtonDisabled: false });
 				}
 				else {
-					axios.post(getHostUrl() + '/insertcontract', this.state, { headers: { Authorization: 'Bearer ' + this.props.token.data.token } }).then(res => {
+					axios.post(getHostUrl() + '/insertcontract', this.state, { headers: { Authorization: 'Bearer ' + this.props.token.token } }).then(res => {
 						var msg = "";
 						if (res.data && res.data.ProtocolNumber)
 							msg = 'Η σύμβαση με πρωτόκολλο ' + this.state.contractInfo.ProtocolNumber + '/' + getDateFormatForDocument(this.state.contractInfo.ProtocolDate) + ' δημιουργήθηκε επιτυχώς!!!';
@@ -249,7 +249,7 @@ class NewContract extends Component {
 		event.preventDefault();
 		event.persist();
 
-		let fpaValue = getFpaValueFromReservations(this.props.token.data.user.reservations) / 100
+		let fpaValue = getFpaValueFromReservations(this.props.token.user.reservations) / 100
 
 		if (this.state.contractInfo.AmountPure && Number(this.state.contractInfo.AmountPure) > 0) {
 			this.setState(prevState => ({
@@ -606,7 +606,7 @@ class NewContract extends Component {
 										</div>
 										<div style={styles.divRow}>
 											<MyTextField tp='number' title='Καθαρό Ποσό' id='AmountPure' stateValue={this.state.contractInfo.AmountPure} isRequired={true} isDisabled={false} onChange={this.onChange} inputProps={{ style: { textAlign: "center" } }} InputProps={{ endAdornment: <InputAdornment position="end"><span style={{ fontWeight: 'bolder', marginRight: '10px' }}>€</span></InputAdornment> }} width='20%' />
-											<MyTextField tp='number' title={getFpaLabel(getFpaValueFromReservations(this.props.token.data.user.reservations))} id='AmountFpa' stateValue={this.state.contractInfo.AmountFpa} isRequired={true} isDisabled={false} onChange={this.onChange} inputProps={{ style: { textAlign: "center" } }} InputProps={{ endAdornment: <InputAdornment position="end"><span style={{ fontWeight: 'bolder', marginRight: '10px' }}>€</span></InputAdornment> }} width='20%' />
+											<MyTextField tp='number' title={getFpaLabel(getFpaValueFromReservations(this.props.token.user.reservations))} id='AmountFpa' stateValue={this.state.contractInfo.AmountFpa} isRequired={true} isDisabled={false} onChange={this.onChange} inputProps={{ style: { textAlign: "center" } }} InputProps={{ endAdornment: <InputAdornment position="end"><span style={{ fontWeight: 'bolder', marginRight: '10px' }}>€</span></InputAdornment> }} width='20%' />
 											<MyTextField tp='number' title='Συνολικό Ποσό' id='AmountTotal' stateValue={this.state.contractInfo.AmountTotal} isRequired={true} isDisabled={false} onChange={this.onChange} inputProps={{ style: { textAlign: 'center' } }} InputProps={{ endAdornment: <InputAdornment position="end"><span style={{ fontWeight: 'bolder', marginRight: '10px' }}>€</span></InputAdornment> }} width='20%' />
 											{getButton('contained', 'small', null, styles.btnAuto, this.autoCompleteBudget, 'ΥΠΟΛΟΓΙΣΜΟΣ', null, false)}
 										</div>

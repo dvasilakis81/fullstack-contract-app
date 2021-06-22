@@ -7,7 +7,8 @@ export default function (state = {}, action) {
     case 'GET_TOKEN_JWT_PENDING':       
       state = { ...state, tokenPending: 'token pending', tokenRejected: undefined, token: undefined };
       break;
-    case 'GET_TOKEN_JWT_FULFILLED':      
+    case 'GET_TOKEN_JWT_FULFILLED':    
+      console.log("action.payload: " + action.payload);
       state = { ...state, tokenPending: undefined, tokenRejected: undefined, token: action.payload };
       break;
     case 'GET_TOKEN_JWT_REJECTED':

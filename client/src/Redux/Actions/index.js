@@ -56,6 +56,16 @@ export function getAccount(token, contractId, accountNumber) {
   }
 }
 
+// export function login(username, password) {
+  
+//   var url = getLoginUrl(`${URL}`, true, username, password);
+//   const request = axios.get(url);
+//   return {
+//     type: 'GET_TOKEN_JWT',
+//     payload: request
+//   }
+// }
+
 export function login(username, password) {
   
   //var url = getLoginUrl(`${URL}`, true, username, password);
@@ -65,7 +75,9 @@ export function login(username, password) {
   data.Username = username;
   data.Password = password;
 
+  console.log('data: ' + data);
   const request = axios.post(`${URL}/loginWithLDAP`, data).then(response => response.data);
+  console.log('request: ' + request);
   return {
     type: 'GET_TOKEN_JWT',
     payload: request

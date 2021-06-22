@@ -60,7 +60,7 @@ class ContractsPageBody extends Component {
   onChangeSearch(value) {
     this.setState({ searchValue: value });
     if (value.length >= minCharsToSearch) {
-      this.props.searchContracts(this.props.token.data, value);
+      this.props.searchContracts(this.props.token, value);
       store.dispatch({ type: 'IS_CONTRACTS_SEARCH_MODE', payload: true });
       store.dispatch({ type: 'SEARCH_MODE_VALUE', payload: value });
 
@@ -81,48 +81,47 @@ class ContractsPageBody extends Component {
   }
 
   fetchMore() {
-    this.props.getContracts(this.props.token.data, this.props.contracts.length, getContractsLimit());
+    this.props.getContracts(this.props.token, this.props.contracts.length, getContractsLimit());
   }
 
   componentDidMount() {
-    if (this.props.token && this.props.token.data) {
+    if (this.props.token) {
       if (this.props.doRefresh === undefined) {
 
-        axios.get(getHostUrl() + "/agencies", { headers: { Authorization: "Bearer " + this.props.token.data.token } }).then(response => {
+        axios.get(getHostUrl() + "/agencies", { headers: { Authorization: "Bearer " + this.props.token.token } }).then(response => {
           store.dispatch({
             type: "GET_MUN_AGENCIES",
             payload: response
           });
         });
 
-        axios.get(getHostUrl() + "/directions", { headers: { Authorization: "Bearer " + this.props.token.data.token } }).then(response => {
+        axios.get(getHostUrl() + "/directions", { headers: { Authorization: "Bearer " + this.props.token.token } }).then(response => {
           store.dispatch({
             type: "GET_MUN_DIRECTIONS",
             payload: response
           });
         });
 
-        axios.get(getHostUrl() + "/contracttypes", { headers: { Authorization: "Bearer " + this.props.token.data.token } }).then(response => {
+        axios.get(getHostUrl() + "/contracttypes", { headers: { Authorization: "Bearer " + this.props.token.token } }).then(response => {
           store.dispatch({
             type: "GET_CONTRACT_TYPES",
             payload: response
           });
         });
 
-        axios.get(getHostUrl() + "/errormessages", { headers: { Authorization: "Bearer " + this.props.token.data.token } }).then(response => {
+        axios.get(getHostUrl() + "/errormessages", { headers: { Authorization: "Bearer " + this.props.token.token } }).then(response => {
           store.dispatch({
             type: "GET_ERRORMESSAGES",
             payload: response
           });
         });
 
-        var ddd = (this.props.token.data.token ? this.props.token.data.token : 'tokenData.token: undefined');
-        var fff = (this.props.token.data ? ddd : 'tokenData: undefined');
+        var ddd = (this.props.token.token ? this.props.token.token : 'tokenData.token: undefined');        
 
         if (this.props.isSearchMode)
-          this.props.searchContracts(this.props.token.data, this.props.searchModeValue);
+          this.props.searchContracts(this.props.token, this.props.searchModeValue);
         else
-          this.props.getContracts(this.props.token.data, 0, getContractsLimit(this.props.loadedItems));
+          this.props.getContracts(this.props.token, 0, getContractsLimit(this.props.loadedItems));
       }
 
       let isSearchMode = (this.props.searchModeValue && this.props.searchModeValue.length > minCharsToSearch)
@@ -300,9 +299,9 @@ class ContractsPageBody extends Component {
                 <div style={{ height: '100%', display: 'flex', flexFlow: 'column', flex: '0.3', backgroundColor: '#fff' }}>
                   <div style={{ display: 'flex', flexFlow: 'row', backgroundColor: '#fff' }}>
                     <div style={{ display: 'flex', flexFlow: 'column', flex: '1' }}>
-                      {this.props.token.data.user.departmentNumber ? <div style={{ fontSize: "20px", textAlign: "center", verticalAlign: 'middle', fontWeight: "600", padding: "0px", }}>
+                      {this.props.token.user.departmentNumber ? <div style={{ fontSize: "20px", textAlign: "center", verticalAlign: 'middle', fontWeight: "600", padding: "0px", }}>
                         <span style={{ marginLeft: "5px" }}>
-                          {this.props.token.data.user.ou}/{this.props.token.data.user.departmentNumber}
+                          {this.props.token.user.ou}/{this.props.token.user.departmentNumber}
                         </span>
                       </div> : <></>}                      
                       {this.getSearchBar()}
