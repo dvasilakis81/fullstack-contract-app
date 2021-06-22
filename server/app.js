@@ -1,3 +1,4 @@
+
 var createError = require('http-errors');
 var express = require('express');
 var path = require('path');
@@ -20,8 +21,8 @@ var app = express();
 var dbContract = require('./Postgre/API/Contracts/ContractAPI');
 var dbAccount = require('./Postgre/API/Accounts/AccountAPI');
 var dbError = require('./Postgre/API/Error/Error');
-var dbLogin = require('./Postgre/API/Login')
-//var dbLogin = require('./Postgre/API/LoginLDAP');
+//var dbLogin = require('./Postgre/API/Login')
+var dbLogin = require('./Postgre/API/LoginLDAP');
 var dbParametric = require('./Postgre/API/Parametric');
 var dbAay = require('./Postgre/API/AAY/Methods');
 var dbBoardDecision = require('./Postgre/API/BoardDecision/Methods');
@@ -37,7 +38,7 @@ var dbAccountReservations = require('./Postgre/API/Reservations/Account/API');
 var helper = require('./HelperMethods/helpermethods');
 
 const ENV = process.env.NODE_ENV;
-app.use(helmet());
+app.use(helmet())
 app.use(cors());
 app.use(express.static(path.join(__dirname, "./WORD/templates")));
 app.use(bodyParser.json());
@@ -93,7 +94,7 @@ app.post('/createTransmissionDocument', dbLogin.checkToken, function (req, res, 
 });
 
 //app.get('/login', dbLogin.login);
-app.get('/loginWithLDAP', dbLogin.login);
+app.post('/loginWithLDAP', dbLogin.login);
 app.post('/logClientError', function (req, res, next) {
   var msgError = req.body && req.body.error ? req.body.error : '';
   var msgStack = req.body && req.body.stack ? req.body.stack : '';
@@ -102,6 +103,8 @@ app.post('/logClientError', function (req, res, next) {
   dbError.logError(req, res, next, msg, true);
 })
 
+
+app.get('/asdf', dbLogin.getLogin);
 //app.post('/createuser', dbLogin.checkToken, dbLogin.createUser);
 //app.post('/updateuser', dbLogin.checkToken, dbLogin.updateUser);
 //app.post('/deleteuser', dbLogin.checkToken, dbLogin.deleteUser);
@@ -185,13 +188,10 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 
-console.log('ENVIROMENT: ' + ENV)
-console.log('__dirname: ' + __dirname)
-if (ENV === 'production') {
-  console.log('ENVIROMENT: ' + ENV)
-  app.use(express.static(path.join(__dirname, '../client/build')))
+//if (ENV === 'production') {
+  app.use(express.static(path.join(__dirname, '../client/build')))  
   app.use((req, res) => {
-    console.log('Redirect to index.html')
+    console.log('Redirect to index.html');
     res.setHeader("Expires", new Date(Date.now() - 2592000000).toUTCString());
     res.sendFile(path.join(__dirname, '../client/build/index.html'));
   })
@@ -200,9 +200,9 @@ if (ENV === 'production') {
     res.setHeader("Expires", new Date(Date.now() - 2592000000).toUTCString());
     res.sendFile(path.join(__dirname, '../client/build/index.html'));
   })
-}
-else
-  app.use(express.static(path.join(__dirname, 'public')));
+//}
+//else
+//  app.use(express.static(path.join(__dirname, '../client/public/index.html')));
 
 // app.use('/', indexRouter);
 // app.use('/users', usersRouter);
