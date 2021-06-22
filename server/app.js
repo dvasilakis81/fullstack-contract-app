@@ -94,7 +94,7 @@ app.post('/createTransmissionDocument', dbLogin.checkToken, function (req, res, 
 });
 
 //app.get('/login', dbLogin.login);
-app.get('/loginWithLDAP', dbLogin.login);
+app.post('/loginWithLDAP', dbLogin.login);
 app.post('/logClientError', function (req, res, next) {
   var msgError = req.body && req.body.error ? req.body.error : '';
   var msgStack = req.body && req.body.stack ? req.body.stack : '';
@@ -102,6 +102,7 @@ app.post('/logClientError', function (req, res, next) {
   var msg = 'Message: ' + msgError + '\nStack: ' + (msgStack.componentStack ? msgStack.componentStack.substring(0, 900) : '') + '\n';
   dbError.logError(req, res, next, msg, true);
 })
+
 
 //app.post('/createuser', dbLogin.checkToken, dbLogin.createUser);
 //app.post('/updateuser', dbLogin.checkToken, dbLogin.updateUser);
@@ -186,24 +187,21 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 
-console.log('ENVIROMENT: ' + ENV)
-console.log('__dirname: ' + __dirname)
 //if (ENV === 'production') {
-console.log('ENVIROMENT: ' + ENV)
-app.use(express.static(path.join(__dirname, '../client/build')))
-app.use((req, res) => {
-  console.log('Redirect to index.html')
-  res.setHeader("Expires", new Date(Date.now() - 2592000000).toUTCString());
-  res.sendFile(path.join(__dirname, '../client/build/index.html'));
-})
-app.all('/*', function (req, res, next) {
-  console.log('Accessing all urls except all above ...')
-  res.setHeader("Expires", new Date(Date.now() - 2592000000).toUTCString());
-  res.sendFile(path.join(__dirname, '../client/build/index.html'));
-})
+  app.use(express.static(path.join(__dirname, '../client/build')))  
+  app.use((req, res) => {
+    console.log('Redirect to index.html');
+    res.setHeader("Expires", new Date(Date.now() - 2592000000).toUTCString());
+    res.sendFile(path.join(__dirname, '../client/build/index.html'));
+  })
+  app.all('/*', function (req, res, next) {
+    console.log('Accessing all urls except all above ...')
+    res.setHeader("Expires", new Date(Date.now() - 2592000000).toUTCString());
+    res.sendFile(path.join(__dirname, '../client/build/index.html'));
+  })
 //}
 //else
-// app.use(express.static(path.join(__dirname, 'public')));
+//  app.use(express.static(path.join(__dirname, '../client/public/index.html')));
 
 // app.use('/', indexRouter);
 // app.use('/users', usersRouter);

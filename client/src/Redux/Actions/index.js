@@ -58,8 +58,14 @@ export function getAccount(token, contractId, accountNumber) {
 
 export function login(username, password) {
   
-  var url = getLoginUrl(`${URL}`, true, username, password);
-  const request = axios.get(url);
+  //var url = getLoginUrl(`${URL}`, true, username, password);
+  //const request = axios.get(url);
+
+  var data={}
+  data.Username = username;
+  data.Password = password;
+
+  const request = axios.post(`${URL}/loginWithLDAP`, data).then(response => response.data);
   return {
     type: 'GET_TOKEN_JWT',
     payload: request

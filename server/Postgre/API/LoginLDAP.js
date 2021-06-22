@@ -40,8 +40,10 @@ async function setupDummyUser(req, res, next) {
 }
 
 async function login(request, response, next) {
-  const username = request.query.u;
-  const password = request.query.p;
+  //const username = request.query.u;
+  //const password = request.query.p;
+  const username = request.body.Username;
+  const password = request.body.Password;
 
   //searchForPeople(request, response, next);
   if (username === 'p.skafidas' && password === 'demo')
@@ -369,7 +371,12 @@ function checkToken(req, res, next) {
   }
 };
 
+function getLogin(req, res, next) {
+    return res.status(200).json({Message: 'OK'}); 
+};
+
 module.exports = {
   login,
+  getLogin,
   checkToken
 }

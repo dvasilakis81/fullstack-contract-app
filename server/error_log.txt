@@ -1,12 +1,12 @@
-Message: Cannot read property 'uid' of undefined
-Stack: TypeError: Cannot read property 'uid' of undefined
-    at getWhere (/home/d.vasilakis/Ordering_Development/server/Postgre/API/Contracts/Queries.js:96:36)
-    at getQueryTotalContractsByUser (/home/d.vasilakis/Ordering_Development/server/Postgre/API/Contracts/Queries.js:91:91)
-    at getSelectFromClauses (/home/d.vasilakis/Ordering_Development/server/Postgre/API/Contracts/Queries.js:108:5)
-    at Object.query_getcontracts (/home/d.vasilakis/Ordering_Development/server/Postgre/API/Contracts/Queries.js:72:16)
-    at Object.getContracts (/home/d.vasilakis/Ordering_Development/server/Postgre/API/Contracts/Methods.js:8:45)
-    at getContracts (/home/d.vasilakis/Ordering_Development/server/Postgre/API/Contracts/ContractAPI.js:8:33)
+Message: Not Found
+Stack: NotFoundError: Not Found
+    at /home/d.vasilakis/Ordering_Development/server/app.js:215:8
     at Layer.handle [as handle_request] (/home/d.vasilakis/Ordering_Development/node_modules/express/lib/router/layer.js:95:5)
-    at next (/home/d.vasilakis/Ordering_Development/node_modules/express/lib/router/route.js:137:13)
-    at Route.dispatch (/home/d.vasilakis/Ordering_Development/node_modules/express/lib/router/route.js:112:3)
-    at Layer.handle [as handle_request] (/home/d.vasilakis/Ordering_Development/node_modules/express/lib/router/layer.js:95:5)
+    at trim_prefix (/home/d.vasilakis/Ordering_Development/node_modules/express/lib/router/index.js:317:13)
+    at /home/d.vasilakis/Ordering_Development/node_modules/express/lib/router/index.js:284:7
+    at Function.process_params (/home/d.vasilakis/Ordering_Development/node_modules/express/lib/router/index.js:335:12)
+    at next (/home/d.vasilakis/Ordering_Development/node_modules/express/lib/router/index.js:275:10)
+    at SendStream.error (/home/d.vasilakis/Ordering_Development/node_modules/serve-static/index.js:121:7)
+    at SendStream.emit (events.js:315:20)
+    at SendStream.error (/home/d.vasilakis/Ordering_Development/node_modules/send/index.js:270:17)
+    at SendStream.onStatError (/home/d.vasilakis/Ordering_Development/node_modules/send/index.js:421:12)
