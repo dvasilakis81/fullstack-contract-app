@@ -56,6 +56,12 @@ async function insertInfoToContractTable(req, res, next, client) {
   const { rows } = await client.query(queries.query_insertcontract(req, res, next));
   return rows[0].Id;
 }
+async function insertContractUsers(req, res, next, contractId, client) {
+
+  const { rows } = await client.query(queries.query_insertcontractusers(req, contractId));
+  //return rows[0].Id;
+}
+
 async function insertContractOwnerInfo(req, res, next, contractId, client) {
 
   const { rows } = await client.query(queries.query_insertcontractowner(req, contractId));
@@ -67,6 +73,17 @@ async function updateContract(req, res, next, client) {
   try {
     const { rows } = await client.query(queries.query_updatecontract(req));
     return rows[0].Id;
+  } catch (error) {
+    next(error);
+  }
+}
+
+async function updateContractUsers(req, res, next, client) {
+
+  try {
+    await client.query(queries.query_deletecontractusers(req));
+    if (req.body.contractInfo.contractStuff.length > 0 )
+      await client.query(queries.query_insertcontractusers(req, req.body.contractInfo.ContractId));
   } catch (error) {
     next(error);
   }
@@ -89,7 +106,9 @@ module.exports = {
   searchContracts,
   insertInfoToContractTable,
   insertContractOwnerInfo,
+  insertContractUsers,
   deleteContract,
   contractExists,
-  updateContract  
+  updateContract,
+  updateContractUsers  
 }
