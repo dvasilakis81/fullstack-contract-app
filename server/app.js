@@ -22,6 +22,7 @@ var dbContract = require('./Postgre/API/Contracts/ContractAPI');
 var dbAccount = require('./Postgre/API/Accounts/AccountAPI');
 var dbError = require('./Postgre/API/Error/Error');
 //var dbLogin = require('./Postgre/API/Login')
+var dbGetUserInfo = require('./Postgre/API/LoginLDAP');
 var dbLogin = require('./Postgre/API/LoginLDAP');
 var dbParametric = require('./Postgre/API/Parametric');
 var dbAay = require('./Postgre/API/AAY/Methods');
@@ -94,6 +95,8 @@ app.post('/createTransmissionDocument', dbLogin.checkToken, function (req, res, 
 });
 
 //app.get('/login', dbLogin.login);
+app.post('/getLDAPUsers', dbLogin.searchForPeople);
+app.post('/getUserInfo', dbLogin.getUserInfo);
 app.post('/loginWithLDAP', dbLogin.login);
 app.post('/logClientError', function (req, res, next) {
   var msgError = req.body && req.body.error ? req.body.error : '';
@@ -102,7 +105,6 @@ app.post('/logClientError', function (req, res, next) {
   var msg = 'Message: ' + msgError + '\nStack: ' + (msgStack.componentStack ? msgStack.componentStack.substring(0, 900) : '') + '\n';
   dbError.logError(req, res, next, msg, true);
 })
-
 
 //app.post('/createuser', dbLogin.checkToken, dbLogin.createUser);
 //app.post('/updateuser', dbLogin.checkToken, dbLogin.updateUser);

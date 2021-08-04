@@ -39,13 +39,14 @@ async function insertContract(req, res, next) {
     await client.query('BEGIN');
 
     var contractId = await methods.insertInfoToContractTable(req, res, next, client);
-    var ownerId = await methods.insertContractOwnerInfo(req, res, next, contractId, client);
+    await methods.insertContractUsers(req, res, next, contractId, client);
+    var ownerId = await methods.insertContractOwnerInfo(req, res, next, contractId, client);    
     var activityId = await activityAPI.insertActivity(req, res, next, contractId, 'Δημιουργία Σύμβασης', client);
 
     await client.query('COMMIT');
   } catch (error) {
     next(error);
-    await client.query('ROLLBACK');    
+    await client.query('ROLLBACK');
   }
   finally {
     client.release();
@@ -55,11 +56,15 @@ async function insertContract(req, res, next) {
 }
 
 async function updateContract(req, res, next) {
+  var contractId = req.body.contractInfo.ContractId;
+
   const client = await pool.connect();
   try {
-    await client.query('BEGIN');
+    await client.query('BEGIN');    
 
-    var contractId = await methods.updateContract(req, res, next, client);
+    await methods.updateContract(req, res, next, client);
+    await methods.updateContractUsers(req, res, next, client);
+
     await activityAPI.insertActivity(req, res, next, contractId, 'Επεξεργασία Σύμβασης', client);
     await client.query('COMMIT');
   } catch (error) {
@@ -80,7 +85,7 @@ async function deleteContract(req, res, next) {
   try {
     await client.query('BEGIN');
     var contractId = await methods.deleteContract(req, res, next);
-    await activityAPI.insertActivity(req, res, next, contractId, 'Διαγραφή Σύμβασης', client);
+    //await activityAPI.insertActivity(req, res, next, contractId, 'Διαγραφή Σύμβασης', client);
     await client.query('COMMIT');
   } catch (error) {
     next(error);

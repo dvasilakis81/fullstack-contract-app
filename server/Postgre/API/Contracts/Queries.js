@@ -45,6 +45,18 @@ function query_insertcontract(req) {
   return sqlQuery;
 }
 
+function query_insertcontractusers(req, contractId) {
+  var contractInfo = req.body.contractInfo;
+
+  var sqlQuery = 'INSERT INTO "Ordering"."ContractUsers"("ContractId", "UserId")  VALUES ';
+  for (let i = 0; i < contractInfo.contractStuff.length; i++)
+    sqlQuery += util.format('(%s,%s),', contractId, helper.addQuotes(contractInfo.contractStuff[i].UserId));
+
+  if (sqlQuery.endsWith(","))
+    sqlQuery = sqlQuery.substring(0, sqlQuery.length - 1)
+  return sqlQuery;
+}
+
 function query_insertcontractowner(req, contractId) {
   var owner = req.body.loginUserInfo;
 
@@ -92,14 +104,23 @@ function getQueryTotalContractsByUser(loginUserInfo) {
 }
 
 function getWhere(loginUserInfo) {
-  return util.format('WHERE (c."OwnerId"=%s OR %s OR %s OR %s OR %s OR %s)',
-    helper.addQuotes(loginUserInfo.uid),
+  return util.format('WHERE (%s OR %s OR %s OR %s OR %s OR %s OR %s)',
+    checkIfLoginUserIsTheOwner(loginUserInfo),
+    checkIfLoginUserBelongsToContractUsers(loginUserInfo),
     checkIfLoginUserIsTheGeneralManager(loginUserInfo),
     checkIfLoginUserIsTheMayor(loginUserInfo),
     checkIfLoginUserBelongToSameDirectionAndDepartment(loginUserInfo),
     checkIfLoginUserIsSupervisor(loginUserInfo),
     checkIfLoginUserIsDirector(loginUserInfo)
   );
+}
+
+function checkIfLoginUserIsTheOwner(loginUserInfo) {
+  return util.format(' c."OwnerId"=%s ', helper.addQuotes(loginUserInfo.uid));
+}
+
+function checkIfLoginUserBelongsToContractUsers(loginUserInfo) {
+  return util.format(' %s IN (SELECT cu."UserId" FROM "Ordering"."ContractUsers" as cu WHERE cu."ContractId"=c."Id" ) ', helper.addQuotes(loginUserInfo.uid));
 }
 
 function getSelectFromClauses(loginUserInfo) {
@@ -118,7 +139,8 @@ function getSelectFromClauses(loginUserInfo) {
     '(SELECT json_agg(AAY) FROM (SELECT * FROM "Ordering"."AAY" as aay WHERE aay."ContractId" = c."Id" ORDER BY aay."OrderNo") AAY) AS AAY, ' +
     '(SELECT json_agg(AuthorDocumentedRequest) FROM (SELECT * FROM "Ordering"."AuthorDocumentedRequest" as adr WHERE adr."ContractId" = c."Id" ORDER BY adr."OrderNo") AuthorDocumentedRequest) AS AuthorDocumentedRequest, ' +
     '(SELECT json_agg(EconomicalCommitee) FROM (SELECT * FROM "Ordering"."EconomicalCommitee" as ec WHERE ec."ContractId" = c."Id" ORDER BY ec."OrderNo") EconomicalCommitee) AS EconomicalCommitee, ' +
-    '(SELECT json_agg(SnippetPractical) FROM (SELECT * FROM "Ordering"."SnippetPractical" as sp WHERE sp."ContractId" = c."Id" ORDER BY sp."OrderNo") SnippetPractical) AS SnippetPractical ' +
+    '(SELECT json_agg(SnippetPractical) FROM (SELECT * FROM "Ordering"."SnippetPractical" as sp WHERE sp."ContractId" = c."Id" ORDER BY sp."OrderNo") SnippetPractical) AS SnippetPractical, ' +
+    '(SELECT json_agg(ContractUsers) FROM (SELECT * FROM "Ordering"."ContractUsers" as cu WHERE cu."ContractId" = c."Id") ContractUsers) AS ContractUsers ' +
     'FROM "Ordering"."Contract" as c '
 }
 
@@ -139,8 +161,8 @@ function checkIfLoginUserIsDirector(loginUserInfo) {
 }
 
 function checkIfLoginUserBelongToSameDirectionAndDepartment(loginUserInfo) {
-  return util.format(' (%s IN (SELECT con."Direction" FROM "Ordering"."ContractOwner" as con WHERE con."ContractId"=c."Id" )) AND  ' +
-    '(%s IN (SELECT con."Department" FROM "Ordering"."ContractOwner" as con WHERE con."ContractId"=c."Id" ))',
+  return util.format(' (%s IN (SELECT con."Direction" FROM "Ordering"."ContractOwner" as con WHERE con."ContractId"=c."Id" )) AND ' +
+    '(%s IN (SELECT con."Department" FROM "Ordering"."ContractOwner" as con WHERE con."ContractId"=c."Id" )) AND c."AllUsers"=true ',
     helper.addQuotes(loginUserInfo.ou),
     helper.addQuotes(loginUserInfo.departmentNumber));
 }
@@ -149,8 +171,7 @@ function query_searchcontracts(req) {
   var filter = req.body.filter;
   var loginUserInfo = req.body.data.user;
 
-  var whereFilter = getWhere(loginUserInfo) + ' AND LOWER(c."Title") LIKE LOWER(\'%' + filter + '%\')' + ' OR LOWER(c."ConcessionaireName") LIKE LOWER(\'%' + filter + '%\') ' +
-    'AND (c."OwnerId"=' + helper.addQuotes(loginUserInfo.uid) + ' OR c."AllUsers"=true) ';
+  var whereFilter = getWhere(loginUserInfo) + ' AND LOWER(c."Title") LIKE LOWER(\'%' + filter + '%\')' + ' OR LOWER(c."ConcessionaireName") LIKE LOWER(\'%' + filter + '%\') ';
 
   return util.format('%s %s %s %s', getSelectFromClauses(loginUserInfo), whereFilter, 'ORDER BY c."Start" DESC ', 'OFFSET 0 LIMIT 100')
 }
@@ -206,6 +227,13 @@ function query_updatecontract(req) {
   return sqlQuery;
 }
 
+function query_deletecontractusers(req) {
+  var contractInfo = req.body.contractInfo;
+
+  var sqlQuery = util.format('DELETE FROM "Ordering"."ContractUsers" WHERE "ContractId"=%s RETURNING * ', helper.addQuotes(contractInfo.ContractId));
+  return sqlQuery;
+}
+
 function query_deletecontract(req) {
   return util.format('DELETE FROM "Ordering"."Contract" WHERE "Id"=%s RETURNING * ', req.body.Id);
 }
@@ -218,6 +246,8 @@ module.exports = {
   query_contractexists,
   query_insertcontract,
   query_insertcontractowner,
+  query_insertcontractusers,
   query_updatecontract,
-  query_deletecontract
+  query_deletecontract,
+  query_deletecontractusers,
 }
