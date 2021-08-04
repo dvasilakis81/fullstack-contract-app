@@ -15,21 +15,6 @@ class SelectContractStuff extends Component {
     }
   }
 
-  getMenutItemValue(user) {
-    return user.Firstname + ' ' + user.Lastname;
-  }
-
-  getMenuItems() {
-    let menuItems = [];
-
-    this.props.users.map(user => (
-      menuItems.push(<MenuItem key={user.Username} value={user}>
-        {this.getMenutItemValue(user)}
-      </MenuItem>)))
-
-    return menuItems.map(mi => (mi))
-  }
-
   render() {
 
     return (
@@ -41,8 +26,8 @@ class SelectContractStuff extends Component {
               <Autocomplete
                 multiple
                 id="tags-outlined"
-                options={this.props.users}
-                getOptionLabel={option => option.Firstname + ' ' + option.Lastname}
+                options={this.props.token.user.users}
+                getOptionLabel={option => option.cn}
                 filterSelectedOptions
                 onChange={(event, value) => this.props.handleContractStuff(value)}
                 defaultValue={this.props.selectedUsers}
@@ -59,7 +44,7 @@ class SelectContractStuff extends Component {
               />
             </div>
           </div>
-          : <span style={{ flex: '1', fontSize: '26px', color: 'red' }}>{this.props.users ? 'Να έχουν πρόσβαση και οι ' + this.props.users.length + ' χρήστες' : 'Κάτι πήγε λάθος!'} </span>}
+          : <span style={{ flex: '1', fontSize: '26px', color: 'red' }}>{this.props.token.user.users ? 'Να έχουν πρόσβαση και οι ' + this.props.token.user.users.length + ' χρήστες' : 'Κάτι πήγε λάθος!'} </span>}
         <div style={{ marginLeft: '30px' }}>
           {getCheckboxField('IsCheckedAll', 'Όλο το προσωπικό', this.props.isAllStuffChecked, null, this.props.selectAllStuff)}
         </div>
@@ -71,8 +56,7 @@ class SelectContractStuff extends Component {
 
 function mapStateToProps(state) {
   return {
-    reservations: state.parametricdata_reducer.reservations,
-    users: state.parametricdata_reducer.users,
+    reservations: state.parametricdata_reducer.reservations,    
     token: state.token_reducer.token
   }
 }

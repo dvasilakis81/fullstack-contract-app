@@ -100,7 +100,7 @@ class AccountInfo extends React.Component {
 				ProtocolNumber: accountDetails.ProtocolNumber ? accountDetails.ProtocolNumber : null,
 				ProtocolDate: accountDetails.ProtocolDate ? getValidMaterialDateFormat(accountDetails.ProtocolDate) : '',
 				FirstAccountProtocolNumber: accountDetails.FirstAccountProtocolNumber ? accountDetails.FirstAccountProtocolNumber : null,
-				FirstAccountProtocolDate: accountDetails.FirstAccountProtocolDate ? getValidMaterialDateFormat(accountDetails.FirstAccountProtocolDate) : '',				
+				FirstAccountProtocolDate: accountDetails.FirstAccountProtocolDate ? getValidMaterialDateFormat(accountDetails.FirstAccountProtocolDate) : '',
 				WorkConfirmationDate: accountDetails.WorkConfirmationDate ? getValidMaterialDateFormat(accountDetails.WorkConfirmationDate) : '',
 				DeliveryGoodsDate: accountDetails.DeliveryGoodsDate ? getValidMaterialDateFormat(accountDetails.DeliveryGoodsDate) : '',
 				InvoiceNumber: accountDetails.invoice && accountDetails.invoice[0] && accountDetails.invoice[0].Number ? accountDetails.invoice[0].Number : '',
@@ -137,28 +137,28 @@ class AccountInfo extends React.Component {
 						onClick={this.editAccount}>
 						<EditIcon />
 						Επεξεργασία
-          </Button>
+					</Button>
 					<Button variant="contained"
 						style={{ margin: '5px', background: '#17d3cd', textTransform: 'none', fontSize: '16px' }}
 						disabled={this.state.submitButtonDisabled}
 						onClick={this.createDocument1}>
 						<SaveAltIcon />
 						Δημιουργία αρχείου 'Διαβιβαστικό έγγραφο {accountDetails.Number}ου λογαριασμού.docx'
-          </Button>
+					</Button>
 					<Button variant="contained"
 						style={{ margin: '5px', background: '#17d3cd', textTransform: 'none', fontSize: '16px' }}
 						disabled={this.state.submitButtonDisabled}
 						onClick={this.createDocument2}>
 						<SaveAltIcon />
 						Δημιουργία αρχείου '{accountDetails.Number}ος Λογαριασμός.docx'
-          </Button>
+					</Button>
 					<Button variant="contained"
 						style={{ margin: '5px', background: '#17d3cd', textTransform: 'none', fontSize: '16px' }}
 						disabled={this.state.syncButtonDisabled}
 						onClick={this.syncReservations}>
 						{/* <SaveAltIcon /> */}
 						Συγχρονισμός Κρατήσεων
-          </Button>
+					</Button>
 				</Paper>
 			</Grid>
 			<Grid item>
@@ -932,64 +932,65 @@ class AccountInfo extends React.Component {
 		}
 
 		if (userReservations && accountReservations) {
+			if (userReservations && accountReservations)
+				ret = false;
+			else {
+				for (let index = 0; index < userReservations.length; index++) {
 
-			for (let index = 0; index < userReservations.length; index++) {
+					var found = false;
 
+					const ur = userReservations[index];
+					if (ur.IsReservation === false)
+						continue;
 
-				var found = false;
+					if (ur.IsReservation === true) {
 
-				const ur = userReservations[index];
-				if (ur.IsReservation === false)
-					continue;
+						for (let index = 0; index < accountReservations.length; index++) {
+							const ar = accountReservations[index];
+							if (ar.IsReservation === false)
+								continue;
 
-				if (ur.IsReservation === true) {
+							if (ur.Name === ar.Name) {
+								found = true;
 
-					for (let index = 0; index < accountReservations.length; index++) {
-						const ar = accountReservations[index];
-						if (ar.IsReservation === false)
-							continue;
-
-						if (ur.Name === ar.Name) {
-							found = true;
-
-							if (parseFloat(ur.Percentage) !== parseFloat(ar.Percentage)) {
-								ret = false;
-								break;
-							}
-
-							if (ur.Stamp && ar.Stamp) {
-								if (parseFloat(ur.Stamp) !== parseFloat(ar.Stamp)) {
+								if (parseFloat(ur.Percentage) !== parseFloat(ar.Percentage)) {
 									ret = false;
 									break;
 								}
-							}
 
-							if (ur.StampOGA && ar.StampOGA) {
-								if (parseFloat(ur.StampOGA) !== parseFloat(ar.StampOGA)) {
+								if (ur.Stamp && ar.Stamp) {
+									if (parseFloat(ur.Stamp) !== parseFloat(ar.Stamp)) {
+										ret = false;
+										break;
+									}
+								}
+
+								if (ur.StampOGA && ar.StampOGA) {
+									if (parseFloat(ur.StampOGA) !== parseFloat(ar.StampOGA)) {
+										ret = false;
+										break;
+									}
+								}
+
+								if (ur.IsReservation !== ar.IsReservation) {
 									ret = false;
 									break;
 								}
-							}
 
-							if (ur.IsReservation !== ar.IsReservation) {
-								ret = false;
 								break;
 							}
-
-							break;
 						}
 					}
-				}
 
-				if (found === false) {
-					ret = false;
-					break;
-				}
+					if (found === false) {
+						ret = false;
+						break;
+					}
 
-				if (ret === false)
-					break;
+					if (ret === false)
+						break;
+				}
 			}
-
 		}
 
 		return ret;

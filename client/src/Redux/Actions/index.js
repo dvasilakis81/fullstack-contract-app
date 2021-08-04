@@ -36,7 +36,8 @@ export function searchContracts(tokenData, filter) {
 
 export function deleteContract(data, token) {
 
-  const request = axios.post(`${URL}/deletecontract`, data, { headers: { Authorization: 'Bearer ' + token } })
+  data.loginUserInfo = token.user;
+  const request = axios.post(`${URL}/deletecontract`, data, { headers: { Authorization: 'Bearer ' + token.token } })
   return {
     type: 'DELETE_CONTRACT',
     payload: request
@@ -86,7 +87,7 @@ export function login(username, password) {
 
 export function updateUser(data) {
 
-  const request = axios.post(`${URL}/updateuser`, data)
+  const request = axios.post(`${URL}/updateuser`, data);
   return {
     type: 'UPDATE_USER',
     payload: request
@@ -129,7 +130,7 @@ export function processContractInfo(data, token, command) {
       payload: request
     }
   }
-  else if (command.startsWith('update')) {
+  else if (command.startsWith('update')) {    
     const request = axios.post(`${URL}/` + command, data, { headers: { Authorization: 'Bearer ' + token } })
     return {
       type: 'UPDATE_CONTRACTINFO',

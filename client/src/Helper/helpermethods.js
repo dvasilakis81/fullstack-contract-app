@@ -94,10 +94,14 @@ export function getContractsLimit(loadedContracts) {
 }
 
 export function getHostUrl() {
-  if (process.env.NODE_ENV === 'production')
-    return ''
+  var ret ='';
+  
+  if (process && process.env && process.env.NODE_ENV === 'production')
+    ret = ''
   else
-    return window.SERVER_URL
+    ret= window.SERVER_URL;
+
+  return ret;
 }
 
 export function getLoginUrl(url, isLdap, username, password) {

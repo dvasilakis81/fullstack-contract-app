@@ -5,6 +5,8 @@ import { Redirect } from "react-router-dom";
 import NumberFormat from 'react-number-format';
 import { Link } from 'react-router-dom';
 
+import axios from 'axios';
+
 import { Box, List, ListItem, Grid, Paper, Typography, Button } from '@material-ui/core';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
@@ -96,7 +98,7 @@ class ItemDetail extends React.Component {
 		this.handleDeleteContract = this.handleDeleteContract.bind(this);
 		this.openDeleteDialogMethod = this.openDeleteDialogMethod.bind(this);
 		this.handleClose = this.handleClose.bind(this);
-		this.handlePopoverClose = this.handlePopoverClose.bind(this);
+		this.handlePopoverClose = this.handlePopoverClose.bind(this);		
 	}
 
 	handlePopoverClick(value, event) {
@@ -117,7 +119,8 @@ class ItemDetail extends React.Component {
 	handleDeleteContract(e) {
 
 		//axios.post(getHostUrl() + '/deletecontract', this.props.contractDetails, { headers: { Authorization: 'Bearer ' + this.props.token.token } }).then(res => {
-		this.props.deleteContract(this.props.contractDetails, this.props.token.token);
+
+		this.props.deleteContract(this.props.contractDetails, this.props.token);
 		this.setState({ openDeleteDialog: false });
 		// .then(res => {
 		// 	if (res && res.data && res.data.tokenIsValid === undefined) {
@@ -132,6 +135,27 @@ class ItemDetail extends React.Component {
 		// 		this.setState({ message: <><div>{msg}</div><div>{getServerErrorResponseMessage(error)}</div></>, openMessage: true, variant: 'error', submitButtonDisabled: false });
 		// 	})
 		//}
+	}
+
+	testPost(e) {
+		e.preventDefault();
+
+		this.setState({ submitButtonDisabled: true });
+
+		var contractDetails = this.props.isSearchMode ? this.props.contractDetailsSearchMode : this.props.contractDetails;
+		var accountDetails = this.props.account;
+		var dataToPost = { "username": "i.fytros" }
+
+		var config = {
+			headers: { 'Content-Type': 'application/json;charset=utf-8' }
+		};
+
+		axios.post(getHostUrl() + '/getUserInfo', dataToPost, config)
+			.then(res => {
+				var x = res;
+			}).catch(error => {
+				this.setState({ message: <><div>Αποτυχής προσπάθεια δημιουργίας αρχείου!</div><div>{getServerErrorResponseMessage(error)}</div></>, openMessage: true, variant: 'error', submitButtonDisabled: false });
+			})
 	}
 
 	openDeleteDialogMethod() {
@@ -190,7 +214,7 @@ class ItemDetail extends React.Component {
 										isDownpayment: (hasDownpayment && value.index === 1)
 									}
 								}} >
-								<Button key={value.index} variant="contained" style={{ margin: '5px', background: value.color }}>
+								<Button key={value.index} variant="contained" style={{ margin: '5px', minWidth: '200px', background: value.color }}>
 									<b>Λογαριασμός</b>: {value.index}
 								</Button>
 							</Link>
@@ -208,7 +232,7 @@ class ItemDetail extends React.Component {
 			style={{ margin: '5px', background: 'lightgrey' }}
 			onClick={this.editNewContract}>
 			<EditIcon />
-				Επεξεργασία Σύμβασης
+			Επεξεργασία Σύμβασης
 		</Button>)
 	}
 
@@ -263,15 +287,15 @@ class ItemDetail extends React.Component {
 					<DialogContent>
 						<DialogContentText id="alert-dialog-description">
 							Θέλετε να διαγράψετε την σύμβαση <b>«{detailItem.Title}»</b> και τους λογαριασμούς που σχετίζονται με αυτή;
-            			</DialogContentText>
+						</DialogContentText>
 					</DialogContent>
 					<DialogActions>
 						<Button onClick={this.handleDeleteContract} color="primary">
 							Διαγραφή
-              </Button>
+						</Button>
 						<Button onClick={this.handleClose} color="primary" autoFocus>
 							Ακύρωση
-            </Button>
+						</Button>
 					</DialogActions>
 				</Dialog>
 			</Paper>
@@ -428,12 +452,11 @@ class ItemDetail extends React.Component {
 	getSelectedUsers(contractDetails) {
 		let users = [];
 
-		if (this.props.users && contractDetails.contractusers) {
-			for (let i = 0; i < this.props.users.length; i++) {
-				let user = this.props.users[i];
-				for (let j = 0; j < contractDetails.contractusers.length; j++) {
-					const userHasPermission = contractDetails.contractusers[j];
-					if (userHasPermission.UserId.toString() === user.Id.toString()) {
+		if (this.props.token && this.props.token.user && this.props.token.user.users && contractDetails.contractusers) {
+			for (let i = 0; i < this.props.token.user.users.length; i++) {
+				let user = this.props.token.user.users[i];
+				for (let j = 0; j < contractDetails.contractusers.length; j++) {					
+					if (contractDetails.contractusers[j].UserId.toString() === user.uid) {
 						users.push(user)
 						break;
 					}
@@ -461,18 +484,11 @@ class ItemDetail extends React.Component {
 			return <List style={{ display: 'flex', flexDirection: 'row', padding: '0px', margin: '0px' }}>
 				<ListItem style={{ width: 'auto', margin: '0px', padding: '0px', wordWrap: 'normal', whiteSpace: 'noWrap' }}><b>Προσωπικό που έχει πρόσβαση </b></ListItem>
 				<ListItem>
-					<span>Όλοι οι υπόλοιποι χρήστες ({this.props.users ? (this.props.users.length - 1) : '???'})</span>
+					<span>Όλοι οι υπόλοιποι χρήστες ({this.props.token.user.users ? (this.props.token.user.users.length - 1) : '???'})</span>
 				</ListItem>
 			</List>
 		else {
 			var contractusers = this.getSelectedUsers(contractDetails)
-			if (contractusers.length === 0)
-				return <List style={{ display: 'flex', flexDirection: 'row', padding: '0px', margin: '0px' }}>
-					<ListItem style={{ width: 'auto', margin: '0px', padding: '0px', wordWrap: 'normal', whiteSpace: 'noWrap' }}><b>Προσωπικό που έχει πρόσβαση </b></ListItem>
-					<ListItem>
-						<span>Κανένας από τους υπόλοιπους {this.props.users ? (this.props.users.length - 1) : '???'} χρήστες</span>
-					</ListItem>
-				</List>
 			if (contractusers) {
 				return (
 					<List style={{ display: 'flex', flexDirection: 'row', padding: '0px', margin: '0px' }}>
@@ -481,21 +497,14 @@ class ItemDetail extends React.Component {
 							<List style={{ display: 'flex', flexDirection: 'row', padding: '0px', flexWrap: 'wrap' }}>
 								{
 									contractusers.map((item, index) => {
-										return (this.getContractUserTemplate(item, 'lightGrey'))
+										return (this.getContractUserTemplate(item.cn, 'lightGrey'))
 									})
 								}
 							</List>
 						</ListItem>
 					</List>
 				)
-			}
-			else
-				return <List style={{ display: 'flex', flexDirection: 'row', padding: '0px', margin: '0px' }}>
-					<ListItem style={{ width: 'auto', margin: '0px', padding: '0px', wordWrap: 'normal', whiteSpace: 'noWrap' }}><b>Προσωπικό που έχει πρόσβαση </b></ListItem>
-					<ListItem>
-						<span>Κανένας από τους υπόλοιπους {this.props.users ? (this.props.users.length - 1) : '???'} χρήστες</span>
-					</ListItem>
-				</List>
+			}			
 		}
 	}
 
@@ -589,7 +598,7 @@ class ItemDetail extends React.Component {
 								<b>Πληροφορίες σύμβασης '{contractInfo.Discreet}'</b>
 							</Typography>
 						</Paper>
-					</Grid>
+					</Grid>					
 					<Grid item>
 						<Paper style={styles.paperContractInfo} square={true}>
 							<Typography>
@@ -604,13 +613,13 @@ class ItemDetail extends React.Component {
 							</Typography>
 						</Paper>
 					</Grid>
-					{/* <Grid item>
+					<Grid item>
 						<Paper style={styles.paperContractInfo} square={true}>
 							<Typography>
 								{this.getContractUsersTemplate(contractInfo)}
 							</Typography>
 						</Paper>
-					</Grid> */}
+					</Grid>
 					{this.getContractMonetaryTemplate(contractInfo)}
 					<Grid item>
 						<Paper style={styles.paperContractInfo} square={true}>
@@ -703,7 +712,7 @@ class ItemDetail extends React.Component {
 												<Paper style={styles.paperMoreContractInfo} square={true}>
 													<Typography>
 														<b>Αρ.Απόφασης Κατακύρωσης</b> {contractInfo.AwardNumber}/{getDateFormatForDocument(contractInfo.AwardDate)}{' '}(ΑΔΑ: {contractInfo.AwardAda})
-            							</Typography>
+													</Typography>
 												</Paper>
 											</Grid>
 										</Grid>

@@ -29,7 +29,7 @@ const StyledTooltip = withStyles({
 })(Tooltip);
 
 export function getSelectField(id, label, values, selectedValue, isRequired, style, setValue) {
-  
+
   return <TextField
     required={isRequired}
     select
@@ -50,7 +50,7 @@ export function getTextFieldWithTooltip(tl, type, id, label, variant, stateValue
 
   return (<StyledTooltip
     placement="top"
-    disableHoverListener={true}    
+    disableHoverListener={true}
     title={
       <React.Fragment>
         <Typography
@@ -112,7 +112,7 @@ export function getTextFieldMultiline(rows, type, id, label, variant, stateValue
 }
 
 export function getTextField(type, id, label, variant, stateValue, isRequired, style, isDisabled, inputProps, inputLabelProps, onChange) {
-  
+
   return <TextField
     disabled={isDisabled}
     required={isRequired}
@@ -121,12 +121,12 @@ export function getTextField(type, id, label, variant, stateValue, isRequired, s
     label={label}
     value={stateValue}
     variant={variant}
-    style={style}    
+    style={style}
     onChange={onChange}
     InputProps={inputProps}
-    InputLabelProps={inputLabelProps} 
+    InputLabelProps={inputLabelProps}
     size='small'
-    />
+  />
 }
 
 export function getCheckboxField(id, label, stateValue, style, setValue) {

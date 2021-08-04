@@ -128,7 +128,9 @@ class NewContract extends Component {
 		this.autoCompleteBudget = this.autoCompleteBudget.bind(this);
 		this.handleClose = this.handleClose.bind(this, '');
 		this.handleContractStuff = this.handleContractStuff.bind(this);
-		this.selectAllStuff = this.selectAllStuff.bind(this);		
+		this.getSelectedUsers = this.getSelectedUsers.bind(this);
+		this.selectAllStuff = this.selectAllStuff.bind(this);
+		//this.selectAllStuff = this.selectAllStuff.bind(this);		
 		this.loadSelectAccountPer = this.loadSelectAccountPer.bind(this);
 	}
 
@@ -152,12 +154,22 @@ class NewContract extends Component {
 		})
 	}
 	handleContractStuff(e) {
-		this.setState({ contractStuff: this.getUserIds(e) });
+		this.setState(prevState => ({
+			contractInfo: {
+				...prevState.contractInfo,
+				contractStuff: this.getUserIds(e)
+			}
+		}))
 	};
 
 	selectAllStuff() {
-		this.setState({ AllUsers: !this.state.AllUsers });
-		this.setState({ contractStuff: !this.state.AllUsers ? this.getUserIds(this.props.users) : [] });
+		this.setState(prevState => ({
+			contractInfo: {
+				...prevState.contractInfo,
+				AllUsers: !this.state.contractInfo.AllUsers,
+				contractStuff: !this.state.contractInfo.AllUsers ? this.getUserIds(this.props.token.user.users) : []
+			}
+		}));
 	}
 
 	getUserIds(e) {
@@ -165,11 +177,11 @@ class NewContract extends Component {
 
 		if (e) {
 			for (let i = 0; i < e.length; i++)
-				userIds.push({ 'UserId': e[i].Id })
+				userIds.push({ 'UserId': e[i].uid })
 		}
 
 		return userIds;
-	}	
+	}
 
 	handleSubmit(event) {
 		event.preventDefault();
@@ -249,7 +261,7 @@ class NewContract extends Component {
 		event.preventDefault();
 		event.persist();
 
-		let fpaValue = getFpaValueFromReservations(this.props.token.user.reservations) / 100
+		let fpaValue = getFpaValueFromReservations(this.props.token.user.reservations) / 100;
 
 		if (this.state.contractInfo.AmountPure && Number(this.state.contractInfo.AmountPure) > 0) {
 			this.setState(prevState => ({
@@ -437,7 +449,7 @@ class NewContract extends Component {
 	loadContractTypes() {
 		let ret = '';
 		let contractTypes = [
-			{ ContractTypeId: 1, ContractTypeName: 'Δημόσιας Ανάθεσης' },
+			{ ContractTypeId: 1, ContractTypeName: 'Δημόσια Ανάθεση' },
 			{ ContractTypeId: 2, ContractTypeName: 'Προγραμματική' }
 		];
 		//if (this.props.contractTypes) {
@@ -450,7 +462,7 @@ class NewContract extends Component {
 		//}
 
 		return ret;
-	}	
+	}
 
 	onAutocompleteChange(e, v, r) {
 
@@ -471,7 +483,7 @@ class NewContract extends Component {
 				this.setState(prevState => ({
 					contractInfo: {
 						...prevState.contractInfo,
-						[targetId]: v						
+						[targetId]: v
 					}
 				}))
 		}
@@ -524,6 +536,42 @@ class NewContract extends Component {
 
 		return ret;
 	}
+
+	getSelectedUsers() {
+		let users = [];
+
+		if (this.props.token.user.users && this.state.contractInfo.contractStuff) {
+			if (this.state.contractInfo.contractStuff.length > 0) {
+				for (let i = 0; i < this.props.token.user.users.length; i++) {
+					let user = this.props.token.user.users[i];
+					for (let j = 0; j < this.state.contractInfo.contractStuff.length; j++) {
+						const userHasPermission = this.state.contractInfo.contractStuff[j];
+						if (userHasPermission.UserId.toString() === user.uid.toString()) {
+							users.push(user)
+							break;
+						}
+					}
+				}
+			}
+		}
+
+		return users;
+	}
+
+	getSelectUsersTemplate() {
+
+		if (this.props.token) {
+			if (this.props.token.user.uid === this.state.contractInfo.OwnerId) {
+				return <SelectContractStuff
+					handleContractStuff={this.handleContractStuff}
+					usersHavingAccessToContract={this.state.contractInfo.contractStuff}
+					selectAllStuff={this.selectAllStuff}
+					isAllStuffChecked={this.state.contractInfo.AllUsers}
+					selectedUsers={this.getSelectedUsers()} />
+			}
+		}
+	}
+
 	render() {
 		var divWidth = this.props.screenDimensions.width > this.props.screenDimensions.height ? '80%' : '100%'
 		var title = 'Δημιουργία Σύμβασης';
@@ -543,9 +591,9 @@ class NewContract extends Component {
 								<form style={{ padding: '10px' }} autoComplete="off" onSubmit={this.handleSubmit}>
 									{getSubmitButton('contained', 'primary', { position: 'fixed', left: this.props.screenDimensions.width - 250, top: this.props.screenDimensions.height - (getHeaderHeight() + getFooterHeight()) }, null, 'Αποθήκευση', <Icon style={{ marginLeft: '10px', padding: '10px' }}>save</Icon>, this.state.submitButtonDisabled)}
 									<div style={{ display: 'flex', flexFlow: 'column', width: '100%', flexWrap: 'wrap' }}>
-										{/* <div style={{ margin: '10px', width: '100%' }}>
+										<div style={{ margin: '10px', width: '100%' }}>
 											{this.getSelectUsersTemplate()}
-										</div> */}
+										</div>
 										<div style={styles.divRow}>
 											{/* style={{ margin: '0px', padding: '0px', width: w, textAlignLast: 'center' }} */}
 											<MyAutocomplete
@@ -584,6 +632,10 @@ class NewContract extends Component {
 												<></>}
 										</div>
 										<div style={styles.divRow}>
+											<MyTextField tp='text' title='Διακριτικός Τίτλος Θέματος' id='Discreet' stateValue={this.state.contractInfo.Discreet} isRequired={false} isDisabled={false} onChange={this.onChange} InputProps={{ inputProps: { maxLength: 2000, style: { textAlign: 'center' } } }} multiline={true} width='100%' />
+											<MyTextField tp='text' title='Θέμα' id='Title' stateValue={this.state.contractInfo.Title} isRequired={true} isDisabled={false} onChange={this.onChange} InputProps={{ inputProps: { maxLength: 2000, style: { textAlign: 'center' } } }} multiline={true} width='100%' />
+										</div>
+										<div style={styles.divRow}>
 											<MyTextField tp='text' title='K.A.E.' id='KAE' stateValue={this.state.contractInfo.KAE} isRequired={true} isDisabled={false} onChange={this.onChange} InputProps={{ inputProps: { maxLength: 20, style: { textAlign: 'center' } } }} width='20%' />
 											<MyTextField tp='text' title='Φ.' id='Actor' stateValue={this.state.contractInfo.Actor} isRequired={true} isDisabled={false} onChange={this.onChange} InputProps={{ inputProps: { maxLength: 5, style: { textAlign: 'center' } } }} width='20%' />
 											<MyTextField tp='text' title='Δ.' id='CodeDirection' stateValue={this.state.contractInfo.CodeDirection} isRequired={true} isDisabled={false} onChange={this.onChange} InputProps={{ inputProps: { maxLength: 5, style: { textAlign: 'center' } } }} width='20%' />
@@ -599,11 +651,7 @@ class NewContract extends Component {
 										<div style={styles.divRow}>
 											<MyTextField tp='text' title='Όνομα Αναδόχου' id='ConcessionaireName' stateValue={this.state.contractInfo.ConcessionaireName} isRequired={true} isDisabled={false} onChange={this.onChange} InputProps={{ style: { textAlign: 'center' } }} width='80%' />
 											<MyTextField tp='text' title='Α.Φ.Μ. Αναδόχου' id='ConcessionaireAFM' stateValue={this.state.contractInfo.ConcessionaireAFM} isRequired={true} isDisabled={false} onChange={this.onChange} InputProps={{ style: { textAlign: 'center' } }} width='20%' />
-										</div>
-										<div style={styles.divRow}>
-											<MyTextField tp='text' title='Διακριτικός Τίτλος' id='Discreet' stateValue={this.state.contractInfo.Discreet} isRequired={false} isDisabled={false} onChange={this.onChange} InputProps={{ inputProps: { maxLength: 2000, style: { textAlign: 'center' } } }} multiline={true} width='100%' />
-											<MyTextField tp='text' title='Τίτλος' id='Title' stateValue={this.state.contractInfo.Title} isRequired={true} isDisabled={false} onChange={this.onChange} InputProps={{ inputProps: { maxLength: 2000, style: { textAlign: 'center' } } }} multiline={true} width='100%' />
-										</div>
+										</div>									
 										<div style={styles.divRow}>
 											<MyTextField tp='number' title='Καθαρό Ποσό' id='AmountPure' stateValue={this.state.contractInfo.AmountPure} isRequired={true} isDisabled={false} onChange={this.onChange} inputProps={{ style: { textAlign: "center" } }} InputProps={{ endAdornment: <InputAdornment position="end"><span style={{ fontWeight: 'bolder', marginRight: '10px' }}>€</span></InputAdornment> }} width='20%' />
 											<MyTextField tp='number' title={getFpaLabel(getFpaValueFromReservations(this.props.token.user.reservations))} id='AmountFpa' stateValue={this.state.contractInfo.AmountFpa} isRequired={true} isDisabled={false} onChange={this.onChange} inputProps={{ style: { textAlign: "center" } }} InputProps={{ endAdornment: <InputAdornment position="end"><span style={{ fontWeight: 'bolder', marginRight: '10px' }}>€</span></InputAdornment> }} width='20%' />
