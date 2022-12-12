@@ -39,7 +39,7 @@
     "currency-formatter": "^1.5.5",
     "debug": "^4.1.1",
     "docxtemplater": "^3.17.5",
-    "express": "^4.17.1",
+    "express": "^4.17.3",
     "express-promise-router": "^4.0.1",
     "helmet": "^3.22.0",
     "http-errors": "^1.7.3",
